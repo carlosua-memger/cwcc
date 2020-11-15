@@ -1,0 +1,163 @@
+{{define "SideBar"}}
+
+{{$d1s := .SideBarCont}}
+{{$d2s := .SideBarCont}}
+{{$d3s := .SideBarCont}}
+{{$d4s := .SideBarCont}}
+	<!-- BEGIN SIDEBAR -->
+<style type="text/css">
+
+
+.color_sidebar{
+background-color: #f4d00a !important;
+
+
+}
+
+.search_text_sidebar{
+color: #003BAF !important;
+}
+
+.style_user_sidebar{
+background-color: #ffdf33 !important;
+
+border: 0 !important; 
+color: #003BAF !important;
+font-weight: bold !important;
+font-size: 16px !important;
+
+}
+
+a:hover {  
+  background-color: #ffd700	 !important;
+}
+
+.hover {  
+  background-color: #ffd700 !important;
+}
+
+li:hover {  
+  background-color: #ffd700 !important;
+}
+
+.bold_text{
+font-weight: bold !important;
+}
+</style>	
+		 
+	
+	<div class="page-sidebar-wrapper ">
+
+		<!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+		<!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+		<div class="page-sidebar navbar-collapse collapse">
+			
+			<!-- BEGIN SIDEBAR MENU -->
+			<ul class="page-sidebar-menu color_sidebar" data-auto-scroll="true" data-slide-speed="150">
+				<!-- DOC: To remove the sidebar toggler from the sidebar you just need to completely remove the below "sidebar-toggler-wrapper" LI element -->
+				<li class="sidebar-toggler-wrapper color_sidebar">
+					<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+					<div class="sidebar-toggler hover">
+					</div>
+					<!-- END SIDEBAR TOGGLER BUTTON -->
+				</li>
+				<!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
+				<li class="sidebar-search-wrapper color_sidebar">
+					<!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+					<!-- DOC: Apply "sidebar-search-bordered" class the below search form to have bordered search box -->
+					<!-- DOC: Apply "sidebar-search-bordered sidebar-search-solid" class the below search form to have bordered & solid search box -->
+					<form class="sidebar-search" action="extra_search.html" method="POST">
+						<a href="javascript:;" class="remove">
+						<i class="icon-close"></i>
+						</a>
+						
+					</form>
+					<!-- END RESPONSIVE QUICK SEARCH FORM -->
+				</li>
+				
+				{{range  $d1 := $d1s}}
+				{{if eq $d1.Cte_level 1}}
+				{{if eq $d1.Menurank "Parent"}}
+				<li class="color_sidebar">
+					<!-- class="ajaxify" -->
+					<a href="#{{$d1.Url.String}}?rights={{$d1.Rights}}" >
+					<i class="icon-user search_text_sidebar"></i>
+					<span class="title search_text_sidebar bold_text">{{$d1.Name}}</span>
+					<span class="arrow search_text_sidebar"></span>
+					</a>
+					
+					<ul class="sub-menu search_text_sidebar">
+						
+						{{range  $d2:= $d2s}}
+							{{if eq $d2.Cte_level 2}}
+								{{if equals $d1.Id $d2.Parent}}
+
+								<li>
+									<a href="#{{$d2.Url.String}}?rights={{$d2.Rights}}"   onclick="javascript:Navigate('{{$d2.Url.String}}?rights={{$d2.Rights}}');" class="search_text_sidebar" >
+										{{$d2.Name}}
+									</a>
+									<ul class="sub-menu search_text_sidebar">
+										
+										{{range  $d3:= $d3s}}
+											{{if eq $d3.Cte_level 3}}
+											
+												{{if equals $d2.Id $d3.Parent}}
+												<li>
+													<a href="#{{$d3.Url.String}}?rights={{$d3.Rights}}"   onclick="javascript:Navigate('{{$d3.Url.String}}?rights={{$d3.Rights}}' );" class="search_text_sidebar"  >{{$d3.Name}}</a>
+													<ul class="sub-menu search_text_sidebar">
+													
+													{{range  $d4:= $d4s}}
+														{{if eq $d4.Cte_level 4}}
+														
+															{{if equals $d3.Id $d4.Parent}}
+															<li>
+																<a href="#{{$d4.Url.String}}?rights={{$d4.Rights}}"  onclick="javascript:Navigate('{{$d4.Url.String}}?rights={{$d4.Rights}}');" class="search_text_sidebar" >{{$d4.Name}}</a>
+															</li>
+															{{end}}
+														{{end}}
+													{{end}}
+													</ul>
+												</li>
+												{{end}}
+											{{end}}
+										{{end}}
+									
+									</ul>
+
+								
+
+								</li>
+								{{end}}
+							{{end}}
+						{{end}}
+					</ul>
+					
+				</li>
+				{{end}}	
+				{{end}}
+				{{if eq $d1.Menurank "Last"}}
+				{{if eq $d1.Cte_level 1}}
+				<li class="search_text_sidebar">
+					<!-- class="ajaxify" -->
+					<a href="#{{$d1.Url.String}}?rights={{$d1.Rights}}" onclick="javascript:Navigate('{{$d1.Url.String}}?rights={{$d1.Rights}}');">
+					<i class="icon-user search_text_sidebar"></i>
+					<span class="title search_text_sidebar bold_text">{{$d1.Name}}</span>
+					
+					</a>
+				{{end}}
+				{{end}}
+				{{end}}
+
+				
+
+		
+			<!-- END SIDEBAR MENU -->
+	
+		</div>
+		
+	</div>
+	<!-- END SIDEBAR -->
+{{end}}
+
+<!-- class="ajaxify" -->
+

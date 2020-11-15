@@ -1,0 +1,454 @@
+{{$Org_id := .Conf.org_id}}
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Edit Customer Sales Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+
+
+
+
+<div class="row">
+<div class="col-md-6">
+
+
+<h3 class="form-section">Customer Sales ID = {{.Conf.suprec_id}}</h3>
+
+
+<form id="CreateTransaction" class="form-horizontal"  method="Post" onsubmit="return DoEditTransaction()">
+
+
+			<div class="form-horizontal">
+						<div class="form-group">
+							<label class="col-md-3 control-label">Location</label>
+							<div class="col-md-8">
+								<select name="location" class="form-control" > 
+								 	{{$location_id  := .Conf.suprec_location }}
+								 	{{range  $key ,$val := .Ls_location}}
+									{{ $loop_id  := index  $val 0 }}
+									{{if eq $location_id $loop_id }}	
+								 		<option value="{{ index  $val 0}}" data-customer="{{ index  $val 2}}" data-courier="{{ index  $val 3}}" data-soldby="{{ index  $val 4}}">{{ index  $val 1}}</option>
+								 	{{else}}	
+								 		<option value="{{ index  $val 0}}" data-customer="{{ index  $val 2}}" data-courier="{{ index  $val 3}}" data-soldby="{{ index  $val 4}}">{{ index  $val 1}}</option>
+									{{end}}
+									{{end}}
+
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Transaction Date<span class="required" aria-required="true">*</span>
+							</label>
+							<div class="col-md-8">
+								<input type="text" name="transdate" value="{{.Conf.suprec_transdate}}" placeholder="Name" class="form-control date-picker" maxlength="50" Required>
+											<span class="help-block c_h_date" style="color:red;" ></sapan>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Customer</label>
+							<div class="col-md-8">
+								<select name="customer" class="form-control" > 
+								 	{{$custid := .Conf.suprec_custid }}
+								 	{{range  $key ,$val := .Ls_customer}}
+									{{ $loop_id  := index  $val 0 }}
+									{{if eq $custid $loop_id }}	
+								 		<option value="{{ index  $val 0}}" data-id="{{ index  $val 2}}" data-soldby="{{ index  $val 3}}" selected>{{ index  $val 1}}</option>
+								 	{{else}}	
+								 		<option value="{{ index  $val 0}}" data-id="{{ index  $val 2}}" data-soldby="{{ index  $val 3}}">{{ index  $val 1}}</option>
+									{{end}}
+									{{end}}
+
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Courier</label>
+							<div class="col-md-8">
+								<select name="courier" class="form-control" > 
+								 	{{$courier  := .Conf.suprec_courier }}
+								 	{{range  $key ,$val := .Ls_courier}}
+									{{ $loop_id  := index  $val 0 }}
+									{{if eq $courier $loop_id }}	
+								 		<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+								 	{{else}}	
+								 		<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+									{{end}}
+									{{end}}
+
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Sold By</label>
+							<div class="col-md-8">
+								<select name="soldby" class="form-control" > 
+								 	{{$orgmem_id  := .Conf.suprec_soldby }}
+								 	{{range  $key ,$val := .Ls_orgmem}}
+									{{ $loop_id  := index  $val 0 }}
+									{{if eq $orgmem_id $loop_id }}	
+								 		<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+								 	{{else}}	
+								 		<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+									{{end}}
+									{{end}}
+
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+								<label class="col-md-3 control-label">Term</label>
+									<div class="col-md-4">
+										<input type="text" name="term" placeholder="Term"  maxlength="8" class="form-control createAct num_f" value="{{.Conf.suprec_term}}">
+									</div>
+							</div>		
+						<div class="form-group">
+							<label class="col-md-3 control-label">Remarks</label>
+							<div class="col-md-8">
+								
+							<!-- 	<input type="text" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct"> -->
+								<textarea name = "remarks" class="form-control createAct">{{.Conf.suprec_remarks}}</textarea>
+							</div>
+						</div>
+						
+					</div>
+
+
+			<!-- <div class="form-actions fluid">
+				<div class="col-md-offset-3 col-md-9">
+					<button type="submit" class="btn blue submit_btn">Update</button>
+					<button class="btn default" onclick="javascript:Navigate('/inventory/supplier_receipt?rights={{.Rights}}')" type="button">Cancel</button>
+				</div>
+			</div> -->
+
+		
+		</form>
+	
+</div>	
+
+<div class="col-md-6">
+
+
+		<form id="item_tagsdata" class="form-horizontal"  method="Post" onsubmit="return Dobatchsave()" >
+			<input type="hidden" name="suprec_id" class="c_item_id" value="{{.Conf.suprec_id}}">
+
+				<table class="table table-bordered table-striped tbl_dtls" width="50%"  >
+					<tbody>
+					{{range  $key,$val := .Arr_tag}}
+						<tr>
+							<td style="width:15%">
+								 {{ index  $val 1}}
+							</td>
+							<td style="width:50%">
+								{{$datatype  := index  $val 3 }}
+								{{if eq $datatype `String` }}
+									<input type="text" class="value_input" name="value_input" placeholder="value" id="autocomplete_{{ index  $val 0}}" value="{{ index  $val 4}}">
+								{{end}}
+								{{if eq $datatype `Number` }}
+									<input type="number" name="value_input" class="value_input" placeholder="value" value="{{ index  $val 4}}">
+								{{end}}
+								
+								<input type="text" name="remarks" class="value_remarks" placeholder="remarks" value="{{ index  $val 5}}">
+								<input type="hidden" name ="tag" value="{{ index  $val 0}}">
+								<!-- <a onclick="javascript:func_sync( 0 ,{{ index  $val 0}},this,event );"> save</a> -->
+							</td>
+						
+						</tr>
+					
+					<script type="text/javascript">
+					{{$tagid := index  $val 0}}
+					//var json_data_$tagid = ["a","a2","a3","a3","a4","a5","a6","a7","1","101",]
+
+					
+					var  json_data_{{$tagid}} = [""]    
+			       
+			        {{$retdata := Sql_list "temp var for extend data" $Org_id $tagid}}
+			        
+
+			        {{range  $kkey,$vval := $retdata}}
+						json_data_{{$tagid}}.push( "{{ index  $vval 0}}" )
+					{{end}}
+
+			        $('#autocomplete_{{$tagid}}' ).autocomplete({
+			            	source: json_data_{{$tagid}}
+			            });
+					</script>
+					
+					{{end}}
+					</tbody>
+				</table>
+			
+			</form>
+
+</div>
+
+
+</div>
+
+	<div class="form-actions fluid">
+		<div class="col-md-offset-3 col-md-9">
+			<button type="submit" onclick="return DoEditTransaction()" class="btn blue submit_btn">Update</button>
+			<button class="btn default" onclick="javascript:nav_back('/inventory/customer_sales?rights={{.Rights}}')" type="button">Cancel</button>
+		</div>
+	</div>
+
+</div>
+
+
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	
+</div>
+
+
+		
+			<script type="text/javascript">
+			$('.date-picker').datepicker({"setDate": new Date() ,  autoclose: true });
+            $('input[name=item_class]').focus()
+			$("[name=location] , [name=soldby] , [name=customer] , [name=courier]").select2();
+
+			var  termdata = [""]    
+					termdata.push("0")
+					termdata.push("30") 
+					termdata.push("60") 
+					termdata.push("90") 
+				$('[name=term]' ).autocomplete({
+		        	source: termdata
+		        });
+			$("[name=term]").focus(function(){
+				$("[name=term]").autocomplete("search","0");
+			});
+			
+			num_val_init()
+			
+            function DoEditTransaction(){
+            	var d_date = $("[name=transdate]").val();
+				var parts =d_date.split('/');
+				var mydate = new Date(parts[2],parts[0]-1,parts[1]); 
+				var tem_curdate = new Date();
+				tem_curdate.setDate(tem_curdate.getDate()-100);
+				if(d_date==""){
+					$(".c_h_date").html('valid date required.');
+					return false;
+				}
+				if (tem_curdate >  mydate){
+					$(".c_h_date").html('Minimum date allowed is '+ tem_curdate.toLocaleString(	) + '.');
+					return false;
+				}
+				$.get("/json_func",
+                    {
+                    	
+                    	 qdata : "SIS_CusSalHdr_Save 'Edit', '{{.Conf.username}}', {{.Conf.suprec_id}}, {{.Conf.org_id}}, "+$('[name=location]').val()+", '"+$('[name=transdate]').val()+"', '"+$('[name=customer]').val()+"', '"+$('[name=soldby]').val()+"', '"+$('[name=term]').val()+"', '"+$('[name=courier]').val()+"','"+$('[name=remarks]').val()+"'"
+                    }
+                    ,
+                    function(data,status){
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									//alert(ret_msg)
+									//$('#basic').modal('hide')
+					            	//dtbl()
+					            	console.log("success here")
+									Dobatchsave()
+									//return false;
+			                    }else{
+			                    	console.log("fail")
+			                    	alert(ret_msg)
+			                    }
+		                    }
+	                    }
+                    });	
+					return false;
+			}
+
+
+			$('.num_f').keyup(function(e) {
+		var regex = new RegExp("^[0-9][0-9]*$");
+		console.log(regex.test(this.value))
+		if (!regex.test(this.value)) {
+			this.value = '';
+		}
+	});
+
+
+			function func_sync(item , tag , t,event){
+				//console.log($(event.target).closest("tr").find('.value_input').val())
+
+				var item_id =  $(".c_item_id").val();
+				var text_val =  $(event.target).closest("tr").find('.value_input').val();
+				var text_val_remarks =  $(event.target).closest("tr").find('.value_remarks').val();
+
+				$.get("/json_func",
+                    {
+                    	qdata : "SIS_CusSalTags_Save 'Update', '{{.Conf.username}}', {{.Conf.org_id}}, "+item_id+", "+tag+", '"+text_val+"', '"+text_val_remarks+"'"
+						
+						
+					}
+                    ,
+                    function(data,status){
+                    	console.log(data)
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									console.log(data[i][0])
+									alert(ret_msg)
+									
+								//return false;
+			                    }else{
+			                    	alert(ret_msg)
+			                    }
+		                         
+		                    }
+	                    }
+                    });
+
+			}
+			
+			function Dobatchsave(){
+				$.post("/inventory/customer_sales/HaddTagHandler",
+                    $("#item_tagsdata").serialize()
+					,
+                    function(data,status){
+                    	var errcount = 0 
+                    	if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        
+		                        if (data[i][0]=="HasError"){
+									errcount = errcount + 1
+								//return false;
+			                    }
+			                }
+						}
+						if (errcount>0){
+	                    	alert(errcount)
+	                    	alert("Opsss something went wrong")
+                        }else{
+                        	//alert("Save Success")
+                        	Navigate('/inventory/customer_sales/details?rights={{.Rights}}&ID={{.Conf.suprec_id}}')
+                        } 
+                        
+                    });
+
+				return false;
+
+
+			}
+
+	function repoFormatResult( repo ) {
+	    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+	    return markup;
+	}
+
+	function repoFormatSelection( repo ) {
+	                return repo.full_name;
+	            }
+	$( "#leader" ).select2({
+    placeholder: "Search for Name",
+     minimumInputLength: 2,
+        multiple: false,
+        allowClear: true,
+    ajax: {
+        url: "/Ajax/GetMembers",
+        dataType: "json",
+        quietMillis: 250,
+        data: function( term, page ) {
+            return {
+                // search term
+                q: term
+            };
+        },
+        results: function( data, page ) {
+                // parse the results into the format expected by Select2.
+                // since we are using custom formatting functions we do not need to alter the remote JSON data
+                return { results: data.items };
+        }
+        
+    }, 
+	initSelection: function( element, callback ) {
+		// the input tag has a value attribute preloaded that points to a preselected repository's id
+		// this function resolves that id attribute to an object that select2 can render
+		// using its formatResult renderer - that way the repository name is shown preselected
+		var id = $( element ).val();
+		if ( id !== "" ) {
+			$.ajax( "/Ajax/GetMembers?id=" + id, {
+				dataType: "json"
+			}).done( function( data ) {
+				callback( data );
+			});
+		}
+	},
+
+    
+    formatResult: repoFormatResult,
+    formatSelection: repoFormatSelection,
+    // apply css that makes the dropdown taller
+    dropdownCssClass: "bigdrop",
+    // we do not want to escape markup since we are displaying html in results
+    escapeMarkup: function( m ) {
+        return m;
+    }
+});
+//$('input[name=name]').select2('open');
+			
+	var cor_d = $("[name=customer]").select2().find(":selected").data("id")
+	$("[name=courier]").val(cor_d).trigger("change");
+	
+	$("[name=customer]").on("select2-close", function() { 
+		var cor_d = $("[name=customer]").select2().find(":selected").data("id")
+		var cus_soldby = $("[name=customer]").select2().find(":selected").data("soldby")
+		console.log(cus_soldby)
+		$("[name=courier]").val(cor_d).trigger("change");
+		
+		$("[name=soldby]").val(cus_soldby).trigger("change");
+		
+
+	});
+	
+	$("[name=location]").on("select2-close", function() { 
+		var customer = $("[name=location]").select2().find(":selected").data("customer")
+		var courier = $("[name=location]").select2().find(":selected").data("courier")
+		var soldby = $("[name=location]").select2().find(":selected").data("soldby")
+		console.log(soldby)
+		$("[name=customer]").val(customer).trigger("change");
+		$("[name=courier]").val(courier).trigger("change");
+		$("[name=leader]").val(soldby).trigger("change");
+
+		
+
+	});
+
+				
+
+
+			</script>
+	

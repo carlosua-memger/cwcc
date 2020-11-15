@@ -1,0 +1,232 @@
+<!-- <Form> -->
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+		<form id="transdetnew" method="Post" onsubmit="javascript: return DoeditTrasDet()">
+			<input type="hidden" name="id" value="{{.Tconf.AppID}}">	
+			 <input type="hidden" name="cusapp" value="{{.Tconf.AppCusAcc}}"> 
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">Edit Transaction Details</h4>
+				</div>
+				<!-- <div class="modal-body">
+				 -->	 <!-- modal data here -->
+				<div class="form-horizontal"> 
+					
+						
+					<div class="form-group">
+						<label class="col-md-3 control-label">Applied To</label>
+						<div class="col-md-4">
+							<select name="applierTo" class="form-control" required>
+								{{$CustAA := .Tconf.AppAppliedTo }}
+								{{range  $key ,$val := .ArrCustAA}}
+									{{ $loop_id:= index $val 0}}
+									{{if eq $CustAA $loop_id }}	
+										<option value="{{ index  $val 0}}"  data-id="{{ index  $val 2}}" selected>{{ index  $val 1}}</option>
+									{{else}}
+										<option value="{{ index  $val 0}}"  data-id="{{ index  $val 2}}">{{ index  $val 1}}</option>
+									{{end}}	
+								{{end}}
+							</select>
+						</div>
+					</div>	
+
+					<div class="form-group">
+						<label class="col-md-3 control-label">Applied Amount</label>
+							<div class="col-md-4">
+								<input type="text" name="appliedAmt" placeholder="Amount"  value="{{.Tconf.AppAppliedAmt}}" maxlength="12" class="form-control createAct" onkeypress='return numbersOnly(this,event,true,true);' required>
+							</div>
+
+							<div class="col-md-4">
+									<a  class="btn green act_btn" onclick="javascript:Modalfunc_app_sugg();">
+                   	 				Suggest Amount<i class="fa fa-plus"></i></a>
+
+								</div>
+					</div>
+					
+							<div class="form-group">
+								<label class="col-md-3 control-label">Other Adjustment</label>
+									<div class="col-md-4">
+										<input type="text" name="otheradj" placeholder="Amount"  value="{{.Tconf.AppOtheradj}}" maxlength="12" class="form-control createAct" onkeypress='return numbersOnly(this,event,true,true);' required>
+									</div>
+
+									<div class="col-md-4">
+									<a  class="btn green act_btn" onclick="javascript:Modalfunc_show_prev();">
+                   	 				Suggest Amount<i class="fa fa-plus"></i></a>
+
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-md-3 control-label">Remarks</label>
+									<div class="col-md-4">
+										<textarea name="remarks" placeholder="Remarks"  maxlength="200" class="form-control createAct">{{.Tconf.AppRemarks}}</textarea>
+									</div>
+							</div>
+					
+					 <!-- end modal data here -->
+				<!-- </div> -->
+					<div class="errorDv">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn default" data-dismiss="modal">Go Back</button>
+					<button type="submit" class="btn blue">Update changes</button>
+				</div>
+
+		<!--  -->
+				<!-- /.modal-content -->
+		</form>
+	</div>
+		<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->					
+					
+
+
+<script type="text/javascript">
+ 	$('.form_datetime').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+	
+	//alert('{{.Tconf.customer}}' )
+	
+	var rights = '{{.Tconf.rights}}' 
+	var assignmentID = '{{.Tconf.location}}' 
+
+	
+	function DoeditTrasDet(a){
+				if(!$('#transdetnew')[0].checkValidity()){
+					$('.val_err').show();
+				 	return false;
+				}
+			/*	$( ".errorDv" ).html("")
+			if ($("input[name=appliedAmt]").val()>=0){
+					var htdata  = '<div class="alert alert-danger"> <strong>Error: </strong>  Invalid Amount  (must be greater than zero)?</div>'
+					$( ".errorDv" ).html(htdata)
+					return false;
+				}
+*/
+
+				/*if ($("input[name=otheradj]").val()==0){
+					var htdata  = '<div class="alert alert-danger"> <strong>Error: </strong>  Invalid Amount  (not be zero)?</div>'
+					$( ".errorDv" ).html(htdata)
+					return false;
+				}*/
+				$.post("/inventory/helper/application/DEditHandler",$( "#transdetnew" ).serialize()
+		        ,
+		        function(data,status){
+		        	if(data[0]!='0'){
+		            	var htdata  = '<div class="alert alert-success"> <strong></strong> '+data[1]+'</div>'
+						$( ".errorDv" ).html(htdata)
+		            	$(".createAct").val("")
+			            $('#basic').modal('hide')
+		                PageRefresher('2')
+					}else{
+						var htdata  = '<div class="alert alert-danger"> <strong></strong> '+data[1]+'</div>'
+						$( ".errorDv" ).html(htdata)
+					}	
+				
+		        });
+	 			return false
+			}
+
+		$('[name=applierTo]').on('change', function()
+{
+
+			var appliedamount = $(this).find(':selected').data('id');
+				if (Math.abs(appliedamount) < Math.abs('{{.Tconf.balance}}') ){
+					//alert(-Math.abs($(this).find(':selected').data('id') ))
+					//$("input[name=appliedAmt]").val(-Math.abs($(this).find(':selected').data('id')) );
+					var appliedamount = $(this).find(':selected').data('id');
+							if ('{{.Tconf.balance}}' > 0)
+							{
+							$("input[name=appliedAmt]").val(Math.abs(appliedamount));
+									}else {
+
+										$("input[name=appliedAmt]").val(-Math.abs(appliedamount));
+									}
+					return false;
+				} else {
+					//alert(Math.abs($(this).find(':selected').data('id') ))
+					//$("input[name=appliedAmt]").val(Math.abs($(this).find(':selected').data('id')) );
+					
+						if ('{{.Tconf.balance}}' > 0)
+							{
+							$("input[name=appliedAmt]").val(Math.abs('{{.Tconf.balance}}'));
+									}else {
+
+										$("input[name=appliedAmt]").val(-Math.abs('{{.Tconf.balance}}'));
+									}
+					//$("input[name=appliedAmt]").val(-Math.abs('{{.Tconf.balance}}'));
+					//return false;					
+				}
+
+
+});
+function Modalfunc_show_prev(){
+      var applied = Math.abs($("[name=appliedAmt]").val());
+      var balance = Math.abs('{{.Tconf.balance}}');
+      var suggest_amt = +balance - +applied;
+   if ('{{.Tconf.balance}}' > 0)
+							{
+							  $("[name=otheradj]").val(Math.abs(suggest_amt));
+									}else {
+
+										  $("[name=otheradj]").val(-Math.abs(suggest_amt));
+									}
+
+
+
+      
+
+    }
+
+
+    function Modalfunc_app_sugg(){
+      var applied = Math.abs($("[name=appliedAmt]").val());
+      var otheradj = Math.abs($("[name=otheradj]").val());
+      var suggest_amt = +applied - +otheradj;
+    	if ('{{.Tconf.balance}}' > 0)
+							{
+							  $("[name=appliedAmt]").val(Math.abs(suggest_amt));
+									}else {
+
+										  $("[name=appliedAmt]").val(-Math.abs(suggest_amt));
+									}
+
+
+
+   
+
+    }
+	
+
+
+/*$('select').on('change', function()
+{*/
+	//$("input[name=appliedAmt]").val($(this).find(':selected').data('id') );
+
+	//alert(Math.abs($(this).find(':selected').data('id') ))
+
+
+
+			/*	if ($(this).find(':selected').data('id') >=0){
+					//alert(-Math.abs($(this).find(':selected').data('id') ))
+					$("input[name=appliedAmt]").val(-Math.abs($(this).find(':selected').data('id')) );
+					return false;
+				} else {
+					//alert(Math.abs($(this).find(':selected').data('id') ))
+					$("input[name=appliedAmt]").val(Math.abs($(this).find(':selected').data('id')) );
+					return false;					
+				}
+
+
+	
+});*/
+    
+
+</script>

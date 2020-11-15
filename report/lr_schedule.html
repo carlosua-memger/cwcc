@@ -1,0 +1,258 @@
+<html>
+    <head>
+                <!-- <title style="font-size: 16px;">Paired logs Report</title> -->
+            <style type="text/css">
+                .rpt_date {
+                    float: right;
+                    
+                }
+                .page_header{
+                    margin-bottom: 5px;
+                    /*display: inline; */
+                }
+                .name{
+                    /*float: left;*/
+                    margin-bottom: 3px;
+                    font-family: Arial; 
+                }
+                .covered_data{
+                    /*float: right;*/
+                    font-family: Arial; 
+                }
+                .pic_logo {
+                    width: 200px;
+
+                }
+                table{
+                    width: 100%;
+                }
+                
+                .dtatbl {
+                
+                border: 0.99px solid #B3B3B3;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 12px;
+                }
+
+                .dtatbl th{
+                    border: 0.99px solid #B3B3B3;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 14px;
+                }
+
+                .dtatbl td {
+                    border: 0.99px solid #B3B3B3;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 14px;
+                }
+                th, td {
+                    /*padding: 2px;*/
+                      font-size: 12pt;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+                th{
+                    
+                    background-color: whiteSmoke;
+                    /*background-image: -webkit-linear-gradient*/
+                    
+                }
+                body {
+                    font-size: 12px;
+                }
+                .logo{
+                    width: 200px;
+                    margin-bottom: 5px;
+                }
+                .page_footer{
+                    margin-top: 20px;
+                    display: inline-block;
+                    width: 100%;
+                }
+                .signaturemember{
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: left;
+                    font-family: inherit;
+                }
+                .signatureleft{
+                    margin-left: 10%;
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: left;
+                    font-family: inherit; 
+                }
+                .signatureright{
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: right;
+                    font-family: inherit; 
+                }
+                .tbl_foor{
+                    margin-top: 10px;
+                }
+                .tbl_foor td div{
+                    border-top: 0.99px solid black; 
+                    width: 50%;
+                }
+                .isred {
+                    color: red;
+                }
+                .log_sum{
+                    margin-top: 10px;
+                }
+                td div{
+                    font-size: 12px;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+                td div b{
+                    font-size: 12px;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+                .header {
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                    font-size: 25px;
+                }
+            </style></head>
+                
+
+            <body>
+                <table>
+                    <tr>
+                        <td>
+                    <img src="/src/metronic_3.1.2/images/cwcc_logo_complete.png" width="175" height="75" style="margin-top: 1px;"alt="logo" class="logo-default"/>
+                </td>
+                <td class="header">
+                <h>Amortization Schedule</h>
+                </td>
+                </tr>
+                </table>
+    <!--            {{.Conf.org_id}}
+               {{.Conf.trnID }} "mars" -->
+
+              <!--  {{ $currentCategoryUrl := .Conf.org_id | printf "%s%s" "," | printf "%s%s" .Conf.trnID }}
+               {{$currentCategoryUrl}}
+
+ -->
+                {{$sql_str := combine_string `LRHDR_Get 4,` .Conf.org_id "," .Conf.trnID "," `0` }}
+                {{$conf_data := tpl_sql_row $sql_str }}
+                
+               <table borderColor="#a9a9a9" cellSpacing="0" cellPadding="1" width="100%" border="1">
+                   <tr>
+                       <td>
+                <table width="100%">
+                    <tr>
+                        <td>ID: <b>{{index $conf_data  0}}</b> </td>
+                        <td>Loan Type: <b>{{index $conf_data  39}}</b></td>
+                        <td>Payment mode: <b>{{index $conf_data  40}}</b> </td>
+                    </tr>
+                    <tr>
+                        <td>Tran Date: <b>{{index $conf_data  3}}</b></td>
+                        <td>Amount: <b>{{index $conf_data  7}}</b></td>
+                        <td>Term (mos): <b>{{index $conf_data  8}} </b></td>
+                        
+                        
+                    </tr>
+                    <tr>
+                         <td>Member: <b>{{index $conf_data  37}}</b></td>
+                         <td>Interest Rate (per annum): <b>{{index $conf_data  12}}</b></td>
+                         <td>CV Amount: <b>{{index $conf_data  18}}</b></td>
+                    </tr>
+
+                    <tr>
+                            <td>PN#: <b>{{index $conf_data  1}}</b> </td>
+                            <td>Service Fee: <b>{{index $conf_data  13}}</b></td>
+                            <td>Released Date: <b>{{index $conf_data  11}}</b></td>
+                           </tr>
+
+
+                </table>
+                </td>
+                </tr>
+            </table>
+            <br>
+
+                {{$sql_str2 := combine_string `LRDTL_List 3,` .Conf.trnID }}
+
+              {{$data_list := tpl_sql $sql_str2 }}
+                
+               
+
+
+            
+                
+                <table width="100%" Width="100%" class="dtatbl">
+                    <tr>
+                        <th><b>Due Date</th>
+                        <th><b>Due Amt</th>
+                        <th><b>Principal</th>
+                        <th><b>Interest</th>
+                        <th><b>Service Fee</th>
+                        <th><b>Remarks</th>
+                        
+                       
+                        
+                        
+                    </tr>    
+
+                      <tr>
+                       {{range  $key1, $val1stloop := $data_list}}
+                            <tr> 
+                            
+                             <td>{{index $val1stloop  1}}</td>
+                             <td align="right">{{index $val1stloop  2}}</td>
+                             <td align="right">{{index $val1stloop  3}}</td>
+                             <td align="right">{{index $val1stloop  4}}</td>
+                             <td align="right">{{index $val1stloop  5}}</td>
+                             <td>{{index $val1stloop  6}}</td>
+
+                            </tr>
+                         
+                        {{end}}
+                    </tr>   
+                    
+                    <tr>
+
+                            <th><b>TOTAL</th>
+                                <th align="right"><b>{{index $conf_data  46}}</th>
+                                <th align="right"><b>{{index $conf_data  43}}</th>
+                                <th align="right"><b>{{index $conf_data  44}}</th>
+                                <th align="right"><b>{{index $conf_data  45}}</th>
+                                <th><b></th>
+
+
+                    </tr>
+
+                 
+                </table>
+
+
+<br>
+<br>
+
+
+                <table>
+                <tr>
+                        <td><b>Prepared by :__________________________&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+                    </tr> 
+                    <tr>
+                   <td>
+
+                   PRINTED BY: {{.Conf.username}} @  {{get_datetime}} Status: {{index $conf_data  36}}
+                  </td>
+                </tr>
+                <tr>
+                    <td>
+                   <font size="3"><b>Powered by Memgertech Inc.</b></font>
+                    </td>
+                   </tr>
+
+
+                </table>
+
+
+
+    </body>
+</html>

@@ -1,0 +1,283 @@
+{{$Org_id := .Tconf.Org_id}}
+
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<div class="row">
+					<div class="col-md-6">
+						<h3 class="form-section">Non-Selling Aging Report Info</h3>
+
+						<form id="CreateTransaction" class="form-horizontal"  target="_blank" method="Get" action="/inventory/reports/non_selling_aging/viewer">
+							<!-- <div class="form-horizontal">
+								<div class="form-group">
+									<label class="col-md-3 control-label">Select Report</label>
+									<div class="col-md-8">
+										<select name="rpt_type" class="form-control" > 
+										 	<option>Select</option>
+										 	<option value="ledgerasof">Ledger Report as of</option>
+										 	<option value="ledgerperiod">Ledger Report Period</option>
+										</select>
+									</div>
+								</div>
+							</div> -->
+
+							<div class="form-group c_location">
+								<label class="col-md-3 control-label">Supplier</label>
+								<div class="col-md-8">
+									<select name="supplier" class="form-control" > 
+									 	<option value="0">All</option>
+									 	{{range  $Ls_Arr_supplier ,$val := .Ls_supplier}}
+											<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+										{{end}}
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-group c_asofdate" hidden>
+								<label class="col-md-3 control-label">As of Date<span class="required" aria-required="true">*</span>
+								</label>
+								<div class="col-md-8">
+									<input type="text" name="asofdate" placeholder="As of date" class="form-control date-picker" maxlength="50" Required>
+												<!-- <span class="help-block">
+												A block of help text. </sapan> -->
+								</div>
+							</div>
+
+							<div class="form-group c_datefrom" hidden>
+								<label class="col-md-3 control-label">Date from<span class="required" aria-required="true">*</span>
+								</label>
+								<div class="col-md-8">
+									<input type="text" name="datefrom" placeholder="Date from" class="form-control date-picker" maxlength="50">
+												<!-- <span class="help-block">
+												A block of help text. </sapan> -->
+								</div>
+							</div>
+
+							<div class="form-group c_dateto" hidden>
+								<label class="col-md-3 control-label">Date to<span class="required" aria-required="true">*</span>
+								</label>
+								<div class="col-md-8">
+									<input type="text" name="dateto" placeholder="Date to" class="form-control date-picker" maxlength="50">
+												<!-- <span class="help-block">
+												A block of help text. </sapan> -->
+								</div>
+							</div>
+							<div class="form-group c_item">
+								<label class="col-md-3 control-label">Item</label>
+								<div class="col-md-4">
+									<input type="text" name="item" placeholder="Item" id="item"  class="form-control input-large" >
+								</div>
+							</div>
+							<!-- ledger as of -->
+							<div class="form-group c_item_key">
+								<label class="col-md-3 control-label">Item Name(product filter)</label>
+								<div class="col-md-4">
+									<input type="text" name="item_key" placeholder="key word"   class="form-control input-large" >
+								</div>
+							</div>
+							<div class="form-group c_zeros" hidden>
+								<label class="col-md-3 control-label">Zeros</label>
+								<div class="col-md-8">
+									<select name="zeros" class="form-control" > 
+									 	<option value="1">All</option>
+									 	<option value="2">Zero Qty</option>
+									 	<option value="3">With Qty</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group c_item_status" hidden>
+								<label class="col-md-3 control-label">Status</label>
+								<div class="col-md-8">
+									<select name="item_status" class="form-control" > 
+									 	<option value="">All</option>
+									 	{{range  $Ls_item_status,$val := .Arr_item_status}}
+											<option value="{{ index  $val 0}}">{{ index  $val 0}}</option>
+										{{end}}
+									</select>
+								</div>
+							</div>
+							<div class="form-group c_item_sales_type" hidden>
+								<label class="col-md-3 control-label">Sales Type</label>
+								<div class="col-md-8">
+									<select name="sales_type" class="form-control" > 
+									 	<option value="1">All</option>
+									 	<option value="2">Regular</option>
+									 	<option value="3">Sale</option>
+									 	<option value="4">MD30</option>
+									 	<option value="5">MD50</option>
+									 	<option value="6">MD70</option>
+									 	<option value="7">MDMega</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group c_price" hidden>
+								<label class="col-md-3 control-label" >Price</label>
+								<div class="col-md-8">
+									<select name="price" class="form-control" > 
+									 	<option value="0">All</option>
+									 	{{range  $Ls_price ,$val := .Arr_price}}
+											<option value="{{ index  $val 0}}">{{ index  $val 0}}</option>
+										{{end}}
+									</select>
+								</div>
+							</div>
+							<div class="form-group c_batch" hidden>
+								<label class="col-md-3 control-label">Batch</label>
+								<div class="col-md-4">
+									<input type="text" name="batch" placeholder="Batch"   class="form-control input-large" >
+								</div>
+							</div>
+							<div class="form-group c_item_class" hidden>
+								<label class="col-md-3 control-label">Item Class</label>
+								<div class="col-md-8">
+									<select name="item_class" class="form-control" > 
+									 	<option value="0">All</option>
+									 	{{range  $Ls_item_class ,$val := .Arr_item_class}}
+											<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+										{{end}}
+									</select>
+								</div>
+							</div>
+							<!-- end ledger as of -->	
+
+							<div class="form-actions fluid">
+								<div class="col-md-offset-3 col-md-9">
+									<button type="submit" class="btn blue submit_btn">Generate</button>
+									<button class="btn default" onclick="javascript:Navigate('/inventory/item?rights={{.Rights}}')" type="button">Cancel</button>
+								</div>
+							</div>
+						</form>
+										
+					</div>	
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+	var currentDate = new Date();  
+	$(".date-picker").datepicker("setDate",currentDate);
+	$("[name=supplier]").select2();
+
+	function repoFormatResult( repo ) {
+	    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div></div>";
+
+	    return markup;
+	}
+
+	function repoFormatSelection( repo ) {
+        return repo.full_name;
+    }
+    		
+	$( "#item" ).select2({
+	    placeholder: "Search for Items",
+	    minimumInputLength: 2,
+	    multiple: false,
+	    allowClear: true,
+	    ajax: {
+	        url: "/inventory/adjustment_entry/details/Ajax/Ajax_getItem",
+	        dataType: "json",
+	        quietMillis: 250,
+	        data: function( term, page ) {
+	            return {
+	                // search term
+	                q: term
+	            };
+	        },
+	        results: function( data, page ) {
+	                // parse the results into the format expected by Select2.
+	                // since we are using custom formatting functions we do not need to alter the remote JSON data
+	                return { results: data.items };
+	        }
+	        
+	    },
+	    
+	    formatResult: repoFormatResult,
+	    formatSelection: repoFormatSelection,
+	    // apply css that makes the dropdown taller
+	    dropdownCssClass: "bigdrop",
+	    // we do not want to escape markup since we are displaying html in results
+	    escapeMarkup: function( m ) {
+	        return m;
+	    }
+	});
+	
+	/*$
+	('.c_location').hide();
+	$('.c_asofdate').hide();
+	$('.c_item').hide();
+	$('.c_datefrom').hide();
+	$('.c_dateto').hide();
+
+	$('.c_item_key').hide();
+	$('.c_zeros').hide();
+	$('.c_item_status').hide();
+	$('.c_item_sales_type').hide();
+	$('.c_price').hide();
+	$('.c_batch').hide();
+	$('.c_item_class').hide();
+	*/
+
+/*
+	$('select[name=rpt_type]').change(function(){
+		$('.c_location').hide();
+		$('.c_asofdate').hide();
+		$('.c_item').hide();
+		$('.c_datefrom').hide();
+		$('.c_dateto').hide();
+
+		$('.c_item_key').hide();
+		$('.c_zeros').hide();
+		$('.c_item_status').hide();
+		$('.c_item_sales_type').hide();
+		$('.c_price').hide();
+		$('.c_batch').hide();
+		$('.c_item_class').hide();
+
+
+
+		if($(this).val() == "ledgerasof"){
+			$('.c_location').show();
+			$('.c_asofdate').show();
+			$('.c_item').show();
+
+			$('.c_item_key').show();
+			$('.c_zeros').show();
+			$('.c_item_status').show();
+			$('.c_item_sales_type').show();
+			$('.c_price').show();
+			$('.c_batch').show();
+			$('.c_item_class').show();
+			//$('.date-picker').datepicker({"setDate": new Date() ,  autoclose: true });
+			
+		}else if($(this).val() == "ledgerperiod"){
+			$('.c_location').show();
+			$('.c_item').show();
+			$('.c_datefrom').show();
+			$('.c_dateto').show();
+
+		}
+
+
+	});
+*/
+
+</script>

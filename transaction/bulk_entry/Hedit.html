@@ -1,0 +1,370 @@
+{{$Org_id := .Tconf.Org_id}}
+
+<head>
+	<!-- <title style="font-size: 16px;">Paired logs Report</title> -->
+	<style type="text/css">
+		table {
+
+			font-size: 10px;
+			font-family: 'Roboto';
+
+
+			border-collapse: collapse;
+			border-spacing: 50px;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+
+
+		}
+
+		table td,
+		table th {
+			max-width: 100px;
+			overflow-x: hidden;
+			overflow-y: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			padding: 3px;
+
+
+		}
+
+		.headercolor {
+			background-color: #EFEBEB
+		}
+
+		.fontroboto {
+
+			font-family: 'Roboto';
+			font-size: 10px;
+		}
+
+		.row.header {
+			font-weight: 900;
+			color: #ffffff;
+			background: #ea6153;
+		}
+
+		.row.green {
+			background: #27ae60;
+		}
+
+		.cell {
+			padding: 1px 10px;
+			display: table-cell;
+		}
+
+		.table {
+			margin: 0 0 40px 0;
+			width: 100%;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+			display: table;
+		}
+
+		@media screen and (max-width: 580px) {
+			.row {
+				padding: 14px 0 7px;
+				display: block;
+			}
+
+			.row.header {
+				padding: 0;
+				height: 6px;
+			}
+
+			.row.header .cell {
+				display: none;
+			}
+
+			.row .cell {
+				margin-bottom: 10px;
+			}
+
+			.row .cell:before {
+				margin-bottom: 3px;
+				min-width: 150px;
+				font-size: 10px;
+				line-height: 10px;
+				font-weight: bold;
+				text-transform: uppercase;
+				color: #969696;
+				display: block;
+			}
+		}
+
+		#amt_generated2 {
+			font-size: 14px;
+		}
+
+		@keyframes blinker {
+			50% {
+				opacity: 0;
+			}
+		}
+
+		.redfont {
+			color: #FF0000;
+		}
+	</style>
+</head>
+
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-file-text"></i>Edit Consumer Entry Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+
+
+
+
+				<div class="row">
+					<div class="col-md-6">
+
+
+						<h3 class="form-section">Consumer Entry {{.Tconf.id}}</h3>
+
+
+
+						<form id="CreateTransaction" class="form-horizontal" method="Post" onsubmit="return DoCreateTransaction()">
+							<input type="hidden" name="id" value="{{.Tconf.id}}">
+
+							<div class="form-horizontal">
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Tran date<span class="required" aria-required="true">*</span>
+									</label>
+									<div class="col-md-8">
+										<input type="text" name="trandate" id="trandate" placeholder="Select Date"
+											class="form-control date-picker-notime" maxlength="50" Required value="{{.Tconf.trandate}}">
+										<span class="help-block c_h_date" style="color:red;"></span>
+
+									</div>
+								</div>
+
+								
+								<div class="form-group">
+									<label class="col-md-3 control-label">Loan Type</label>
+									<div class="col-md-8">
+										<select name="loantype" class="form-control" id="loantype">
+
+											{{$loantype_id  := .Tconf.loantype }}
+											{{range  $key ,$val := .Ls_loantype}}
+											{{ $loop_id  := index  $val 0 }}
+											{{if eq $loantype_id $loop_id }}
+											<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+											{{else}}
+											<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+											{{end}}
+											{{end}}
+
+										</select>
+									</div>
+								</div>
+
+									
+								<div class="form-group">
+									<label class="col-md-3 control-label">Partner</label>
+									<div class="col-md-8">
+										<select name="partner" class="form-control" id="partner">
+
+											{{$partner_id  := .Tconf.partner }}
+											{{range  $key ,$val := .Ls_partner}}
+											{{ $loop_id  := index  $val 0 }}
+											{{if eq $partner_id $loop_id }}
+											<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+											{{else}}
+											<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+											{{end}}
+											{{end}}
+
+										</select>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Paymode</label>
+									<div class="col-md-8">
+										<select name="paymode" class="form-control" id="paymode">
+
+											{{$paymode_id  := .Tconf.payment_mode }}
+											{{range  $key ,$val := .Ls_paymode}}
+											{{ $loop_id  := index  $val 0 }}
+											{{if eq $paymode_id $loop_id }}
+											<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+											{{else}}
+											<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+											{{end}}
+											{{end}}
+
+										</select>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">First Due<span class="required" aria-required="true">*</span>
+									</label>
+									<div class="col-md-8">
+										<input type="text" name="first_due" id="first_due" placeholder="Select Date"
+											class="form-control date-picker-notime" maxlength="50" Required value="{{.Tconf.first_due}}">
+										<span class="help-block c_h_date" style="color:red;"></span>
+
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-md-3 control-label">Released Date<span class="required" aria-required="true">*</span>
+									</label>
+									<div class="col-md-8">
+										<input type="text" name="released" id="released" placeholder="Select Date"
+											class="form-control date-picker-notime" maxlength="50" Required value="{{.Tconf.released}}">
+										<span class="help-block c_h_date" style="color:red;"></span>
+
+									</div>
+								</div>
+
+
+
+
+								
+								<div class="form-group">
+									<label class="col-md-3 control-label">Remarks</label>
+									<div class="col-md-8">
+
+										<!-- 	<input type="text" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct"> -->
+										<textarea name="remarks" class="form-control createAct">{{.Tconf.remarks}}</textarea>
+									</div>
+								</div>
+
+							</div>
+
+						</form>
+
+
+					</div>
+
+				</div>
+				<div class="form-actions fluid">
+					<div class="col-md-offset-3 col-md-9">
+						<button type="submit" class="btn blue submit_btn" onclick="return DoCreateTransaction()">Save</button>
+						<button class="btn default" onclick="javascript:nav_back('/transaction/bulk_entry?rights={{.Rights}}')"
+							type="button">Go Back</button>
+					</div>
+				</div>
+
+
+			</div>
+
+
+
+
+
+		</div>
+	</div>
+
+
+
+
+</div>
+
+</div>
+
+
+
+
+<script type="text/javascript">
+
+
+
+
+	function DoCreateTransaction() {
+
+		var ret_msg = ""
+		
+		$.get("/json_func",
+			{
+				//qdata : "Branch_Save 'Add','programmer',1,0,'"+$('[name=sup_name]').val()+"' ,'"+$('[name=sort]').val()+"' ,'"+$('[name=remarks]').val()+"'"
+				qdata: "BULK_LOANHDR_SaveEdit '{{.Tconf.username}}',{{.Tconf.id}}, '" +  $('[name=trandate]').val() + "',"   +$('[name=partner]').val() +","+ $('[name=loantype]').val() +"," + $('[name=paymode]').val() + ",'" + $('[name=first_due]').val()  +"','" + $('[name=released]').val() + "','" + $('[name=remarks]').val() +"'"
+
+			}
+			,
+			function (data, status) {
+				//json_personnel = data
+				if (data != null) {
+					for (var i = 0; i < data.length; i++) {
+						//alert(data[i][0]);
+
+						ret_msg = data[i][1]
+						if (data[i][1] == "Success") {
+							//console.log(data[i][0])
+							//alert(ret_msg)
+							//$('#basic').modal('hide')
+							//dtbl()
+							//console.log("success here")
+							//$("#item_tagsdata").show()
+							//$(".submit_btn").prop('disabled', true);
+							$(".c_suprec_id").val(data[i][0])
+							GotoDetail(data[i][0])
+							//return false;
+						} else {
+							alert(ret_msg)
+						}
+
+					}
+				}
+			});
+
+		return false;
+		
+
+	}
+
+	function GotoDetail(lrid) {
+		$.get("/transaction/bulk_entry/details?rights={{.Rights}}&ID=" + lrid,
+			function (data, status) {
+				$("#ContentID").html(data);
+
+			}
+
+		);
+	}
+
+
+	
+	$(".date-picker").datetimepicker({ format: 'mm/dd/yyyy hh:mm:ss' });
+	$(".date-picker").datepicker({autoclose: true });
+	$(".date-picker-notime").datepicker({autoclose: true });
+
+
+	/*	$(".date-picker").datetimepicker({
+					 dateFormat: "yy-mm-dd",
+						 timeFormat:  "hh:mm:ss"
+
+			});*/
+
+	//$('.date-picker').datepicker({"setDate": new Date() ,  autoclose: true });
+	//$('input[name=item_class]').focus();
+	//$("[name=item_class] , [name=supplier], [name=location]").select2();
+	var rghts = '{{.Rights}}'
+
+
+
+
+
+	
+
+
+</script>

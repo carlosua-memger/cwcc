@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<style type="text/css">
+	table tr td{
+		font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+		border: 1px solid #cecece;
+		padding: 5px;
+		font-size:small
+	}
+	table tr th{
+		font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+		border: 1px solid #cecece;
+		padding: 5px;
+		font-size:small
+	}
+	
+</style>
+<body>
+
+<table id="example1" class="table table-bordered " cellspacing="0" width="100%">
+	<thead class="tbl_data">
+	         <!-- <tr style="border-bottom: 1px solid #DDD;">
+	        <th colspan="2" >HR Information</th>
+	        <th colspan="2">Contact</th>
+	    </tr> -->
+	    <tr>
+	        {{ range $index, $elmt := .Header}}
+	        <th>{{$elmt}}</th>
+	        {{end}}
+	    </tr>
+	    	
+		{{ range $index, $elmt := .Arr_data}}
+	    <tr>
+	        <td>{{index $elmt 3}}</td>
+	        <td>{{index $elmt 1}}</td>
+	        <td>{{index $elmt 5}}</td>
+	        <td>{{index $elmt 6}}</td>
+	        <td>{{index $elmt 7}}</td>
+	       
+	       
+	    </tr>
+	     {{end}}
+
+	</thead>
+</table>
+<center class="loading_gif" hidden>	
+<img src="/src/metronic_3.1.2/images/giphy.gif" style="margin-top: 1px;" alt="logo" class="logo-default">
+</center>
+<center class="end_of_rec" hidden>
+	End of records..
+</center>
+</body>
+<script src="/src/metronic_3.1.2/metronic/assets/global/plugins/jquery-1.11.0.min.js" type="text/javascript"></script>
+
+<script >
+	
+
+var track_page = 0; //track user scroll as page number, right now page number is 1
+var loading  = false; //prevents multiple loads
+var is_end_rec = false;
+load_contents(); //initial content load
+
+$(window).scroll(function() { //detect page scroll
+	//console.log("dapt mas dako ni sya :" +  $(window).scrollTop() + $(window).height() )
+	//console.log("dapt gamay ni sya:"+ $(document).height() )
+    if($(window).scrollTop() + $(window).height() >= $(document).height()) { //if user scrolled to bottom of the page
+        if(!is_end_rec){ 
+        //track_page = track_page + 1; //page number increment
+        load_contents(); //load content   
+    	}
+    }
+});     
+//Ajax load function
+
+function load_contents(){
+    if(loading == false){
+        loading = true;  //set loading flag on
+        track_page = track_page + 1; //page number increment
+        console.log(track_page)
+        $('.loading_gif').show(); //hide loading animation once data is received
+        $.get( '/inventory/reports/product_movement/ajaxviewer', 
+        	{
+        		'page'			: track_page ,
+	        	'datefrom'		:'{{.Tconf.datefrom}}' ,
+	        	'dateto'		:'{{.Tconf.dateto}}',
+	        	'item_id'		:'{{.Tconf.item_id}}',
+	        	'org_id'		:'{{.Tconf.org_id}}',
+	        	
+			}, function(data){
+            loading = false; //set loading flag off once the content is loaded
+            /*if(data.trim().length == 0){
+                //notify user if nothing to load
+                $('.loading-info').html("No more records!");
+                return;
+            }*/
+
+            var htmdata = ''
+
+            if( data!=null){
+                    for (var i = 0; i < data.length; i++) {
+                        //alert(data[i][0]);
+                        htmdata += '<tr id="'+data[i][1]+'"><td>'+data[i][0]+'<a href="#'+data[i][1]+'" onclick="javascript:open_url('+data[i][1]+",'"+data[i][2]+"'"+',event);" >'+data[i][2]+'<a/></td><td>'+data[i][3]+'</td><td >'+data[i][4]+'</td><td>'+data[i][5]+'</td><td>'+data[i][6]+'</td><td>'+data[i][7]+'</td><td>'+data[i][8]+'</td></tr>'
+                    }
+            }else{
+            	is_end_rec=true
+            	$('.end_of_rec').show(); //hide loading animation once data is received
+            }        
+
+            loading = false
+            $('.loading_gif').hide(); //hide loading animation once data is received
+            $(".tbl_data").append(htmdata); //append data into #results element
+        
+        }).fail(function(xhr, ajaxOptions, thrownError) { //any errors?
+            alert(thrownError); //alert with HTTP error
+        })
+    }
+}
+
+/*function open_url(i ,item_name) {
+    
+    var url_to_open = "/inventory/reports/non_selling_aging/ajaxviewer_details?location=0&item="+i+"&item_name="+item_name+"&location_name=&uprice=&status=&runbal="
+    var myWindow = window.open(url_to_open, "", "width=800,height=500");
+}
+*/
+
+function open_url(a ,itemname,event) {
+    var strt_date = '{{.Tconf.datefrom}}'
+    var end_date  =  '{{.Tconf.dateto}}' 
+    var item_id = a
+    var item_name = itemname
+    var item_img = " "
+    //$( event.target ).closest( "tr" ).html( "src" );
+
+    var img_src = $(event.target).closest("tr").find("img").attr( "src" );
+    if (img_src === undefined || img_src === null) {
+    	img_src=""
+	}
+    console.log(img_src)
+    
+    var url_to_open = "/inventory/report/product_movement_per_item?item_id="+ item_id +"&startdate="+strt_date+"&enddate="+end_date +"&item_name="+item_name+"&item_img="+img_src+"&ddata="
+    var myWindow = window.open(url_to_open, "", "width=800,height=1000");
+}
+
+
+</script>
+
+</html>

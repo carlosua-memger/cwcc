@@ -1,0 +1,152 @@
+<!-- <Form> -->
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+		<form id="transdetnew" method="Post" onsubmit="javascript: return DoeditTrasDet()">
+			<input type="hidden" name="hdr_id" value="{{.Tconf.hdr_id}}">	
+			<input type="hidden" name="id" value="{{.Tconf.location_detail_id}}">	
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">Edit Location Customer</h4>
+				</div>
+				<!-- <div class="modal-body">
+				 -->	 <!-- modal data here -->
+
+
+
+					<div class="form-horizontal">
+
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Customer</label>
+							<div class="col-md-8">
+
+								<select name="customer" class="form-control" readonly="readonly"> 
+										<option value="{{.Tconf.location_detail_customer}}" selected>{{.Tconf.location_detail_customer_name}}</option>
+								</select>
+
+							</div>
+						</div>
+
+						
+							<div class="form-group">
+								<label class="col-md-3 control-label">Activate</label>
+									<div class="col-md-5">
+										<!-- <input type='hidden' value='0' name='activated[0]'> -->
+										<input id="activated" name="activated" type="checkbox" class="checkbox" value="1" {{.Tconf.location_detail_activated}}>
+										<input type="hidden" id="activated" name="activated" value="0" />
+									</div>
+
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label">Remarks</label>
+									<div class="col-md-5">
+										<textarea name = "remarks" class="form-control createAct">{{.Tconf.location_detail_remarks}}</textarea>
+									</div>
+
+							</div>
+										  									
+					</div>
+
+					 <!-- end modal data here -->
+				<!-- </div> -->
+				<div class="errorDv">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn default" data-dismiss="modal">Go Back</button>
+					<button type="submit" class="btn blue">Update changes</button>
+				</div>
+
+		<!--  -->
+				<!-- /.modal-content -->
+		</form>
+	</div>
+		<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->					
+					
+
+
+<script type="text/javascript">
+ 	$('.form_datetime').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+	
+ 	num_val_init() //for number auto zero
+	var rights = '{{.Tconf.rights}}' 
+	var assignmentID = '{{.Tconf.location}}' 
+
+		$('select').each(function(){
+		    $('option').each(function() {
+		        if(!this.selected) {
+		            $(this).attr('disabled', true);
+		        }
+		    });
+		});
+
+ 				/* $('#activated').on('change', function () {
+			        if(this.checked){
+			            this.value = this.checked ? 1 : 0;
+			            $('input[name=activated]:checked').val(this.value)
+			            alert(this.value);
+			        }
+			        if(!this.checked){
+			            this.value = this.checked ? 1 : 0;
+			            $('input[name=activated]:checked').val(this.value)
+			            alert(this.value);
+			        }
+
+ 				}).change();  */
+
+
+			//$("select").attr("disabled", "disabled");
+			
+			function DoeditTrasDet(a){
+
+				
+				if(!$('#transdetnew')[0].checkValidity()){
+					$('.val_err').show();
+				 	return false;
+				}
+				$( ".errorDv" ).html("")
+
+
+			        /* if(this.checked){
+			            this.value = this.checked ? 1 : 0;
+			            $('input[name=activated]').val(this.value)
+			            alert(this.value);
+			        }
+			        if(!this.checked){
+			            this.value = this.checked ? 1 : 0;
+			            $('input[name=activated]').val(this.value)
+			            alert(this.value);
+			        } */
+
+
+				$.post("/inventory/location/customer/DEditHandler",$( "#transdetnew" ).serialize()
+
+		        ,
+		        function(data,status){
+		        	alert(data[1])
+		            if(data[1]=='Success'){
+		            	$(".createAct").val("")
+			            	$.get("/inventory/location/customer?rights="+rights+"&ID={{.Tconf.hdr_id}}",
+	                    		 function(data,status){
+			                     $("#ContentID").html(data);
+			                     $('#basic').modal('hide')
+			                    }
+			                );
+			        }	
+				
+		        });
+	 			return false
+			}
+	setTimeout(function (){
+     //   $( "#item").select2('open')
+    	
+    }, 500);
+
+</script>

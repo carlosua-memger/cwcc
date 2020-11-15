@@ -1,0 +1,494 @@
+    <style type="text/css">
+    tr.hilight {
+    background: #6FB1B1;
+    }
+    td.hilight {
+    background: #6FB1B1 ;
+    }
+   .ipt {
+            width: 30px;
+        }
+    .ipt_r {
+            width: 50px;
+        }
+    .ipt_ref {
+            width: 100px;
+    }
+    .dtl_h {
+        border-bottom: 4px solid #35AA47;
+        width: 65px;
+        margin-bottom: 13px;
+    }        
+    </style>
+    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+    
+    <div class="portlet box grey-cascade" id="dpanel">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-globe"></i>{{.Tempconf.Panel_name}}
+            </div>
+            <div class="tools">
+                <a href="javascript:;" class="collapse">
+                </a>
+                <a href="#portlet-config" data-toggle="modal" class="config">
+                </a>
+                <a href="javascript:;" class="reload">
+                </a>
+                <a href="javascript:;" class="remove">
+                </a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="table-toolbar">
+                {{if eq .Tempconf.Add_back_button "true"}}
+                    <div class="btn-group">
+                        <a Class="btn green afjaxify" href="#/transaction/DSS?rights={{.Tempconf.Rights}}" onclick="javascript:nav_back('/inventory/item_class?rights={{.Tempconf.Rights}}');">
+                        <i class="fa fa-backward"></i> Back 
+                        </a>
+                    </div>
+                {{end}}
+                {{if eq .Tempconf.Add_new_button_details "true"}}
+                    <a  class="btn green act_btn" data-toggle='modal' href='#basic'  onclick="javascript:Modalfunc('{{.Tempconf.Add_new_button_url}}{{.Tempconf.hdr_id}}');">
+                    Add New <i class="fa fa-plus"></i>
+                     </a>
+                     
+                {{end}}
+                
+                {{if eq .Tempconf.Add_new_button "true"}}
+                <div class="btn-group act_btn" >
+                    <a class="btn green" href="#{{.Tempconf.Add_new_button_url}}" onclick="javascript:Navigate('{{.Tempconf.Add_new_button_url}}');">
+                    Add New <i class="fa fa-plus"></i>
+                    </a>
+
+                   <!--  <a  class="btn green act_btn" data-toggle='modal' href='#basic'  onclick="javascript:Modalfunc('{{.Tempconf.Add_new_button_url}}{{.Tempconf.hdr_id}}');">
+                    Add New <i class="fa fa-plus"></i>
+                     </a> -->
+
+                </div>
+                {{end}}
+                
+                
+                {{if eq .Tempconf.Add_cancel_button "true"}}
+                <div class="btn-group act_btn">
+                    <a class="btn green" href="#{{.Tempconf.Add_cancel_button_url}}" onclick="javascript:func_cancel('{{.Tempconf.Add_cancel_button_url}}');">
+                    Cancel 
+                    </a>
+                </div>
+                {{end}}
+
+                {{if eq .Tempconf.Add_post_button "true"}}
+                <div class="btn-group act_btn">
+                    <a class="btn green" href="#{{.Tempconf.Add_post_button_url}}" onclick="javascript:func_post('{{.Tempconf.Add_post_button_url}}');">
+                    Post 
+                    </a>
+                </div>
+                {{end}}
+
+                <div class="btn-group pull-right">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        <li>
+                            <a href="#">
+                            Print </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                            Save as PDF </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                            Export to Excel </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="error_section">
+               
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <label class="control-label">Item</label>
+                    <div>
+                        <input type="text" name="item" placeholder="Item" id="item"  class="input-large"  required>
+                    </div>
+                            
+                </div>
+                <div class="col-md-8" >
+                    <label class="control-label">Date:</label>
+                    <div >
+                        <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                            <span></span> <b class="caret"></b>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5" >
+                    <button class="btn blue" onclick="javascript:func_filter();">Filter</button>
+                </div>     
+                 <span id="limitAlert"class="help-block col-md-8 " style="color:red" hidden >Error: Date range maximum of 1 Year </span>
+            </div>  
+                
+                <script type="text/javascript">
+                $(function() {
+                   
+                    
+                    
+                    //var start = moment().subtract(29, 'days');
+                    //var end = moment();
+
+                    var start = moment().subtract(1, 'month').startOf('month')
+                    var end = moment().subtract(1, 'month').endOf('month')
+                    
+
+                    function cb(start, end) {
+                        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                    }
+
+                    $('#reportrange').daterangepicker({
+                        startDate: start,
+                        endDate: end,
+                        ranges: {
+                           'Today': [moment(), moment()],
+                           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                           'This Month': [moment().startOf('month'), moment().endOf('month')],
+                           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                        }
+                    }, cb);
+
+                    cb(start, end);
+                    
+                });
+                </script>
+
+            
+
+
+            <div class ="progressclass">
+
+               <!--  <div class="progress"> <div class="progress-bar progress-bar-striped active uploadprog" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 10%"> <span class="sr-only">45% Complete</span></div></div> -->
+
+            </div>
+            <div class ="progressCountclass"></div>
+               
+             <hr>   
+             
+            <!-- <div>pushing...</div> -->
+        <table id="example1" class="table table-bordered " cellspacing="0" width="100%">
+            <thead>
+                
+                </tr>
+                <!-- <tr>
+                    <th>Item</th>
+                    <th>Supplier</th>
+                    <th colspan="2">Beginning balance</th>
+                    <th colspan="2">Supplier Receipts</th>
+                    <th colspan="2">Customer Sales</th>
+                    <th colspan="2">Ending Balance</th>
+
+
+
+                </tr>
+                <tr> -->
+
+                    <!-- {{ range $index, $elmt := .Headercol}}
+                    <th>{{$elmt}}</th>
+                    {{end}} -->
+
+                    <!-- 
+                    <th></th>
+                    <th></th>
+                    
+                    <th>Volume</th>
+                    <th>Value</th>
+                    <th>Volume</th>
+                    <th>Value</th>
+                    <th>Volume</th>
+                    <th>Value</th>
+                    <th>Volume</th>
+                    <th>Value</th>
+
+ -->
+                    <th>Item</th>
+                    <th>Supplier Name</th>
+                    <th>Beginning Balance</th>
+                    <th>Supplier Reciept</th>
+                    <th>Customer Sale</th>    
+                    <th>Adjustment Entry</th>
+                    <th>Ending Balance</th>   
+                    
+
+                </tr>
+            </thead>
+
+            <tfoot>
+                <!-- <tr>
+                    {{ range $index, $elmt := .Headercol}}
+                    <th>{{$elmt}}</th>
+                    {{end}}
+                </tr> -->
+                 <!--  <tr >
+                    <th colspan="2" >HR Information</th>
+                    <th colspan="1" style="border-top: 1px solid #DDD;">Contact</th>
+                </tr> -->
+                
+            </tfoot>
+        </table>
+
+        
+        
+    </div>
+</div>
+
+ <script>
+
+ 
+
+        var stat_done = 0
+        var ish = 0
+        var level = "{{.Tempconf.level}}"
+        var last_url = "{{.AjaxUrl}}"
+       var  last_search ="{{.Tempconf.last_search}}"
+           
+       $(document).ready(function() {
+        
+
+        $('#limitAlert').hide()
+
+
+        });
+        function Modalfunc(a,v){
+            console.log(v)
+            $.get(a,
+                    {
+                      Assign_ID:'{{.Tempconf.Assign_ID}}'
+                    }
+                    ,
+
+                    function(data,status){
+                        $("#basic").html(data);
+                        //$(".dr-js").select2();
+                        
+                    });
+            //return false;
+        }
+        function func_edit(a,b){
+            $.get(a,
+                    function(data,status){
+                     $("#ContentID").html(data);
+                    $(".dr-js").select2();
+
+                    }
+                );
+            return false
+        }
+        function func_add_child(a,b){
+            console.log("{{.Tempconf.Add_new_button_url}}")
+            $.get("{{.Tempconf.Add_new_button_url}}&parentID="+a,
+                    function(data,status){
+                     //$("#ContentID").html(data);
+                     $("#basic").html(data);
+                    $('#basic').modal('show'); 
+                    //$(".dr-js").select2();
+
+                    }
+                );
+            return false
+        }
+        function Modalfuncdelete (a,b,c) {
+            //a=link //b=dtl_id
+            clicked =c
+            console.log(a)
+            $.get(a,
+                    {
+                      dtl_id:b 
+                    },
+                    function(data,status){
+                        $("#modalSession").html(data);
+                    });
+            return false;
+        }
+        function Dodelete (a) {
+            $.post(a,$( ".formDelete" ).serialize()
+            ,
+            function(data,status){
+                var ret_data ="";
+                ret_data = data[1];
+                if (ret_data.indexOf("Error")==-1){
+                    $('#modalSession').modal('hide') 
+                    clicked.closest("tr").remove();
+                }else{
+                   alert("Transaction not successful."); 
+                   $('#modalSession').modal('hide') 
+                }
+            });
+        return false;
+        }
+
+        function repoFormatResult( repo ) {
+            var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div></div>";
+
+            return markup;
+        }
+
+        function repoFormatSelection( repo ) {
+            return repo.full_name;
+        }
+        
+            $( "#item" ).select2({
+                placeholder: "Search for Items",
+                minimumInputLength: 2,
+                multiple: false,
+                allowClear: true,
+                ajax: {
+                    url: "/inventory/customer_sales/details/Ajax/Ajax_getItem",
+                    dataType: "json",
+                    quietMillis: 250,
+                    data: function( term, page ) {
+                        return {
+                            // search term
+                            q: term
+                        };
+                    },
+                    results: function( data, page ) {
+                            // parse the results into the format expected by Select2.
+                            // since we are using custom formatting functions we do not need to alter the remote JSON data
+                            return { results: data.items };
+                    }
+                    
+                },
+                
+                formatResult: repoFormatResult,
+                formatSelection: repoFormatSelection,
+                // apply css that makes the dropdown taller
+                dropdownCssClass: "bigdrop",
+                // we do not want to escape markup since we are displaying html in results
+                escapeMarkup: function( m ) {
+                    return m;
+                }
+            });
+
+        function func_filter () {
+            $('#limitAlert').hide()
+            var strt_date = $('#reportrange').data('daterangepicker').startDate.format('YYYY-MM-DD ');
+            var end_date  = $('#reportrange').data('daterangepicker').endDate.format('YYYY-MM-DD ');
+            var df =$('#reportrange').data('daterangepicker').endDate - $('#reportrange').data('daterangepicker').startDate
+            if(df> 31708799999){ //limit 1yr
+                $('#limitAlert').show()
+                return false;
+                
+            }
+            console.log(df)
+            var itemid = $("#item").select2("val"); 
+            console.log(strt_date)
+            console.log(end_date)
+
+            var aj_url ="{{.AjaxUrl}}&item_id=" + itemid + "&startdate="+strt_date+"&enddate="+end_date
+            console.log(aj_url)
+            $('#example1').dataTable( {
+                "serverSide": true,
+                "processing": true,
+                "ajax": aj_url ,
+                "ordering" : false,
+                destroy: true,
+                "pageLength": {{.Tempconf.pageLength}},
+                'displayStart': {{.Tempconf.displayStart}},
+                "oSearch": {"sSearch": last_search},
+                "sDom": '<"top"iflp>rt<"bottom"i>',
+               /* "sScrollX": "100%",
+                "sScrollYInner": "110%",*/
+                    
+
+                "initComplete": function() {
+                    
+                    var $searchInput = $('div.dataTables_filter input');
+
+                    $searchInput.unbind();
+
+                    $searchInput.bind('keyup', function(e) {
+                        if(e.keyCode == 13) {
+                            oTable.fnFilter(this.value); 
+                        }
+                    });
+                },
+
+            } ) ;
+
+
+        }
+        
+
+
+        dtbl();
+       function dtbl(){
+        var strt_date = $('#reportrange').data('daterangepicker').startDate.format('YYYY-MM-DD ');
+            var end_date  = $('#reportrange').data('daterangepicker').endDate.format('YYYY-MM-DD ');
+            var itemid = $("#item").select2("val"); 
+            //console.log(strt_date)
+            //console.log(end_date)
+
+            var aj_url ="{{.AjaxUrl}}&item_id=" + itemid + "&startdate="+strt_date+"&enddate="+end_date
+            //console.log(aj_url)
+                
+       var oTable =    $('#example1').dataTable( {
+                                "serverSide": true,
+                                "processing": true,
+                                "ajax": aj_url,
+                                "ordering" : false,
+                                destroy: true,
+                                "pageLength": {{.Tempconf.pageLength}},
+                                'displayStart': {{.Tempconf.displayStart}},
+                                "oSearch": {"sSearch": last_search},
+                                "sDom": '<"top"iflp>rt<"bottom"i>',
+                               /* "sScrollX": "100%",
+                                "sScrollYInner": "110%",*/
+                                    
+
+                                "initComplete": function() {
+                                    
+                                    var $searchInput = $('div.dataTables_filter input');
+
+                                    $searchInput.unbind();
+
+                                    $searchInput.bind('keyup', function(e) {
+                                        if(e.keyCode == 13) {
+                                            oTable.fnFilter(this.value); 
+                                        }
+                                    });
+                                },
+
+                            } ) ;
+            $('#example1').on( 'draw.dt', function () {
+               //   console.log(oTable.ajax.params());
+               //alert(params)
+               //console.log(oTable.dataTable().fnSettings())
+               if(level=='1'){
+               var params = oTable.oApi._fnAjaxParameters(oTable.dataTable().fnSettings());
+               localStorage.setItem("last_url", last_url); 
+               localStorage.setItem("last_start", params.start);
+               localStorage.setItem("last_length",params.length);
+               localStorage.setItem("last_search",params.search.value);
+               }
+            });
+
+        }
+
+
+function open_url(a,itemname,d) {
+    var strt_date = $('#reportrange').data('daterangepicker').startDate.format('YYYY-MM-DD ');
+    var end_date  = $('#reportrange').data('daterangepicker').endDate.format('YYYY-MM-DD ');
+    var itemid = $("#item").select2("val"); 
+    //console.log(strt_date)
+    //console.log(end_date)
+
+    var url_to_open = a  + "&startdate="+strt_date+"&enddate="+end_date +"&item_name="+itemname+"&ddata="+d
+    var myWindow = window.open(url_to_open, "", "width=800,height=1000");
+}
+
+</script>
+
+
+<div class="lower_table"></div>

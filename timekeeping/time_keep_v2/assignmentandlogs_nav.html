@@ -1,0 +1,848 @@
+  <style type="text/css">
+  tr.hilight {
+    background: azure;
+  }
+  td.hilight {
+    background: azure ;
+  }
+  .txbxnd{
+    width: 50px;
+
+  }
+  .txblog{
+    width: 75px;
+
+  }
+  .ssuc{
+    border: solid 1px #2b8b3a;
+  }
+  .sfai{
+     border: solid 1px red;
+  }
+
+  .pagination a {
+      color: black;
+      float: left;
+      padding: 12px 16px;
+      text-decoration: none;
+      border: solid 1px #cecece;
+  }
+
+  .pagination a.active {
+      background-color: #cecece;
+      color: white;
+  }
+  .hrreg {
+    width: 50px;
+  }
+  .rmks {
+    height: 100px;
+    width: 100px;
+  }
+  
+
+  </style>
+  <div class="row">
+    
+    <div class="col-md-6">
+      
+      <div class="form-inline">
+         <div class="form-group">
+            <button onclick="mem_nav(0);"><i class="fa fa-backward"></i></button> 
+            <button onclick="mem_nav(1);"><i class="fa fa-forward"></i></button>
+            <label>Date: </label>  <input type="text" name="selected_date" class="form-control input-small  date-picker" placeholder="Date" maxlength="50" >  
+          </div>
+      </div>
+
+      <div class="form-inline">
+        <div class="form-group">
+          <label>Assignment:</label>
+          <input type="text" name="assignment" placeholder="Assignment" id="assignment"  class="form-control input-large" >
+        </div>
+      </div>
+      
+
+
+      
+    </div>
+   
+
+    <div class="col-md-6">
+      
+      <div class="form-inline">
+        <div class="form-group">
+          <label>Search:</label>
+          <input type="text" name="search" placeholder="Search" name="search" id="search"  class="form-control input-xlarge">
+        </div>
+      </div>
+
+      <div class="form-inline">
+        <div class="form-group">
+
+          <select name="numberPerPage" class="form-control">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option value="40">40</option>
+            <option value="50">50</option>
+            <option value="60">60</option>
+            <option value="70">70</option>
+            <option value="80">80</option>
+            <option value="90">90</option>
+            <option value="100">100</option>
+          </select>
+
+          <div class="pagination form-group">
+            <a href="#">&laquo;</a>
+            <a href="#">1</a>
+            <a class="active" href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">4</a>
+            <a href="#">5</a>
+            <a href="#">6</a>
+            <a href="#">&raquo;</a>
+          </div>
+          
+        </div>
+      </div>  
+
+
+  </div> 
+
+<!-- 
+  <div class="row">
+    <div class="col-md-6">
+    </div>
+
+    
+
+    <div class="col-md-6">
+      <div class="form-inline">
+        <div class="form-group">
+
+          <select name="numberPerPage" class="form-control">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option value="40">40</option>
+            <option value="50">50</option>
+            <option value="60">60</option>
+            <option value="70">70</option>
+            <option value="80">80</option>
+            <option value="90">90</option>
+            <option value="100">100</option>
+          </select>
+
+          <div class="pagination form-group">
+            <a href="#">&laquo;</a>
+            <a href="#">1</a>
+            <a class="active" href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">4</a>
+            <a href="#">5</a>
+            <a href="#">6</a>
+            <a href="#">&raquo;</a>
+          </div>
+          <label>Search:</label>
+          <input type="text" name="search" placeholder="Search" name="search" id="search"  class="form-control input-small">
+        </div>
+      </div>  
+
+
+    </div>    
+  </div> -->
+
+
+  
+  <hr>
+
+  
+<div class="loading_class" hidden="">
+  <center >
+    <img src="/src/metronic_3.1.2/images/giphy.gif" style="margin-top: 1px;" alt="logo" class="logo-default">
+  </center>
+</div>
+<div class="content_container">
+  <label>Time and productivity details :</label>
+
+  <table class="table table-bordered">
+  <thread>
+    <tr>
+          <td>Member</td>
+        <td>Raw logs</td>
+        <td colspan="4">Time and productivity</td>
+        <td colspan="11">Totals / Interpretation</td>
+        
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td>Sub assignment</td>
+        <td>In</td>
+        <td>Out</td>
+        <td>Output</td>
+
+        <td>Day Code</td>
+        <td>Regular</td>
+        <td>OT hrs</td>
+        <td>ND</td>
+        <td>NDOT</td>
+        <td>Break</td>
+        <td>Late</td>
+        <td>Undertime</td>
+        <td>Remarks</td>
+        <td>Approved OT</td>
+        <td></td>
+        
+      </tr>
+
+     
+
+  </thread>
+  <tbody id="tdataid">
+  
+  
+  </tbody>
+  <tfoot>
+
+    <td><a  data-toggle="modal" href="#myModal" >Add Member</a></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+
+  </tfoot>
+</table>
+
+
+
+<label>Stoppage details :</label>
+  <table class="table table-bordered">
+    <thread>
+      <tr>
+          <td>Start</td>
+          <td>End</td>
+          <td>Sub assignment</td>
+          <td>Reason</td>
+          <td></td>
+      </tr>
+    </thread>
+    <tbody id="tdataid">
+      <tr>
+        <td><a href="">[+ add log] </a></td>
+        <td><a href="">[+ add log] </a></td>
+        <td><a href="">[ Line 3 ] </a></td>
+        <td><a href="">[ Blah blah blah ] </a></td>
+        <td><a href="">[ Save ] </a></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      
+
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal Add member -->
+<div id="myModal" class="modal fade" role="dialog">
+  <!-- <Form> -->
+
+  <div class="modal-dialog modal-md">
+    <div class="modal-content" id="ModalCont">
+
+      <form id="transdetnew" method="Post" onsubmit="javascript: return DocreateEntryline(this)">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <h4 class="modal-title">Add New Entry line</h4>
+          </div>
+          <!-- <div class="modal-body">
+           -->   <!-- modal data here -->
+           <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="form-group">
+                  <label class="col-md-2 control-label">Member</label>
+                  <div class="col-md-5">
+                    <input type="text" name="memberid" placeholder="member" id="member"  class="form-control input-large"  required>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label class="col-md-2 control-label">Sub-assignment</label>
+                    <div class="col-md-5">
+                      <!-- <input type="text" name="addnew-assignment" placeholder="Assignment" id="addnew-assignment"  class="form-control input-large" > -->
+                      <select name="addnew-assignment" id="addnew-assignment" class="form-control input-large">
+                      </select>
+                    </div>
+                </div> 
+
+                <div class="form-group">
+                  <label class="col-md-2 control-label">IN</label>
+                    <div class="col-md-5">
+                       <input type="text" name="IN" placeholder="IN"  maxlength="50" class="form-control input-large form_datetime" required="">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-md-2 control-label">OUT</label>
+                    <div class="col-md-5">
+                      <input type="text" name="OUT" placeholder="OUT"  maxlength="50" class="form-control input-large form_datetime" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                  <label class="col-md-2 control-label">produced</label>
+                    <div class="col-md-5">
+                      <input type="text" name="produced" placeholder="Produced"  maxlength="10" value="0" class="form-control input-small">
+                    </div>
+                </div>
+           
+                <div class="form-group">
+                  <label class="col-md-2 control-label">Remarks</label>
+                    <div class="col-md-5">
+                      <textarea name="addnew_remarks" placeholder="Remarks" maxlength="500" class="form-control input-large"></textarea>
+                      
+                    </div>
+                </div>
+                
+                
+                                          
+            </div>
+             <!-- end modal data here -->
+          <!-- </div> -->
+          <div class="errorDv">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn default" data-dismiss="modal">Go Back</button>
+            <button type="submit" class="btn blue">Save </button>
+            <button type="button" class="btn blue btn_sa" onclick="javascript:DocreateEntryline('AS');">Save & Add new</button>
+          </div>
+          <div class="modal-body">
+      <!--  -->
+          <!-- /.modal-content -->
+      </form>
+    </div>
+      <!-- /.modal-content -->
+  </div>
+    <!-- /.modal-dialog --> 
+
+</div>
+
+
+
+<script type="text/javascript">
+  // Date picker calendar init
+
+    $('.date-picker').datepicker({
+        rtl: Metronic.isRTL(),
+        orientation: "left",
+        autoclose: true,
+        setDate : new Date()
+    });
+    $('.date-picker').datepicker("setDate", new Date()); //set current date
+
+    $(".form_datetime").datetimepicker({
+      autoclose: true,
+      isRTL: Metronic.isRTL(),
+     
+      pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left")
+     });
+
+   /* Global value init*/
+   var AssignID =""
+   var searchVal =""
+   var numberPerPage ="5"
+   var CurrentPage ="1"
+
+   //var Selecteddate = ""
+
+  function mem_nav(x) {
+    var selected_date = $("input[name=selected_date]").val();
+    var m = moment(selected_date);
+    if(x==0){ //Backward arrow
+      m.subtract(1,'days');
+    }else if(x==1){  //Forward arrow
+      m.add(1,'days');
+    }
+    $("input[name=selected_date]").val (m.format('MM/DD/YYYY') );
+    Startprocess()
+  } 
+
+  // Assignment Seachbox init
+  $( "#assignment" ).select2({
+      placeholder: "Search for assigment",
+      minimumInputLength: 2,
+      multiple: false,
+      allowClear: true,
+      ajax: {
+          url: "/api/ajax/timekeeping/timekeep_v2/{{.Org}}/assignment?mode=4",
+          dataType: "json",
+          quietMillis: 250,
+          data: function( term, page ) {
+              return {
+                  // search term
+                  q: term
+              };
+          },
+          results: function( data, page ) {
+                  // parse the results into the format expected by Select2.
+                  // since we are using custom formatting functions we do not need to alter the remote JSON data
+                  return { results: data.items };
+          }
+          
+      },
+      
+      formatResult: repoFormatResult,
+      formatSelection: repoFormatSelection,
+      // apply css that makes the dropdown taller
+      dropdownCssClass: "bigdrop",
+      // we do not want to escape markup since we are displaying html in results
+      escapeMarkup: function( m ) {
+          return m;
+      }
+  });
+
+  function repoFormatResult( repo ) {
+    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+    return markup;
+  }
+
+  function repoFormatSelection( repo ) {
+        return repo.full_name;
+  }
+
+
+//Help function daycode dropdown
+function daycode_dropdown(codeid) {
+  var html =  `<select class="daycode">`
+      html += '<option value="1" '+Is_selected(1,codeid)+'>Regular Day</option>'
+      html += '<option value="2" '+Is_selected(2,codeid)+'>Rest Day </option>'
+      html += '<option value="3" '+Is_selected(3,codeid)+'>Special holiday </option>'
+      html += '<option value="3" '+Is_selected(4,codeid)+'>Special holiday RD</option>'
+      html += '<option value="3" '+Is_selected(5,codeid)+'>Regular holiday</option>'
+      html += '<option value="3" '+Is_selected(6,codeid)+'>Regular holiday RD</option>'
+      html +=  `</select>`
+  return html    
+}
+function Is_selected(daycode,codeid) {
+  if(daycode == codeid){
+    return "selected"
+  }else{
+    return ""
+  }
+}
+//Helper logpair filled
+function logpraw_feed(memberID ,topAss, seleected_date) {
+  $.ajaxSetup({async: false});
+  var htlog = $.get("/api/ajax/timekeeping/timekeep_v2/{{.Org}}/LBR_LogRaw_get?mode=2",
+  { 
+      org:            '{{.Org}}',
+      TopAssignment:  topAss,
+      LogDate:        seleected_date,
+      MemberID: memberID
+    },
+    function(data,status){
+      return data
+    }
+  );
+  var htm_log ='<div class="logs_cont">'
+  for (var raw_no in htlog.responseJSON) {
+    if(htlog.responseJSON[raw_no].lbr_logpair=="0"){
+      htm_log +='<a href="#" data-lograwID="'+ htlog.responseJSON[raw_no].lbr_LogRawID_hideme +'" >[' + htlog.responseJSON[raw_no].logtime + '] </a><br>'
+    }else{
+      htm_log +='<span >[' + htlog.responseJSON[raw_no].logtime + '] </span><br>'
+    }
+  }
+  $.ajaxSetup({async: true});
+  htm_log += '</div> <div class="log_save_cont"> <a href="#" class="add_log" onclick="AddLog('+memberID+',event)">Add</a> </div>'
+  return htm_log
+}
+
+//Helper lograw filled
+function logpair_feed(memberID ,topAss, seleected_date) {
+  $.ajaxSetup({async: false});
+  var serverdata = $.get("/api/ajax/timekeeping/timekeep_v2/{{.Org}}/LBR_LogPair_get?mode=2",
+  { 
+      org:            '{{.Org}}',
+      TopAssignment:  topAss,
+      LogDate:        seleected_date,
+      MemberID: memberID
+    },
+    function(data,status){
+      return data
+    }
+  );
+  $.ajaxSetup({async: true});
+  return serverdata.responseJSON
+}
+
+function Startprocess(){
+
+$(".content_container").hide();
+$(".loading_class").show();
+
+//Paging init
+var topAss = AssignID
+var seleected_date = $('input[name=selected_date]').val()
+$.get("/api/ajax/timekeeping/timekeep_v2/{{.Org}}/LBR_LogTotal_List?mode=1",
+      { 
+        org:            '{{.Org}}',
+        TopAssignment:  AssignID,
+        Logdate:        $('input[name=selected_date]').val(),
+        PageNo:         CurrentPage,
+        RowPerPage:     numberPerPage,
+        SearchKey:      $('input[name=search]').val(),
+      },
+      function(data,status){
+        console.log(data);
+        var htmtab = ""
+        var pagetotal = parseInt(data[0].page_total) +1
+        for (var i = 1; i < pagetotal ; i++) {
+            if(data[0].page_current == i){
+              htmtab +='<a class="active" href="#">'+i+'</a>' 
+            }else{
+              htmtab +='<a href="#" class="paging_cont" onclick="paging_nav('+i+');"  data-value="'+i+'" >'+i+'</a>'
+            }
+        }
+        var htm = '<a href="#" class="paging_cont" onclick="paging_nav(+1);" data-value="-1">&laquo;</a>'
+            htm +=htmtab
+            htm +='<a href="#" class="paging_cont" onclick="paging_nav(+1);" data-value="+1">&raquo;</a>'
+        $(".pagination").html(htm)
+      }
+    );
+
+
+//Table content init
+$("#tdataid").html("");
+$.get("/api/ajax/timekeeping/timekeep_v2/{{.Org}}/LBR_LogTotal_List?mode=0",
+      { 
+        org:            '{{.Org}}',
+        TopAssignment:  AssignID,
+        Logdate:        $('input[name=selected_date]').val(),
+        PageNo:         CurrentPage,
+        RowPerPage:     numberPerPage,
+        SearchKey:      $('input[name=search]').val(),
+      },
+      function(data,status){
+        //console.log(data)
+        var ht =''
+        console.log(data)
+        for (var raw_no in data) {
+         
+          logpairJson = logpair_feed(data[raw_no].MemberID_hideme , topAss, seleected_date)
+          console.log(logpairJson)
+         // ht += '<option value="'+data[d1].id+'">' +data[d1].text+'/option'
+          var rawspan =1
+          if (logpairJson.length==1){
+            rowspan = 2
+          }else if (logpairJson.length>1){
+            rowspan = logpairJson.length + 1
+          }
+          var htm_raw = '<tr data-memberid='+ data[raw_no].MemberID_hideme +'>'
+            htm_raw += '<td rowspan="'+rowspan+'">'+ data[raw_no].Member_name +'</td>'
+            htm_raw += '<td rowspan="'+rowspan+'">'+logpraw_feed(data[raw_no].MemberID_hideme , topAss, seleected_date)+'</td>'
+            
+            
+            if (logpairJson.length>0){ //get fist line of pairlog
+              htm_raw += '<td> <button type="button" onclick="logpair_delete('+logpairJson[0].lbr_logpairID_HideMe+',event)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </button> <a href="#">'+logpairJson[0].assignment+'</a></td>'
+              htm_raw += '<td>'+logpairJson[0].login+'</td>'
+              htm_raw += '<td>'+logpairJson[0].logout+'</td>'
+              htm_raw += '<td>'+logpairJson[0].produced+'</td>'
+            }else{ /// setting defaul no data display
+              htm_raw += '<td><a href=""></a></td>'
+              htm_raw += '<td></td>'
+              htm_raw += '<td></td>'
+              htm_raw += '<td></td>'
+            }
+
+            htm_raw += '<td rowspan="'+rowspan+'">'+daycode_dropdown(data[raw_no].lbr_daycode_hideme)+'</td>'
+            htm_raw += '<td rowspan="'+rowspan+'"> <input type="text" class="hr_reg hrreg" value="'+data[raw_no].hr_reg+'"></td>'
+            htm_raw += '<td rowspan="'+rowspan+'"> <input type="text" class="hr_ot hrreg" value="'+data[raw_no].hr_ot+'"></td>'
+            htm_raw += '<td rowspan="'+rowspan+'"> <input type="text" class="hr_nd hrreg" value="'+data[raw_no].hr_nd+'"> </td>'
+            htm_raw += '<td rowspan="'+rowspan+'"> <input type="text" class="hr_ndot hrreg" value="'+data[raw_no].hr_ndot+'"> </td>'
+            htm_raw += '<td rowspan="'+rowspan+'"> <input type="text" class="hr_break hrreg" value="'+data[raw_no].hr_break+'"> </td>'
+            htm_raw += '<td rowspan="'+rowspan+'"> <input type="text" class="min_late hrreg" value="'+data[raw_no].min_late+'"> </td>'
+            htm_raw += '<td rowspan="'+rowspan+'"> <input type="text" class="min_undertime hrreg" value="'+data[raw_no].min_undertime+'"></td>'
+            htm_raw += '<td rowspan="'+rowspan+'"> <textarea class="remarks rmks" maxlength="500">'+data[raw_no].remarks+'</textarea></td>'
+            htm_raw += '<td rowspan="'+rowspan+'">  [12]</td>'
+            htm_raw += '<td rowspan="'+rowspan+'"><a href="#" class="btn_save" onclick="Log_total_save('+ data[raw_no].lbr_logtotalID_hideme +',event)">Save</a></td>'
+          htm_raw += '</tr>'
+          if (logpairJson.length>1){
+              for (var i = 1; i < logpairJson.length; i++) {
+                htm_raw += '<tr>'
+                htm_raw += '<td><a href="#">'+logpairJson[i].assignment+'</a></td>'
+                htm_raw += '<td>'+logpairJson[i].login+'</td>'
+                htm_raw += '<td>'+logpairJson[i].logout+'</td>'
+                htm_raw += '<td>'+logpairJson[i].produced+'</td>'
+                htm_raw += '</tr>'
+              }
+
+
+            htm_raw += '<tr>'
+            htm_raw += '<td> </td>'
+            htm_raw += '<td ></td>' 
+            htm_raw += '<td> </td>'
+            htm_raw += '<td> </td>'
+            htm_raw += '</tr>'  
+
+          }else if(logpairJson.length==1){
+              htm_raw += '<tr>'
+              htm_raw += '<td> </td>'
+              htm_raw += '<td ></td>'
+              htm_raw += '<td> </td>'
+              htm_raw += '<td> </td>'
+              htm_raw += '</tr>'
+          }  
+                
+
+
+          $("#tdataid").append(htm_raw);
+
+         
+        }
+          $(".content_container").show();
+          $(".loading_class").hide();
+      }
+    );
+
+}
+
+/*Triger starger*/
+$('input[name=assignment]').on("select2-close", function() {
+  AssignID =this.value
+  Startprocess();  
+  ChildAssign();
+    
+});
+$( 'input[name=selected_date]' ).change(function () {
+  
+  Startprocess(); 
+  
+});
+
+
+
+/*Add member serch txtbox*/
+$( "#member" ).select2({
+    placeholder: "Search for members",
+    minimumInputLength: 2,
+    multiple: false,
+    allowClear: true,
+    ajax: {
+        url: "/Ajax/GetMembers",
+        dataType: "json",
+        quietMillis: 250,
+        data: function( term, page ) {
+            return {
+                // search term
+                q: term
+            };
+        },
+        results: function( data, page ) {
+                // parse the results into the format expected by Select2.
+                // since we are using custom formatting functions we do not need to alter the remote JSON data
+                return { results: data.items };
+        }
+        
+    },
+    
+    formatResult: repoFormatResult,
+    formatSelection: repoFormatSelection,
+    // apply css that makes the dropdown taller
+    dropdownCssClass: "bigdrop",
+    // we do not want to escape markup since we are displaying html in results
+    escapeMarkup: function( m ) {
+        return m;
+    }
+});   
+
+
+
+//Create raw line from modal
+
+function DocreateEntryline(a){
+
+  $.post("/api/ajax/timekeeping/timekeep_v2/{{.Org}}/LBR_TK_Pairing_Save",
+      {
+        mode      : 1,
+        FormUser  : "{{.User}}",
+        org       : '{{.Org}}',
+        member    : $('input[name=memberid]').val(), 
+        assign    : $('select[name=addnew-assignment]').val() ,
+        logdate   : $('input[name=selected_date]').val() ,
+        login     : $('input[name=IN]').val() ,
+        logout    : $('input[name=OUT]').val() ,
+        produced  : $('input[name=produced]').val() ,
+        remarks   : $('textarea[name=addnew_remarks]').val(),
+      } 
+      ,
+      function(data,status){
+          console.log(data)
+          if(data[0].RetMsg=="Success"){
+            if(a=='AS'){
+              alert(data[0].RetMsg);
+              $('input[name=memberid]').val("");
+            }else{
+              Startprocess();
+              $('#myModal').modal('hide')
+            }
+            
+          }else{
+            alert(data[0].RetMsg);
+          }
+          
+      });
+  return false
+
+}
+
+//Assignment child init
+function ChildAssign() {
+  $.get("/api/ajax/timekeeping/timekeep_v2/{{.Org}}/Lbr_assign_get?mode=5",
+    { 
+      org:           '{{.Org}}',
+      TopAssignment:  AssignID,
+    },
+    function(data,status){
+      console.log(data)
+       var htm =""
+      for (var raw_no in data) {
+        htm +='<option value="'+data[raw_no].id+'">'+data[raw_no].fullname+'</option>'
+      }
+      $("#addnew-assignment" ).html(htm)
+      
+    }
+  );
+
+}
+
+
+//search key enter
+$('#search').live("keypress", function(e) {
+    if (e.keyCode == 13) {
+        searchVal = this.value
+        Startprocess();
+        return false; // prevent the button click from happening
+    }
+});
+// Trigger nnumber per page
+$( 'select[name=numberPerPage]' ).change(function (e) {
+  numberPerPage = this.value ;
+  console.log(numberPerPage);
+  Startprocess(); 
+  
+});
+
+
+function paging_nav(x) {
+  CurrentPage = x;
+  Startprocess();
+}
+
+//triggers functions
+function Log_total_save(lbr_logtotalID_hideme,event) {
+
+  
+  $(event.target).closest("tr").find('.btn_save').text("Saving...")
+  $.post("/api/ajax/timekeeping/timekeep_v2/{{.Org}}/lbr_logtotal_update",
+      {  
+        lbr_logtotalID : lbr_logtotalID_hideme,
+        user          : "{{.User}}" ,
+        hr_reg        : $(event.target).closest("tr").find('.hr_reg').val()         ,
+        lbr_daycodeID : $(event.target).closest("tr").find('.daycode').val()        ,
+        hr_ot         : $(event.target).closest("tr").find('.hr_ot').val()          ,
+        hr_nd         : $(event.target).closest("tr").find('.hr_nd').val()          ,
+        hr_ndot       : $(event.target).closest("tr").find('.hr_ndot').val()        ,
+        hr_break      : $(event.target).closest("tr").find('.hr_break').val()       ,
+        min_late      : $(event.target).closest("tr").find('.min_late').val()       ,
+        min_undertime : $(event.target).closest("tr").find('.min_undertime').val()  ,
+        remarks       : $(event.target).closest("tr").find('.remarks').val()        ,
+      },
+      function(data,status){
+        console.log(data)
+        if(data[0].RetMsg=="Success"){
+        $(event.target).closest("tr").find('.btn_save').text("Saved!")
+        }else{
+          alert(data[0].RetMsg)
+        }
+      }
+    );
+}
+
+function AddLog(MemberID,event) {
+
+  $(event.target).closest("tr").find('.log_save_cont').html('<div class="save_log_cont"><input type="text" name="newlog" class="form_datetime txtboxlog"><a href="#" class="add_log_save" onclick="AddLog_save('+MemberID+',event)">Add</a> </div>'); 
+  $(".form_datetime").datetimepicker({
+    autoclose: true,
+    isRTL: Metronic.isRTL(),
+    pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left")
+   });
+
+}
+
+function AddLog_save(MemberID,event) {
+
+  $.post("/api/ajax/timekeeping/timekeep_v2/{{.Org}}/LBR_TK_Raw_Save",
+    {  
+      user          : "{{.User}}" ,
+      org           : "{{.Org}}",
+      memberID      : MemberID     ,
+      logdatetime   : $(event.target).closest("td").find('.txtboxlog').val()        ,
+      
+    },
+    function(data,status){
+      console.log(data)
+      //RetNo
+      if(data[0].RetMsg=="Success"){
+        
+        $(event.target).closest("tr").find('.logs_cont').append('<a href="#" data-lograwID="'+ data[0].RetNo +'" >[' + $(event.target).closest("td").find('.txtboxlog').val()  + '] </a><br>')
+
+        $(event.target).closest("tr").find('.log_save_cont').html('<a href="#" class="add_log" onclick="AddLog('+MemberID+',event)">Add</a>'); 
+
+      }else{
+        alert(data[0].RetMsg)
+      }
+    }
+  );
+}
+
+function logpair_delete(LogPair_ID, event) {
+  $.post("/api/ajax/timekeeping/timekeep_v2/{{.Org}}/LBR_LogPair_Delete",
+      {  
+        LogPair_ID : LogPair_ID,
+        user       : "{{.User}}" ,
+      },
+      function(data,status){
+        console.log(data)
+        if(data[0].RetMsg=="Success"){
+          Startprocess();
+        }else{
+          alert(data[0].RetMsg)
+        }
+        
+      }
+    );  
+}
+
+</script>
+
+  

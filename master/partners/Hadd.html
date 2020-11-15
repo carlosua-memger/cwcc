@@ -1,0 +1,179 @@
+{{$Org_id := .Tconf.Org_id}}
+
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>New Partner Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+
+
+
+
+<div class="row">
+<div class="col-md-6">
+
+
+<h3 class="form-section">Partner info</h3>
+
+
+
+		<form id="CreateTransaction" class="form-horizontal"  method="Post" onsubmit="return DoCreateTransaction()">
+	
+					<div class="form-horizontal">
+						<div class="form-group">
+							<label class="col-md-3 control-label">Name<span class="required" aria-required="true">*</span>
+							</label>
+							<div class="col-md-8">
+								<input type="text" name="name"  placeholder="Name" id="inputName" class="form-control" maxlength="100" required>
+											<!--  <span class="help-block with-errors">
+											A block of help text. </span> --> 
+							</div>
+						</div>
+
+						
+						
+
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Parent</label>
+							<div class="col-md-8">
+								<select name="parent" class="form-control" > 
+									    <option value="null"></option>
+								 	{{range  $Ls_partners,$val := .Ls_partners}}
+
+										<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+									{{end}}
+								</select>
+							</div>
+						</div>
+
+					
+											
+						<div class="form-group">
+							<label class="col-md-3 control-label">Remarks</label>
+							<div class="col-md-8">
+								
+							<!-- 	<input type="text" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct"> -->
+								<textarea name = "remarks" class="form-control createAct"></textarea>
+							</div>
+						</div>
+						
+					</div>
+
+					<!--  <div class="form-actions fluid">
+						<div class="col-md-offset-3 col-md-9">
+							<button type="submit" class="btn blue submit_btn" >Submit</button>
+							<button class="btn default" onclick="javascript:Navigate('/inventory/customer?rights={{.Rights}}')" type="button">Cancel</button>
+						</div>
+					</div>  -->
+<div class="form-actions fluid">
+	<div class="col-md-offset-3 col-md-9">
+		<button type="submit" class="btn blue submit_btn"  onclick="return DoCreateTransaction()">Save</button>
+		<button class="btn default" onclick="javascript:nav_back('/master/partners?rights={{.Rights}}')" type="button">Go back</button>
+
+		
+	</div>
+</div>
+</form>
+						
+						
+				
+
+
+</div>	
+
+
+
+
+
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	
+</div>
+
+
+			<script type="text/javascript">
+			var currentDate = new Date();  
+			 /*$('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });*/
+			
+			$('.date-picker').datepicker("setDate", new Date());
+			 $('input[name=name]').focus()
+			$("[name=parent]").select2();
+			var rghts = '{{.Rights}}'
+			function DoCreateTransaction(){
+				var ret_msg= ""
+				$.get("/json_func",
+                    {
+                       //qdata : "Branch_Save 'Add','programmer',1,0,'"+$('[name=sup_name]').val()+"' ,'"+$('[name=sort]').val()+"' ,'"+$('[name=remarks]').val()+"'"
+                       qdata : "Partners_SaveAdd '{{.Tconf.username}}', {{.Tconf.Org_id}}, '"+$('[name=name]').val()+"', "+$('[name=parent]').val()+",'"+$('[name=remarks]').val()+"'"
+                    }
+                    ,
+                    function(data,status){
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									console.log(data[i][0])
+									//console.log(data[i][0])
+									//alert(ret_msg)
+									//$('#basic').modal('hide')
+					            	//dtbl()
+					            	//console.log("success here")
+					            	//$("#item_tagsdata").show()
+					            	//$(".submit_btn").prop('disabled', true);
+					            	$(".c_item_id").val(data[i][0])
+					            	alert("Save Success")
+                        			Navigate('/master/partners?rights={{.Rights}}')
+								//return false;
+			                    }else{
+			                    	alert(ret_msg)
+			                    }
+		                         
+		                    }
+	                    }
+                    });	
+					
+                    return false;
+		                /*$('#basic').modal('hide')
+		            	dtbl()
+			         	return false*/
+			        	
+			}
+
+			
+		
+			
+	    
+			</script>
+
+
+
+
+

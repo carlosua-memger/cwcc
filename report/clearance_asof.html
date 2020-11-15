@@ -1,0 +1,231 @@
+<html>
+    <head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+                <!-- <title style="font-size: 16px;">Paired logs Report</title> -->
+            <style type="text/css">
+                .rpt_date {
+                    float: right;
+                    
+                }
+                .page_header{
+                    margin-bottom: 5px;
+                    /*display: inline; */
+                }
+                .name{
+                    /*float: left;*/
+                    margin-bottom: 3px;
+                    font-family: Arial; 
+                }
+                .covered_data{
+                    /*float: right;*/
+                    font-family: Arial; 
+                }
+                .pic_logo {
+                    width: 200px;
+
+                }
+                table{
+                    width: 100%;
+                }
+                
+                .dtatbl {
+                
+                border: 0.99px solid #B3B3B3;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 12px;
+                }
+
+                .dtatbl th{
+                    border: 0.99px solid #B3B3B3;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 14px;
+                }
+
+                .dtatbl td {
+                    border: 0.99px solid #B3B3B3;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 14px;
+                }
+                th, td {
+                    /*padding: 2px;*/
+                      font-size: 12pt;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+                th{
+                    
+                    background-color: whiteSmoke;
+                    /*background-image: -webkit-linear-gradient*/
+                    
+                }
+                body {
+                    font-size: 12px;
+                }
+                .logo{
+                    width: 200px;
+                    margin-bottom: 5px;
+                }
+                .page_footer{
+                    margin-top: 20px;
+                    display: inline-block;
+                    width: 100%;
+                }
+                .signaturemember{
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: left;
+                    font-family: inherit;
+                }
+                .signatureleft{
+                    margin-left: 10%;
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: left;
+                    font-family: inherit; 
+                }
+                .signatureright{
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: right;
+                    font-family: inherit; 
+                }
+                .tbl_foor{
+                    margin-top: 10px;
+                }
+                .tbl_foor td div{
+                    border-top: 0.99px solid black; 
+                    width: 50%;
+                }
+                .isred {
+                    color: red;
+                }
+                .log_sum{
+                    margin-top: 10px;
+                }
+                td div{
+                    font-size: 12px;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+                td div b{
+                    font-size: 12px;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+                .header {
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                    font-size: 25px;
+                }
+            </style></head>
+                
+
+            <body>
+
+                    {{$sql_str := combine_string `Members_Get 5,` .Tconf.org_id "," .Tconf.user_id }}
+                    {{$conf_data := tpl_sql_row $sql_str }}
+
+                    <TABLE id="Table4" cellSpacing="0" cellPadding="0" width="100%" border="0">
+                            <TR>
+                                <TD colspan="2">
+                                    <b><font style="FONT-FAMILY: Arial">
+                                            <center>COMMON WEALTH CREDIT COOPERATIVE</center>
+                                            <center>MEMBER ACCOUNTABILITIES/RESIGNATION CLEARANCE</center>
+                                        </font>
+                                        
+                                        {{$sql_str2 := combine_string `Clearance_Report_AsOf 1,` .Tconf.member ",'" .Tconf.asof "'" }}
+
+                                        {{$data_list := tpl_sql $sql_str2 }}
+
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr> 
+                                        
+                                                {{range  $key1, $val1stloop := $data_list}}
+                                                     
+                                                     
+                                                      <td>{{index $val1stloop  1}}</td>
+                                                      <td>{{index $val1stloop  2}}</td>
+                                                    
+                         
+                                                     </tr>
+                                                  
+                                                 {{end}}
+                                    <TABLE id="Table5" cellSpacing="0" cellPadding="0" width="100%" border="0">
+                                        <TBODY>
+                                            <TR>
+                                                <TD>__________________________________</TD>
+                                                <br>
+                                                <br>
+                                            </TR>
+                                            <TR>
+                                                <font style="FONT-FAMILY: Arial">Prepared By:
+                                                    <BR>
+                                                    <BR>
+                                                    <TD>
+                                                        <b><font style="FONT-FAMILY: Arial">
+                                                                {{index $conf_data  0}} <br></b>
+                                                    CWCC Savings and Loans Advisor</font>
+
+                                                    
+                                </TD>
+                                </FONT>
+                                <td>
+                                    <font style="FONT-FAMILY: Arial" size="2">Printed Date:<br>
+                                        <font style="FONT-FAMILY: Arial">
+                                                {{get_datetime}}<br>
+                                </td>
+                            </TR>
+                            <tr>
+                                    <td>
+                                   <font size="2"><b>Powered by Memgertech Inc.</b></font>
+                                    </td>
+                                   </tr>
+                        </TABLE>
+                        </TD></TR></TBODY></TABLE>
+
+
+
+
+
+              <!--   <table>
+                    <tr>
+                        <td>
+                    <img src="/src/metronic_3.1.2/images/cwcc_logo_complete.png" width="175" height="75" style="margin-top: 1px;"alt="logo" class="logo-default"/>
+                </td>
+                <td class="header">
+                <h>Amortization Schedule</h>
+                </td>
+                </tr>
+                </table> -->
+    <!--            {{.Conf.org_id}}
+               {{.Conf.trnID }} "mars" -->
+
+              <!--  {{ $currentCategoryUrl := .Conf.org_id | printf "%s%s" "," | printf "%s%s" .Conf.trnID }}
+               {{$currentCategoryUrl}}
+
+ -->
+               
+
+              
+                
+               
+
+
+            
+                
+              
+
+
+              
+
+
+    </body>
+</html>

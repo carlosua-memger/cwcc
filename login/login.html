@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+<meta charset="utf-8"/>
+<title>Memger</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="" name="description"/>
+<meta content="" name="author"/>
+<!-- BEGIN GLOBAL MANDATORY STYLES -->
+<!-- <link href="/src/metronic_3.1.2/metronic/metronic/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/> -->
+
+
+<!-- <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+<script src="https://apis.google.com/js/api:client.js"></script> -->
+
+
+<link href="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="/src/metronic_3.1.2/metronic/assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+<link href="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+<!-- END GLOBAL MANDATORY STYLES -->
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link href="/src/metronic_3.1.2/metronic/assets/global/plugins/select2/select2.css" rel="stylesheet" type="text/css"/>
+<link href="/src/metronic_3.1.2/metronic/assets/admin/pages/css/login.css" rel="stylesheet" type="text/css"/>
+<!-- END PAGE LEVEL SCRIPTS -->
+<!-- BEGIN THEME STYLES -->
+<link href="/src/metronic_3.1.2/metronic/assets/global/css/components.css" rel="stylesheet" type="text/css"/>
+<link href="/src/metronic_3.1.2/metronic/assets/global/css/plugins.css" rel="stylesheet" type="text/css"/>
+<link href="/src/metronic_3.1.2/metronic/assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
+<link id="style_color" href="/src/metronic_3.1.2/metronic/assets/admin/layout/css/themes/default.css" rel="stylesheet" type="text/css"/>
+<!-- END THEME STYLES -->
+<link rel="shortcut icon" href="favicon.ico"/>
+
+
+
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+  <script src="https://apis.google.com/js/api:client.js"></script>
+  <script>
+  var googleUser = {};
+  var startApp = function() {
+    gapi.load('auth2', function(){
+      // Retrieve the singleton for the GoogleAuth library and set up the client.
+      auth2 = gapi.auth2.init({
+        client_id: '849655928151-alk6l63onuv5dne9a004i88ofgssln7f.apps.googleusercontent.com',
+        cookiepolicy: 'single_host_origin',
+        // Request scopes in addition to 'profile' and 'email'
+        //scope: 'additional_scope'
+      });
+      attachSignin(document.getElementById('customBtn'));
+    });
+  };
+
+  function attachSignin(element) {
+    console.log(element.id);
+    auth2.attachClickHandler(element, {},
+        function(googleUser) {
+          onSignUp(googleUser)	
+          /*document.getElementById('name').innerText = "Signed in: " +
+              googleUser.getBasicProfile().getName();*/
+        
+        }, function(error) {
+          alert(JSON.stringify(error, undefined, 2));
+        });
+  }
+  </script>
+  
+
+
+<style type="text/css">
+	.login .content {
+    	width: 65%;
+	}
+</style>
+
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<meta name="google-signin-client_id" content="849655928151-alk6l63onuv5dne9a004i88ofgssln7f.apps.googleusercontent.com">
+</head>
+<!-- BEGIN BODY -->
+<!-- DOC: Apply "page-header-f	ixed-mobile" and "page-footer-fixed-mobile" class to body element to force fixed header or footer in mobile devices -->
+<!-- DOC: Apply "page-sidebar-closed" class to the body and "page-sidebar-menu-closed" class to the sidebar menu element to hide the sidebar by default -->
+<!-- DOC: Apply "page-sidebar-hide" class to the body to make the sidebar completely hidden on toggle -->
+<!-- DOC: Apply "page-sidebar-closed-hide-logo" class to the body element to make the logo hidden on sidebar toggle -->
+<!-- DOC: Apply "page-sidebar-hide" class to body element to completely hide the sidebar on sidebar toggle -->
+<!-- DOC: Apply "page-sidebar-fixed" class to have fixed sidebar -->
+<!-- DOC: Apply "page-footer-fixed" class to the body element to have fixed footer -->
+<!-- DOC: Apply "page-sidebar-reversed" class to put the sidebar on the right side -->
+<!-- DOC: Apply "page-full-width" class to the body element to have full width page without the sidebar menu -->
+<body class="login">
+<!-- BEGIN LOGO -->
+
+<!-- 
+<div class="beta_test btn green" style=" -ms-transform: rotate(20deg); /* IE 9 */
+    -webkit-transform: rotate(20deg); /* Safari */
+    transform: rotate(20deg);"
+    > beta version 
+</div>
+-->
+
+<div class="logo">
+	<a href="/">
+	<img src="/src/metronic_3.1.2/images/cwcc_logo_complete.png" style="margin-top: 1px;"alt="logo" class="logo-default"/>
+	</a>
+</div>
+<!-- END LOGO -->
+<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+<div class="menu-toggler sidebar-toggler">
+</div>
+<!-- END SIDEBAR TOGGLER BUTTON -->
+<!-- BEGIN LOGIN -->
+
+<div class="content row maincont">
+	<div class=" col-md-6">
+		
+		<!-- BEGIN LOGIN FORM -->
+			<form class="form-signin" id="form_login" action="/main" method="post">
+				<input type="hidden" name="auth_type" value="">
+				<h3 class="form-title">Login to your account</h3>
+				<div class="alert alert-danger display-hide">
+					<button class="close" data-close="alert"></button>
+					<span>
+					Enter any username and password. </span>
+				</div>
+				<div class="form-group">
+					<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+					<label class="control-label">Username</label>
+					<div class="input-icon">
+						<i class="fa fa-user"></i>
+						<input class="form-control placeholder-no-fix" name="username" type="text" autocomplete="off" placeholder="Username" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">Password</label>
+					<div class="input-icon">
+						<i class="fa fa-lock"></i>
+						<input class="form-control" type="password" name="password" autocomplete="off" placeholder="Password" name="password"/>
+					</div>
+				</div>
+				<div style="color: red;">{{.login_status}}</div>
+				<div class="form-action">
+					<div>
+					<label><input type="checkbox" name="remember" value="1"/> Remember me </label>
+					</div>
+					<button type="submit" class="btn green" value="login">
+					Login <i class="m-icon-swapright m-icon-white"></i>
+					</button>
+				</div>
+
+						
+				
+
+				
+			<div class="form-group ">
+			<label class="control-label"><h4>Forgot your password ? <a id="hf-chat">Contact us</a>.</h4></label>
+			
+		</div>
+		<div class="create-account">
+			<p>
+				Need remote support?&nbsp; <a href="javascript:;" onclick="TogetherJS(this); return false;" >
+				Click Here </a>.
+			</p>
+		</div>
+
+				
+			</form>
+			<!-- END LOGIN FORM -->
+		
+	</div>
+
+
+	<div class=" col-md-6">
+		
+		<!-- BEGIN LOGIN FORM -->
+			<form class="form-signin" accept="#/signup" method="POST" onsubmit="return fun_signup()">
+				<h3 class="form-title">Sign up (Yep, single user is <b>FREE</b>)</h3>
+				<!-- <div class="form-group">
+					<label class="control-label">Organization Name:</label>
+					<div class="input-icon">
+						<i class="fa fa-user"></i>
+						<input class="form-control placeholder-no-fix" name="orgName" type="text" placeholder="Organization" required/>
+					</div>
+				</div> -->
+
+				
+
+				<div class="form-group">
+					<label class="control-label">Email</label>
+					<div class="input-icon">
+						<i class="fa fa-user"></i>
+						<input class="form-control placeholder-no-fix" name="email" type="email" placeholder="Email"/>
+					</div>
+				</div>
+				
+				<div class="email_exist" style="color:red;">
+					
+				</div>	
+
+
+				<div class="form-group">
+					<button class="btn green " type="submit"> 
+					Sign up <i class="m-icon-swapright m-icon-white"></i>
+					</button>
+				</div>
+
+
+					    	
+				<div class="form-group">
+
+				</div>
+				
+
+				
+			</form>
+			<!-- END LOGIN FORM -->
+			  
+	<!-- BEGIN COPYRIGHT -->
+	
+
+	</div>
+
+</div>
+
+<div class="row">
+		<div class="copyright">
+			
+			
+				 2015 &copy; Copyright MEMGERTECH.INC.
+				
+		</div>
+	</div>
+<script src="/src/metronic_3.1.2/metronic/assets/global/plugins/jquery-1.11.0.min.js" type="text/javascript"></script>
+
+
+<script src="https://togetherjs.com/togetherjs-min.js"></script>
+<script>
+ 
+
+	$(function(){
+	    $('a, button').click(function() {
+	        $(this).toggleClass('active');
+	    });
+	});
+
+
+    startApp();
+
+    function onSignIn(googleUser) {
+	  var profile = googleUser.getBasicProfile();
+	  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+	  console.log('Name: ' + profile.getName());
+	  console.log('Image URL: ' + profile.getImageUrl());
+	  console.log('Email: ' + profile.getEmail());
+	  	$("input[name=username]").val(profile.getEmail());
+	  	$("input[name=auth_type]").val("1");	
+	   var auth2 = gapi.auth2.getAuthInstance();
+	   console.log(auth2)	
+	   	auth2.signOut().then(function () {
+	      console.log('User signed out.');
+	    });
+	 		$( "#form_login" ).submit();
+
+
+ 
+	}
+
+	function onSignUp(googleUser) {
+		var org_name = $("input[name=orgName]").val().trim().length
+	  	if(org_name==0){
+	  		alert("Organization missing.")
+	  		return false;
+	  	} 	
+	  var profile = googleUser.getBasicProfile();
+	  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+	  console.log('Name: ' + profile.getName());
+	  console.log('Image URL: ' + profile.getImageUrl());
+	  console.log('Email: ' + profile.getEmail());
+	  	$("input[name=username]").val(profile.getEmail());
+	  	$("input[name=auth_type]").val("1");	
+	 		
+	 				
+	 		var vemail = profile.getEmail()	
+	 		var lname = profile.getFamilyName()
+	 		var mname = profile.getName()
+	 		var fname = profile.getGivenName() 
+
+	 	var auth2 = gapi.auth2.getAuthInstance();
+	   	console.log(auth2)	
+	   	auth2.signOut().then(function () {
+	      console.log('User signed out.');
+	    });
+	    	
+	 		$.post("/signupeviaemail",
+	 		{
+	 			orgName : org_name , 
+				email 	:vemail , 
+				lastname : lname ,
+				middlename 	: mname ,
+				firstname 	: fname ,
+				Password 	:"" ,
+	 		}
+	        ,
+	        function(data,status){
+	          
+	           console.log(data)
+	            alert(data)
+	            $( "#form_login" ).submit();
+	        });
+
+
+	 		
+
+
+
+	}
+
+	function validateEmail($email) {
+	  var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+	  return emailReg.test( $email );
+	}
+
+	function fun_signup(){
+		
+		var org_name = "";
+		var email = $("input[name=email]").val();
+		var password = "" ;
+		
+		/*if(org_name.trim().length ==0){
+			alert("Organization required.")
+			return false
+		}*/
+		if(email.trim().length ==0){
+			alert("Email address required.")
+			return false
+		}
+		if( !validateEmail(email)) { 
+			alert("Email addess invalid.")
+			return false
+		}
+
+
+		$.post("/Signup",
+ 		{
+ 			orgName : org_name , 
+			email 	:email , 
+			password 	: password ,
+			
+ 		}
+        ,
+        function(data,status){
+        	if(data.Status){
+        		$(".maincont").html(data.HtmlData);
+        	}else{
+        		$(".email_exist").html(data.HtmlData)
+
+        	}	
+		});
+		return false;
+	}
+
+	
+
+
+
+	    window.HFCHAT_CONFIG = {
+         EMBED_TOKEN: "b5558fb0-4fb0-11e5-b68f-f519327d98e7",
+         ACCESS_TOKEN: "a70e469cc900433dbdb58008330bd925",
+         HOST_URL: "https://www.happyfoxchat.com",
+         ASSETS_URL: "https://d1l7z5ofrj6ab8.cloudfront.net/visitor"
+     };
+
+    (function() {
+      var scriptTag = document.createElement('script');
+      scriptTag.type = 'text/javascript';
+      scriptTag.async = true;
+      scriptTag.src = window.HFCHAT_CONFIG.ASSETS_URL + '/js/widget-loader.js';
+
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(scriptTag, s);
+    })();
+
+
+
+    HFCHAT_CONFIG.options = {
+   showBadgeOnLoad: true, // Will hide badge only on load
+};
+
+window.HFCHAT_CONFIG.onload = function() {
+   var HappyFoxChat = this;
+   document.getElementById('hf-chat').addEventListener('click', function(e){
+      e.preventDefault();
+      HappyFoxChat.showWidget();
+      HappyFoxChat.expandChatbox();
+   });
+};
+
+</script> 
+
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

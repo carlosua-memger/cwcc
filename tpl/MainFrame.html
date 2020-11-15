@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+
+<html lang="en" class="no-js">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+<meta charset="utf-8"/>
+<title></title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="" name="description"/>
+<meta content="" name="author"/>
+<!-- BEGIN GLOBAL MANDATORY STYLES -->
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
+<link href="/src/metronic_3.1.2/metronic/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="/src/metronic_3.1.2/metronic/assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
+<link href="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="/src/metronic_3.1.2/metronic/assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+<!-- <link href="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/> -->
+<!-- END GLOBAL MANDATORY STYLES -->
+<!-- BEGIN PAGE LEVEL PLUGIN STYLES -->
+
+<!-- END PAGE LEVEL PLUGIN STYLES -->
+<!-- BEGIN PAGE STYLES -->
+<link href="/src/metronic_3.1.2/metronic/assets/admin/pages/css/tasks.css" rel="stylesheet" type="text/css"/>
+<!-- END PAGE STYLES -->
+
+<!-- BEGIN PAGE LEVEL STYLES -->
+
+<link rel="stylesheet" type="text/css" href="/src/metronic_3.1.2/metronic/assets/global/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="/src/metronic_3.1.2/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/>
+
+<!-- <link rel="stylesheet" type="text/css" href="/src/metronic_3.1.2/metronic/assets/global/plugins/jquery-tags-input/jquery.tagsinput.css"/>
+<link rel="stylesheet" type="text/css" href="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css">
+ -->
+<link rel="stylesheet" type="text/css" href="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap-datepicker/css/datepicker3.css"/>
+<link rel="stylesheet" type="text/css" href="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css"/>
+
+<!-- END PAGE LEVEL STYLES -->
+
+<!-- BEGIN THEME STYLES -->
+<link href="/src/metronic_3.1.2/metronic/assets/global/css/components.css" rel="stylesheet" type="text/css"/>
+<link href="/src/metronic_3.1.2/metronic/assets/global/css/plugins.css" rel="stylesheet" type="text/css"/>
+<link href="/src/metronic_3.1.2/metronic/assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
+<link href="/src/metronic_3.1.2/metronic/assets/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css" id="style_color"/>
+<link href="/src/metronic_3.1.2/metronic/assets/global/plugins/typeahead/jquery.typeahead.min.css" rel="stylesheet" type="text/css"/>
+<link href="/src/metronic_3.1.2/metronic/assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
+
+<link href="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css"/>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.5.3/css/bootstrapValidator.min.css" rel="stylesheet" type="text/css"/>
+
+
+
+<!-- END THEME STYLES -->
+<link rel="shortcut icon" href="favicon.ico"/>
+
+
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+  <script src="https://apis.google.com/js/api:client.js"></script>
+
+ <script src="https://apis.google.com/js/platform.js" async defer></script>
+<meta name="google-signin-client_id" content="849655928151-alk6l63onuv5dne9a004i88ofgssln7f.apps.googleusercontent.com"> 
+
+<style type="text/css">
+	/*  .modal:nth-of-type(even) {
+      z-index: 1042 !important;
+	  }
+	  .modal-backdrop.in:nth-of-type(even) {
+	      z-index: 1041 !important;
+	  }*/
+</style>
+</head>
+
+<style type="text/css">
+
+.header_mainframe{
+background-color: #fcffab !important;
+}
+
+.color_org{
+background-color: #fcffab !important;
+height: 44px !important;
+border: 0 !important; 
+color: #003BAF !important;
+
+}
+
+.style_user{
+background-color: #fcffab !important;
+border: 0 !important; 
+color: #003BAF !important;
+font-weight: bold !important;
+font-size: 16px !important;
+}
+
+.style_footer{
+background-color: #fcffab !important;
+}
+
+.light_gold{
+	background-color: #fcffab !important;
+}
+
+.copyright_footer{
+background-color: #fcffab !important;
+border: 0 !important; 
+color: #003BAF !important;
+font-weight: bold !important;
+font-size: 14px !important;
+}
+</style>
+
+
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<!-- DOC: Apply "page-header-fixed-mobile" and "page-footer-fixed-mobile" class to body element to force fixed header or footer in mobile devices -->
+<!-- DOC: Apply "page-sidebar-closed" class to the body and "page-sidebar-menu-closed" class to the sidebar menu element to hide the sidebar by default -->
+<!-- DOC: Apply "page-sidebar-hide" class to the body to make the sidebar completely hidden on toggle -->
+<!-- DOC: Apply "page-sidebar-closed-hide-logo" class to the body element to make the logo hidden on sidebar toggle -->
+<!-- DOC: Apply "page-sidebar-hide" class to body element to completely hide the sidebar on sidebar toggle -->
+<!-- DOC: Apply "page-sidebar-fixed" class to have fixed sidebar -->
+<!-- DOC: Apply "page-footer-fixed" class to the body element to have fixed footer -->
+<!-- DOC: Apply "page-sidebar-reversed" class to put the sidebar on the right side -->
+<!-- DOC: Apply "page-full-width" class to the body element to have full width page without the sidebar menu -->
+<body class="page-header-fixed page-quick-sidebar-over-content">
+<!-- BEGIN HEADER -->
+<div class="page-header navbar navbar-fixed-top header_mainframe">
+	<!-- BEGIN HEADER INNER -->
+	<div class="page-header-inner ">
+		<!-- BEGIN LOGO -->
+		<div class="page-logo">
+			<a href="/mainframe">
+			<img src="/src/metronic_3.1.2/images/cwcc_logo_complete.png" style="margin-top: 0px;"alt="logo" class="logo-default" height="50" width="200"/>
+			</a>
+			<div class="menu-toggler sidebar-toggler hide">
+				<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
+			</div>
+		</div>
+		<!-- END LOGO -->
+		<!-- BEGIN RESPONSIVE MENU TOGGLER -->
+		<a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+		</a>
+		<!-- END RESPONSIVE MENU TOGGLER -->
+		<!-- BEGIN TOP NAVIGATION MENU -->
+		<div class="top-menu">
+			<ul class="nav navbar-nav pull-right color_org ">
+				
+					
+				<!-- BEGIN USER LOGIN DROPDOWN -->
+				<li>
+				<select class="bs-select form-control input-small cls_org color_org">
+					
+
+
+					{{$item_selected  := str_to_int .Tconf.org_id }}
+				 	
+				 	{{range  $Arr_orglist := .Org_list}}
+					{{ $loop_id  := $Arr_orglist.Org_id }}
+					{{if eq $item_selected $loop_id }}	
+				 		<option value="{{$Arr_orglist.Org_id}}" selected>{{$Arr_orglist.Org_name}}</option>
+				 	{{else}}	
+				 		<option value="{{$Arr_orglist.Org_id}}">{{$Arr_orglist.Org_name}}</option>
+					{{end}}
+					{{end}}
+
+
+					
+				</select>
+
+				</li>
+				<li class="dropdown dropdown-user">
+					
+					<a href="#" class="dropdown-toggle style_user" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+					<!-- <img alt="" class="img-circle" src="/src/metronic_3.1.2/metronic/assets/admin/layout/img/avatar3_small.jpg"/> -->
+					<span class="username style_user">
+					{{.LogInUsername}} </span>
+					<i class="fa fa-angle-down"></i>
+					</a>
+					<ul class="dropdown-menu">
+						<li>
+							<a href="/changepassword" >
+								<i class="icon-key"></i> Change Password 
+							</a>
+						</li>
+						<li>
+							<a href="/LogOut" onclick="signOut();">
+								<i class="icon-key"></i> Log Out 
+							</a>
+						</li>
+					</ul>
+				</li>
+				<!-- END USER LOGIN DROPDOWN -->
+				<!-- BEGIN QUICK SIDEBAR TOGGLER -->
+				<li class="dropdown dropdown-quick-sidebar-toggler style_user">
+					<a href="javascript:;" class="dropdown-toggle">
+					<!-- <i class="icon-logout"></i> -->
+					</a>
+				</li>
+				
+				<!-- END QUICK SIDEBAR TOGGLER -->
+			</ul>
+
+			<ul>
+				
+			</ul>
+			
+		</div>
+		<!-- END TOP NAVIGATION MENU -->
+	</div>
+	<!-- END HEADER INNER -->
+</div>
+<!-- END HEADER -->
+<div class="clearfix">
+</div>
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+	{{template "SideBar" .SideBar}}
+	<!-- BEGIN CONTENT -->
+	<div class="page-content-wrapper light_gold">
+		<div class="page-content">
+			<div id="ContentID"></div>
+			<div id="ContentID1"></div>
+				
+		</div>
+	</div>
+	<!-- END CONTENT -->
+	<!-- BEGIN QUICK SIDEBAR -->
+	<!-- <a href="javascript:;" class="page-quick-sidebar-toggler"><i class="icon-close"></i></a> -->
+	
+	<!-- END QUICK SIDEBAR -->
+</div>
+<!-- END CONTAINER -->
+<!-- BEGIN FOOTER -->
+
+<div class="page-footer style_footer">
+
+	<div class="page-footer-inner">
+		
+		 
+		 <p class="copyright_footer">Powered by Memgertech Inc.</p>
+	</div>
+
+
+	
+
+	<div class="page-footer-tools">
+		
+		<span class="go-top">
+		<i class="fa fa-angle-up"></i>
+		</span>
+		
+	</div>
+
+
+
+</div>
+<!-- END FOOTER -->
+<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+<!-- BEGIN CORE PLUGINS -->
+<!--[if lt IE 9]>
+<script src="../../assets/global/plugins/respond.min.js"></script>
+<script src="../../assets/global/plugins/excanvas.min.js"></script> 
+<![endif]-->
+
+<div class="modal fade" id="basic"  role="basic" aria-hidden="true">
+<!-- 	<div class="modal-dialog modal-lg">
+		<div class="modal-content" id="ModalCont">
+			
+		</div>
+	</div> -->
+	
+</div>
+<div class="modal fade" id="modalSession" tabindex="-1" role="basic" aria-hidden="true">
+<!-- 	<div class="modal-dialog modal-lg">
+		<div class="modal-content" id="ModalCont">
+			
+		</div>
+	</div> -->
+	
+</div>
+
+<div class="modal fade" id="large" tabindex="-1" role="dialog" aria-hidden="true">
+
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+
+<script src="/src/metronic_3.1.2/metronic/assets/global/plugins/jquery-1.11.0.min.js" type="text/javascript"></script>
+<script src="/src/metronic_3.1.2/metronic/assets/global/scripts/bootbox.min.js" type="text/javascript"></script>
+
+<script>
+
+
+	$(document).ready( function () {
+  displaydefaultPage();
+
+});
+
+	function displaydefaultPage() {
+								
+								//$('#mycontributions').empty();
+
+		                    $.get("/json_func",
+		                    {
+		                       qdata : "sysaccess_get 2,{{.Tconf.userID}},1"
+									//exec sysaccess_get 2, 79904,1
+		                   
+		                    }
+		                    ,
+		                    function(data,status){
+		                        if( data!=null){
+
+		                        	var line="";
+		                        	
+
+		                        	
+		                     
+				                    for (var i = 0; i < data.length; i++) {
+				                    	 	ret_msg = data[i][0]
+
+				                    			var myStr = data[i][12];
+
+				                    			if (myStr == "Yes") {
+
+				                    						Navigate(data[i][3]);
+
+				                    			}
+
+
+				                    			
+  									
+				                    		
+				                    		//$('#mycontributions').append(line);
+				                    		console.log(myStr);
+
+				                     	 
+				                    }
+				                  
+
+
+				                    
+
+
+				                    //$("[name=amt_generated]").val(CommaFormatted(amt_generated)).trigger("change");
+				                   
+			
+
+			                    }
+		                    });	
+							
+		                    return false;
+					};
+
+var clicked  ,ValidName =0  ,x =0
+var ht404 = '<div class="note note-success"> '
+	ht404 +='					<h4 class="class="block" >Page Error</h4> '
+	ht404 +='					<p> '
+	ht404 +='						The system detect an error on your browser, or your session is not renew, '
+	ht404 +='to fix this problem. Please refresh your browser by pressing F5  on your keyboard, or logout your account. and'
+	ht404 +=' relogin. if the problem persist please contact the System Administrator.'
+	ht404 +='					</p> '
+	ht404 +='</div>'
+
+function masking(){
+	$("#mask_byear").inputmask("mask", {
+        "mask": "9999"
+    });
+	/*$("#mask_postcode").inputmask("mask", {
+        "mask": "9999"
+    });*/
+	$("#mask_TIN").inputmask("mask", {
+        "mask": "999-999-999-000"
+    });
+    $("#mask_SSS").inputmask("mask", {
+        "mask": "99-9999999-9"
+    });
+    $("#mask_GSIS").inputmask("mask", {
+        "mask": "99999999999"
+    });
+     $("#mask_phone").inputmask("mask", {
+        "mask": "+63-999-999-9999"
+    });
+	 $("#mask_cphone").inputmask("mask", {
+        "mask": "+63-9999999999"
+    });
+	 $("#mask_PHealth").inputmask("mask", {
+        "mask": "99-999999999-9"
+    });
+	 $("#mask_Pagibig").inputmask("mask", {
+        "mask": "9999-9999-9999"
+    });
+	
+}
+function Navigate(a){
+	localStorage.removeItem("last_arch_custorder");
+	localStorage.removeItem("last_arch_ActualCount");
+	localStorage.removeItem("last_arch_AjustmentEntry");
+	localStorage.removeItem("last_arch_Brochure");
+	localStorage.removeItem("last_arch_CustomerReplacement");
+	localStorage.removeItem("last_arch_CustomerReturn");
+	localStorage.removeItem("last_arch_CustomerSales");
+	localStorage.removeItem("last_arch_InternalIssuance");
+	localStorage.removeItem("last_arch_InternalOrder");
+	localStorage.removeItem("last_arch_InternalReturn");
+	localStorage.removeItem("last_arch_LocationOrder");
+	localStorage.removeItem("last_arch_LocationReciept");
+	localStorage.removeItem("last_arch_LocationTransfer");
+	localStorage.removeItem("last_arch_SupplierOrder");
+	localStorage.removeItem("last_arch_SupplierReciept");
+	localStorage.removeItem("last_arch_SupplierReplacement");
+	localStorage.removeItem("last_arch_SupplierReturn");
+
+	
+
+
+$.get(a,
+	        {
+	        },
+	        function(data,status){
+	            if (status) {
+	            	$("#ContentID").html(data);
+	        	}else{
+	        		$("#ContentID").html("something went wrong, please refresh you browser.")
+	        	}
+	        	//TableManaged.init();
+	        	//masking()
+	        
+				
+			});
+	/*$.ajax({
+	  statusCode: {
+	    404: function() {
+	    	$("#ContentID").html(ht404);
+	    }
+	  }
+	});*/
+
+	return false;
+}
+
+
+function Modalfunc_show_prev(a,v){
+        $.get("/get_duplicate_dev_id",
+                {
+                  device_id: $('input[name=device_id]').val()
+                }
+                ,
+
+                function(data,status){
+                    $("#large").html(data);
+                    $('#large').modal({
+                    	show : true ,
+				    	backdrop: 'static',
+				    	keyboard: false  // to prevent closing with Esc button (if you want this too)
+					});
+                    
+                });
+        //return false;
+    }
+
+
+
+$('.cls_org').on('change', function(event) {
+	window.location="?org_id="+$(this).val();
+});
+
+function stringContains(inputString, stringToFind) {
+    return (String(inputString).indexOf(stringToFind) != -1)
+}
+
+function DoReLogin(a){
+	
+	$.post("/Relogin",$( "#IDRelogin" ).serialize()
+	        ,
+	        function(data,status){
+	        	if(data.Stats=="1"){
+		            	x=0
+		            	$('#modalSession').modal('hide') 
+		        	}else{
+		        		$("#IDsessiorErrAlert").html(data.Message)
+		        		//alert(data.Message)
+		        	}
+
+	                
+		        				/*$('#modalSession').modal({
+								  keyboard: false ,
+								  backdrop: 'static'
+								});
+								*/
+	            ///}
+			});
+	return false;
+}
+
+function bftxt(a,b){
+	switch(b) {
+    case 1:
+        a.className = "form-control input-xsmall spinner";
+        break;
+    case 2:
+        a.className = "form-control input-small spinner";
+        break;    
+    case 3:
+        a.className = "form-control input-inline input-medium  createAct spinner"
+        break;
+    case 4:
+        a.className = "form-control input-inline input-large  createAct spinner"
+        break;    
+    case 5:
+    	a.className = "form-control createAct spinner"
+    	break;
+    default: 
+    	return false   
+	}	
+}
+
+function back_storege (str) {
+	var  last_arch = localStorage.getItem("last_arch"+str);
+    $("#arc option[value='"+last_arch+"'").attr("selected","selected");     
+    $("#arc").change(function(){
+        localStorage.setItem("last_arch"+str, $("#arc").val() );  
+        dtbl();
+    });
+}
+
+function num_val_init() {
+	$(".num_f").on("blur", function () {
+	    if ($(this).val().trim().length == 0) {
+	        $(this).val("00.00");
+	    }
+
+	});
+}
+
+function numbersOnly(Sender,evt,isFloat,isNegative) {
+        if(Sender.readOnly) return false;       
+
+        var key   = evt.which || !window.event ? evt.which : event.keyCode;
+        var value = Sender.value;
+
+        if((key == 46 || key == 44) && isFloat){                
+            var selected = document.selection ? document.selection.createRange().text : "";
+            if(selected.length == 0 && value.indexOf(".") == -1 && value.length > 0) Sender.value += ".";
+            return false;
+        }
+        if(key == 45) { // minus sign '-'
+            if(!isNegative) return false;
+            if(value.indexOf('-')== -1) Sender.value = '-'+value; else Sender.value = value.substring(1);
+            if(Sender.onchange != null) {
+                if(Sender.fireEvent){
+                    Sender.fireEvent('onchange');
+                } else {
+                    var e = document.createEvent('HTMLEvents');
+                        e.initEvent('change', false, false);
+                    Sender.dispatchEvent(e);
+                }
+            }
+
+            var begin = Sender.value.indexOf('-') > -1 ? 1 : 0;
+            if(Sender.setSelectionRange){
+                Sender.setSelectionRange(begin,Sender.value.length);
+            } else {
+                var range = Sender.createTextRange();
+                range.moveStart('character',begin);
+                range.select();                 
+            }
+
+            return false;
+        }
+        if(key > 31 && (key < 48 || key > 57)) return false;
+    }
+	//end of accept number and . only
+
+</script>
+
+<script src="/src/metronic_3.1.2/metronic/assets/global/plugins/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+<!-- IMPORTANT! Load jquery-ui-1.10.3.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+<script src="/src/metronic_3.1.2/metronic/assets/global/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
+<script src="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<script src="/src/metronic_3.1.2/metronic/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="/src/metronic_3.1.2/metronic/assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="/src/metronic_3.1.2/metronic/assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+<script src="/src/metronic_3.1.2/metronic/assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
+
+<!-- for ninput mask -->
+<!-- <script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/fuelux/js/spinner.min.js"></script> -->
+<script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js"></script>
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+
+<!-- <script src="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script> -->
+<!-- <script src="/src/metronic_3.1.2/metronic/assets/global/plugins/jquery-tags-input/jquery.tagsinput.min.js" type="text/javascript"></script> -->
+<!-- <script src="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js" type="text/javascript"></script> -->
+<!-- <script src="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script> -->
+<!-- <script src="/src/metronic_3.1.2/metronic/assets/global/plugins/typeahead/handlebars.min.js" type="text/javascript"></script> -->
+<!-- <script src="/src/metronic_3.1.2/metronic/assets/global/plugins/typeahead/typeahead.bundle.min.js" type="text/javascript"></script> -->
+<!-- <script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/ckeditor/ckeditor.js"></script> -->
+
+<!-- end input mask -->
+<script src="/src/metronic_3.1.2/metronic/assets/global/scripts/metronic.js" type="text/javascript" defer="defer"></script>
+<script src="/src/metronic_3.1.2/metronic/assets/admin/layout/scripts/layout.js" type="text/javascript" defer="defer"></script>
+<script src="/src/metronic_3.1.2/metronic/assets/admin/layout/scripts/quick-sidebar.js" defer="defer" type="text/javascript"></script>
+<script src="/src/metronic_3.1.2/metronic/assets/admin/pages/scripts/table-managed.js" defer="defer" type="text/javascript"></script>
+
+<script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js" defer="defer" ></script>
+<script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" defer="defer"></script>
+
+<script src="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap-daterangepicker/moment.min.js" type="text/javascript"></script>
+<script src="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.js" type="text/javascript"></script>
+
+<!-- ../../assets/global/plugins/jquery-validation/js/jquery.validate.min.js -->
+<script src='http://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/js/bootstrapvalidator.min.js'></script>
+
+
+<script src="https://togetherjs.com/togetherjs-min.js"></script>
+<script>
+jQuery(document).ready(function() { 
+		
+		
+		setInterval(function(){ 
+				if(x==0)
+				{
+					$.get("/SessionExpire",
+				        {
+				        },
+				        function(data,status){
+				        	if(data.trim().length>0){
+								$("#modalSession").html(data);
+								x=1
+								$('#modalSession').modal({
+								  keyboard: false ,
+								  backdrop: 'static'
+								});
+								$('#modalSession').modal('show');
+							}
+				        }
+			        );
+		        }
+		}, 60000);
+	Metronic.init(); // init metronic core components
+	Layout.init(); // init current layout
+	QuickSidebar.init() // init quick sidebar
+   	//TableManaged.init();
+
+   	 //ComponentsFormTools.init();
+});
+
+
+
+</script>
+
+
+
+
+
+<!--Start of Tawk.to Script-->
+<!-- <script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/5bd2b474476c2f239ff613c3/default';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script> -->
+<!--End of Tawk.to Script-->
+<script>
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+    
+  }
+
+
+/*$('#large').modal({
+	backdrop: 'static',
+	keyboard: false  // to prevent closing with Esc button (if you want this too)
+});
+*/
+
+
+</script>
+
+
+<style type="text/css">
+	/*#hfc-cleanslate .hfc-badge.hfc-badge-bottom {
+	    right: 1639px;
+	    margin-bottom: 51px;
+	    border-radius: 8px;
+	}
+	#hfc-cleanslate.hfc-chat-container {
+    	position: fixed
+	}*/
+
+
+	#hfc-cleanslate .hfc-badge.hfc-badge-bottom {
+      /*right: 1639px;*/
+     /* margin-left: 20px;*/
+      left: 0;
+      width: 120px;
+      /*bottom:-10px;*/ 
+      margin-bottom: 50px;
+      border-radius: 8px;
+      border-radius: 5px;
+  	}
+  	#hfc-cleanslate.hfc-chat-container {
+    	position: fixed
+  	}
+ 	#hfc-cleanslate .hfc-badge-title {
+    	font-size: small;
+  	}
+
+  	table.dataTable tbody td {
+   /* white-space: nowrap;*/
+	}
+	textarea {
+		    min-height: 100px;
+	}
+
+</style>
+</body>
+<!-- END BODY -->
+</html>
+

@@ -1,0 +1,156 @@
+<html>
+    <head>
+                <!-- <title style="font-size: 16px;">Paired logs Report</title> -->
+                <link href="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <!-- Custom CSS -->
+            <style type="text/css">
+                .rpt_date {
+                    float: right;
+                    
+                }
+                .page_header{
+                    margin-bottom: 5px;
+                    /*display: inline; */
+                }
+                .name{
+                    /*float: left;*/
+                    margin-bottom: 3px;
+                    font-family: Arial; 
+                }
+                .covered_data{
+                    /*float: right;*/
+                    font-family: Arial; 
+                }
+                .pic_logo {
+                    width: 200px;
+
+                }
+                table{
+                    width: 100%;
+                }
+                
+                .dtatbl {
+                
+                border: 0.99px solid #B3B3B3;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 12px;
+                }
+
+                .dtatbl th{
+                    border: 0.99px solid #B3B3B3;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 12px;
+                }
+
+                .dtatbl td {
+                    border: 0.99px solid #B3B3B3;
+	                border-collapse: collapse;
+	                font-family: 'Arial Narrow', Arial, sans-serif;
+	                font-size: 12px;
+                }
+                th, td {
+                    /*padding: 2px;*/
+                      font-size: 12px;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+                th{
+                    
+                    background-color: whiteSmoke;
+                    /*background-image: -webkit-linear-gradient*/
+                    
+                }
+                body {
+                    font-size: 12px;
+                }
+                .logo{
+                    width: 200px;
+                    margin-bottom: 5px;
+                }
+                .page_footer{
+                    margin-top: 20px;
+                    display: inline-block;
+                    width: 100%;
+                }
+                .signaturemember{
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: left;
+                    font-family: inherit;
+                }
+                .signatureleft{
+                    margin-left: 10%;
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: left;
+                    font-family: inherit; 
+                }
+                .signatureright{
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: right;
+                    font-family: inherit; 
+                }
+                .tbl_foor{
+                    margin-top: 10px;
+                }
+                .tbl_foor td div{
+                    border-top: 0.99px solid black; 
+                    width: 50%;
+                }
+                .isred {
+                    color: red;
+                }
+                .log_sum{
+                    margin-top: 10px;
+                }
+                td div{
+                    font-size: 12px;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+                td div b{
+                    font-size: 12px;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+
+                table, th, td {
+                    border: 1px solid black;
+                    border-collapse: collapse;
+                }
+                
+                .img-responsive{
+                    width: 171px;
+                    height: 171px;
+
+                }
+            </style>
+
+              <!-- Bootstrap Core CSS -->
+    
+    
+    </head>
+	<body>
+    {{$Orgid := .Conf.org_id }}
+    {{$sql_str := combine_string `SIS_Brochure_Print ` .Conf.org_id "," .Conf.trnID }}
+	{{$data_list := tpl_sql $sql_str }}
+
+	{{range  $key1, $val1stloop := $data_list}}
+    {{$img := index $val1stloop  1 }}
+    	   
+    <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <a class="thumbnail" href="#">
+        	<img class="img-responsive" style="width: 171px;
+                    height: 171px;" src="{{ Img_to_render `img_uploads/size_171/` $img 171  $Orgid }}" alt="">
+        <center><div>{{index $val1stloop  0}} P{{ index $val1stloop  2}} </div></center>
+        <center><div>{{index $val1stloop  3}}</div></center>
+        </a>
+
+    </div>
+
+    {{end}}
+                        
+   
+	</body>
+</html>
+

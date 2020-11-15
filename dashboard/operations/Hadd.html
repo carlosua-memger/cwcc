@@ -1,0 +1,187 @@
+{{$Org_id := .Tconf.Org_id}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.js"></script>
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<div class="row">
+					<div class="col-md-6">
+						<h3 class="form-section">Product Movement Report</h3>
+
+						<form id="CreateTransaction" class="form-horizontal" >
+								
+							
+				                <div class="col-md-8">
+				                    <label class="control-label">Item</label>
+				                    <div>
+				                        <input type="text" name="item" placeholder="Item" id="item"  class="input-large" >
+				                    </div>
+				                    </div>
+				                    
+				                <div class="col-md-8">
+				                    <label class="control-label">Item Name (product filter)</label>
+								<div >
+									<input type="text" name="key" placeholder="key word" id="key" class="input-large" >
+								</div>
+							</div>
+				                            
+				               
+				                <div class="col-md-8" >
+				                    <label class="control-label">Date:</label>
+				                    <div >
+				                        <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+				                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+				                            <span></span> <b class="caret"></b>
+				                        </div>
+				                    </div>
+				                </div>
+								<!-- <span id="limitAlert"class="help-block col-md-8 " style="color:red" hidden >Error: Date range maximum of 1 Year </span> -->
+				             
+							
+
+							<div class="form-actions fluid">
+								<div class="col-md-offset-3 col-md-9">
+									<a onclick="javascript:open_url();" class="btn blue">Generate</a>
+								</div>
+							</div>
+						</form>
+										
+					</div>	
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+	var currentDate = new Date();  
+	$(".date-picker").datepicker("setDate",currentDate);
+
+	function repoFormatResult( repo ) {
+	    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div></div>";
+
+	    return markup;
+	}
+
+	function repoFormatSelection( repo ) {
+        return repo.full_name;
+    }
+    		
+	$( "#item" ).select2({
+	    placeholder: "Search for Items",
+	    minimumInputLength: 2,
+	    multiple: false,
+	    allowClear: true,
+	    ajax: {
+	         url: "/inventory/adjustment_entry/details/Ajax/Ajax_getItem",
+	        dataType: "json",
+	        quietMillis: 250,
+	        data: function( term, page ) {
+	            return {
+	                // search term
+	                q: term
+	            };
+	        },
+	        results: function( data, page ) {
+	                // parse the results into the format expected by Select2.
+	                // since we are using custom formatting functions we do not need to alter the remote JSON data
+	                return { results: data.items };
+	        }
+	        
+	    },
+	    
+	    formatResult: repoFormatResult,
+	    formatSelection: repoFormatSelection,
+	    // apply css that makes the dropdown taller
+	    dropdownCssClass: "bigdrop",
+	    // we do not want to escape markup since we are displaying html in results
+	    escapeMarkup: function( m ) {
+	        return m;
+	    }
+	});
+	
+
+
+
+</script>
+
+
+
+
+<script type="text/javascript">
+                $(function() {
+                   
+                    
+                    
+                    //var start = moment().subtract(29, 'days');
+                    //var end = moment();
+
+                    var start = moment().subtract(1, 'month').startOf('month')
+                    var end = moment().subtract(1, 'month').endOf('month')
+                    
+
+                    function cb(start, end) {
+                        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                    }
+
+                    $('#reportrange').daterangepicker({
+                        startDate: start,
+                        endDate: end,
+                        ranges: {
+                           'Today': [moment(), moment()],
+                           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                           'This Month': [moment().startOf('month'), moment().endOf('month')],
+                           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                        }
+                    }, cb);
+
+                    cb(start, end);
+                    
+                });
+
+				function open_url() {
+				   	
+				   	$('#limitAlert').hide()
+		            var strt_date = $('#reportrange').data('daterangepicker').startDate.format('YYYY-MM-DD ');
+		            var end_date  = $('#reportrange').data('daterangepicker').endDate.format('YYYY-MM-DD ');
+		            var df =$('#reportrange').data('daterangepicker').endDate - $('#reportrange').data('daterangepicker').startDate
+		            if(df> 31708799999){ //limit 1yr
+		            //    $('#limitAlert').show()
+		                return false;
+		                
+		            }
+		            console.log(df)
+		            var itemid = $("#item").select2("val"); 
+		            var itemkey = document.getElementById("key").value;
+		            console.log(strt_date)
+		            console.log(end_date)
+
+		            /*var aj_url ="&item_id=" + itemid + "&datefrom="+strt_date+"&dateto="+end_date
+		            console.log(aj_url)*/
+		            
+
+	  var url_to_open = "/inventory/reports/product_movement/viewer?item_id=" + itemid + "&datefrom="+strt_date+"&dateto="+end_date+"&item_key="+itemkey
+				    console.log(url_to_open)
+				    var myWindow = window.open(url_to_open);
+					return false;
+				}
+
+                </script>

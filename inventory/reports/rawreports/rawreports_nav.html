@@ -1,0 +1,371 @@
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Raw Reports
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<form id="CreateTransaction" class="form-horizontal" target ="_blank" action="/reports/rawreports/do_print/" method="Get">
+
+					<div class="form-body">
+							
+						<div id="warnerr" class="Metronic-alerts alert alert-warning fade in" hidden>
+							date range greater than 16 days	
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Report Name:<span class="required" aria-required="true">
+								* </span></label>
+								<div class="col-md-4">
+								<select name="reportname" class="reportname form-control input-xlarge dr-js" required>
+								{{range $assignlist := .RawreportsList }}
+								<option  value="{{$assignlist.Sql}}][{{$assignlist.Reportname}}">{{$assignlist.Reportname}}</option>
+								{{end}}
+								</select>
+							</div>
+						</div>
+						<div class="c_branch form-group">
+							<label class="col-md-3 control-label">Branch</label>
+							<div class="col-md-4">
+								<select name="branch" class="branch form-control input-large "> 
+								
+								</select>
+							</div>
+						</div>
+						<div class="c_trntype form-group">
+							<label class="col-md-3 control-label">Tran Type</label>
+							<div class="col-md-4">
+								<select name="trntype" class="trntype form-control input-large"> 
+								
+								</select>
+							</div>
+						</div>
+						<div class="c_product form-group">
+							<label class="col-md-3 control-label">Product</label>
+							<div class="col-md-4">
+								<!-- <select name="product" id="product" class="product form-control input-large"> 
+								
+								</select> -->
+
+								<input type="text"  name="product" placeholder="Product" id="product"   class="form-control input-xlarge">
+
+							</div>
+						</div>	
+						<div class="c_costcode form-group">
+							<label class="col-md-3 control-label">Costcode</label>
+							<div class="col-md-4">
+								<select name="costcode" class="costcode form-control input-large "> 
+								
+								</select>
+							</div>
+						</div>
+						<div class="c_personnel form-group">
+							<label class="col-md-3 control-label">Personnel</label>
+							<div class="col-md-4">
+								<select name="personnel" class="personnel form-control input-large"> 
+								
+								</select>
+							</div>
+						</div>
+
+						<div class="c_refno form-group">
+							<label class="col-md-3 control-label">Refno</label>
+							<div class="col-md-4">
+								<input type="text" name="refno" class="Refno form-control" placeholder="Costcode" maxlength="50">
+							</div>
+						</div>
+
+
+						<div class="c_datefrom form-group">
+							<label class="col-md-3 control-label">Date From :<span class="required" aria-required="true">
+								* </span>
+							</label>
+							<div class="dc_datefrom col-md-4">
+								<input type="text" name="datefrom" id="datefrom"class="form-control date-picker" placeholder="Date from" maxlength="50" required>
+							</div>
+						</div>
+						<div class="c_dateto form-group">
+							<label class="col-md-3 control-label">Date To :<span class="required" aria-required="true">
+								* </span>
+							</label>
+							<div class="dc_dateto col-md-4">
+								<input type="text" name="dateto" id="dateto"class="form-control date-picker" placeholder="Date to:" maxlength="50" required>
+							</div>
+						</div>
+
+						
+						<div class="form-group">
+							<label class="col-md-3 control-label">Export type:</label>
+							<div class="col-md-4">
+								<select name="export_type" class="form-control input-large dr-js"> 
+								<option value="print">Print</option>
+								<option value="excel">Excel</option>
+								<option value="word">Word</option>
+								<option value="pdf">PDF</option>	
+								</select>
+							</div>
+						</div>
+
+						<div class="form-actions fluid">
+							<div class="col-md-offset-3 col-md-9">
+								<button class="btn btn-circle blue" type="submit">Submit</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+			$('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+			
+			//$(".dr-js").select2();
+			$(".clsAssign").on("select2-close", function() { 
+				console.log( $('#datefrom').val() + "&dateto="+$('#dateto').val() )
+				$.get("/timekeeping/CreateTransactionDetails/ajaxgetmemberbyassigment?assigmentID="+this.value +"&datefrom="+ $('#datefrom').val() + "&dateto="+$('#dateto').val() ,
+            		function(data,status){
+                   		var ht ='<option value="0">All</option>'
+                   		for (var i = 0; i < data.length; i++) { 
+						    ht+='<option value="'+data[i].Member_id+'">'+data[i].Name+'</option>'
+						}
+						$('#member').html(ht);
+				        $('#member').select2();	
+					}
+                );
+			})
+		//$('#drpmember').select2("val","");
+
+		
+		ajax_getbranch();
+        var  json_branch =''    
+        function ajax_getbranch(){
+            
+            $.get("/json_func",
+                    {
+                      qdata : "Branch_get 2, 1"
+                    }
+                    ,
+
+                    function(data,status){
+                    	var ht ='<option value="0][All">All</option>'
+                        for (var i = 0; i < data.length; i++) {
+			                ht += '<option value="'+data[i][0]+']['+data[i][1]+'">'+data[i][1]+' </option>'
+			            };
+						$('.branch').html(ht);
+						$('.branch').html(ht);
+
+				        //$('.branch').select2();
+
+                        //$("#basic").html(data);
+                        //$(".dr-js").select2();
+                        
+                    });
+
+        }
+
+        /*ajax_getproduct();
+        var  json_product =''    
+        function ajax_getproduct(){
+            
+            $.get("/json_func",
+                    {
+                      qdata : "product_get 2, 1"
+                    }
+                    ,
+                    function(data,status){
+                        var ht ='<option value="0][All">All</option>'
+                        for (var i = 0; i < data.length; i++) {
+			                ht += '<option value="'+data[i][0]+']['+data[i][1]+'">'+data[i][1]+' </option>'
+			            };
+						$('.product').html(ht);
+						$('.product').select2();
+
+                        
+                    });
+
+        }*/
+
+        ajax_gettype();
+        var  json_type =''    
+        function ajax_gettype(){
+            
+            $.get("/json_func",
+                {
+                  qdata : "trantype_get 2, 1"
+                }
+                ,
+                function(data,status){
+                    var ht ='<option value="0][All">All</option>'
+                    for (var i = 0; i < data.length; i++) {
+		                ht += '<option value="'+data[i][0]+']['+data[i][1]+'">'+data[i][1]+' </option>'
+		            };
+					$('.trntype').html(ht);
+					$('.trntype').select2();
+
+                }
+            );
+        }
+
+        ajax_getpersonnel();
+        var  json_personnel =''    
+        function ajax_getpersonnel(){
+            
+            $.get("/json_func",
+                    {
+                      qdata : "personnel_get 2, 1"
+                    }
+                    ,
+                    function(data,status){
+                        var ht ='<option value="0][All">All</option>'
+                        for (var i = 0; i < data.length; i++) {
+			                ht += '<option value="'+data[i][0]+']['+data[i][1]+'">'+data[i][1]+' </option>'
+			            };
+						$('.personnel').html(ht);
+						$('.personnel').select2();
+
+                    });
+
+        }
+
+        json_costcode();
+        var  json_costcode =[""]    
+        function json_costcode(){
+            $.get("/json_func",
+            {
+              qdata : "DailySumDtl_costcode_Get 1, 1, ''"
+            }
+            ,
+            function(data,status){
+                var ht ='<option value=" ][All">All</option>'
+                for (var i = 0; i < data.length; i++) {
+	                ht += '<option value="'+data[i][0]+']['+data[i][1]+'">'+data[i][1]+' </option>'
+	            };
+				$('.costcode').html(ht);
+				$('.costcode').select2();
+            });
+        }
+        
+        $('.reportname').change(function(){
+        	console.log($(this).val())
+        	if(stringContains($(this).val(),"@@branch")) {
+        		$('.c_dateto').show();	         
+            }else{
+            	$('.c_dateto').hide();	
+            }
+        	if(stringContains($(this).val(),"@@trntype")) {
+        		$('.c_trntype').show();	         
+            }else{
+            	$('.c_trntype').hide();	
+            }
+            if(stringContains($(this).val(),"@@product")) {
+        		$('.c_product').show();	         
+            }else{
+            	$('.c_product').hide();	
+            }
+            if(stringContains($(this).val(),"@@costcode")) {
+        		$('.c_costcode').show();	         
+            }else{
+            	$('.c_costcode').hide();	
+            }
+            if(stringContains($(this).val(),"@@personnel")) {
+        		$('.c_personnel').show();	         
+            }else{
+            	$('.c_personnel').hide();	
+            }
+            if(stringContains($(this).val(),"@@refno")) {
+        		$('.c_refno').show();	         
+            }else{
+            	$('.c_refno').hide();	
+            }
+            if(stringContains($(this).val(),"@@datefrom")) {
+        		$('.c_datefrom').show()
+        		//$('.c_datefrom').attr('required')	
+        		$('.dc_datefrom').html('<input type="text" name="datefrom" id="datefrom"class="form-control date-picker" placeholder="Date from" maxlength="50" required>');         
+            }else{
+            	//$('.c_datefrom').removeAttr('required')
+            	$('.dc_datefrom').html('<input type="text" name="datefrom" id="datefrom"class="form-control date-picker" placeholder="Date from" maxlength="50">');
+            	$('.c_datefrom').hide();	
+            	
+            }
+            if(stringContains($(this).val(),"@@dateto")) {
+        		$('.c_dateto').show();	
+        		$(".dc_dateto").html('<input type="text" name="dateto" id="dateto"class="form-control date-picker" placeholder="Date to:" maxlength="50" required>');
+
+        		//$('.c_dateto').prop('required',true)         
+            }else{
+            	//$('.c_dateto').prop('required',false)  
+            	$(".dc_dateto").html('<input type="text" name="dateto" id="dateto"class="form-control date-picker" placeholder="Date to:" maxlength="50">');  
+            	$('.c_dateto').hide();	
+        	}
+        	$('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });	
+        });
+
+
+	
+	function repoFormatResult( repo ) {
+	    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+	    return markup;
+	  }
+
+	  function repoFormatSelection( repo ) {
+	        return repo.full_name;
+	  }
+	 // var assignID ="emp"      
+	  $( "#product" ).select2({
+	      placeholder: "Search product",
+	      minimumInputLength: 2,
+	      multiple: false,
+	      allowClear: true,
+	      ajax: {
+	          url: "/ajax/getproduct",
+	          dataType: "json",
+	          quietMillis: 250,
+	          data: function( term, page ) {
+	              return {
+	                  // search term
+	                  q: term
+	              };
+	          },
+	          results: function( data, page ) {
+	                  // parse the results into the format expected by Select2.
+	                  // since we are using custom formatting functions we do not need to alter the remote JSON data
+	                  return { results: data.items };
+	          }
+	          
+	      },
+	      
+	      formatResult: repoFormatResult,
+	      formatSelection: repoFormatSelection,
+	      // apply css that makes the dropdown taller
+	      dropdownCssClass: "bigdrop",
+	      // we do not want to escape markup since we are displaying html in results
+	      escapeMarkup: function( m ) {
+	          return m;
+	      }
+	  });
+
+
+</script>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<style type="text/css">
+	#example1 tr td{
+		font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+		border: 1px solid #cecece;
+		padding: 2px;
+		font-size:10px
+
+	}
+	#example1 tr th{
+		font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+		border: 1px solid #cecece;
+		padding: 2px;
+		font-size:12px
+
+	}
+	table tr{
+		/*font-size: 18px;
+    font-family: monospace;*/
+
+	}
+
+	.header {
+  font-weight: 900;
+  color: #ffffff;
+  background: #27ae60;
+}
+
+ tr:nth-child(2n) {
+             background-color: #ECE7E7;
+        }
+ tr:hover {
+          background-color: #CDC2C2;
+        }
+
+
+</style>
+<body>
+
+
+		<font face="arial">Loan Ledger Report<br>
+		{{.MemberName}}</font>
+		<br>
+		<br>
+
+ 
+
+<table id="example1" class="table table-bordered " cellspacing="0" width="100%">
+	<thead class="tbl_data">
+	        
+	    <tr>
+	        <th class="header">Description/Date</th>
+	        <th class="header">Reference</th>
+	        <th class="header">DR</th>
+	        <th class="header">CR</th>
+	        <th class="header">Running Balance</th>
+	       
+		
+		</tr>
+
+
+		{{ range $index, $elmt := .Arr_data}}
+	    <tr>
+	        <td>{{index $elmt 1}}</td>
+	        <td>{{index $elmt 2}}</td>
+	        <td style="text-align: right;">{{index $elmt 3}}</td>
+	        <td style="text-align: right;">{{index $elmt 4}}</td>
+	        <td style="text-align: right;">{{index $elmt 5}}</td>
+	        
+	       
+	    </tr>
+	     {{end}}
+
+	</thead>
+</table>
+<br>
+<font face="arial">Printed date: {{get_datetime}} <br>
+Printed by: {{.Tconf.username}} <br></font>
+<font size="2" face="arial"><b>Powered by Memgertech Inc.</b></font>
+	
+</body>
+
+
+
+</html>

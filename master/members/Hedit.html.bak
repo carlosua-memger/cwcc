@@ -1,0 +1,614 @@
+{{$Org_id := .Conf.Org_id}}
+
+<style type="text/css">
+
+.center-div
+{
+     margin: 0 auto;
+     width: 1000px; 
+}
+
+
+
+</style>
+
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Edit Member Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+
+
+
+
+<div class="row">
+<!-- <div class="col-md-6">
+
+
+<h3 class="form-section">Member Information</h3> -->
+
+
+
+		<form id="CreateTransaction" class="form-horizontal center-div"  method="Post" onsubmit="return DoEditTransaction()">
+	
+					<div class="form-horizontal">
+						
+						  <div class="portlet-body ">
+                                    <div class="tabbable-custom ">
+                                    	<h3 class="form-section">Member Information #{{.Conf.id}}  </h3>
+                                        <ul class="nav nav-tabs ">
+                                            <li class="active">
+                                                <a href="#tab_5_1" data-toggle="tab"> Identity </a>
+                                            </li>  
+                                            <li>
+                                                <a href="#tab_5_2" data-toggle="tab"> Personal </a>
+                                            </li>
+                                            <li>
+                                                <a href="#tab_5_3" data-toggle="tab"> Financial </a>
+                                            </li>
+                                            <li>
+                                                <a href="#tab_5_4" data-toggle="tab"> Membership </a>
+                                            </li>
+                                            
+                                        </ul>
+                                        <div class="tab-content ">
+                                            <div class="tab-pane active " id="tab_5_1">
+                                            		
+                                            	<div class="container" style="width: 50%">
+
+													<label class="control-label"><b>First Name</b><span class="required" aria-required="true">*</span>
+													</label>
+													<input type="text" name="firstname" value="{{.Conf.fname}}"  placeholder="First Name" id="inputFirstName" class="form-control " maxlength="50" required>
+													
+													
+
+													
+
+
+													<label class="control-label" style=""><b>Middle Name</b><span class="required" aria-required="true">*</span>
+													</label>
+													
+													<input type="text" name="middlename"  value="{{.Conf.mname}}"  placeholder="Middle Name" id="inputMiddleName" class="form-control" maxlength="50" required>
+
+												
+														
+
+													<label class="control-label"><b>Last Name</b><span class="required" aria-required="true">*</span>
+													</label>
+													<input type="text" name="lastname" value="{{.Conf.lname}}"   placeholder="Last Name" id="inputLastName" class="form-control" maxlength="50" required>
+
+													<label class="control-label"><b>Suffix Name</b><span class="required" aria-required="true">*</span>
+													</label>
+													<input type="text" name="sname"  placeholder="Suffix Name" value="{{.Conf.sname}}"  id="inputSuffixName" class="form-control" maxlength="50">
+
+													<label class="control-label"><b>Birthday</b><span class="required" aria-required="true">*</span>
+													</label>
+													<input type="text" name="birthday" value="{{.Conf.birthday}}"  placeholder="Select date" id="inputBirthday" class="form-control date-picker" required>
+
+													<label class="control-label"><b>SSS Number</b><span class="required" aria-required="true">*</span>
+													</label>
+													<input type="text" name="sss" value="{{.Conf.sss}}"  placeholder="SSS Number" id="inputSSSNumber" class="form-control" maxlength="15" required>
+
+													<label class="control-label"><b>Tax Identification Number</b><span class="required" aria-required="true">*</span>
+													</label>
+													<input type="text" name="tin" value="{{.Conf.tin}}"  placeholder="TIN Number" id="inputTINNumber" class="form-control" maxlength="15" required>
+
+													<label class="control-label"><b>GSIS Number</b>
+													</label>
+													<input type="text" name="gsis" value="{{.Conf.gsis}}"  placeholder="GSIS Number" id="inputGSISNumber" class="form-control" maxlength="15">
+
+													<label class="control-label"><b>Mobile Number</b>
+													</label>
+													<input type="text" name="mobile" value="{{.Conf.cell_no}}"  placeholder="Mobile Number" id="inputMobileNumber" class="form-control" maxlength="50">
+
+													<label class="control-label"><b>Email Address</b>
+													</label>
+													<input type="text" name="email" value="{{.Conf.email}}"  placeholder="Email Address" id="inputEmailAddress" class="form-control" maxlength="50">
+												</div>			
+ 												
+											<!--  <span class="help-block with-errors">
+											A block of help text. </span> --> 
+													
+												
+
+
+                                            </div>
+                                            <div class="tab-pane" id="tab_5_2">
+                                             <div class="container" style="width: 50%">
+                                             		<label class="control-label" ><b>Status</b></label>
+                                             		<select class="form-control" id="stat" name="stat">
+                                             			
+  													<option value="S" {{if eq .Conf.stat `S`}} selected {{end}}>Single</option>
+  													<option value="M" {{if eq .Conf.stat `M`}} selected {{end}}>Married</option>
+  													<option value="E" {{if eq .Conf.stat `E`}} selected {{end}}>Separated</option>
+  													<option value="W" {{if eq .Conf.stat `W`}} selected {{end}}>Widowed</option>
+													</select>
+
+													<label class="control-label" ><b>Gender</b></label>
+                                             		<select class="form-control" id="sex" name="sex">
+                                             			
+  													<option value="M" {{if eq .Conf.stat `M`}} selected {{end}}>Male</option>
+  													<option value="F" {{if eq .Conf.stat `F`}} selected {{end}}>Female</option>
+  													</select>
+
+  													<label class="control-label"><b>Nationality</b>
+													</label>
+													<input type="text" name="nationality" value="{{.Conf.nationality}}"  placeholder="Nationality" id="inputNationality" class="form-control " maxlength="20">
+														
+													<label class="control-label"><b>Bank</b></label>
+							
+														<select name="bank" class="form-control" > 
+														 	{{$bank_id  := .Conf.bank }}
+														 	{{range  $key ,$val := .Ls_bank}}
+															{{ $loop_id  := index  $val 0 }}
+															{{if eq $bank_id $loop_id }}	
+														 		<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+														 	{{else}}	
+														 		<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+															{{end}}
+															{{end}}
+
+														</select>
+
+													<label class="control-label"><b>Account Number</b></label>
+													<input type="text" name="acct" value="{{.Conf.acct}}"  placeholder="Account Number" id="inputAcct" class="form-control " maxlength="50">
+
+													<label class="control-label"><b>Birth Place</b></label>
+													<input type="text" name="birthplace" value="{{.Conf.birthplace}}"  placeholder="Birth Place" id="inputBplace" class="form-control " maxlength="50">
+
+													<label class="control-label"><b>Spouse Name</b></label>
+													<input type="text" name="spouse" value="{{.Conf.spousename}}"  placeholder="Spouse Name" id="inputSpouse" class="form-control " maxlength="100">
+
+													<label class="control-label"><b>Maiden Name</b></label>
+													<input type="text" name="maiden" value="{{.Conf.maiden_name}}"  placeholder="Maiden Name" id="inputMaiden" class="form-control " maxlength="100">
+
+													<label class="control-label"><b>Present Address</b></label>
+													<input type="text" name="present_add" value="{{.Conf.present_add}}"  placeholder="Present Address" id="inputPAddress" class="form-control " maxlength="200">
+
+													<label class="control-label"><b>Post Code</b></label>
+													<input type="text" name="postcode"  value="{{.Conf.postcode}}" id="postcode" placeholder="Postal Code" class="form-control" maxlength="50">
+
+
+													<label class="control-label"><b>Present Address Status</b></label>
+													<select class="form-control" id="present_stat" name="present_stat">
+                                             			
+  													<option value="O" {{if eq .Conf.present_stat `O`}} selected {{end}}>Owned</option>
+  													<option value="R" {{if eq .Conf.present_stat `R`}} selected {{end}}>Rented</option>
+  													</select>
+
+													<label class="control-label"><b>Other Address</b></label>
+													<input type="text" name="other_add" value="{{.Conf.other_add}}"  placeholder="Other Address" id="inputOAddress" class="form-control " maxlength="200">
+
+													<label class="control-label"><b>Other Address Status</b></label>
+													<select class="form-control" id="other_stat" name="other_stat">
+                                             			
+  													<option value="O" {{if eq .Conf.other_stat `O`}} selected {{end}}>Owned</option>
+  													<option value="R" {{if eq .Conf.other_stat `R`}} selected {{end}}>Rented</option>
+  													</select>
+
+  													<label class="control-label"><b>Mailing Address</b></label>
+													<input type="text" name="mailing_add" value="{{.Conf.mailing_add}}"  placeholder="Mailing Address" id="inputMAddress" class="form-control " maxlength="200">
+
+													<label class="control-label"><b>Contact Number</b></label>
+													<input type="text" name="phone_no" value="{{.Conf.phone_no}}"  placeholder="Contact Number" id="inputPNumber" class="form-control " maxlength="50">
+
+													<label class="control-label"><b>Educational Attainment</b></label>
+													<select class="form-control" id="educ_attain" name="educ_attain">
+                                             			
+  													<option value="" {{if eq .Conf.educ_attain ``}} selected {{end}}>N/A</option>
+  													<option value="E" {{if eq .Conf.educ_attain `E`}} selected {{end}}>Elementary</option>
+  													<option value="H" {{if eq .Conf.educ_attain `H`}} selected {{end}}>High School</option>
+  													<option value="C" {{if eq .Conf.educ_attain `C`}} selected {{end}}>College</option>
+  													<option value="M" {{if eq .Conf.educ_attain `M`}} selected {{end}}>Masters</option>
+  													<option value="D" {{if eq .Conf.educ_attain `D`}} selected {{end}}>Doctorate</option>
+  													</select>
+
+  													<label class="control-label"><b>Employment Status</b></label>
+													<select class="form-control" id="emp_stat" name="emp_stat">
+                                             			
+  													<option value="" {{if eq .Conf.emp_stat ``}} selected {{end}}>N/A</option>
+  													<option value="M" {{if eq .Conf.emp_stat `M`}} selected {{end}}>Member</option>
+  													<option value="R" {{if eq .Conf.emp_stat `R`}} selected {{end}}>Regular</option>
+  													</select>
+
+  													<label class="control-label"><b>Occupation</b></label>
+													<input type="text" name="occupation" value="{{.Conf.occupation}}"  placeholder="Occupation" id="inputOccupation" class="form-control " maxlength="50">
+
+													<label class="control-label"><b>Remarks</b></label>
+
+													<textarea name = "remarks"  class="form-control" maxlength="500">{{.Conf.remarks}}</textarea>
+						
+
+													
+
+												</div>	
+                                            </div>
+                                            <div class="tab-pane" id="tab_5_3">
+                                                <div class="container" style="width: 75%">
+                                                	
+
+													<label class="control-label"><b>Current Employer/Business Name</b></label>
+													<input type="text" name="emp"  value="{{.Conf.emp}}" id="emp" placeholder="Current Employe/Business Name" class="form-control" maxlength="50">
+
+													<label class="control-label"><b>Employer Address</b></label>
+													<input type="text" name="emp_add" value="{{.Conf.emp_add}}"  placeholder="Employee Address" id="inputEAddress" class="form-control " maxlength="200">
+
+													<label class="control-label"><b>Employer Contact Number</b></label>
+													<input type="text" name="emp_no" value="{{.Conf.emp_no}}"  placeholder="Employer Contact Number" id="emp_no" class="form-control " maxlength="50">
+
+													<label class="control-label"><b>Industry</b></label>
+													<input type="text" name="emp_ind" value="{{.Conf.emp_ind}}"  placeholder="Industry" id="emp_ind" class="form-control " maxlength="50">
+
+
+													<label class="control-label"><b>Gross</b></label>
+													<input type="text" name="gross"  value="{{.Conf.gross}}" id="gross" placeholder="Gross" class="form-control" maxlength="15" onkeypress='return numbersOnly(this,event,true,false);'>
+
+													<label class="control-label"><b>Allowance & Other Earnings</b></label>
+													<input type="text" name="fund_source"  value="{{.Conf.fund_source}}" id="fund_source" placeholder="Allowance & Other Earnings" class="form-control" maxlength="15" onkeypress='return numbersOnly(this,event,true,false);'>
+
+													<label class="control-label"><b>Years in Current Employment/ Business</b></label>
+													<input type="text" name="emp_year"  value="{{.Conf.emp_year}}" id="emp_year" placeholder="Gross" class="form-control" maxlength="15" onkeypress='return numbersOnly(this,event,false,false);'>
+
+													<label class="control-label"><b>Previous Employer/Business Name</b></label>
+													<input type="text" name="prev_emp"  value="{{.Conf.prev_emp}}" id="prev_emp" placeholder="Previous Employer/Business Name" class="form-control" maxlength="50">
+
+													<label class="control-label"><b>Years in Previous Employment/ Business</b></label>
+													<input type="text" name="prev_year"  value="{{.Conf.prev_year}}" id="prev_year" placeholder="Years in Previous Employement" class="form-control" maxlength="15" onkeypress='return numbersOnly(this,event,false,false);'>
+
+													<label class="control-label"><b>Dependents</b></label>
+													<input type="text" name="dependents"  value="{{.Conf.dependents}}" id="dependents" placeholder="Dependents" class="form-control" maxlength="15" onkeypress='return numbersOnly(this,event,false,false);'>
+
+													<label class="control-label"><b>Spouse Employer</b></label>
+													<input type="text" name="spo_emp"  value="{{.Conf.spo_emp}}" id="spo_emp" placeholder="Spouse Employer" class="form-control" maxlength="50">
+
+													<label class="control-label"><b>Spouse Employment Status</b></label>
+													<select class="form-control" id="spo_emp_stat" name="spo_emp_stat">
+                                             			
+  													<option value="" {{if eq .Conf.spo_emp_stat ``}} selected {{end}}>N/A</option>
+  													<option value="M" {{if eq .Conf.spo_emp_stat `M`}} selected {{end}}>Member</option>
+  													<option value="R" {{if eq .Conf.spo_emp_stat `R`}} selected {{end}}>Regular</option>
+  													</select>
+
+  													<label class="control-label"><b>Spouse Gross</b></label>
+													<input type="text" name="spo_gross"  value="{{.Conf.spo_gross}}" id="spo_gross" placeholder="Spouse Gross" class="form-control" maxlength="15" onkeypress='return numbersOnly(this,event,true,false);'>
+
+													<label class="control-label"><b>No of Credit Cards/ Bank</b></label>
+													<input type="text" name="card_bank"  value="{{.Conf.card_bank}}" id="card_bank" placeholder="No of Credit Cards/ Bank" class="form-control" maxlength="50">
+
+													<label class="control-label"><b>Vehicles</b></label>
+													<input type="text" name="vehicles"  value="{{.Conf.vehicles}}" id="vehicles" placeholder="Vehicles" class="form-control" maxlength="50">
+
+													
+
+															<label class="control-label"><b>Existing Transactions with Banks/ Financial Institutions/ Informal Financial Sector</b></label>	
+													<div class="form-inline">
+															<label class="control-label">Name of Bank/ Lender</label>	
+															<label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type of Transaction/ Products Availed</label>
+															<label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;Amount</label>	
+															
+													</div>		
+													<div class="form-inline">
+
+															<input type="text" name="lend1"  value="{{.Conf.lend1}}" id="lend1" placeholder="" class="form-control" maxlength="50">
+															&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="lend1_tran"  value="{{.Conf.lend1_tran}}" id="lend1_tran" placeholder="" class="form-control" maxlength="50">
+															&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="lend1_amt"  value="{{.Conf.lend1_amt}}" id="lend1_amt" placeholder="" class="form-control" maxlength="15" onkeypress='return numbersOnly(this,event,true,false);'>
+
+													</div>
+													<br>
+
+													<div class="form-inline">
+
+															<input type="text" name="lend2"  value="{{.Conf.lend2}}" id="lend2" placeholder="" class="form-control" maxlength="50">
+															&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="lend2_tran"  value="{{.Conf.lend2_tran}}" id="lend2_tran" placeholder="" class="form-control" maxlength="50">
+															&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="lend2_amt"  value="{{.Conf.lend2_amt}}" id="lend2_amt" placeholder="" class="form-control" maxlength="15" onkeypress='return numbersOnly(this,event,true,false);'>
+
+													</div>
+													<br>
+
+													<div class="form-inline">
+
+															<input type="text" name="lend3"  value="{{.Conf.lend3}}" id="lend3" placeholder="" class="form-control" maxlength="50">
+															&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="lend3_tran"  value="{{.Conf.lend3_tran}}" id="lend3_tran" placeholder="" class="form-control" maxlength="50">
+															&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="lend3_amt"  value="{{.Conf.lend3_amt}}" id="lend3_amt" placeholder="" class="form-control" maxlength="15" onkeypress='return numbersOnly(this,event,true,false);'>
+
+													</div>
+
+
+
+
+
+
+
+
+
+                                                </div>
+                                                </div>
+
+                                                	<div class="tab-pane" id="tab_5_4">
+                                               		 <div class="container" style="width: 50%">
+                                               		 	<label class="control-label"><b>Membership Type</b></label>
+							
+														<select name="membertype" class="form-control" > 
+														 	{{$membertype  := .Conf.membertype }}
+														 	{{range  $key ,$val := .Ls_membertype}}
+															{{ $loop_id  := index  $val 0 }}
+															{{if eq $membertype $loop_id }}	
+														 		<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+														 	{{else}}	
+														 		<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+															{{end}}
+															{{end}}
+
+														</select>
+
+
+  														<label class="control-label"><b>ID Number</b></label>
+														<input type="text" name="id_no"  value="{{.Conf.id_no}}" id="id_no" placeholder="ID Number" class="form-control" maxlength="20">
+
+														<label class="control-label"><b>Membership Status</b></label>
+							
+														<select name="status" class="form-control" > 
+														 	{{$status  := .Conf.status }}
+														 	{{range  $key ,$val := .Ls_status}}
+															{{ $loop_id  := index  $val 0 }}
+															{{if eq $status $loop_id }}	
+														 		<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+														 	{{else}}	
+														 		<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+															{{end}}
+															{{end}}
+
+														</select>
+
+														<label class="control-label"><b>Status Date</b>
+														</label>
+														<input type="text" name="status_date" value="{{.Conf.status_date}}"  placeholder="Select date" id="status_date" class="form-control date-picker">
+
+														<label class="control-label"><b>Branch</b></label>
+							
+														<select name="branch" class="form-control" > 
+														 	{{$branch  := .Conf.branch }}
+														 	{{range  $key ,$val := .Ls_branch}}
+															{{ $loop_id  := index  $val 0 }}
+															{{if eq $branch $loop_id }}	
+														 		<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+														 	{{else}}	
+														 		<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+															{{end}}
+															{{end}}
+
+														</select>
+
+														<label class="control-label"><b>Terminated</b>
+														</label>
+														<input type="text" name="terminated" value="{{.Conf.terminated}}"  placeholder="Select date" id="status_date" class="form-control date-picker">
+
+														<label class="control-label"><b>Savings Deduction</b></label>
+													<input type="text" name="savings_deduction"  value="{{.Conf.gross}}" id="savings_deduction" placeholder="Savings Deduction" class="form-control" maxlength="15" onkeypress='return numbersOnly(this,event,true,false);'>
+
+
+
+
+
+                                               		 </div>
+                                               		</div>
+
+                                            
+                                        </div>
+                                    </div>
+						
+<div class="form-actions">
+	<div class="col-md-offset-3 col-md-9">
+		<button type="submit" class="btn blue submit_btn"  onclick="return DoCreateTransaction()">Update Member </button>
+		<button class="btn default" onclick="javascript:nav_back('/master/members?rights={{.Conf.rights}}')" type="button">Go back</button>
+
+		
+	</div>
+</div>
+</form>
+						
+						
+				
+
+
+</div>	
+
+
+</div>
+
+
+
+
+	
+
+</div>
+
+
+
+
+
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	
+</div>
+
+
+			<script type="text/javascript">
+			var currentDate = new Date();  
+			 /*$('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });*/
+
+            		
+          	if ("{{.Conf.terminated}}"=="NULL"){
+			$("[name=terminated]").val("").change();
+					}
+
+			
+			var terminated_date = "{{.Conf.terminated}}"
+			if ($('[name=terminated]').val()=="") {
+
+				terminated_date =null
+			}
+					
+
+
+			
+			$("#select_id").val("val2").change();
+			$("[name=stat]").val("{{.Conf.stat}}").change();
+			$("[name=bank], [name=branch] " ).select2();
+			
+			//document.getElementById('stat').selectedIndex="{{.Conf.stat}}";
+			// $('input[name=name]').focus()
+		//	$("[name=name] , [name=customer]").select2();
+		
+			function DoCreateTransaction(){
+				var ret_msg= ""
+				$.get("/json_func",
+                    {
+                       //qdata : "Branch_Save 'Add','programmer',1,0,'"+$('[name=sup_name]').val()+"' ,'"+$('[name=sort]').val()+"' ,'"+$('[name=remarks]').val()+"'"
+                       qdata : "Members_SaveEdit '{{.Conf.username_sess}}', {{.Conf.Org_id}}, {{.Conf.id}}, '"+$('[name=firstname]').val()+"', '"+$('[name=middlename]').val()+"', '"+$('[name=lastname]').val()+"', '"+$('[name=sname]').val()+"', '"+$('[name=birthday]').val()+"', '"+$('[name=tin]').val()+"', '"+$('[name=sss]').val()+"', '"+$('[name=gsis]').val()+"', '"+$('[name=mobile]').val()+"', '"+$('[name=email]').val()+"', '"+$('[name=stat]').val()+"', '"+$('[name=sex]').val()+"', '"+$('[name=nationality]').val()+"', '"+$('[name=bank]').val()+"',  '"+$('[name=acct]').val()+"', '"+$('[name=birthplace]').val()+"', '"+$('[name=spouse]').val()+"', '"+$('[name=maiden]').val()+"', '"+$('[name=present_add]').val()+"', '"+$('[name=postcode]').val()+"', '"+$('[name=present_stat]').val()+"', '"+$('[name=other_add]').val()+"', '"+$('[name=other_stat]').val()+"', '"+$('[name=mailing_add]').val()+"', '"+$('[name=phone_no]').val()+"', '"+$('[name=educ_attain]').val()+"', '"+$('[name=emp_stat]').val()+"', '"+$('[name=occupation]').val()+"', '"+$('[name=remarks]').val()+"', '"+$('[name=fund_source]').val()+"', '"+$('[name=emp]').val()+"', '"+$('[name=gross]').val()+"', '"+$('[name=emp_add]').val()+"', '"+$('[name=emp_no]').val()+"', '"+$('[name=emp_ind]').val()+"', '"+$('[name=emp_year]').val()+"', '"+$('[name=prev_emp]').val()+"', '"+$('[name=prev_year]').val()+"', '"+$('[name=dependents]').val()+"', '"+$('[name=spo_emp_stat]').val()+"', '"+$('[name=spo_emp]').val()+"', '"+$('[name=spo_gross]').val()+"', '"+$('[name=card_bank]').val()+"', '"+$('[name=vehicles]').val()+"','"+$('[name=lend1]').val()+"', '"+$('[name=lend1_tran]').val()+"', '"+$('[name=lend1_amt]').val()+"', '"+$('[name=lend2]').val()+"', '"+$('[name=lend2_tran]').val()+"', '"+$('[name=lend2_amt]').val()+"', '"+$('[name=lend3]').val()+"', '"+$('[name=lend3_tran]').val()+"', '"+$('[name=lend3_amt]').val()+"', '"+$('[name=membertype]').val()+"', '"+$('[name=id_no]').val()+"', '"+$('[name=status]').val()+"', '"+$('[name=status_date]').val()+"','"+$('[name=branch]').val()+"',"+terminated_date+" , '"+$('[name=savings_deduction]').val()+"'"
+
+                      // , '"+$('[name=username]').val()+"', '"+$('[name=password]').val()+"', '"+$('[name=enabled]').val()+"', '"+$('[name=disabled]').val()+"', '"+$('[name=sysrole]').val()+"'"
+
+
+                       		
+                    }
+                    ,
+                    function(data,status){
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									console.log(data[i][0])
+									//console.log(data[i][0])
+									//alert(ret_msg)
+									//$('#basic').modal('hide')
+					            	//dtbl()
+					            	//console.log("success here")
+					            	//$("#item_tagsdata").show()
+					            	//$(".submit_btn").prop('disabled', true);
+					            	$(".c_item_id").val(data[i][0])
+					            	Dobatchsave()
+								//return false;
+			                    }else{
+			                    	alert(ret_msg)
+			                    }
+		                         
+		                    }
+	                    }
+                    });	
+					
+                    return false;
+		                /*$('#basic').modal('hide')
+		            	dtbl()
+			         	return false*/
+			        	
+			}
+
+			function Dobatchsave(membersid){
+						alert("Save Success")
+                        	nav_back('/master/members?rights={{.Conf.rights}}')
+				                
+				                }
+
+			
+
+			
+
+			function repoFormatResult( repo ) {
+    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+    return markup;
+}
+
+		
+
+
+function repoFormatSelection( repo ) {
+            return repo.full_name;
+        }
+		
+      
+		$( "#postcode" ).select2({
+            	    placeholder: "Search for Area",
+            	     minimumInputLength: 3,
+            	        multiple: false,
+            	        allowClear: true,
+            	    ajax: {
+            	        url: "/Ajax/GetPostalcode",
+            	        dataType: "json",
+            	        quietMillis: 250,
+            	        data: function( term, page ) {
+            	            return {
+            	                // search term
+            	                q: term
+            	            };
+            	        },
+            	        results: function( data, page ) {
+            	                // parse the results into the format expected by Select2.
+            	                // since we are using custom formatting functions we do not need to alter the remote JSON data
+            	                return { results: data.items };
+            	        }
+            	        
+            	    },
+            		initSelection: function( element, callback ) {
+            			// the input tag has a value attribute preloaded that points to a preselected repository's id
+            			// this function resolves that id attribute to an object that select2 can render
+            			// using its formatResult renderer - that way the repository name is shown preselected
+            			var id = $( element ).val();
+            			if ( id !== "" ) {
+            				$.ajax( "/Ajax/GetPostalcode?id=" + id, {
+            					dataType: "json"
+            				}).done( function( data ) {
+            					callback( data );
+            				});
+            			}
+            		},
+
+            		    formatResult: repoFormatResult,
+            		    formatSelection: repoFormatSelection,
+            		    // apply css that makes the dropdown taller
+            		    dropdownCssClass: "bigdrop",
+            		    // we do not want to escape markup since we are displaying html in results
+            		    escapeMarkup: function( m ) {
+            		        return m;
+            		    }
+            			});
+            					
+
+		
+	
+	    
+			</script>
+
+
+
+
+
+

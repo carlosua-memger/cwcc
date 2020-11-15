@@ -1,0 +1,189 @@
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Generate Transaction Log Report
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<form id="CreateTransaction" class="form-horizontal" target ="_blank" action="/timekeeping/report/member_log" method="Get">
+
+					<div class="form-body">
+						
+						<div id="warnerr" class="Metronic-alerts alert alert-warning fade in" hidden>
+							date range greater than 16 days	
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Date From :<span class="required" aria-required="true">
+								* </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="datefrom" id="datefrom"class="form-control date-picker" placeholder="Date from" maxlength="50" Required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Date To :<span class="required" aria-required="true">
+								* </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="dateto" id="dateto"class="form-control date-picker" placeholder="Date to:" maxlength="50" Required>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Assignment</label>
+								<div class="col-md-4">
+								<select name="lbr_assign" id="assignment" class="form-control input-xlarge dr-js clsAssign" required>
+								<option value="0">All</option>	 
+								{{range $assignlist := .LBR_Assign_Get }}
+								<option  value="{{$assignlist.Id}}">{{$assignlist.Name}}</option>
+								{{end}}
+									</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Member</label>
+								<div class="col-md-4">
+								<select name="member" id ="member"class="form-control input-large dr-js"  required> 
+								<option value="0">All</option>	
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">No. of Member/s Per Page</label>
+								<div class="col-md-4">
+								<select name="no_page" id ="no_page" class="form-control input-large dr-js"  required> 
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3" selected>3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>	
+								</select>
+							</div>
+						</div>
+
+
+						<div class="form-actions fluid">
+							<div class="col-md-offset-3 col-md-9">
+								<button class="btn blue" type="submit">Print</button>
+
+								<a class="btn blue" onclick="javascript:rpt_main('a',4);">Print 2 </a>
+								<a class="btn blue" onclick="javascript:rpt_main('a',5);">Productivity </a>
+
+								<a class="btn blue" onclick="javascript:rpt_main('a',1);">Print paired logs</a>
+								<a class="btn blue" onclick="javascript:rpt_main('a',2);">Print raw logs</a>
+								<a class="btn blue" onclick="javascript:rpt_main('a',3);">Print Daily Summary & Raw</a>
+
+								<a class="btn blue" onclick="javascript:rpt_main('a',3);">Summary per Member</a>
+								
+
+
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+			<script type="text/javascript">
+			  $('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+			  
+			
+			function rpt_main(a,t) {
+				$("#warnerr").hide() 
+				$('.date-picker').attr({style:''})
+			  	var datefrom  	= new Date( $("input[name=datefrom]").val() )
+			  	var dateto 		= new Date( $("input[name=dateto]").val() )
+			  	var diffDays = parseInt((dateto - datefrom) / (1000 * 60 * 60 * 24)); 
+				if(diffDays>16){
+					var ht_err = 'border: 1px solid red;'
+					$('.date-picker').attr({style:ht_err})
+					$("#warnerr").show() 
+					
+				}else{
+					$('.date-picker').attr({style:''})
+					$("#warnerr").hide() 
+					
+					if(t==1){
+						var url = "/timekeeping/report/Lbr_rep_logpair_rpt?datefrom="+$("input[name=datefrom]").val() +"&dateto="+ $("input[name=dateto]").val() +"&lbr_assign="+$("#assignment").val()+"&member="+ $("#member").val()
+			  		}else if(t==2){
+			  			var url = "/timekeeping/report/Lbr_rep_lograw_rpt?datefrom="+$("input[name=datefrom]").val() +"&dateto="+ $("input[name=dateto]").val() +"&lbr_assign="+$("#assignment").val()+"&member="+ $("#member").val()	
+			  		}else if(t==3){
+			  			var url = "/timekeeping/report/Lbr_rep_lograw_rpt?datefrom="+$("input[name=datefrom]").val() +"&dateto="+ $("input[name=dateto]").val() +"&lbr_assign="+$("#assignment").val()+"&member="+ $("#member").val()	
+			  		}else if(t==4){
+			  			var url = "/timekeeping/report/member_log2?datefrom="+$("input[name=datefrom]").val() +"&dateto="+ $("input[name=dateto]").val() +"&lbr_assign="+$("#assignment").val()+"&member="+ $("#member").val() +"&no_page="+$("#no_page").val()	
+			  		}else if(t==5){
+			  			var url = "/timekeeping/report/member_log3?datefrom="+$("input[name=datefrom]").val() +"&dateto="+ $("input[name=dateto]").val() +"&lbr_assign="+$("#assignment").val()+"&member="+ $("#member").val() +"&no_page="+$("#no_page").val()	
+			  		}
+			  		window.open(url, '_blank');
+				}
+
+
+			}
+			
+			
+
+			$(".dr-js").select2();
+			function DoCreateTransaction(){
+				$.post("/timekeeping/CreateTransaction",$( "#CreateTransaction" ).serialize()
+		        ,
+		        function(data,status){
+		            if(data.Status==true){
+		            	alert(data.Message)
+		            	$(".createAct").val("")
+		            	$.get("/timekeeping/CreateTransactionDetails?ID="+data.ID,
+                    		 function(data,status){
+		                     $("#ContentID").html(data);
+		                    }
+		                );
+
+		            }
+		        });
+	 		console.log("DoCreateTransaction function here!!")
+			return false
+			}
+
+			$(".clsAssign").on("select2-close", function() { 
+				//"&datefrom="$('#datefrom').val()+"&dateto="$('#dateto').val()
+				console.log( $('#datefrom').val() + "&dateto="+$('#dateto').val() )
+				$.get("/timekeeping/CreateTransactionDetails/ajaxgetmemberbyassigment?assigmentID="+this.value +"&datefrom="+ $('#datefrom').val() + "&dateto="+$('#dateto').val() ,
+            		function(data,status){
+                   		var ht ='<option value="0">All</option>'
+                   		for (var i = 0; i < data.length; i++) { 
+						    ht+='<option value="'+data[i].Member_id+'">'+data[i].Name+'</option>'
+						}
+				        $('#member').html(ht);
+				        $('#member').select2();	
+					}
+                );
+			})
+		$('#member').select2("val","");	
+
+
+			</script>
+

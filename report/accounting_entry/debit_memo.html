@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<style type="text/css">
+	#example1 tr td{
+		font-family: "Times New Roman", Times, serif;
+		border: 1px solid #000000;
+		padding: 0px;
+		font-size:14px
+
+	}
+	#example1 tr th{
+		font-family: "Times New Roman", Times, serif;
+		border: 1px solid #000000;
+		padding: 0px;
+		font-size:16px
+
+	}
+	
+	
+
+
+</style>
+<body>
+
+            {{$sql_str := combine_string `Accounting_DebitMemo 1,'` .Conf.dateSelected "'," .Conf.partner "," .Conf.member "," .Conf.lpartype "," .Conf.paymode "," .Conf.bank "," .Conf.group "," .Conf.coop }}
+            {{$conf_data := tpl_sql_row $sql_str }}
+
+            {{$sql_str2 := combine_string `Accounting_DebitMemo 2,'` .Conf.dateSelected "'," .Conf.partner "," .Conf.member "," .Conf.lpartype "," .Conf.paymode "," .Conf.bank "," .Conf.group "," .Conf.coop }}
+            {{$conf_data2 := tpl_sql_row $sql_str2 }}
+
+            {{$sql_str3 := combine_string `rep_get_coop_header ` .Conf.bank}}
+            {{$conf_data3 := tpl_sql_row $sql_str3 }}
+
+
+        <TABLE id="Table1" cellSpacing="0" cellPadding="3" width="100%" border="0">
+                <TR>
+                    <TD style="WIDTH: 520px" vAlign="top" width="520">
+                            <img src="/src/metronic_3.1.2/{{index $conf_data3 2}}" width="190" height="75" >
+                    </TD>
+                    <TD vAlign="top">
+                        <b>{{index $conf_data3 0}}</b><BR>
+                        <b>{{index $conf_data3 1}}</b>
+                </TR>
+                <TR>
+                    <TD style="WIDTH: 520px; HEIGHT: 40px" width="520"><BR>
+                        <b>{{.Conf.date}}</b></TD>
+                    <TD style="HEIGHT: 40px" vAlign="top" rowspan="2">CV Ref No.:
+                      <b> {{index $conf_data2 0}}</b>
+                    </TD>
+                </TR>
+                <TR>
+                    <TD style="WIDTH: 520px" width="520"><BR>
+                        <b>{{index $conf_data 2}}</b><BR>
+                        <BR>
+                            <b> {{index $conf_data 1}}</b><BR>
+                                <b>{{index $conf_data 3}}</b></TD>
+                    <TD vAlign="top"></TD>
+                </TR>
+        </TABLE>
+
+        <P><BR>
+            <FONT size="4">Dear:
+                    <b>{{index $conf_data 2}}</b></FONT></P>
+        <P><FONT size="4">Please debit
+                <b>{{index $conf_data3 0}}</b>&nbsp;with 
+                Account Number
+                {{index $conf_data 4}}
+                &nbsp;and credit the corresponding&nbsp;amounts to their respective members' 
+                account on
+            <b>{{.Conf.date}}</b>. Grand 
+                total&nbsp;be credited amounted to
+                <b>{{index $conf_data 6}}</b>&nbsp;only 
+               <b> (
+                    {{index $conf_data 5}})</b>.&nbsp;&nbsp;
+            </FONT>
+        </P>
+        <BR>
+        <P><FONT size="4">We hope you find this request in order. </FONT>
+        </P>
+        <P><FONT size="4">Thank you. </FONT>
+        </P>
+        <P><FONT size="4"></FONT>&nbsp;</P>
+        <P><FONT size="4">Very&nbsp;truly yours,&nbsp;&nbsp; </FONT>
+        </P>
+        <P><FONT size="4"></FONT>&nbsp;</P>
+        <P>
+
+                <TABLE id="Table3" cellSpacing="0" cellPadding="3" width="100%" border="0">
+                        <TR>
+                            <TD align="center">__________________________________</TD>
+                            <TD align="center">__________________________________</TD>
+                        </TR>
+                        <TR>
+                            <TD align="center">Authorized Signature</TD>
+                            <TD align="center">Authorized Signature</TD>
+                        </TR>
+                    </TABLE>
+                </P>
+                <P>&nbsp;</P>
+                <P></P>
+            </TD>
+        </TR>
+    </TABLE>
+
+    </body>
+</html>

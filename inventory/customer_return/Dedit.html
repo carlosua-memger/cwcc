@@ -1,0 +1,290 @@
+<!-- <Form> -->
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+		<form id="transdetnew" method="Post" onsubmit="javascript: return DoeditTrasDet()">
+			<input type="hidden" name="hdr_id" value="{{.Tconf.custret_detail_id_hdr_id}}">
+			<input type="hidden" name="id" value="{{.Tconf.custret_detail_id}}">	
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">Edit Transaction Details</h4>
+				</div>
+				<!-- <div class="modal-body">
+				 -->	 <!-- modal data here -->
+					<div class="form-horizontal">
+							<div class="form-group">
+								<label class="col-md-3 control-label">Item</label>
+								<div class="col-md-4">
+									<input type="text" name="item" placeholder="Item" id="item"  class="form-control"  value="{{.Tconf.custret_detail_id_item}}" required>
+								</div>
+
+								<div class="col-md-4">
+									<a  class="btn green act_btn" data-toggle='modal' href='#large'  onclick="javascript:Modalfunc_show_prev(this);">
+                   	 				show previous prices<i class="fa fa-plus"></i></a>
+
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Qty</label>
+									<div class="col-md-4">
+										<input type="text" name="qty" placeholder="Qty"  maxlength="6" class="form-control createAct num_f" value="{{.Tconf.custret_detail_id_qty}}"  onkeypress='return numbersOnly(this,event,false,false);' required>
+									</div>
+							</div>		
+							<div class="form-group">
+								<label class="col-md-3 control-label">Unit Price</label>
+									<div class="col-md-4">
+										<input type="text" name="unit_price" placeholder="Unit Price"  maxlength="12" class="form-control createAct num_f" onkeypress='return numbersOnly(this,event,true,false);' required>
+									</div>
+									<div class="col-md-4">
+									<label id="message"></label>
+
+								</div>
+							</div>
+							<!-- <div class="form-group">
+								<label class="col-md-3 control-label">Total Price</label>
+									<div class="col-md-4">
+										<input type="text"  placeholder="total Price"  maxlength="100" class="form-control createAct num_f" value="{{.Tconf.custret_detail_id_tprice}}"  disabled>
+									</div>
+							</div> -->
+							<div class="form-group">
+								<label class="col-md-3 control-label">Supplier</label>
+								<div class="col-md-4">
+									<select name="supplier" class="form-control" > 
+									 	{{range  $Ls_supplier,$val := .Ls_supplier}}
+											<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+										{{end}}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label">Remarks</label>
+									<div class="col-md-4">
+										<textarea name="remarks" placeholder="remarks"  maxlength="200" class="form-control createAct">{{.Tconf.custret_detail_id_remarks}}</textarea>
+									</div>
+							</div>
+					</div>
+					 <!-- end modal data here -->
+				<!-- </div> -->
+				<div class="errorDv">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn default" data-dismiss="modal">Go Back</button>
+					<button type="submit" class="btn blue">Update changes</button>
+				</div>
+
+		<!--  -->
+				<!-- /.modal-content -->
+		</form>
+	</div>
+		<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->					
+					
+
+
+<script type="text/javascript">
+ 	$('.form_datetime').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+	
+ 	num_val_init()
+ 	$("[name=supplier]").select2();
+ 	var rights = '{{.Tconf.rights}}' 
+	var assignmentID = '{{.Tconf.location}}' 
+			function DoeditTrasDet(a){
+				if(!$('#transdetnew')[0].checkValidity()){
+					$('.val_err').show();
+				 	return false;
+				}
+				$( ".errorDv" ).html("")
+				if ($("input[name=qty]").val()<=0 || $("input[name=qty]").val() % 1 != 0  ){
+					var htdata  = '<div class="alert alert-danger"> <strong>Error: </strong>  Invalid Qty  (must be greater than 0 or whole number)</div>'
+					$( ".errorDv" ).html(htdata)
+					return false;
+				}
+				if ($("input[name=unit_cost]").val()<=0){
+					var htdata  = '<div class="alert alert-danger"> <strong>Error: </strong>  Invalid Unit Price  (must be greater than 0)?</div>'
+					$( ".errorDv" ).html(htdata)
+					return false;
+				}
+
+				$.post("/inventory/customer_return/details/DEditHandler",$( "#transdetnew" ).serialize()
+
+		        ,
+		        function(data,status){
+		        	alert(data[1])
+		            if(data[1]=='Success'){
+		            	$(".createAct").val("")
+			            	$.get("/inventory/customer_return/details?rights="+rights+"&ID={{.Tconf.custret_detail_id_hdr_id}}",
+	                    		 function(data,status){
+			                     $("#ContentID").html(data);
+			                     $('#basic').modal('hide')
+			                    }
+			                );
+			        }	
+				
+		        });
+	 			return false
+			}
+	
+	function repoFormatResult( repo ) {
+	    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div></div>";
+
+	    return markup;
+	}
+	function repoFormatSelection( repo ) {
+		$("input[name=unit_price]").val(repo.price);
+        return repo.full_name;
+    }
+    		
+	$( "#item" ).select2({
+			    placeholder: "Search for Item",
+			     minimumInputLength: 2,
+			        multiple: false,
+			        allowClear: true,
+			    ajax: {
+		        url: "/inventory/customer_return/details/Ajax/Ajax_getItem?assignmentID="+assignmentID+"&isbaseonassignid=1&hdr_id={{.Tconf.custret_detail_id_hdr_id}}",
+			        //url: "/inventory/customer_return/details/Ajax/Ajax_getItem",
+			        dataType: "json",
+			        quietMillis: 250,
+			        data: function( term, page ) {
+			            return {
+			                // search term
+			                q: term
+			            };
+			        },
+			        results: function( data, page ) {
+			                // parse the results into the format expected by Select2.
+			                // since we are using custom formatting functions we do not need to alter the remote JSON data
+			                return { results: data.items };
+			        }
+			        
+			    }, 
+				initSelection: function( element, callback ) {
+					// the input tag has a value attribute preloaded that points to a preselected repository's id
+					// this function resolves that id attribute to an object that select2 can render
+					// using its formatResult renderer - that way the repository name is shown preselected
+					/*var id = $( element ).val();
+					if ( id !== "" ) {
+						$.ajax( "inventory/adjustment_entry/details/Ajax/Ajax_getItem?isbaseonassignid=1&id=" + id, {
+							dataType: "json"
+						}).done( function( data ) {
+							callback( data );
+						});
+					}*/
+					var data = {'Id':{{.Tconf.custret_detail_id_item}},'full_name':"{{.Tconf.custret_detail_id_item_name}}",'price':{{.Tconf.custret_detail_id_uprice}}}
+					callback( data  );
+				},
+
+			    
+			    formatResult: repoFormatResult,
+			    formatSelection: repoFormatSelection,
+			    // apply css that makes the dropdown taller
+			    dropdownCssClass: "bigdrop",
+			    // we do not want to escape markup since we are displaying html in results
+			    escapeMarkup: function( m ) {
+			        return m;
+			    }
+			});		
+	setTimeout(function (){
+     //   $( "#item").select2('open')
+    	
+    }, 500);
+
+	$("#item").on("select2-close", function() { 
+		if(this.value!=""){
+			$.get("/json_func",
+		    	{qdata : "SIS_Supplier_Get 3, {{.Tconf.org_id}},"+this.value}
+		    	,
+		    	function(data,status){
+		    	console.log(data)
+		        //json_personnel = data
+		        var htm =''
+		        if( data!=null){
+		            for (var i = 0; i < data.length; i++) {
+		                console.log(data[i][1])
+		                htm += "<option value="+data[i][0]+">"+data[i][1]+"</option>" 
+		            }
+		           
+		            $("[name=supplier]").html(htm);
+		        	
+		        }
+		    });
+	    }
+	});
+
+	/*$("[name=supplier]").val({{.Tconf.custret_detail_id_supplier}}).trigger("change");*/
+
+	$('#basic').unbind('hidden.bs.modal');
+	$('#basic').on('hidden.bs.modal', function () {
+		PageRefresher('2');	
+	})
+
+	var ret_msg= ""
+			$("#item").change(function () {
+					$.get("/json_func",
+                    {
+                       qdata : "SIS_SupplierItem_Get 3, "+$('[name=item]').val()+""
+
+                    }
+                    ,
+                    function(data,status){
+                        if( data!=null){
+                        	var ht_data = "";
+
+		                    for (var i = 0; i < data.length; i++) {
+		                    	 	ret_msg = data[i][0]
+					            	//$("input[name=customer]").val(ret_msg);
+					            	//console.log(alert(data[i][0]))
+					            	ht_data += '<option value="'+data[i][0]+'">'+data[i][1]+'</option>'
+		                     		    
+		                    }
+		                    $("[name=supplier]").html(ht_data);
+		                    $("[name=supplier]").select2();
+	                    }
+                    });	
+					
+                    return false;
+			});
+
+			 var ret_msg= ""
+			$("#item").change(function () {
+					$.get("/json_func",
+                    {
+                       qdata : "SIS_CusRet_Misc 1 , '{{.Tconf.org_id}}' , "+$('[name=item]').val()+", '{{.Tconf.custret_detail_id_hdr_id}}'"
+
+                    }
+                    ,
+                    function(data,status){
+                        if( data!=null){
+                        	
+                        	var uprice = "";
+                        	var message= "";
+
+		                    for (var i = 0; i < data.length; i++) {
+		                    	 	ret_msg = data[i][0]
+					            	//$("input[name=customer]").val(ret_msg);
+					            	//console.log(alert(data[i][0]))
+			            	
+					            	uprice = data[i][1]
+					            	message = data[i][3]
+		                     		console.log(uprice)  
+		                     		console.log(message)   
+
+		                    }
+		                    $("[name=unit_price]").val(uprice).trigger("change");
+		                    $('#message').text(message);
+		                     
+		                     
+
+	                    }
+                    });	
+					
+                    return false;
+			});
+						
+</script>

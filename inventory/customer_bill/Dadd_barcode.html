@@ -1,0 +1,168 @@
+
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+
+		<form id="transdetnew" method="Post" onsubmit="javascript: return DocreateTrasDet()">
+			<input type="hidden" name="hdr_id" value="{{.Tconf.hdr_id}}">	
+
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h4 class="modal-title">New Transaction Details swipe via barcode*</h4>
+			</div>
+				<div class="row">
+					<div class="col-md-6">	
+						<div class="form-horizontal">
+							<div class="form-group">
+								<label class="col-md-3 control-label">Item-barcode</label>
+								<div class="col-md-7">
+									<input type="text" name="item" id="iditem" placeholder="item"   class="form-control createAct" required>
+									<span class="h_barcode help-block"></span>
+								</div>
+									
+							</div>	
+							<div class="form-group">
+								<label class="col-md-3 control-label">Qty</label>
+								<div class="col-md-4">
+									<input type="number" name="qty" placeholder="Qty" value="1" maxlength="5" class="form-control createAct" required>
+								</div>
+							</div>		
+							<div class="form-group">
+								<label class="col-md-3 control-label">Unit Price</label>
+								<div class="col-md-4">
+									<input type="text" name="unit_cost" placeholder="Unit Price"  value="00.00" maxlength="12" class="form-control createAct" required>
+								</div>
+							</div>							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Remarks</label>
+								<div class="col-md-7">
+									<input type="text" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct">
+								</div>
+							</div>
+							<div id="prefix_608463787855" class="Metronic-alerts alert alert-success fade in">
+								<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+								<span class="c_retdata"></span>
+							</div>
+								
+						</div>
+					</div>
+					<div class="col-md-6 img_div">
+						
+				    </div>
+				    <div class="err_musc"></div>
+				    	
+				</div> <!-- end row -->
+				<div class="modal-footer">
+					<button type="button" class="btn default cclose" data-dismiss="modal">Go Back</button>
+				</div>
+		</form>
+	</div>
+		<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->					
+					
+
+
+<script type="text/javascript">
+ 	$('.form_datetime').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+	
+	$("#prefix_608463787855").hide();
+
+	setTimeout(function (){
+       $('#iditem').focus();
+    	
+    }, 500);
+	
+	var rights = '{{.Tconf.rights}}' 
+			function DocreateTrasDet(a){
+
+				
+				$.post("/inventory/customer_sales/details/DaddHandler",
+				{
+					hdr_id 		: $("input[name=hdr_id]").val() ,
+					item 		: a,
+					qty 		: $("input[name=qty]").val() ,
+					remarks 	: $("input[name=remarks]").val(), 
+					unit_cost 	: $("input[name=unit_cost]").val() ,
+				}
+		        ,
+		        function(data,status){
+		        	//alert(data[1])
+		            
+		            $("#prefix_608463787855").show();
+		            $(".c_retdata").html(data[1]);
+
+
+		            if(data[1]=='Success'){
+		            	
+
+		            	//$("input[name=item]").val("")
+		            	//$("input[name=unit_cost]").	val("")
+		            }
+		        });
+		        $("input[name=item]").val("")
+		        //$("input[name=unit_cost]").	val("")
+	 			return false
+			}
+	
+		$("input[name=item]").on('keydown', function(e) {
+			$(".h_barcode").html("")
+			$("#prefix_608463787855").hide();
+			if(e.keyCode === 13)
+		   		$.get("/inventory/customer_sales/details/Ajax/Ajax_getItem_isbarcode?",
+		   			{
+		   				barcode: $("input[name=item]").val() ,
+	   					mode:  7,
+		   			}
+		   			,
+            		function(data,status){
+            			console.log(data)
+            			//console.log(data[1])
+            			if (data){
+            				$("input[name=unit_cost]").val(data[1])
+            				var barCo =$("input[name=item]").val() 
+            				var strl = barCo.length
+            				trm_str = barCo.slice( (strl-6) ,strl);
+            				if(trm_str!=data[2]){
+            					console.log('error: price variance.')
+            					$(".h_barcode").html('error: Price not matched. Current price: ' + data[1])
+            					return false
+            				}
+            				DocreateTrasDet(data[0])
+
+            				$(".img_div").html('<img  class="c_img_src" src="/src/img_uploads/size_171/{{.Tconf.hdr_id}}/'+data[2]+'.jpg?2016-10-06 08:28:17.9553678 +0800 SGT">')
+
+            			}else{
+            				$("input[name=unit_cost]").val("")
+            				//alert("no item found.")
+            				$(".h_barcode").html("no item found.")
+            				$("input[name=item]").val("")
+
+            				$(".img_div").html('')
+            				$(".err_musc").html('<audio controls autoplay hidden><source src="src/music/beep-10.wav" type="audio/ogg"><source src="src/music/beep-10.wav" type="audio/mpeg"></audio>')
+            			}
+                   	}
+		   			
+                );
+
+		    	
+		});
+
+		
+		$('#basic').unbind('hidden.bs.modal');
+		$('#basic').on('hidden.bs.modal', function () {
+			$.get("/inventory/customer_sales/details?rights="+rights+"&ID={{.Tconf.hdr_id}}",
+	    		 function(data,status){
+	             $("#ContentID").html(data);
+	             $('#basic').modal('hide')
+	            }
+	        );
+		})
+
+	
+
+</script>

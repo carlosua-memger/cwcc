@@ -1,0 +1,483 @@
+{{$Org_id := .Tconf.Org_id}}
+
+<head>
+	<!-- <title style="font-size: 16px;">Paired logs Report</title> -->
+	<style type="text/css">
+		table {
+
+			font-size: 10px;
+			font-family: 'Roboto';
+
+
+			border-collapse: collapse;
+			border-spacing: 50px;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+
+
+		}
+
+		table td,
+		table th {
+			max-width: 100px;
+			overflow-x: hidden;
+			overflow-y: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			padding: 3px;
+
+
+		}
+
+		.headercolor {
+			background-color: #EFEBEB
+		}
+
+		.fontroboto {
+
+			font-family: 'Roboto';
+			font-size: 10px;
+		}
+
+		.row.header {
+			font-weight: 900;
+			color: #ffffff;
+			background: #ea6153;
+		}
+
+		.row.green {
+			background: #27ae60;
+		}
+
+		.cell {
+			padding: 1px 10px;
+			display: table-cell;
+		}
+
+		.table {
+			margin: 0 0 40px 0;
+			width: 100%;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+			display: table;
+		}
+
+		@media screen and (max-width: 580px) {
+			.row {
+				padding: 14px 0 7px;
+				display: block;
+			}
+
+			.row.header {
+				padding: 0;
+				height: 6px;
+			}
+
+			.row.header .cell {
+				display: none;
+			}
+
+			.row .cell {
+				margin-bottom: 10px;
+			}
+
+			.row .cell:before {
+				margin-bottom: 3px;
+				min-width: 150px;
+				font-size: 10px;
+				line-height: 10px;
+				font-weight: bold;
+				text-transform: uppercase;
+				color: #969696;
+				display: block;
+			}
+		}
+
+		#amt_generated2 {
+			font-size: 14px;
+		}
+
+		@keyframes blinker {
+			50% {
+				opacity: 0;
+			}
+		}
+
+		.redfont {
+			color: #FF0000;
+		}
+	</style>
+</head>
+
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-file-text"></i>Edit Loan Payment Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+
+
+
+
+				<div class="row">
+					<div class="col-md-6">
+
+
+						<h3 class="form-section">Loan Payment {{.Tconf.id}}</h3>
+
+
+
+						<form id="CreateTransaction" class="form-horizontal" method="Post" onsubmit="return DoCreateTransaction()">
+							<input type="hidden" name="id" value="{{.Tconf.id}}">
+
+							<div class="form-horizontal">
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Tran date<span class="required" aria-required="true">*</span>
+									</label>
+									<div class="col-md-8">
+										<input type="text" name="trandate" id="trandate" placeholder="Select Date"
+											class="form-control date-picker-notime" maxlength="50" Required value="{{.Tconf.trandate}}">
+										<span class="help-block c_h_date" style="color:red;"></span>
+
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Partner</label>
+									<div class="col-md-8">
+										<select name="partner" class="form-control" id="partner">
+
+											{{$partner_id  := .Tconf.partner }}
+											{{range  $key ,$val := .Ls_partner}}
+											{{ $loop_id  := index  $val 0 }}
+											{{if eq $partner_id $loop_id }}
+											<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+											{{else}}
+											<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+											{{end}}
+											{{end}}
+
+										</select>
+									</div>
+								</div>
+
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Member</label>
+									<div class="col-md-8">
+										<input type="text" value="{{.Tconf.member_name}}" name="member" placeholder="Search Member" id="member"  class="form-control" >
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Payment Type</label>
+									<div class="col-md-8">
+										<select name="lptype" class="form-control" id="lptype">
+
+											{{$lptype_id  := .Tconf.lptype }}
+											{{range  $key ,$val := .Ls_lptype}}
+											{{ $loop_id  := index  $val 0 }}
+											{{if eq $lptype_id $loop_id }}
+											<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+											{{else}}
+											<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+											{{end}}
+											{{end}}
+
+										</select>
+									</div>
+								</div>
+
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Payment Reference</label>
+									<div class="col-md-8">
+										<input type="text" name="lptype_ref" placeholder="Reference" class="form-control" maxlength="20" value="{{.Tconf.lptype_ref}}">
+
+									</div>
+								</div>
+
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Amount<span class="required" aria-required="true">*</span>
+									</label>
+									<div class="col-md-8">
+										<input type="text" id="amount" name="amount" placeholder="0" class="form-control" maxlength="50"
+											Required style="text-align: right" onchange="convertamountwithcomma(this)"
+											onkeypress='return numbersOnly(this,event,true,false);' value="{{.Tconf.amt}}">
+										<span class="help-block" style="color:red;"></sapan>
+
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Remarks</label>
+									<div class="col-md-8">
+
+										<!-- 	<input type="text" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct"> -->
+										<textarea name="remarks" class="form-control createAct">{{.Tconf.remarks}}</textarea>
+									</div>
+								</div>
+
+							</div>
+
+						</form>
+
+
+					</div>
+
+				</div>
+				<div class="form-actions fluid">
+					<div class="col-md-offset-3 col-md-9">
+						<button type="submit" class="btn blue submit_btn" onclick="return DoCreateTransaction()">Save</button>
+						<button class="btn default" onclick="javascript:nav_back('/transaction/loan_payment?rights={{.Rights}}')"
+							type="button">Go Back</button>
+					</div>
+				</div>
+
+
+			</div>
+
+
+
+
+
+		</div>
+	</div>
+
+
+
+
+</div>
+
+</div>
+
+
+
+
+<script type="text/javascript">
+	$(".date-picker").datetimepicker({ format: 'mm/dd/yyyy hh:mm:ss' });
+	$(".date-picker").datepicker({autoclose: true });
+	$(".date-picker-notime").datepicker({autoclose: true });
+
+function repoFormatResult(repo) {
+		//var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div></div>";
+		var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+		return markup;
+	}
+	function repoFormatSelection(repo) {
+		// $("input[name=unit_cost]").val(repo.price);
+		return repo.full_name;
+	}
+
+	$("#member").select2({
+		placeholder: "Search for Members",
+		minimumInputLength: 3,
+		multiple: false,
+		allowClear: true,
+		ajax: {
+			url: "/master/members_search/search/Ajax/Ajax_getItem",
+
+			//url: "/inventory/adjustment_entry/details/Ajax/Ajax_getItem",
+			dataType: "json",
+			quietMillis: 250,
+			data: function (term, page) {
+				return {
+					// search term
+					q: term
+				};
+			},
+			results: function (data, page) {
+				// parse the results into the format expected by Select2.
+				// since we are using custom formatting functions we do not need to alter the remote JSON data
+
+				return { results: data.items };
+			}
+
+
+
+		},
+
+		initSelection: function (element, callback) {
+			// the input tag has a value attribute preloaded that points to a preselected repository's id
+			// this function resolves that id attribute to an object that select2 can render
+			// using its formatResult renderer - that way the repository name is shown preselected
+
+			/*
+			var id = $( element ).val();
+			if ( id !== "" ) {
+				$.ajax( "inventory/location_order/details/Ajax/Ajax_getItem?isbaseonassignid=1&id=" + id, {
+					dataType: "json"
+				}).done( function( data ) {
+					callback( data );
+				});
+			}*/
+			var data = { 'Id': {{.Tconf.member}}, 'full_name': "{{.Tconf.member_name}}" }
+		callback(data);
+					
+				},
+
+	formatResult: repoFormatResult,
+		formatSelection: repoFormatSelection,
+			// apply css that makes the dropdown taller
+			dropdownCssClass: "bigdrop",
+				// we do not want to escape markup since we are displaying html in results
+				escapeMarkup: function(m) {
+					return m;
+
+
+
+				}
+			});
+
+
+	
+	$("#member").change(function () {
+		$.get("/json_func",
+			{
+				qdata: "Members_Get 3," + {{.Tconf.Org_id}} + "," + $('[name=member]').val() 
+
+			}
+			,
+			function (data, status) {
+				if (data != null) {
+					var partner = "";
+					
+					for (var i = 0; i < data.length; i++) {
+						ret_msg = data[i][0]
+
+						partner = data[i][0]
+
+						$("#partner").val(partner).change();
+
+
+					}
+				}
+			});
+
+		return false;
+	});
+	
+
+	$("[name=partner]").select2();
+
+
+	function DoCreateTransaction() {
+
+		var ret_msg = ""
+		var amt = $('[name=amount]').val();
+		amt = amt.replace(/,/g, "");
+		var member = $('[name=member]').val();
+		if (member > 0) {
+			member = member;
+
+		} else {
+			member = 0;
+		}
+		$.get("/json_func",
+			{
+				//qdata : "Branch_Save 'Add','programmer',1,0,'"+$('[name=sup_name]').val()+"' ,'"+$('[name=sort]').val()+"' ,'"+$('[name=remarks]').val()+"'"
+				qdata: "LPHDR_SaveEdit '{{.Tconf.username}}', {{.Tconf.id}}, '" +  $('[name=trandate]').val() + "'," + $('[name=partner]').val() +","+ member + "," +$('[name=lptype]').val() +",'" + $('[name=lptype_ref]').val() + "'," + amt + ",'" + $('[name=remarks]').val() +"'"
+
+			}
+			,
+			function (data, status) {
+				//json_personnel = data
+				if (data != null) {
+					for (var i = 0; i < data.length; i++) {
+						//alert(data[i][0]);
+
+						ret_msg = data[i][1]
+						if (data[i][1] == "Success") {
+							//console.log(data[i][0])
+							//alert(ret_msg)
+							//$('#basic').modal('hide')
+							//dtbl()
+							//console.log("success here")
+							//$("#item_tagsdata").show()
+							//$(".submit_btn").prop('disabled', true);
+							$(".c_suprec_id").val(data[i][0])
+							GotoDetail(data[i][0])
+							//return false;
+						} else {
+							alert(ret_msg)
+						}
+
+					}
+				}
+			});
+
+		return false;
+		
+
+	}
+
+	function GotoDetail(lrid) {
+		$.get("/transaction/loan_payment/details?rights={{.Rights}}&ID=" + lrid,
+			function (data, status) {
+				$("#ContentID").html(data);
+
+			}
+
+		);
+	}
+
+
+	
+
+	
+	var rghts = '{{.Rights}}'
+
+
+
+
+
+	function convertamountwithcomma(amount) {
+		console.log(parseFloat(amount.value.split(',').join('')).toFixed(2));
+		var amt = CommaFormatted(parseFloat(amount.value.split(',').join('')).toFixed(2));
+
+
+		document.getElementById('amount').value = amt
+	
+	};
+
+	function CommaFormatted(amount) {
+		var delimiter = ","; // replace comma if desired
+		var a = amount.split('.', 2)
+		var d = a[1];
+		var i = parseInt(a[0]);
+		if (isNaN(i)) { return ''; }
+		var minus = '';
+		if (i < 0) { minus = '-'; }
+		i = Math.abs(i);
+		var n = new String(i);
+		var a = [];
+		while (n.length > 3) {
+			var nn = n.substr(n.length - 3);
+			a.unshift(nn);
+			n = n.substr(0, n.length - 3);
+		}
+		if (n.length > 0) { a.unshift(n); }
+		n = a.join(delimiter);
+		if (d.length < 1) { amount = n; }
+		else { amount = n + '.' + d; }
+		amount = minus + amount;
+		return amount;
+	}
+
+
+</script>

@@ -1,0 +1,895 @@
+<style type="text/css">
+    tr.hilight {
+    background: #6FB1B1;
+    }
+    td.hilight {
+    background: #6FB1B1 ;
+    }
+   .ipt {
+            width: 30px;
+        }
+    .ipt_r {
+            width: 50px;
+        }
+    .ipt_ref {
+            width: 100px;
+    }
+    .dtl_h {
+        border-bottom: 4px solid #35AA47;
+        width: 65px;
+        margin-bottom: 13px;
+    }       
+    .tot_align_right {
+        text-align: right
+    }    
+    </style>
+    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+    
+    
+
+
+
+    <div class="portlet box grey-cascade" id="dpanel">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-globe"></i>{{.Tempconf.Panel_name}}
+            </div>
+            <div class="tools">
+                <a href="javascript:;" class="collapse">
+                </a>
+                <a href="#portlet-config" data-toggle="modal" class="config">
+                </a>
+                <a href="javascript:;" class="reload">
+                </a>
+                <a href="javascript:;" class="remove">
+                </a>
+            </div>
+        </div>
+        <div class="portlet-body" id="detail">
+                {{if eq .Tempconf.ismoreinfo "true"}}
+        
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="form-group" >
+                                <label class="control-label col-md-4" ><b>Transaction ID:</b></label>
+                                <p class="control-label col-md-8">{{.Tempconf.id}}</p>
+                               
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-4"><b>Status:</b></label>
+                                <p class="control-label col-md-8">{{.Tempconf.Status}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-4"><b>Transaction Date:</b></label>
+                                <p class="control-label col-md-8">{{.Tempconf.trandate}}</p>
+                                <input type="hidden" name="date" id ="date" value="{{.Tempconf.trandate}}">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-4"><b>Transaction Type:</b></label>
+                                <p class="control-label col-md-8">{{.Tempconf.trandate}}</p>
+                                <input type="hidden" name="date" id ="date" value="{{.Tempconf.otherdis_types_Name}}">
+                            </div>
+                        </div>
+        
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-4"><b>Partner:</b></label>
+                                <p class="control-label col-md-8">{{.Tempconf.partner_name}}</p>
+                            </div>
+                        </div>
+        
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-4"><b>Remarks:</b></label>
+                                <p class="control-label col-md-8">{{.Tempconf.remarks}}</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-4"><b>Detail Total:</b></label>
+                                <p class="control-label col-md-8" id=dtl_total>{{.Tempconf.total}}</p>
+                            </div>
+                        </div> 
+
+        
+                       
+                        
+        
+                    </div>
+
+                    
+
+                  
+
+ 
+                    <!--/span-->
+                </div>
+               
+            {{end}}    
+            <div class="table-toolbar">
+
+                {{if eq .Tempconf.Archive "true"}}
+                    <div class="col-md-2" style="margin-left: -15px;">
+                    <select name="arc" id="arc" class="form-control">
+                        <option value="0">Open</option>
+                        <option value="1">Archive</option>
+                    </select>
+                    </div>
+                {{end}}
+
+                {{if eq .Tempconf.Add_back_button "true"}}
+                    <div class="btn-group">
+                        <a Class="btn blue afjaxify" href="#/transaction/other_disbursement?rights={{.Tempconf.Rights}}" onclick="javascript:nav_back('/transaction/other_disbursement?rights={{.Tempconf.Rights}}');">
+                        <i class="fa fa-backward"></i> Back 
+                        </a>
+
+                    
+                    </div>
+                {{end}}
+                
+                
+                {{if eq .Tempconf.Add_new_button "true"}}
+                <div class="btn-group act_btn" >
+                    <a class="btn blue" href="#{{.Tempconf.Add_new_button_url}}" onclick="javascript:Navigate('{{.Tempconf.Add_new_button_url}}');">
+                    Add New <i class="fa fa-plus"></i>
+                    </a>
+
+                   <!--  <a  class="btn green act_btn" data-toggle='modal' href='#basic'  onclick="javascript:Modalfunc('{{.Tempconf.Add_new_button_url}}{{.Tempconf.hdr_id}}');">
+                    Add New <i class="fa fa-plus"></i>
+                     </a> -->
+
+                </div>
+                {{end}}
+
+                {{if eq .Tempconf.Add_new_button_details "true"}}
+                <a  class="btn blue act_btn" data-toggle='modal' href='#basic'  onclick="javascript:Modalfunc('{{.Tempconf.Add_new_button_url}}');">
+                Add New <i class="fa fa-plus"></i>
+                 </a>
+             
+                   
+            
+                     <form class="btn-group act_btn" id="upload_lp" method="post"  enctype="multipart/form-data" onsubmit="return Uploadlog()">
+                        <fieldset>
+                            <div style="position:relative;">
+                                <a class="btn blue" href="javascript:;">
+                                    Upload<i class="fa fa-plus"></i>
+                                    <input type="file" name="myfiles"style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; width: 89px; height: 34px;' size="40"  accept=".txt" id="myfiles" onchange="return Uploadlog();" >
+                                </a>
+                                &nbsp;
+                                <span class='label label-info' id="upload-file-info"></span>
+                            </div>
+                        </fieldset>  
+                    </form>
+                    <div class="btn-group act_btn">
+                        <a class="btn blue" href="#{{.Tempconf.Add_deleteall_button_url}}" onclick="javascript:func_deleteall('{{.Tempconf.Add_deleteall_button_url}}');">
+                        Delete all 
+                        </a>
+                    </div>
+                   
+               
+                 
+            {{end}}
+            
+                
+                
+                {{if eq .Tempconf.Add_cancel_button "true"}}
+                <div class="btn-group act_btn">
+                    <a class="btn blue" href="#{{.Tempconf.Add_cancel_button_url}}" onclick="javascript:func_cancel('{{.Tempconf.Add_cancel_button_url}}');">
+                    Cancel 
+                    </a>
+                </div>
+                {{end}}
+
+                {{if eq .Tempconf.Add_post_button "true"}}
+                <div class="btn-group act_btn">
+                    <a class="btn blue" href="#{{.Tempconf.Add_post_button_url}}" onclick="javascript:func_post('{{.Tempconf.Add_post_button_url}}');">
+                    Post 
+                    </a>
+                </div>
+                {{end}}
+
+                {{if eq .Tempconf.Add_duplicate_button `true`}}
+                <div class="btn-group act_btn">
+                   <a class="btn blue" href="#{{.Tempconf.Add_duplicate_button_url}}" onclick="javascript:func_duplicate('{{.Tempconf.Add_duplicate_button_url}}');"
+                   data-toggle="tooltip" title="Duplicate Record">
+                   Duplicate Rec 
+               </a>
+               </div>       
+               {{end}}   
+
+
+             
+           
+            </div>
+           
+            <div class="error_section">
+               
+            </div>
+
+
+            
+
+
+            <div class ="progressclass">
+
+               <!--  <div class="progress"> <div class="progress-bar progress-bar-striped active uploadprog" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 10%"> <span class="sr-only">45% Complete</span></div></div> -->
+
+            </div>
+            <div class ="progressCountclass"></div>
+            
+             
+            <!-- <div>pushing...</div> -->
+            
+        <table id="example1" class="table table-bordered " cellspacing="0" width="100%">
+            <thead>
+                     <!-- <tr style="border-bottom: 1px solid #DDD;">
+                    <th colspan="2" >HR Information</th>
+                    <th colspan="2">Contact</th>
+                </tr> -->
+                <tr>
+                    {{ range $index, $elmt := .Headercol}}
+                    <th>{{$elmt}}</th>
+                    {{end}}
+                </tr>
+            </thead>
+
+           
+        </table>
+
+        
+        
+    </div>
+</div>
+
+ <script>
+
+function func_duplicate (a,b) {
+                    $.get(a,
+                            function(data,status){
+                                console.log(data)
+                                if(data[1]=='Success'){
+                                    $.get("/transaction/adjustment_entry/details?rights={{.Tempconf.Rights}}&ID="+data[0],
+                                        function(data,status){
+                                        $("#ContentID").html(data);
+                                        
+                                        }
+                                    );    
+                                }else{
+                                    alert(data[1]);
+                                }
+                            }    
+                        );
+                }
+
+
+        function digits (number) { 
+            var n = parseFloat(number).toFixed(2)
+            return Number(n).toLocaleString('en');
+        }
+        
+        function GotoLoanConso(a) {
+		$.get("{{.Tempconf.LoanConso_url}}",
+			function (data, status) {
+				$("#ContentID").html(data);
+
+			}
+		);
+		return false
+	}
+
+
+        back_storege("_LoanPayment");
+
+        var stat_done = 0
+        var ish = 0
+        var level = "{{.Tempconf.level}}"
+        var last_url = "{{.AjaxUrl}}"
+       var  last_search ="{{.Tempconf.last_search}}"
+       dtbl();
+       function dtbl(){
+       var oTable =    $('#example1').dataTable( {
+                                "serverSide": true,
+                                "processing": true,
+                                "ajax": "{{.AjaxUrl}}&arc="+$("#arc").val(),
+                                "ordering" : false,
+                                destroy: true,
+                                "pageLength": {{.Tempconf.pageLength}},
+                                'displayStart': {{.Tempconf.displayStart}},
+                                "oSearch": {"sSearch": last_search},
+                                "sDom": '<"top"iflp>rt<"bottom"i>',
+                                "scrollX": true,
+                                "bAutoWidth" : false,
+                                "stateSave" : true,
+                                /* "sScrollX": "100%",
+                                "sScrollYInner": "110%", */
+                                 
+                                "footerCallback": function ( row, data, start, end, display ) {
+                                    //console.log(data[1])
+                                    
+                                }   
+                                ,
+                                "initComplete": function() {
+                                    
+                                    var $searchInput = $('div.dataTables_filter input');
+
+                                    $searchInput.unbind();
+
+                                    $searchInput.bind('keyup', function(e) {
+                                        if(e.keyCode == 13) {
+                                            oTable.fnFilter(this.value); 
+                                        }
+                                    });
+                                },
+
+                                createdRow: function( row, data, dataIndex ) {
+
+                                    {{if eq .Tempconf.level "2"}}
+
+                                    $( row ).find('td:eq(3)').attr('align', 'right');
+                                  
+                                    {{end}}
+
+                                    
+                                }
+
+                            } ) ;
+            $('#example1').on( 'draw.dt', function () {
+               //   console.log(oTable.ajax.params());
+               //alert(params)
+               //console.log(oTable.dataTable().fnSettings())
+               if(level=='1'){
+               var params = oTable.oApi._fnAjaxParameters(oTable.dataTable().fnSettings());
+               localStorage.setItem("last_url_LoanPayment", last_url); 
+               localStorage.setItem("last_start_LoanPayment", params.start);
+               localStorage.setItem("last_length_LoanPayment",params.length);
+               localStorage.setItem("last_search_LoanPayment",params.search.value);
+               }
+            });
+
+        }
+
+        $(document).ready(function() {
+        
+
+
+
+
+        });
+        function Modalfunc(a,v){
+            console.log(v)
+            $.get(a,
+                    {
+                      Assign_ID:'{{.Tempconf.hdr_id}}'
+                    }
+                    ,
+
+                    function(data,status){
+                        $("#basic").html(data);
+                        //$(".dr-js").select2();
+                        
+                    });
+            //return false;
+        }
+        function Modalfunc_adreference(a,event){
+            //console.log(v)
+            $.get(a,
+                    {
+                      Assign_ID:'{{.Tempconf.hdr_id}}'
+                    }
+                    ,
+
+                    function(data,status){
+                        $("#basic").html(data);
+                        //$(".dr-js").select2();
+                        
+                    });
+            return false;
+        }
+
+         function Modalfunc_email(a,v){
+
+                var htdata ='<div class="upload_top_info">'
+                    htdata +=' <div class="upload_jif" style="background: url(/src/metronic_3.1.2/images/throbber.gif) center center no-repeat; height: 15px; width: 18px; display: inline-block;">'
+                                
+                    htdata +='</div>'
+                    htdata +='<div class="upload_info" style="display: inline-block;">Sending email...</div>'
+                    htdata += '</div>' 
+                    $(".progressclass").html(htdata)
+
+            $.get(a,
+                    {
+                      Assign_ID:'{{.Tempconf.Assign_ID}}'
+                    }
+                    ,
+
+                    function(data,status){
+                        console.log(data);
+
+                            
+                        // $(".progressclass").html(htdata)
+
+                        //$("#basic").html(data);
+                        //$(".dr-js").select2();
+                        $(".progressclass").html("");
+                        var htdata =' <div class="Metronic-alerts alert alert-success fade in"><button type="button" '
+                            htdata +='class="close" data-dismiss="alert" aria-hidden="true"></button><i class="fa-lg fa fa-'
+                            htdata += 'success"></i>  Email sent. '
+                           htdata += '</div>   '
+                            $(".error_section").html(htdata);
+
+                        
+                    });
+            //return false;
+        }
+
+
+
+
+
+        function func_edit(a,b){
+            $.get(a,
+                    function(data,status){
+                     $("#ContentID").html(data);
+                    $(".dr-js").select2();
+
+                    }
+                );
+            return false
+        }
+
+        function func_view(a,b){
+            $.get(a,
+                    function(data,status){
+                     $("#ContentID").html(data);
+                    $(".dr-js").select2();
+
+                    }
+                );
+            return false
+        }
+        function func_add_child(a,b){
+            console.log("{{.Tempconf.Add_new_button_url}}")
+            $.get("{{.Tempconf.Add_new_button_url}}&parentID="+a,
+                    function(data,status){
+                     //$("#ContentID").html(data);
+                     $("#basic").html(data);
+                    $('#basic').modal('show'); 
+                    //$(".dr-js").select2();
+
+                    }
+                );
+            return false
+        }
+        function Modalfuncdelete (a,b,c) {
+            //a=link //b=dtl_id
+            clicked =c
+            console.log(a)
+            $.get(a,
+                    {
+                      dtl_id:b 
+                    },
+                    function(data,status){
+                        $("#modalSession").html(data);
+                    });
+            return false;
+        }
+        function Dodelete (a) {
+            $.post(a,$( ".formDelete" ).serialize()
+            ,
+            function(data,status){
+                var ret_data ="";
+                ret_data = data[1];
+                if (data[1] == "Success") {
+                    $('#modalSession').modal('hide') 
+                    //clicked.closest("tr").remove();
+                    console.log(ret_data);
+                    PageRefresher(level);
+                }else{
+                   alert(data[1]); 
+                }
+            });
+        return false;
+        }
+        function Nav2(a,b,c){
+            
+            
+                $.get("{{.Tempconf.Action_baseURL}}",'{{.Tempconf.ActionCol_param}}='+b,
+                    function(data,status){
+                     $("#ContentID").html(data);
+                    }
+                );    
+            
+            
+            return false;
+        }
+
+
+        function PageRefresher(lev){
+            if(lev=='1'){
+                $.get("/transaction/other_disbursement?rights={{.Tempconf.Rights}}",
+                    function(data,status){
+                    $("#ContentID").html(data);
+                     //$('#basic').modal('hide')
+                    }
+                );
+            } else {
+                $.get("/transaction/other_disbursement/details?rights={{.Tempconf.Rights}}&ID={{.Tempconf.hdr_id}}",
+                    function(data,status){
+                    $("#ContentID").html(data);
+                     //$('#basic').modal('hide')
+                    }
+                );
+
+            }
+        }
+        
+         function func_post(a,b){
+            if (confirm("You are about to post this transaction") == true) {
+            var htdata ='<div class="upload_top_info">'
+                       htdata +=' <div class="upload_jif" style="background: url(/src/metronic_3.1.2/images/throbber.gif) center center no-repeat; height: 15px; width: 18px; display: inline-block;">'
+                                    
+                    htdata +='</div>'
+                    htdata +='<div class="upload_info" style="display: inline-block;">We are now posting your records. Please wait for a moment.</div>'
+                    htdata += '</div>' 
+                     $(".progressclass").html(htdata)
+            $.get(a,
+                    function(data,status){
+                        console.log(data)
+                        $(".progressclass").html("")
+                       // if(data.Message.includes("Success")){
+                        if(data[0][1]=='Success'){
+                            
+                            PageRefresher(level);
+                            /*$(".act_btn").hide();
+                            var htdata =' <div class="Metronic-alerts alert alert-success fade in"><button type="button" '
+                            htdata +='class="close" data-dismiss="alert" aria-hidden="true"></button><i class="fa-lg fa fa-'
+                            htdata += 'success"></i>  Posting '
+                            htdata += data[0][1]
+                            htdata += '</div>   '
+                            $(".error_section").html(htdata);
+                            table = $('#example1').dataTable( {
+                            "serverSide": true,
+                                "ajax": "{{.AjaxUrl}}&status=Posted",
+                                "processing": true,
+                                destroy: true,
+                            } );*/
+                        
+                        }else{
+                            var htdata =' <div class="Metronic-alerts alert alert-danger fade in"><button type="button" '
+                            htdata +='class="close" data-dismiss="alert" aria-hidden="true"></button><i class="fa-lg fa fa-'
+                            htdata += 'warning"></i>Unable to post.<br> '
+                            for (var i = 0; i < data.length; i++) {
+                                //console.log(data[i][0])
+                                htdata +=data[i][1] +"<br>"
+                            };
+                            htdata += '</div>   '
+                            $(".error_section").html(htdata);
+                        }
+
+                    }
+                );
+            return false
+        } else {
+                PageRefresher(level);
+            }
+        }
+
+
+        function func_deleteall(a,b){
+            if (confirm("You are about to delete all records in this transaction") == true) {
+            var htdata ='<div class="upload_top_info">'
+                       htdata +=' <div class="upload_jif" style="background: url(/src/metronic_3.1.2/images/throbber.gif) center center no-repeat; height: 15px; width: 18px; display: inline-block;">'
+                                    
+                    htdata +='</div>'
+                    htdata +='<div class="upload_info" style="display: inline-block;">We are now deleting all your records. Please wait for a moment.</div>'
+                    htdata += '</div>' 
+                     $(".progressclass").html(htdata)
+            $.get(a,
+                    function(data,status){
+                        console.log(data)
+                        $(".progressclass").html("")
+                       // if(data.Message.includes("Success")){
+                        if(data[0][1]=='Success'){
+                            
+                            PageRefresher(level);
+                            /*$(".act_btn").hide();
+                            var htdata =' <div class="Metronic-alerts alert alert-success fade in"><button type="button" '
+                            htdata +='class="close" data-dismiss="alert" aria-hidden="true"></button><i class="fa-lg fa fa-'
+                            htdata += 'success"></i>  Posting '
+                            htdata += data[0][1]
+                            htdata += '</div>   '
+                            $(".error_section").html(htdata);
+                            table = $('#example1').dataTable( {
+                            "serverSide": true,
+                                "ajax": "{{.AjaxUrl}}&status=Posted",
+                                "processing": true,
+                                destroy: true,
+                            } );*/
+                        
+                        }else{
+                            var htdata =' <div class="Metronic-alerts alert alert-danger fade in"><button type="button" '
+                            htdata +='class="close" data-dismiss="alert" aria-hidden="true"></button><i class="fa-lg fa fa-'
+                            htdata += 'warning"></i>Unable to delete.<br> '
+                            for (var i = 0; i < data.length; i++) {
+                                //console.log(data[i][0])
+                                htdata +=data[i][1] +"<br>"
+                            };
+                            htdata += '</div>   '
+                            $(".error_section").html(htdata);
+                        }
+
+                    }
+                );
+            return false
+        } else {
+                PageRefresher(level);
+            }
+        }
+
+        function func_cancel(a,b){
+            if (confirm("You are about to cancel this transaction") == true) {
+            var htdata ='<div class="upload_top_info">'
+                       htdata +=' <div class="upload_jif" style="background: url(/src/metronic_3.1.2/images/throbber.gif) center center no-repeat; height: 15px; width: 18px; display: inline-block;">'
+                                    
+                    htdata +='</div>'
+                    htdata +='<div class="upload_info" style="display: inline-block;">  Where are now canceling your records.. please wait for a moment</div>'
+                    htdata += '</div>' 
+                     $(".progressclass").html(htdata)
+            $.get(a,
+                    function(data,status){
+                        $(".progressclass").html("")
+                        //if(data.Message.includes("Success")){
+                        if(data[0][1]=='Success'){
+                              /* $.get("/inventory/adjustment_entry/details?rights="+rights+"&ID={{.Tempconf.hdr_id}}",
+                                 function(data,status){
+                                 $("#ContentID").html(data);
+                                 //$('#basic').modal('hide')
+                                }
+                            ); */
+
+                            
+                            
+                            PageRefresher(level);
+
+                            /* $(".act_btn").hide();
+                            var htdata =' <div class="Metronic-alerts alert alert-success fade in"><button type="button" '
+                            htdata +='class="close" data-dismiss="alert" aria-hidden="true"></button><i class="fa-lg fa fa-'
+                            htdata += 'Canceled"></i>  '
+                            htdata += data[0][1]
+                            htdata += '</div>   '
+                            $(".error_section").html(htdata);
+                            table = $('#example1').dataTable( {
+                            "serverSide": true,
+                                "ajax": "{{.AjaxUrl}}&status=Posted",
+                                "processing": true,
+                                destroy: true,
+                            } ); */
+                        }else{
+                            var htdata =' <div class="Metronic-alerts alert alert-danger fade in"><button type="button" '
+                            htdata +='class="close" data-dismiss="alert" aria-hidden="true"></button><i class="fa-lg fa fa-'
+                            htdata += 'warning"></i>Unable to cancel.<br> '
+                            for (var i = 0; i < data.length; i++) {
+                                htdata +=data[i][1] +"<br>"
+                            };
+                            
+                          /*  if( data!=null){
+                                for (var i = 0; i < data.length; i++) {
+                                    //alert(data[i][0]);
+                                   htdata += data[i][0]
+                                   
+                                    if (data[i][0]=="Success"){
+                                        console.log(data[i][0])
+                                       
+                                        
+                                    //return false;
+                                    }else{
+                                        alert(ret_msg)
+                                    }
+                                     
+                                }
+                            }
+
+*/
+
+
+                            htdata += '</div>   '
+                             $(".error_section").html(htdata);
+                        }
+
+                    }
+                );
+            return false
+        } else {
+                PageRefresher(level);
+            }
+        }
+
+
+
+         function fuc_ref_delete(trn_id,event) {
+            if(!candf){
+                alert("reference ID already Posted or Cancelled.")
+                return false;
+            }
+            var txt;
+            var r = confirm("Are you Sure to delete this reference?");
+            if (r = true) {
+              //  txt = "You pressed OK!";
+            } else {
+               return false
+
+            }
+
+            $.post('/inventory/customer_sales/details/delete_reference',
+            {
+                trn_id : trn_id
+            }
+            ,
+            function(data,status){
+                console.log(data)
+                alert(data[1])
+                
+                $(event.target).closest("tr").remove()
+
+            });
+            return false;
+
+        }
+
+         $("#arc").change(function(){
+            dtbl();
+        });
+
+        function nav_back(c_url) {
+            var  last_length = localStorage.getItem("last_length_LoanPayment")
+            var  last_start = localStorage.getItem("last_start_LoanPayment")
+            var  last_search = localStorage.getItem("last_search_LoanPayment")
+            var  url_last = c_url
+            console.log(url_last);
+             $.get(url_last,'last_length='+last_length +'&last_start='+last_start+'&last_search='+last_search,
+                    function(data,status){
+                    $("#ContentID").html(data);
+                    $(".dr-js").select2();
+
+                    }
+                );
+            return false
+        }
+
+        {{if eq .Tempconf.level "2"}}
+
+        function Uploadlog(){
+            stat_done =0
+            //pullingFuc()
+            var progressbarhtml ='<div class="progress"> <div class="progress-bar progress-bar-striped active uploadprog" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 10%"> <span class="sr-only">45% Complete</span></div></div> '
+            $(".progressclass").html(progressbarhtml)   
+            var fd = new FormData(document.getElementById("upload_lp"));    
+           
+            //console.log(fd)
+            var date = $('[name=date]').val();
+            fd.append("label", "WEBUPLOAD");
+            $.ajax({
+              url: "/transaction/other_disbursement/details/Upload?hid="+{{ .Tempconf.hdr_id}}+"&partner="+ {{.Tempconf.partner}}+ "&trandate=" + date ,
+              type: "POST",
+              xhr: function() {  // custom xhr
+                    var myXhr = $.ajaxSettings.xhr();
+                    if(myXhr.upload){ // check if upload property exists
+                        myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // for handling the progress of the upload
+                    }
+                    return myXhr;
+                },
+              data: fd ,
+              enctype: 'multipart/form-data',   
+
+             
+              processData: false,  // tell jQuery not to process the data
+              contentType: false   // tell jQuery not to set contentType
+              //async: false
+            }).done(function( data,status ) {
+                stat_done =1
+                var ht =''
+                var success_count = 0
+                var error_count = 0
+                for (var i = 0; i < data.length; i++) { 
+                    
+                    if(stringContains(data[i].Msg,"Invalid")) {
+                       error_count = error_count+1
+                       ht+='<font color="red">txt line:'+data[i].Txtline + ' txt detail: ' + data[i].LineDetail +', MsgID: ' + data[i].MsgID+' Msg: '+data[i].Msg + '</font><br>'
+                    }
+                    if(stringContains(data[i].Msg,"Success")){
+                       success_count = success_count+1 
+                       ht+='txt line:'+data[i].Txtline + ' txt detail: ' + data[i].LineDetail +', MsgID: ' + data[i].MsgID+' Msg: '+data[i].Msg + '<br>'
+                    }
+                }
+                $(".progressclass").html("")
+                    
+                var htdata =' <div class="Metronic-alerts alert alert-success fade in"><button type="button" '
+                htdata +='class="close" data-dismiss="alert" aria-hidden="true"></button><i class="fa-lg fa fa-'
+                htdata += 'warning"></i>  '
+                htdata += 'Upload Success.<br>'
+                htdata += 'Success count: '+ success_count +'<br>'
+                htdata += 'Error count: '+ error_count +'<br>'
+                htdata += ht
+                htdata += '</div>   '
+                $(".error_section").html(htdata); 
+                /*$.get("/timekeeping/CreateTransactionDetails?ID="+{{.Tempconf.hdr_id}},
+                     function(data,status){
+                     $("#ContentID").html(data);
+                    }
+                );*/
+                table = $('#example1').dataTable( {
+                "serverSide": true,
+                "ajax": "{{.AjaxUrl}}",
+                "processing": true,
+                destroy: true,
+            } );
+
+            });
+            //stat_done =1
+           
+            return false;
+          
+        }
+
+        function pullingFuc(e){
+            //setTimeout(function(){
+                $.ajax({ url: "/transaction/other_disbursement/details/AjaxPolling", success: function(data){
+                //Update your dashboard gauge
+                
+                $(".progressCountclass").html(data)
+               // salesGauge.setValue(data.value);
+
+                //Setup the next poll recursively
+                    if (stat_done ==0) {
+                    setTimeout(function(){
+                    pullingFuc();
+                }, 6000);
+                    }else{
+                         $(".progressCountclass").html("")
+                    }
+               
+                }, dataType: "json"});
+          //  }, 3000);
+
+        }    
+        function progressHandlingFunction(e){
+            if(e.lengthComputable){
+                $('.uploadprog').attr({value:e.loaded,max:e.total});
+                var percentprog = (e.loaded / e.total) * 100
+                //console.log(percentprog)
+                $('.uploadprog').attr({style:"width: "+percentprog+"%"})
+                if (percentprog >70) {
+                   $(".progressclass").html("")
+                   var htdata ='<div class="upload_top_info">'
+                       htdata +=' <div class="upload_jif" style="background: url(/src/metronic_3.1.2/images/throbber.gif) center center no-repeat; height: 15px; width: 18px; display: inline-block;">'
+                                    
+                    htdata +='</div>'
+                    htdata +='<div class="upload_info" style="display: inline-block;"> Uploading records...</div>'
+                    htdata += '</div>' 
+                     $(".progressclass").html(htdata)
+                     
+                };
+                
+
+            }
+            
+        }
+
+       {{end}}
+
+  
+</script>
+
+
+
+
+<div class="lower_table"></div>

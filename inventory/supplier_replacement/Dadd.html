@@ -1,0 +1,244 @@
+<!-- <Form> -->
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+		<form id="transdetnew" method="Post" onsubmit="javascript: return DocreateTrasDet()">
+			<input type="hidden" name="hdr_id" value="{{.Tconf.hdr_id}}">	
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">New Transaction Details</h4>
+				</div>
+				<!-- <div class="modal-body">
+				 -->	 <!-- modal data here -->
+
+					<div class="form-horizontal">
+							<div class="form-group">
+								<label class="col-md-3 control-label">Item</label>
+								<div class="col-md-4">
+									<input type="text" name="item" placeholder="Item" id="item"  class="form-control"  required>
+								</div>
+
+								<div class="col-md-4">
+									<a  class="btn green act_btn" data-toggle='modal' href='#large'  onclick="javascript:Modalfunc_show_prev(this);">
+                   	 				show previous prices<i class="fa fa-plus"></i></a>
+
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Qty</label>
+									<div class="col-md-4">
+										<input type="text" name="qty" placeholder="Qty"  value="1" maxlength="5" class="form-control createAct" required onkeypress='return numbersOnly(this,event,false,false);'>
+									</div>
+							</div>		
+														<div class="form-group">
+								<label class="col-md-3 control-label">Unit Charge</label>
+									<div class="col-md-4">
+										<input type="text" name="unit_charge" placeholder="Unit Cost"  value="0.00" maxlength="100" class="form-control createAct num_f" required onkeypress='return numbersOnly(this,event,true,false);'>
+									</div>
+
+									<div class="col-md-4">
+									<label id="message"></label>
+
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label">remarks</label>
+									<div class="col-md-4">
+										<input type="text" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct">
+									</div>
+							</div>
+										  									
+					</div>
+					 <!-- end modal data here -->
+				<!-- </div> -->
+				<div class="errorDv">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn default" data-dismiss="modal">Go Back</button>
+					<button type="submit" class="btn blue">Save </button>
+					<button type="button" class="btn blue btn_sa" onclick="javascript:DocreateTrasDet('AS');">Save & Add new</button>
+				</div>
+
+		<!--  -->
+				<!-- /.modal-content -->
+		</form>
+	</div>
+		<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->					
+					
+
+
+<script type="text/javascript">
+ 	$('.form_datetime').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+	
+
+	var rights = '{{.Tconf.rights}}' 
+	var assignmentID = '{{.Tconf.location}}' 
+	var supplier =  '{{.Tconf.supplier}}'
+			function DocreateTrasDet(a){
+				
+			if(!$('#transdetnew')[0].checkValidity()){
+					$('.val_err').show();
+				 	return false;
+				}
+				$( ".errorDv" ).html("")
+				if ($("input[name=qty]").val()<=0 || $("input[name=qty]").val() % 1 != 0  ){
+					var htdata  = '<div class="alert alert-danger"> <strong>Error: </strong>  Invalid Qty  (must be greater than 0 or whole number)</div>'
+					$( ".errorDv" ).html(htdata)
+					return false;
+				}
+				if ($("input[name=unit_cost]").val()<=0){
+					var htdata  = '<div class="alert alert-danger"> <strong>Error: </strong>  Invalid Unit Price  (must be greater than 0)</div>'
+					$( ".errorDv" ).html(htdata)
+					return false;
+				}
+
+
+				$.post("/inventory/supplier_replacement/details/DaddHandler",$( "#transdetnew" ).serialize()
+		        ,
+		        function(data,status){
+		        	alert(data[1])
+		            if(data[1]=='Success'){
+		            	
+		            	$("input[name=item]").select2("val", ""); 
+		            	
+		            	if(a!="AS"){
+			            	$.get("/inventory/supplier_replacement/details?rights="+rights+"&ID={{.Tconf.hdr_id}}",
+	                    		 function(data,status){
+			                     $("#ContentID").html(data);
+			                     $('#basic').modal('hide')
+			                    }
+			                );
+			            }else{
+			            	$( "#item" ).select2('open')
+			            		$('[name=qty]').val("1")
+ 							$('[name=unit_charge]').val("00.00")
+ 							$('[name=remarks]').val("")
+			            }	
+		            }
+		        });
+	 			return false
+			}
+	
+	function repoFormatResult( repo ) {
+	    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div></div>";
+
+	    return markup;
+	}
+	function repoFormatSelection( repo ) {
+        $("input[name=unit_price]").val(repo.price);
+ 		return repo.full_name;
+    }
+    		
+	$( "#item" ).select2({
+	    placeholder: "Search for Items",
+	    minimumInputLength: 2,
+	    multiple: false,
+	    allowClear: true,
+	   // tags: true,
+	    ajax: {
+		        url: "/inventory/supplier_replacement/details/Ajax/Ajax_getItem?assignmentID="+assignmentID+"&isbaseonassignid=1&supplier="+supplier+"&hdr_id='{{.Tconf.hdr_id}}'",
+	        //url: "/inventory/supplier_replacement/details/Ajax/Ajax_getItem",
+	        dataType: "json",
+	        quietMillis: 250,
+	        data: function( term, page ) {
+	            return {
+	                // search term
+	                q: term
+	            };
+	        },
+	        results: function( data, page ) {
+	                // parse the results into the format expected by Select2.
+	                // since we are using custom formatting functions we do not need to alter the remote JSON data
+	                return { results: data.items };
+	        }
+	        
+	    },
+	    
+	    formatResult: repoFormatResult,
+	    formatSelection: repoFormatSelection,
+	    // apply css that makes the dropdown taller
+	    dropdownCssClass: "bigdrop",
+	    // we do not want to escape markup since we are displaying html in results
+	    escapeMarkup: function( m ) {
+	        return m;
+	    }
+	});		
+	setTimeout(function (){
+        $( "#item").select2('open')
+    	
+    }, 500);
+
+	$('.btn_sa').on('keydown', function(e) {
+	    if (e.which == 13) {
+	        e.preventDefault();
+	        DocreateTrasDet('AS')
+	    }
+	});
+	$('#basic').unbind('hidden.bs.modal');
+
+
+	 var ret_msg= ""
+			$("#item").change(function () {
+					$.get("/json_func",
+                    {
+                       qdata : "SIS_SupRep_Misc 1 , '{{.Tconf.Org_id}}' , "+$('[name=item]').val()+", '{{.Tconf.hdr_id}}'"
+
+                    }
+                    ,
+                    function(data,status){
+                        if( data!=null){
+                        	
+                        	var uprice = "";
+                        	var message= "";
+
+		                    for (var i = 0; i < data.length; i++) {
+		                    	 	ret_msg = data[i][0]
+					            	//$("input[name=customer]").val(ret_msg);
+					            	//console.log(alert(data[i][0]))
+			            	
+					            	uprice = data[i][1]
+					            	message = data[i][3]
+		                     		console.log(uprice)  
+		                     		console.log(message)   
+
+		                    }
+		                    $("[name=unit_charge]").val(uprice).trigger("change");
+		                    $('#message').text(message);
+		                     
+		                     
+
+	                    }
+                    });	
+					
+                    return false;
+			});
+
+
+			function Modalfunc_show_prev(a,v){
+        $.get("/inventory/supplier_replacement/details/Show_prev_price",
+        {
+          supplier: '{{.Tconf.supplier}}',
+          item: 	$("input[name=item]").val(),
+          location: '{{.Tconf.location}}'
+
+        }
+        ,
+
+        function(data,status){
+            $("#large").html(data);
+            $('#large').modal({
+            	show : true ,
+		    	backdrop: 'static'
+			});
+        });
+    }
+	
+</script>

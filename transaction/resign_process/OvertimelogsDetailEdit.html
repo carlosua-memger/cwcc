@@ -1,0 +1,154 @@
+<!-- <Form> -->
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+		<form id="transdetedit" method="Post" onsubmit="javascript: return DoeditTrasDet()">
+			<input type="hidden" name="dtl_id" value="{{.LBR_OTDtl.Id}}">
+			<input type="hidden" name="hdr_id" value="{{.LBR_OTDtl.Hdr}}">	
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">Edit Overtime Details [ {{.LBR_OTDtl.Id}} ]</h4>
+				</div>
+				<!-- <div class="modal-body">
+				 -->	 <!-- modal data here -->
+
+				 	
+					
+					<div class="form-horizontal">
+							<div class="form-group">
+								<label class="col-md-3 control-label">Member/s</label>
+								<div class="col-md-4">
+									<input type="text" name="memberid" value="{{.LBR_OTDtl.Memberid}}" placeholder="member" id="member"  class="form-control input-large"  required>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Applied Date<span class="required" aria-required="true">*</span>
+								</label>
+								<div class="col-md-4">
+									<input type="text" name="applied" placeholder="Applied Date" value="{{.LBR_OTDtl.Applied}}" class="form-control form_datetime" Required>
+												<!-- <span class="help-block">
+												A block of help text. </sapan> -->
+								</div>
+							</div>	
+							<div class="form-group">
+								<label class="col-md-3 control-label">Hours</label>
+									<div class="col-md-4">
+										<input type="text" name="hours" placeholder="Hours"  value="{{.LBR_OTDtl.Hours}}" maxlength="5" class="form-control createAct" required>
+									</div>
+							</div>		
+							<div class="form-group">
+								<label class="col-md-3 control-label">remarks</label>
+									<div class="col-md-4">
+										<input type="text" name="remarks" placeholder="remarks"  value="{{.LBR_OTDtl.Remarks}}" maxlength="100" class="form-control createAct">
+									</div>
+							</div>
+										  									
+					</div>
+					
+					 <!-- end modal data here -->
+				<!-- </div> -->
+				<div class="modal-footer">
+					<button type="button" class="btn default" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn blue">Update changes</button>
+				</div>
+
+		<!--  -->
+				<!-- /.modal-content -->
+		</form>
+	</div>
+		<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->					
+					
+
+
+
+<script type="text/javascript">
+ 			$('.form_datetime').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+			var right = '{{.Htconf.rights}}'
+			function DoeditTrasDet(){
+				$.post("/timekeeping/overtime_logs/details/OvertimeLogsDetailEdit",$( "#transdetedit" ).serialize()
+		        ,
+		        function(data,status){
+		            if(data.Status==true){
+		            	alert(data.Message)
+		            	$(".createAct").val("")
+		            	$.get("/timekeeping/overtime_logs/details?rights="+right+"&ID={{.LBR_OTDtl.Hdr}}",
+                    		function(data,status){
+			                    $('#basic').modal('hide')
+			                    $("#ContentID").html(data);
+			                }
+		                );
+
+		            }
+		        });
+	 		return false
+			}
+			
+			function repoFormatResult( repo ) {
+			    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+			    return markup;
+			}
+
+			function repoFormatSelection( repo ) {
+			                return repo.full_name;
+			            }
+			$( "#member" ).select2({
+			    placeholder: "Search for Name",
+			     minimumInputLength: 2,
+			        multiple: false,
+			        allowClear: true,
+			    ajax: {
+			        url: "/Ajax/GetMembers",
+			        dataType: "json",
+			        quietMillis: 250,
+			        data: function( term, page ) {
+			            return {
+			                // search term
+			                q: term
+			            };
+			        },
+			        results: function( data, page ) {
+			                // parse the results into the format expected by Select2.
+			                // since we are using custom formatting functions we do not need to alter the remote JSON data
+			                return { results: data.items };
+			        }
+			        
+			    }, 
+				initSelection: function( element, callback ) {
+					// the input tag has a value attribute preloaded that points to a preselected repository's id
+					// this function resolves that id attribute to an object that select2 can render
+					// using its formatResult renderer - that way the repository name is shown preselected
+					var id = $( element ).val();
+					if ( id !== "" ) {
+						$.ajax( "/Ajax/GetMembers?id=" + id, {
+							dataType: "json"
+						}).done( function( data ) {
+							callback( data );
+						});
+					}
+				},
+
+			    
+			    formatResult: repoFormatResult,
+			    formatSelection: repoFormatSelection,
+			    // apply css that makes the dropdown taller
+			    dropdownCssClass: "bigdrop",
+			    // we do not want to escape markup since we are displaying html in results
+			    escapeMarkup: function( m ) {
+			        return m;
+			    }
+			});
+			$( "#member" ).select2('open')
+			
+</script>
+
+
+

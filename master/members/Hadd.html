@@ -1,0 +1,263 @@
+{{$Org_id := .Tconf.Org_id}}
+
+<style type="text/css">
+
+.center-div
+{
+     margin: 0 auto;
+     width: 1000px; 
+}
+
+
+
+</style>
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>New Member Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+
+
+
+
+<div class="row">
+
+
+
+
+
+
+		<form id="CreateTransaction" class="form-horizontal center-div"  method="Post" onsubmit="return DoCreateTransaction()">
+	
+					<div class="form-horizontal">
+						
+						 <div class="portlet-body ">
+                                    <div class="tabbable-custom ">
+                                    	<h3 class="form-section">Member Information</h3>
+                                        <ul class="nav nav-tabs ">
+                                            <li class="active">
+                                                <a href="#tab_5_1" data-toggle="tab"> Identity </a>
+                                            </li>  
+                                            <!-- <li>
+                                                <a href="#tab_5_2" data-toggle="tab"> Personal </a>
+                                            </li>
+                                            <li>
+                                                <a href="#tab_5_1" data-toggle="tab"> Financial </a>
+                                            </li>
+                                            <li>
+                                                <a href="#tab_5_1" data-toggle="tab"> Membership </a>
+                                            </li>
+                                            <li>
+                                                <a href="#tab_5_1" data-toggle="tab"> Account </a>
+                                            </li> -->
+                                        </ul>
+                                        <div class="tab-content ">
+                                            <div class="tab-pane active " id="tab_5_1">
+                                            		
+                                            	<div class="container" style="width: 50%">
+
+													<label class="control-label"><b>First Name</b><span class="required" aria-required="true">*</span>
+													</label>
+													<input type="text" name="firstname"  placeholder="First Name" id="inputFirstName" class="form-control " maxlength="50" required>
+													
+													
+
+													
+
+
+													<label class="control-label" style=""><b>Middle Name</b><span class="required" aria-required="true">*</span>
+													</label>
+													
+													<input type="text" name="middlename"  placeholder="Middle Name" id="inputMiddleName" class="form-control" maxlength="50" required>
+
+												
+														
+
+													<label class="control-label"><b>Last Name</b><span class="required" aria-required="true">*</span>
+													</label>
+													<input type="text" name="lastname"  placeholder="Last Name" id="inputLastName" class="form-control" maxlength="50" required>
+
+													<label class="control-label"><b>Suffix Name</b>
+													</label>
+													<input type="text" name="sname"  placeholder="Suffix Name" id="inputSuffixName" class="form-control" maxlength="50">
+
+													<label class="control-label"><b>Birthday</b><span class="required" aria-required="true">*</span>
+													</label>
+													<input type="text" name="birthday"  placeholder="Select date" id="inputBirthday" class="form-control date-picker" required>
+
+													<label class="control-label"><b>SSS Number</b><span class="required" aria-required="true" >*</span>
+													</label>
+													<input type="text" name="sss"  placeholder="SSS Number" id="inputSSSNumber" class="form-control" maxlength="15" onkeypress='return numbersOnly(this,event,false,false);' required>
+
+													<label class="control-label"><b>Tax Identification Number</b><span class="required" aria-required="true">*</span>
+													</label>
+													<input type="text" name="tin"  placeholder="TIN Number" id="inputTINNumber" class="form-control" maxlength="15" onkeypress='return numbersOnly(this,event,false,false);' required>
+
+													<label class="control-label"><b>GSIS Number</b>
+													</label>
+													<input type="text" name="gsis"  placeholder="GSIS Number" id="inputGSISNumber" class="form-control" maxlength="15" onkeypress='return numbersOnly(this,event,false,false);'>
+
+													<label class="control-label"><b>Mobile Number</b>
+													</label>
+													<input type="text" name="mobile"  placeholder="Mobile Number" id="inputMobileNumber" class="form-control" maxlength="50" onkeypress='return numbersOnly(this,event,false,false);'>
+
+													<label class="control-label"><b>Email Address</b>
+													</label>
+													<input type="text" name="email"  placeholder="Email Addres" id="inputEmailAddress" class="form-control" maxlength="50">
+												</div>			
+ 												
+											<!--  <span class="help-block with-errors">
+											A block of help text. </span> --> 
+													
+												
+
+
+                                            </div>
+
+                                           
+                                        </div>
+                                    </div>
+						
+<div class="form-actions">
+	<div class="col-md-offset-3 col-md-9">
+		<button type="submit" class="btn blue submit_btn"  onclick="return DoCreateTransaction()">Add Member</button>
+		<button class="btn default" onclick="javascript:nav_back('/master/members?rights={{.Rights}}')" type="button">Go back</button>
+
+		
+	</div>
+</div>
+</form>
+						
+						
+				
+
+
+	
+
+
+</div>
+
+
+
+
+	
+
+</div>
+
+
+
+
+
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	
+</div>
+
+
+			<script type="text/javascript">
+			var currentDate = new Date();  
+			 /*$('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });*/
+			
+			$('.date-picker').datepicker("setDate", new Date());
+			 $('input[name=name]').focus()
+		//	$("[name=name] , [name=customer]").select2();
+			var rghts = '{{.Rights}}'
+			function DoCreateTransaction(){
+				var ret_msg= ""
+				$.get("/json_func",
+                    {
+                       //qdata : "Branch_Save 'Add','programmer',1,0,'"+$('[name=sup_name]').val()+"' ,'"+$('[name=sort]').val()+"' ,'"+$('[name=remarks]').val()+"'"
+                       qdata : "Members_SaveAdd '{{.Tconf.username}}', {{.Tconf.Org_id}}, '"+$('[name=firstname]').val()+"', '"+$('[name=middlename]').val()+"' , '"+$('[name=lastname]').val()+"', '"+$('[name=sname]').val()+"', '"+$('[name=birthday]').val()+"' , '"+$('[name=tin]').val()+"','"+$('[name=sss]').val()+"', '"+$('[name=gsis]').val()+"', '"+$('[name=mobile]').val()+"' , '"+$('[name=email]').val()+"'    "
+                    }
+                    ,
+                    function(data,status){
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									console.log(data[i][0])
+									//console.log(data[i][0])
+									//alert(ret_msg)
+									//$('#basic').modal('hide')
+					            	//dtbl()
+					            	//console.log("success here")
+					            	//$("#item_tagsdata").show()
+					            	//$(".submit_btn").prop('disabled', true);
+					            	$(".c_item_id").val(data[i][0])
+					            	Dobatchsave(data[i][0])
+								//return false;
+			                    }else{
+			                    	alert(ret_msg)
+			                    }
+		                         
+		                    }
+	                    }
+                    });	
+					
+                    return false;
+		                /*$('#basic').modal('hide')
+		            	dtbl()
+			         	return false*/
+			        	
+			}
+
+			function Dobatchsave(membersid){
+				$.get("/master/members/HEditHandler?rights={{.Rights}}&h_id="+membersid,
+				                function(data,status){
+				                 $("#ContentID").html(data);
+				                
+				                }
+
+			);}
+
+			
+
+			function repoFormatResult( repo ) {
+    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+    return markup;
+}
+
+		
+
+
+function repoFormatSelection( repo ) {
+            return repo.full_name;
+        }
+
+			
+	
+	    
+			</script>
+
+
+
+
+

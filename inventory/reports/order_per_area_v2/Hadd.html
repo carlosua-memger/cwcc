@@ -1,0 +1,297 @@
+<style type="text/css">
+	
+
+
+/*The next 3 sections make the magic happen*/
+.table1 {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.table2 {
+
+display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+
+
+/*Use the following to make sure cols align correctly*/
+
+
+
+
+
+
+
+
+</style>
+
+<div class="row">
+	
+		<!-- BEGIN BORDERED TABLE PORTLET-->
+	
+
+			<label class="col-md-3">Order type:</label>
+				<div class="col-md-5" onchange="get_level1(); ">
+		 			<select name="ordertype" id="ordertype" class="form-control">
+                        <option value="1">Customer Orders</option>
+                        <option value="2">Location Orders</option>
+                        <option value="3">Supplier Orders</option>
+
+            		</select>
+         		</div>
+       
+   
+
+
+
+
+		<div class="portlet box grey-cascade col-md-4">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-coffee"></i>Areas
+				</div>
+				<div class="tools">
+					<a href="javascript:;" class="collapse">
+					</a>
+					<a href="#portlet-config" data-toggle="modal" class="config">
+					</a>
+					<a href="javascript:;" class="reload">
+					</a>
+					<a href="javascript:;" class="remove">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<table id="tbl_l1" class="table table-bordered table-hover table1" cellpadding="0" >
+				<thead>
+				<tr>
+					
+					<th>
+						Name
+					</th>
+					<th>
+						Area
+					</th>
+					<th>
+						Pending Totals
+					</th>
+					
+				</tr>
+				</thead>
+				<tbody id="l1_body">
+				
+				
+			
+				</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- END BORDERED TABLE PORTLET-->
+
+	
+	
+
+		<div class="col-md-8" id="tbl_c3" hidden>
+		<!-- BEGIN BORDERED TABLE PORTLET-->
+			<div class="portlet box grey-cascade" >
+				<div class="portlet-title">
+					<div class="caption">
+						<i class="fa fa-coffee"></i>Pending Orders
+					</div>
+					<div class="tools">
+						<a href="javascript:;" class="collapse">
+						</a>
+						<a href="#portlet-config" data-toggle="modal" class="config">
+						</a>
+						<a href="javascript:;" class="reload">
+						</a>
+						<a href="javascript:;" class="remove">
+						</a>
+					</div>
+				</div>
+
+			<div class="portlet-body">
+				<table id="tbl_l3" class="table table-bordered table-hover" cellpadding="0" >
+					<thead>
+						<tr >
+							
+							<th>
+								Order No.
+							</th>
+							<th>
+								Date
+							</th>
+							<th>
+								Location Name
+							</th>
+							<th>
+								Remarks
+							</th>
+							<th>
+								 Item Name
+							</th>
+							<th>
+								 Ordered
+							</th>
+							<th>
+								 Served
+							</th>
+							
+						</tr>
+					</thead>
+					<tbody id="l3_body">
+					
+					</tbody>
+				</table>
+			</div>
+			</div>
+		<!-- END BORDERED TABLE PORTLET-->
+
+</div>	
+
+
+<script type="text/javascript">
+
+	get_level1()
+	function get_level1() {
+	//	http://localhost/api/ajax/inventory/get-to-json/63/1
+		//$('#tbl_l1').DataTable().destroy();
+		
+		 $('#tbl_l1').DataTable({
+    		
+    		"scrollY": "400px",
+    		"bPaginate": false,
+    		"dom":' <"search"f><"top"l>rt<"bottom"ip><"clear">',
+    		"destroy": true,
+
+
+    	});
+
+		var myVar = document.getElementById('ordertype').value;
+		
+		$.get("/api/ajax/inventory/get-to-json/{{.Org_id}}/1",
+        {
+          sql_str: 'sis_pendingOrder '+myVar+ ', {{.Org_id}}, 0'
+        }
+        ,
+		function(data,status){
+        	console.log(data);
+        	var ht ='';
+        	for (var i = 0; i < data.length; i++) {
+        		ht += ` <tr>
+					
+					<td>
+						<a onclick="javascript:get_level3(`+data[i].id_hideme+`);"> `+data[i].name+` </a>
+					</td>
+					<td>
+						`+data[i].area+`
+					</td>
+					<td>
+						`+data[i].pendingtotals+`
+					</td>
+					
+				</tr>
+			 	 `		
+        		
+        	}
+
+        	
+        $("#l1_body").html(ht);
+       // $('#tbl_l1').DataTable().destroy();
+      
+       
+
+        });
+	}
+
+	
+
+	function get_level3(customerID) {
+	//	http://localhost/api/ajax/inventory/get-to-json/63/1
+		 $("#tbl_c3").hide();	
+		//  $('#tbl_l3').DataTable().destroy();
+		 $('#tbl_l3').DataTable(
+        	//{"ordering": false }
+        	{
+        		"scrollY": "400px",
+        		"bPaginate": false,
+        		//"scrollX": true,
+        		"dom":' <"search"f><"top"l>rt<"bottom"ip><"clear">',
+        		"destroy": true,
+
+        	}	
+    	);
+
+
+
+		  var myVar = document.getElementById('ordertype').value;
+		$.get("/api/ajax/inventory/get-to-json/{{.Org_id}}/1",
+        {
+          sql_str: 'sis_pendingOrder '+myVar+ ', {{.Org_id}},'+customerID
+        }
+        ,
+		function(data,status){
+        	console.log(data);
+        	var ht ='';
+        	for (var i = 0; i < data.length; i++) {
+        		ht += ` <tr>
+					<td>
+						<a onclick="javascript:open_trans(`+data[i].OrderNo+`);"> `+data[i].OrderNo+` </a>
+					</td>
+					<td>
+						`+data[i].TrxDate+`
+					</td>
+					<td>
+						`+data[i].LocationName+`
+					</td>
+					<td>
+						`+data[i].Remarks+`
+					</td>
+					<td>
+						`+data[i].ItemName+`
+					</td>
+					<td>
+						`+data[i].Ordered+`
+					</td>
+					<td>
+						`+data[i].Served+`
+					</td>
+					
+				</tr>
+			 	 `		
+        		
+        	}
+        $("#tbl_c3").show();	
+        $("#l3_body").html(ht);
+
+       
+       
+
+        });
+	}
+
+function open_trans(id) {
+    
+	var myVar = document.getElementById('ordertype').value;
+
+	if (myVar == 1) 
+		{ 
+
+    var url_to_open = "/inventory/customer_order/details?rights={{.Rights}}&ID="+id
+        var myWindow = window.open(url_to_open, "", "width=800,height=500");
+		}
+}
+
+
+$(document).ready(function() {
+    var table = $('#tbl_l3').DataTable();
+
+    new $.fn.dataTable.FixedHeader( table );
+} );
+
+
+</script>

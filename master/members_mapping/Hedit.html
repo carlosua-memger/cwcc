@@ -1,0 +1,556 @@
+{{$Org_id := .Tconf.org_id}}
+
+<head>
+	<!-- <title style="font-size: 16px;">Paired logs Report</title> -->
+	<style type="text/css">
+		table {
+
+			font-size: 10px;
+			font-family: 'Roboto';
+
+
+			border-collapse: collapse;
+			border-spacing: 50px;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+
+
+		}
+
+		table td,
+		table th {
+			max-width: 100px;
+			overflow-x: hidden;
+			overflow-y: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			padding: 3px;
+
+
+		}
+
+		.headercolor {
+			background-color: #EFEBEB
+		}
+
+		.fontroboto {
+
+			font-family: 'Roboto';
+			font-size: 10px;
+		}
+
+		.row.header {
+			font-weight: 900;
+			color: #ffffff;
+			background: #ea6153;
+		}
+
+		.row.green {
+			background: #27ae60;
+		}
+
+		.cell {
+			padding: 1px 10px;
+			display: table-cell;
+		}
+
+		.table {
+			margin: 0 0 40px 0;
+			width: 100%;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+			display: table;
+		}
+
+		@media screen and (max-width: 580px) {
+			.row {
+				padding: 14px 0 7px;
+				display: block;
+			}
+
+			.row.header {
+				padding: 0;
+				height: 6px;
+			}
+
+			.row.header .cell {
+				display: none;
+			}
+
+			.row .cell {
+				margin-bottom: 10px;
+			}
+
+			.row .cell:before {
+				margin-bottom: 3px;
+				min-width: 150px;
+				font-size: 10px;
+				line-height: 10px;
+				font-weight: bold;
+				text-transform: uppercase;
+				color: #969696;
+				display: block;
+			}
+		}
+
+		#amt_generated2 {
+			font-size: 14px;
+		}
+
+		@keyframes blinker {
+			50% {
+				opacity: 0;
+			}
+		}
+
+		.redfont {
+			color: #FF0000;
+		}
+	</style>
+</head>
+
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-file-text"></i>Members Mapping
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+
+
+
+
+				<div class="row">
+					<div class="col-md-6">
+
+
+						<h3 class="form-section">Mapping ID {{.Tconf.id}}</h3>
+
+
+
+						<form id="CreateTransaction" class="form-horizontal" method="Post" onsubmit="return DoEditTransaction()">
+
+
+							<div class="form-horizontal">
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Detected</label>
+									<div class="col-md-8">
+										<input type="text"  class="form-control" name="detected" maxlength="50"  value="{{.Tconf.detected}}" readonly>
+										
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">CHRIS ID
+									</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" name="detected" maxlength="50"  value="{{.Tconf.employeeno}}" readonly>
+
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Full name
+									</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" name="detected" maxlength="50"  value="{{.Tconf.fullname}}" readonly>
+
+									</div>
+								</div>
+
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">CHRIS Code
+									</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" name="detected" maxlength="50"  value="{{.Tconf.employeecode}}" readonly>
+
+									</div>
+								</div>
+
+
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Member</label>
+									<div class="col-md-8">
+										<input type="text" name="member" value="{{.Tconf.member_name}}" placeholder="Search Member" id="member" class="form-control" onchange="memberOnChange();">
+										Leave member entry blank to add as new member.
+											
+
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Partner</label>
+									<div class="col-md-8">
+										<select name="partner" class="form-control" id="partner">
+
+											{{$partner_id  := .Tconf.proposedpartner }}
+											{{range  $key ,$val := .Ls_partner}}
+											{{ $loop_id  := index  $val 0 }}
+											{{if eq $partner_id $loop_id }}
+											<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+											{{else}}
+											<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+											{{end}}
+											{{end}}
+
+										</select>
+									</div>
+								</div>
+
+
+
+							
+
+								
+							</div>
+
+							<!-- <div class="form-actions fluid">
+						<div class="col-md-offset-3 col-md-9">
+							<button type="submit" class="btn blue submit_btn">Save</button>
+							<button class="btn default" onclick="javascript:Navigate('/inventory/supplier_order?rights={{.Rights}}')" type="button">Cancel</button>
+						</div>
+					</div>
+ -->
+
+
+						</form>
+
+
+					</div>
+
+					
+
+				</div>
+
+				<div class="form-actions fluid">
+					<div class="col-md-offset-3 col-md-9">
+						{{if eq .Tconf.Action_button_save "true"}}
+						<button type="submit" id="btnSubmit" class="btn blue submit_btn" onclick="return DoCreateTransaction()">Save</button>
+						{{end}}
+
+						<button class="btn default" id="btnGoBack"
+							onclick="javascript:nav_back('/master/members_mapping?rights={{.Rights}}')" type="button">Go
+							Back</button>
+					
+
+						{{if eq .Tconf.Action_button_post "true"}}
+						<div class="btn-group act_btn">
+							<a class="btn blue" id="btnPost" href="#{{.Tconf.Add_post_button_url}}"
+								onclick="javascript:func_post('{{.Tconf.Add_post_button_url}}');">
+								Post
+							</a>
+						</div>
+						{{end}}
+
+						{{if eq .Tconf.Action_button_cancel "true"}}
+						<div class="btn-group act_btn">
+							<a class="btn blue" id="btnCancel" href="#{{.Tconf.Add_cancel_button_url}}"
+								onclick="javascript:func_cancel('{{.Tconf.Add_cancel_button_url}}');">
+								Cancel
+							</a>
+						</div>
+						{{end}}
+						
+
+
+
+
+					</div>
+				</div>
+
+
+			</div>
+
+
+
+
+
+		</div>
+	</div>
+
+
+
+
+</div>
+
+</div>
+
+
+
+
+<script type="text/javascript">
+
+	function memberOnChange(){
+		if( $('#member').val() !=  "{{.Tconf.proposedmember}}")
+			$("#btnPost").attr("disabled", true);
+		else 
+			$("#btnPost").attr("disabled", false);
+	}
+
+
+
+	//	$("#savings_ledger").hide();
+	//	$("#loans_ledger").hide();
+	$("[name=partner]").select2();
+
+	function repoFormatResult(repo) {
+		//var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div></div>";
+		var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+		return markup;
+	}
+	function repoFormatSelection(repo) {
+		// $("input[name=unit_cost]").val(repo.price);
+		return repo.full_name;
+	}
+
+	$("#member").select2({
+		placeholder: "Search for Members",
+		minimumInputLength: 3,
+		multiple: false,
+		allowClear: true,
+		ajax: {
+			url: "/master/members_search/search/Ajax/SearchNoStatus",
+
+			//url: "/inventory/adjustment_entry/details/Ajax/Ajax_getItem",
+			dataType: "json",
+			quietMillis: 250,
+			data: function (term, page) {
+				return {
+					// search term
+					q: term
+				};
+			},
+			results: function (data, page) {
+				// parse the results into the format expected by Select2.
+				// since we are using custom formatting functions we do not need to alter the remote JSON data
+
+				return { results: data.items };
+			}
+
+
+
+		},
+
+		initSelection: function (element, callback) {
+			// the input tag has a value attribute preloaded that points to a preselected repository's id
+			// this function resolves that id attribute to an object that select2 can render
+			// using its formatResult renderer - that way the repository name is shown preselected
+
+			/*
+			var id = $( element ).val();
+			if ( id !== "" ) {
+				$.ajax( "inventory/location_order/details/Ajax/Ajax_getItem?isbaseonassignid=1&id=" + id, {
+					dataType: "json"
+				}).done( function( data ) {
+					callback( data );
+				});
+			}*/
+			var data = { 'Id': {{.Tconf.proposedmember}}, 'full_name': "{{.Tconf.proposedmember_name}}" }
+		callback(data);
+					
+				},
+
+	formatResult: repoFormatResult,
+		formatSelection: repoFormatSelection,
+			// apply css that makes the dropdown taller
+			dropdownCssClass: "bigdrop",
+				// we do not want to escape markup since we are displaying html in results
+				escapeMarkup: function(m) {
+					return m;
+
+
+
+				}
+			});
+
+	
+
+
+	
+	function DoCreateTransaction() {
+
+		$("#btnSubmit").attr("disabled", true);
+		$("#btnGoBack").attr("disabled", true);
+		$("#btnPost").attr("disabled", true);
+		$("#btnCancel").attr("disabled", true);
+		document.getElementById("btnSubmit").innerHTML = "Saving...";
+
+		var ret_msg = ""
+		
+		var member = $('[name=member]').val();
+		if (member > 0) {
+			member = member;
+
+		} else {
+			member = 0;
+		}
+		$.get("/json_func",
+			{
+				//qdata : "Branch_Save 'Add','programmer',1,0,'"+$('[name=sup_name]').val()+"' ,'"+$('[name=sort]').val()+"' ,'"+$('[name=remarks]').val()+"'"
+				qdata: "EOD_CHRISMemberToMap_SaveEdit '{{.Tconf.username}}',{{.Tconf.id}}, " + $('[name=partner]').val() + ", " + member +  ""
+
+
+
+			}
+			,
+			function (data, status) {
+				//json_personnel = data
+				if (data != null) {
+					for (var i = 0; i < data.length; i++) {
+						//alert(data[i][0]);
+
+						ret_msg = data[i][1]
+						if (data[i][1] == "Success") {
+							//console.log(data[i][0])
+							//alert(ret_msg)
+							//$('#basic').modal('hide')
+							//dtbl()
+							//console.log("success here")
+							//$("#item_tagsdata").show()
+							//$(".submit_btn").prop('disabled', true);
+							$(".c_suprec_id").val(data[i][0]);
+							alert("Save Success");
+							GotoList();
+						//	PageRefresher("1")
+							//return false;
+						} else {
+							alert(ret_msg);
+						}
+
+					}
+				}
+			});
+
+		return false;
+		/*$('#basic').modal('hide')
+	dtbl()
+	return false*/
+
+	}
+
+	function GotoList() {
+		Navigate('/master/members_mapping?rights={{.Tconf.rights}}');
+	}
+
+
+
+
+
+
+
+
+
+	function func_post(a, b) {
+		if (confirm("You are about to post this transaction") == true) {
+
+			$("#btnSubmit").attr("disabled", true);
+			$("#btnGoBack").attr("disabled", true);
+			$("#btnPost").attr("disabled", true);
+			$("#btnCancel").attr("disabled", true);
+			document.getElementById("btnPost").innerHTML = "Posting...";
+
+
+			var htdata = '<div class="upload_top_info">'
+			htdata += ' <div class="upload_jif" style="background: url(/src/metronic_3.1.2/images/throbber.gif) center center no-repeat; height: 15px; width: 18px; display: inline-block;">'
+
+			htdata += '</div>'
+			htdata += '<div class="upload_info" style="display: inline-block;">We are now posting your records. Please wait for a moment.</div>'
+			htdata += '</div>'
+			$(".progressclass").html(htdata)
+			$.get(a,
+				function (data, status) {
+					console.log(data)
+					$(".progressclass").html("")
+					// if(data.Message.includes("Success")){
+					if (data[0][1] == 'Success') {
+						alert("Posting Success");
+						GotoList();
+
+
+					} else {
+						alert("Unable to Post: " + data[0][1]);
+						//PageRefresher("1");
+					}
+
+				}
+			);
+			return false
+		} else {
+		//	PageRefresher("1");
+		}
+	}
+
+	function func_cancel(a, b) {
+		if (confirm("You are about to cancel this transaction") == true) {
+
+			$("#btnSubmit").attr("disabled", true);
+			$("#btnGoBack").attr("disabled", true);
+			$("#btnPost").attr("disabled", true);
+			$("#btnCancel").attr("disabled", true);
+			document.getElementById("btnCancel").innerHTML = "Cancelling...";
+
+			var htdata = '<div class="upload_top_info">'
+			htdata += ' <div class="upload_jif" style="background: url(/src/metronic_3.1.2/images/throbber.gif) center center no-repeat; height: 15px; width: 18px; display: inline-block;">'
+
+			htdata += '</div>'
+			htdata += '<div class="upload_info" style="display: inline-block;">  Where are now canceling your records.. please wait for a moment</div>'
+			htdata += '</div>'
+			$(".progressclass").html(htdata)
+			$.get(a,
+				function (data, status) {
+					$(".progressclass").html("")
+					//if(data.Message.includes("Success")){
+					if (data[0][1] == 'Success') {
+
+
+
+						alert("Cancel Success");
+						PageRefresher("1");
+
+					} else {
+						alert("Unable to Cancel: " + data[0][1]);
+						PageRefresher("1");
+
+					}
+
+				}
+			);
+			return false
+		} else {
+			PageRefresher("1");
+		}
+	}
+
+	function PageRefresher(lev) {
+		
+			$.get("/transaction/loan_applications/HEditHandler?rights={{.Tconf.rights}}&h_id={{.Tconf.id}}",
+				function (data, status) {
+					$("#ContentID").html(data);
+					//$('#basic').modal('hide')
+				}
+			);
+		
+	}
+
+	
+
+
+
+
+
+</script>

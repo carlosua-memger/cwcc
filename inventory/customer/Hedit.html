@@ -1,0 +1,439 @@
+{{$Org_id := .Conf.org_id}}
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Edit Customer Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+
+
+
+
+
+<div class="row">
+<div class="col-md-6">
+<h3 class="form-section">Customer info ID = {{.Conf.item_id}}</h3>
+
+
+
+<form id="CreateTransaction" class="form-horizontal"  method="Post" onsubmit="return DoEditTransaction()">
+	
+			<div class="form-horizontal">
+				<div class="form-group">
+					<label class="col-md-3 control-label">Name<span class="required" aria-required="true">*</span>
+					</label>
+					<div class="col-md-8">
+						<input type="text" name="name" value="{{.Conf.item_name}}" placeholder="Name" id="inputName" class="form-control" maxlength="100" required>
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Contact Person
+					</label>
+					<div class="col-md-8">
+						<input type="text" name="contactperson" value="{{.Conf.item_contactperson}}" placeholder="Contact Person" id="inputContactPerson" class="form-control" maxlength="100" rows="4">
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">TIN
+					</label>
+					<div class="col-md-8">
+						<input type="text" name="tin" value="{{.Conf.item_tin}}" placeholder="TIN" id="inputTin" class="form-control" maxlength="50">
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Address
+					</label>
+					<div class="col-md-8">
+						<input type="text" name="address" value="{{.Conf.item_address}}" placeholder="Address" id="inputAddress" class="form-control" maxlength="100" rows="4">
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+					</div>
+				</div>
+
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Courier</label>
+					<div class="col-md-8">
+						<select name="courier" class="form-control" > 
+						 	{{$item_courierID  := .Conf.item_courier }}
+						 	{{.Conf}}
+						 	{{range  $Ls_courier,$val := .Ls_courier}}
+							{{ $loop_id  := index  $val 0 }}
+							{{if eq $item_courierID $loop_id }}	
+						 		<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+						 	{{else}}	
+						 		<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+							{{end}}
+							{{end}}
+
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Area</label>
+					<div class="col-md-4">
+					<input type="text" name="area" placeholder="Area" id="area"  value = "{{.Conf.item_area}}" class="form-control input-large  createAct" required>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Contact Number
+					</label>
+					<div class="col-md-8">
+						<input type="text" name="contactnumber" value="{{.Conf.item_contactno}}" placeholder="Contact Number" id="inputContactNumber" class="form-control" maxlength="200" rows="4">
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Email
+					</label>
+					<div class="col-md-8">
+						<input type="email" name="email" value="{{.Conf.item_email}}" placeholder="Email" id="inputEmail" class="form-control" maxlength="50">
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Credit Limit
+					</label>
+					<div class="col-md-8">
+						<input type="text" name="creditlimit" value="{{.Conf.item_creditlimit}}" placeholder="Credit Limit" id="inputArea" class="form-control createAct num_f" maxlength="50">
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+					</div>
+				</div>
+
+
+				<div class="form-group">
+							<label class="col-md-3 control-label">Default Agent</label>
+							<div class="col-md-8">
+								<select name="soldby" class="form-control" > 
+								 	{{$orgmem_id  := .Conf.item_member }}
+								 	{{range  $key ,$val := .Ls_orgmem}}
+									{{ $loop_id  := index  $val 0 }}
+									{{if eq $orgmem_id $loop_id }}	
+								 		<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+								 	{{else}}	
+								 		<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+									{{end}}
+									{{end}}
+
+								</select>
+							</div>
+						</div>
+									
+				<div class="form-group">
+					<label class="col-md-3 control-label">Remarks</label>
+					<div class="col-md-8">
+						
+					<!-- 	<input type="text" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct"> -->
+						<textarea name = "remarks"  class="form-control createAct">{{.Conf.item_remarks}}</textarea>
+					</div>
+				</div>
+				
+			</div>
+			
+<div class="form-actions fluid">
+		<div class="col-md-offset-3 col-md-9">
+			<button type="submit" class="btn blue submit_btn">Update</button>
+			<button class="btn default" onclick="javascript:nav_back('/inventory/customer?rights={{.Conf.rights}}')" type="button">Go back</button>
+		</div>
+	</div>
+		</form>
+	
+</div>	
+
+			
+<div class="col-md-6">
+	
+<form id="item_tagsdata" class="form-horizontal"  method="Post" onsubmit="return Dobatchsave()" >
+			<input type="hidden" name="item_id" class="c_item_id" value="{{.Conf.item_id}}">
+
+				<table class="table table-bordered table-striped tbl_dtls" width="50%"  >
+					<tbody>
+					{{range  $key,$val := .Arr_itemtag}}
+						<tr>
+							<td style="width:15%">
+								 {{ index  $val 1}}
+							</td>
+							<td style="width:50%">
+								{{$datatype  := index  $val 3 }}
+								{{if eq $datatype `String` }}
+									<input type="text" class="value_input" name="value_input" placeholder="value" id="autocomplete_{{ index  $val 0}}" value="{{ index  $val 4}}">
+								{{end}}
+								{{if eq $datatype `Number` }}
+									<input type="number" name="value_input" class="value_input" placeholder="value" value="{{ index  $val 4}}">
+								{{end}}
+								
+								
+								<input type="hidden" name ="tag" value="{{ index  $val 0}}">
+								<!-- <a onclick="javascript:func_sync( 0 ,{{ index  $val 0}},this,event );"> save</a> -->
+							</td>
+						
+						</tr>
+					
+					<script type="text/javascript">
+					{{$tagid := index  $val 0}}
+					//var json_data_$tagid = ["a","a2","a3","a3","a4","a5","a6","a7","1","101",]
+
+					
+					var  json_data_{{$tagid}} = [""]    
+			       
+			        {{$retdata := Sql_list "sis_custags_get 1, 3, 0" $Org_id $tagid}}
+			        
+
+			        {{range  $kkey,$vval := $retdata}}
+						json_data_{{$tagid}}.push( "{{ index  $vval 0}}" )
+					{{end}}	
+
+			        $('#autocomplete_{{$tagid}}' ).autocomplete({
+			            	source: json_data_{{$tagid}}
+			            });
+					</script>
+					
+					{{end}}
+					</tbody>
+				</table>
+
+
+	<!-- 			
+		<div class="form-actions fluid">
+				<div class="col-md-offset-3 col-md-9">
+					<button type="submit" class="btn blue submit_btn">Update</button>
+					<button class="btn default" onclick="javascript:Navigate('/inventory/customer?rights={{.Conf.rights}}')" type="button">Cancel</button>
+
+				</div>
+			</div>	 -->
+		
+	
+						
+		</form>
+
+</div>
+
+
+</div>
+
+		
+
+</div>
+
+
+
+
+
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	
+</div>
+
+
+		
+			<script type="text/javascript">
+			$('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+            $('input[name=name]').focus()
+			//$("[name=name] , [name=customer]").select2();
+			
+
+            function DoEditTransaction(){
+				$.get("/json_func",
+                    {
+                    	//qdata : "Branch_Save 'Edit','programmer',1, "+$('[name=h_id]').val()+" ,'"+$('[name=sup_name]').val()+"' ,'"+$('[name=sort]').val()+"' ,'"+$('[name=remarks]').val()+"'"
+                    	qdata : "SIS_Customer_Save 'Edit', '{{.Conf.username}}', '{{.Conf.item_id}}' , {{.Conf.org_id}},'"+$('[name=name]').val()+"', '"+$('[name=contactperson]').val()+"','"+$('[name=tin]').val()+"','"+$('[name=address]').val()+"','"+$('[name=area]').val()+"','"+$('[name=email]').val()+"','"+$('[name=contactnumber]').val()+"','"+$('[name=creditlimit]').val()+"',"+$('[name=courier]').val()+", '"+$('[name=remarks]').val()+"', '"+$('[name=soldby]').val()+"'"
+                    
+                    }
+                    ,
+                    function(data,status){
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									//alert(ret_msg)
+									
+									$('#basic').modal('hide')
+					            	//dtbl()
+					            	console.log("success here")
+									Dobatchsave()
+									//return false;
+			                    }else{
+			                    	console.log("fail")
+			                    	alert(ret_msg)
+			                    }
+		                    }
+	                    }
+                    });	
+					return false;
+			}
+
+			function func_sync(item , tag , t,event){
+				//console.log($(event.target).closest("tr").find('.value_input').val())
+
+				var item_id =  $(".c_item_id").val();
+				var text_val =  $(event.target).closest("tr").find('.value_input').val();
+				var text_val_remarks =  $(event.target).closest("tr").find('.value_remarks').val();
+
+				$.get("/json_func",
+                    {
+                       qdata : "SIS_custags_save 'Update', '{{.Conf.username}}', {{.Conf.org_id}}, "+item_id+", "+tag+", '"+text_val+"', '"+text_val_remarks+"'"
+					}
+                    ,
+                    function(data,status){
+                    	console.log(data)
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									console.log(data[i][0])
+									alert(ret_msg)
+									
+								//return false;
+			                    }else{
+			                    	alert(ret_msg)
+			                    }
+		                         
+		                    }
+	                    }
+                    });
+
+			}
+
+			function repoFormatResult( repo ) {
+    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+    return markup;
+}
+			
+			function Dobatchsave(){
+				$.post("/inventory/customer/HaddTagHandler",
+                    $("#item_tagsdata").serialize()
+					,
+                    function(data,status){
+                    	var errcount = 0 
+                    	if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        
+		                        if (data[i][0]=="HasError"){
+									errcount = errcount + 1
+								//return false;
+			                    }
+			                }
+						}
+						if (errcount>0){
+	                    	alert(errcount)
+	                    	alert("Opsss something went wrong")
+                        }else{
+                        	alert("Save Success")
+                        	nav_back('/inventory/customer?rights={{.Conf.rights}}')
+                        } 
+                        
+                    });
+
+				return false;
+
+
+			}
+
+		$('.num_f').keyup(function(e) {
+		var regex = /^\d+(\.\d{0,2})?$/g;
+		if (!regex.test(this.value)) {
+		    this.value = '';
+		}
+	});
+
+		function repoFormatSelection( repo ) {
+            return repo.full_name;
+        }
+
+	$( "#area" ).select2({
+    placeholder: "Search for Area",
+     minimumInputLength: 3,
+        multiple: false,
+        allowClear: true,
+    ajax: {
+        url: "/Ajax/GetPostalcode",
+        dataType: "json",
+        quietMillis: 250,
+        data: function( term, page ) {
+            return {
+                // search term
+                q: term
+            };
+        },
+        results: function( data, page ) {
+                // parse the results into the format expected by Select2.
+                // since we are using custom formatting functions we do not need to alter the remote JSON data
+                return { results: data.items };
+        }
+        
+    },
+	initSelection: function( element, callback ) {
+		// the input tag has a value attribute preloaded that points to a preselected repository's id
+		// this function resolves that id attribute to an object that select2 can render
+		// using its formatResult renderer - that way the repository name is shown preselected
+		var id = $( element ).val();
+		if ( id !== "" ) {
+			$.ajax( "/Ajax/GetPostalcode?id=" + id, {
+				dataType: "json"
+			}).done( function( data ) {
+				callback( data );
+			});
+		}
+	},
+
+    
+    formatResult: repoFormatResult,
+    formatSelection: repoFormatSelection,
+    // apply css that makes the dropdown taller
+    dropdownCssClass: "bigdrop",
+    // we do not want to escape markup since we are displaying html in results
+    escapeMarkup: function( m ) {
+        return m;
+    }
+});
+			
+			</script>
+	

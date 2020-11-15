@@ -1,0 +1,371 @@
+<!-- <Form> -->
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+		<form id="transdetnew" method="Post" onsubmit="javascript: return DocreateTrasDet()">
+			<input type="hidden" name="hdr_id" value="{{.Tconf.hdr_id}}">	
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">New Transaction Details*</h4>
+				</div>
+				<!-- <div class="modal-body">
+				 -->	 <!-- modal data here -->
+
+					<div class="form-horizontal">
+							<div class="form-group">
+								<label class="col-md-3 control-label">Item</label>
+								<div class="col-md-4">
+									<input type="text" name="item" placeholder="Item" id="item"  class="form-control"  required>
+								</div>
+
+								<div class="col-md-4">
+									<a  class="btn green act_btn"onclick="javascript:Modalfunc_show_prev(this);">
+                   	 				show previous prices<i class="fa fa-plus"></i></a>
+
+								</div>
+									
+							
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Qty</label>
+									<div class="col-md-4">
+										<input type="text" name="qty" placeholder="Qty"  maxlength="8" value="1" class="form-control createAct num_f" onkeypress='return numbersOnly(this,event,false,false);' required>
+									</div>
+									
+							</div>		
+							<div class="form-group">
+								<label class="col-md-3 control-label">Unit Price</label>
+									<div class="col-md-4">
+										<input type="text" name="unit_price" placeholder="Unit Price"  value="00.00" maxlength="12" class="form-control createAct num_f" onkeypress='return numbersOnly(this,event,true,false);'  required>
+										
+									</div>
+
+									<div class="col-md-4">
+									<label id="message"></label>
+
+								</div>
+									
+							</div>	
+							<div class="form-group">
+								<label class="col-md-3 control-label">Term</label>
+									<div class="col-md-4">
+										<input type="text" name="term" placeholder="Term"  maxlength="8" value="0" class="form-control createAct num_f" onkeypress='return numbersOnly(this,event,false,true);' >
+									</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label">Discount %</label>
+									<div class="col-md-6 form-inline">
+										<label>1</label>
+										<input type="text" name="discount_per_1" placeholder="Discount (1) %"  value="0" maxlength="3" class="form-control input-xsmall createAct num_f" onkeypress='return numbersOnly(this,event,true,false);'>
+										<label>2</label>
+										<input type="text" name="discount_per_2" placeholder="Discount (2) %"  value="0" maxlength="3" class="form-control input-xsmall createAct num_f	" onkeypress='return numbersOnly(this,event,true,false);' >
+										<label>3</label>
+										<input type="text" name="discount_per_3" placeholder="Discount (3) %"  value="0" maxlength="3" class="form-control input-xsmall createAct num_f" onkeypress='return numbersOnly(this,event,true,false);' >
+									</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-md-3 control-label">Fixed Discount Amount</label>
+									<div class="col-md-4">
+										<input type="text" name="discount_amt" placeholder="Discount Amount"  value="00.00" maxlength="12" class="form-control createAc num_f" onkeypress='return numbersOnly(this,event,true,false);'>
+									</div>
+							</div>
+
+							<div class="form-group">
+					<label class="col-md-3 control-label">Tax<span class="required" aria-required="true"></span>
+					</label>
+					<div class="col-md-8 form-inline">
+					<label>Percent</label>
+						<input type="text" name="tax_per"  placeholder="" class="form-control input-xsmall createAct num_f" value="0" maxlength="50" onkeypress='return numbersOnly(this,event,true,false);'>
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+					<label>&nbsp;Amount </label>
+						<input type="text" name="tax_amt"  placeholder="" class="form-control input-xsmall createAct num_f" value="00.00" maxlength="50" onkeypress='return numbersOnly(this,event,true,false);'>
+					</div>
+				</div>
+								
+								<div class="form-group">
+					<label class="col-md-3 control-label">Commission<span class="required" aria-required="true"></span>
+					</label>
+					<div class="col-md-8 form-inline">
+					<label>Percent</label>
+						<input type="text" name="commission_per"  placeholder="" class="form-control input-xsmall createAct num_f" value="0" maxlength="50" onkeypress='return numbersOnly(this,event,true,false);'>
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+					<label>&nbsp;Amount </label>
+						<input type="text" name="commission_amt"  placeholder="" class="form-control input-xsmall createAct num_f" value="00.00" maxlength="50" onkeypress='return numbersOnly(this,event,true,false);'>
+					</div>
+				</div>
+											
+
+							<div class="form-group">
+								<label class="col-md-3 control-label">Remarks</label>
+									<div class="col-md-4">
+										<textarea name="remarks" placeholder="remarks"  maxlength="200" class="form-control createAct"></textarea>
+									</div>
+							</div>
+							<div class="form-group val_err" hidden>
+								<label class="col-md-10 control-label" style="color:red;">
+							opps something is missing</label>
+							</div>
+										  									
+ 					 <!-- end modal data here -->
+				<!-- </div> -->
+				<div class="errorDv">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn default" data-dismiss="modal">Go Back</button>
+					<button type="submit" class="btn blue">Save(Crtl+s)</button>
+					<button type="button" class="btn blue btn_sa" onclick="javascript:DocreateTrasDet('AS');">Save & Add new(ctl+a)</button>
+				</div>
+
+		<!--  -->
+				<!-- /.modal-content -->
+		</form>
+	</div>
+		<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->					
+	
+
+
+
+
+<script type="text/javascript">
+ 	$('.form_datetime').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+	
+
+ 	//num_val_init() //located on mainframe	
+
+
+	var rights = '{{.Tconf.rights}}' 
+	var assignmentID = '{{.Tconf.location}}' 
+			
+
+	function Modalfunc_show_prev(a,v){
+        $.get("/inventory/customer_order/details/Show_prev_price",
+        {
+          customer: '{{.Tconf.customer}}',
+          item: 	$("input[name=item]").val(),
+          location: '{{.Tconf.location}}'
+
+        }
+        ,
+
+        function(data,status){
+            $("#large").html(data);
+            $('#large').modal({
+            	show : true ,
+		    	backdrop: 'static'
+			});
+        });
+    }
+
+	function DocreateTrasDet(a){
+				if(!$('#transdetnew')[0].checkValidity()){
+					$('.val_err').show();
+				 	return false;
+				}
+				$( ".errorDv" ).html("")
+				if ($("input[name=qty]").val()<=0 || $("input[name=qty]").val() % 1 != 0  ){
+					var htdata  = '<div class="alert alert-danger"> <strong>Error: </strong>  Invalid Qty  (must be greater than 0 or whole number)</div>'
+					$( ".errorDv" ).html(htdata)
+					return false;
+				}
+				if ($("input[name=unit_cost]").val()<=0){
+					var htdata  = '<div class="alert alert-danger"> <strong>Error: </strong>  Invalid Unit Price  (must be greater than 0)</div>'
+					$( ".errorDv" ).html(htdata)
+					return false;
+				}
+				$.post("/inventory/customer_order/details/DaddHandler",$( "#transdetnew" ).serialize()
+		        ,
+		        function(data,status){
+		        	alert(data[1])
+		            if(data[1]=='Success'){
+		            	
+		            	$("input[name=item]").select2("val", ""); 
+		            	
+		            	if(a!="AS"){
+		            		$('#basic').modal('hide')
+			            	PageRefresher('2');
+			            }else{
+			            	$( "#item" ).select2('open')
+			            	$('[name=qty]').val("1")
+ 							$('[name=unit_price]').val("00.00")
+ 							$('[name=term]').val("0")
+ 							$('[name=discount_per_1]').val("0")
+ 							$('[name=discount_per_2]').val("0")
+ 							$('[name=discount_per_3]').val("0")
+ 							$('[name=discount_amt]').val("00.00")
+ 							$('[name=tax_per]').val("00.00")
+ 							$('[name=tax_amt]').val("00.00")
+ 							$('[name=commission_per]').val("00.00")
+ 							$('[name=commission_amt]').val("00.00")
+ 							$('[name=remarks]').val("")
+			            }	
+		            }
+		        });
+	 			return false
+			}
+	
+	function repoFormatResult( repo ) {
+	    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div></div>";
+
+	    return markup;
+	}
+	function repoFormatSelection( repo ) {
+		$("input[name=discount_per_1]").val(repo.discount_per_1);
+        $("input[name=discount_per_2]").val(repo.discount_per_2);
+        $("input[name=discount_per_3]").val(repo.discount_per_3);
+        $("input[name=discount_amt]").val(repo.discount_amt);
+        $("input[name=net]").val(repo.price);
+        return repo.full_name;
+    }
+    
+		$( "#item" ).select2({
+		    placeholder: "Search for Items",
+		    minimumInputLength: 2,
+		    multiple: false,
+		    allowClear: true,
+		    ajax: {
+		        url: "/inventory/customer_order/details/Ajax/Ajax_getItem?assignmentID="+assignmentID+"&isbaseonassignid=1&hdr_id='{{.Tconf.hdr_id}}'",
+
+
+            	//url: "/Ajax/GetMembers?assignmentID="+assignmentID+"&isbaseonassignid=1",
+
+
+		        dataType: "json",
+		        quietMillis: 250,
+		        data: function( term, page ) {
+		            return {
+		                // search term
+		                q: term,
+
+		            };
+		        },
+		        results: function( data, page ) {
+		                // parse the results into the format expected by Select2.
+		                // since we are using custom formatting functions we do not need to alter the remote JSON data
+		                return { results: data.items};
+		        }
+		        
+		    },
+		    
+		    formatResult: repoFormatResult,
+		    formatSelection: repoFormatSelection,
+		    // apply css that makes the dropdown taller
+		    dropdownCssClass: "bigdrop",
+		    // we do not want to escape markup since we are displaying html in results
+		    escapeMarkup: function( m ) {
+		        return m;
+		    }
+		});		
+	
+	
+
+
+    setTimeout(function (){
+        $( "#item").select2('open')
+    	
+    	var  termdata = [""]    
+			termdata.push("0")
+			termdata.push("30")
+			termdata.push("60") 
+			termdata.push("90") 
+		$('[name=term]' ).autocomplete({
+        	source: termdata
+        });
+
+		$("[name=term]").focus(function(){
+		$("[name=term]").autocomplete("search","0");
+	});
+    }, 1000);
+
+    
+
+	
+	$('.btn_sa').on('keydown', function(e) {
+	    if (e.which == 13) {
+	        e.preventDefault();
+	        DocreateTrasDet('AS')
+	    }
+	});
+
+	
+	$("input").keypress(function(event) {
+		console.log(event.which)
+	    if ((event.which == 115 && event.ctrlKey) && !(event.which == 19)) {
+	    //alert("Ctrl-S pressed");
+	    DocreateTrasDet("")
+	    event.preventDefault();
+	    return false;
+	    }
+	    if ((event.which == 97 && event.ctrlKey) && !(event.which == 19)) {
+           DocreateTrasDet('AS')
+		   event.preventDefault();
+		   return false;
+        }
+
+	});
+
+		
+	
+	var ret_msg= ""
+			$("#item").change(function () {
+					$.get("/json_func",
+                    {
+                       qdata : "SIS_CusOrd_Misc 6 , '{{.Tconf.Org_id}}' , "+$('[name=item]').val()+", '{{.Tconf.hdr_id}}'"
+
+                    }
+                    ,
+                    function(data,status){
+                        if( data!=null){
+                        	
+                        var uprice = "";
+                        	var message= "";
+                        	var comm_per = "";
+                        	var comm_amt = "";
+                        	var tax_per = "";
+                        	var tax_amt = "";
+
+		                    for (var i = 0; i < data.length; i++) {
+		                    	 	ret_msg = data[i][0]
+					            	//$("input[name=customer]").val(ret_msg);
+					            	//console.log(alert(data[i][0]))
+			            	
+					            	uprice = data[i][1]
+					            	message = data[i][3]
+					            	comm_per = data[i][4]
+                        			comm_amt = data[i][5]
+                        			tax_per = data[i][6]
+                        			tax_amt = data[i][7]
+		                     		console.log(uprice)  
+		                     		console.log(message)   
+
+		                    }
+		                    $("[name=unit_price]").val(uprice).trigger("change");
+		                     $('#message').text(message);
+		                     $("[name=tax_per]").val(tax_per).trigger("change"); 
+		                    $("[name=tax_amt]").val(tax_amt).trigger("change"); 
+		                    $("[name=commission_per]").val(comm_per).trigger("change");   
+		                    $("[name=commission_amt]").val(comm_amt).trigger("change"); 
+		                     
+		                     
+
+	                    }
+                    });	
+					
+                    return false;
+			});
+						
+
+	
+        
+
+</script>

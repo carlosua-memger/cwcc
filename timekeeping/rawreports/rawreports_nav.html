@@ -1,0 +1,124 @@
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Raw Reports
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<form id="CreateTransaction" class="form-horizontal" target ="_blank" action="/timekeeping/rawreports/do_print/" method="Get">
+
+					<div class="form-body">
+							
+						<div id="warnerr" class="Metronic-alerts alert alert-warning fade in" hidden>
+							date range greater than 16 days	
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Report Name:<span class="required" aria-required="true">
+								* </span></label>
+								<div class="col-md-4">
+								<select name="reportname" class="form-control input-xlarge dr-js" required>
+								{{range $assignlist := .RawreportsList }}
+								<option  value="{{$assignlist.Sql}}">{{$assignlist.Reportname}}</option>
+								{{end}}
+									</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Date From :<span class="required" aria-required="true">
+								* </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="datefrom" id="datefrom"class="form-control date-picker" placeholder="Date from" maxlength="50" Required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Date To :<span class="required" aria-required="true">
+								* </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="dateto" id="dateto"class="form-control date-picker" placeholder="Date to:" maxlength="50" Required>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Assignment</label>
+								<div class="col-md-4">
+								<select name="lbr_assign" id="assignment" class="form-control input-xlarge dr-js clsAssign" required>
+								<option value="0">All</option>	 
+								{{range $assignlist := .LBR_Assign_Get }}
+								<option  value="{{$assignlist.Id}}">{{$assignlist.Name}}</option>
+								{{end}}
+									</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Member</label>
+								<div class="col-md-4">
+								<select name="member" id ="member"class="form-control input-large dr-js" required> 
+								<option value="0">All</option>	
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Export type:</label>
+							<div class="col-md-4">
+								<select name="export_type" class="form-control input-large dr-js"> 
+								<option value="print">Print</option>
+								<option value="excel">Excel</option>
+								<option value="word">Word</option>
+								<option value="pdf">PDF</option>	
+								</select>
+							</div>
+						</div>
+
+						<div class="form-actions fluid">
+							<div class="col-md-offset-3 col-md-9">
+								<button class="btn btn-circle blue" type="submit">Print</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+			$('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+			
+			$(".dr-js").select2();
+			$(".clsAssign").on("select2-close", function() { 
+				console.log( $('#datefrom').val() + "&dateto="+$('#dateto').val() )
+				$.get("/timekeeping/CreateTransactionDetails/ajaxgetmemberbyassigment?assigmentID="+this.value +"&datefrom="+ $('#datefrom').val() + "&dateto="+$('#dateto').val() ,
+            		function(data,status){
+                   		var ht ='<option value="0">All</option>'
+                   		for (var i = 0; i < data.length; i++) { 
+						    ht+='<option value="'+data[i].Member_id+'">'+data[i].Name+'</option>'
+						}
+						$('#member').html(ht);
+				        $('#member').select2();	
+					}
+                );
+			})
+		$('#drpmember').select2("val","");	
+
+</script>

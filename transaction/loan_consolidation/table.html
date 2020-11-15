@@ -1,0 +1,452 @@
+    <style type="text/css">
+    tr.hilight {
+    background: #6FB1B1;
+    }
+    td.hilight {
+    background: #6FB1B1 ;
+    }
+   .ipt {
+            width: 30px;
+        }
+    .ipt_r {
+            width: 50px;
+        }
+    .ipt_ref {
+            width: 100px;
+    }
+    .dtl_h {
+        border-bottom: 4px solid #35AA47;
+        width: 65px;
+        margin-bottom: 13px;
+    }       
+    .tot_align_right {
+        text-align: right
+    }    
+    </style>
+    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+    
+    
+
+
+
+    <div class="portlet box grey-cascade" id="dpanel">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-globe"></i>{{.Tconf.Panel_name}}
+            </div>
+            <div class="tools">
+                <a href="javascript:;" class="collapse">
+                </a>
+                <a href="#portlet-config" data-toggle="modal" class="config">
+                </a>
+                <a href="javascript:;" class="reload">
+                </a>
+                <a href="javascript:;" class="remove">
+                </a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            {{if eq .Tconf.ismoreinfo "true"}}
+            
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">    
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Transaction ID:</label>
+                                <p class="control-label col-md-8">{{.Tconf.la_id}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Status:</label>
+                                <p class="control-label col-md-8">{{.Tconf.la_status}}</p>
+                            </div>
+                        </div>
+
+                        <div class="row">    
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">Member Name:</label>
+                                    <p class="control-label col-md-8">{{.Tconf.la_member_name}}</p>
+                                </div>
+                            </div>
+                        <div class="row">    
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Transaction Date:</label>
+                                <p class="control-label col-md-8">{{.Tconf.la_trandate}}</p>
+                            </div>
+                        </div>
+                        <div class="row">    
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Loan Type:</label>
+                                <p class="control-label col-md-8">{{.Tconf.la_loantype_name}}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="row">    
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Amount:</label>
+                                <p class="control-label col-md-8">{{.Tconf.la_amt}}</p>
+                            </div>
+                        </div>
+                        
+                      
+                         <div class="row">    
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Remarks:</label>
+                                <p class="control-label col-md-8">{{.Tconf.la_remarks}}</p>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+                   
+                    
+                   
+                        
+                       
+                    <!--/span-->
+                </div>
+                <hr>
+            {{end}}    
+            <div class="table-toolbar">
+
+                {{if eq .Tconf.Archive "true"}}
+                    <div class="col-md-2" style="margin-left: -15px;">
+                    <select name="arc" id="arc" class="form-control">
+                        <option value="0">Open</option>
+                        <option value="1">Archive</option>
+                    </select>
+                    </div>
+                {{end}}
+
+                {{if eq .Tconf.Add_back_button "true"}}
+                    <div class="btn-group">
+                        <a Class="btn blue afjaxify" href="#{{.Tconf.ActionCol_back_url}}" onclick="javascript:Back('{{.Tconf.ActionCol_back_url}}');">
+                        <i class="fa fa-backward"></i> Back 
+                        </a>
+
+                    
+                    </div>
+                {{end}}
+                
+                
+                {{if eq .Tconf.Add_new_button "true"}}
+                <div class="btn-group act_btn" >
+                    <a class="btn blue" href="#{{.Tconf.Add_new_button_url}}" onclick="javascript:Navigate('{{.Tconf.Add_new_button_url}}');">
+                    Add New <i class="fa fa-plus"></i>
+                    </a>
+
+                  
+                         
+
+                   <!--  <a  class="btn green act_btn" data-toggle='modal' href='#basic'  onclick="javascript:Modalfunc('{{.Tconf.Add_new_button_url}}{{.Tconf.hdr_id}}');">
+                    Add New <i class="fa fa-plus"></i>
+                     </a> -->
+
+                </div>
+                {{end}}
+
+                {{if eq .Tconf.Add_new_button_details "true"}}
+                {{if eq .Tconf.isposted "0"}}
+                    <a  class="btn blue act_btn" data-toggle='modal' href='#basic'  onclick="javascript:Modalfunc('{{.Tconf.Add_new_button_url}}');">
+                    Add New <i class="fa fa-plus"></i>
+                     </a>
+                    
+                     
+                     <a  class="btn blue act_btn" data-toggle='modal' href='#basic'  onclick="javascript:Modalfunc('{{.Tconf.Download_LoanBal_url}}');">
+                        Download Loan
+                             </a>  
+                             {{end}}
+
+                   
+                     
+                {{end}}
+                
+                
+              
+
+
+                
+               
+
+               
+                
+                
+
+
+            <div class="error_section">
+               
+            </div>
+
+
+            
+
+
+            <div class ="progressclass">
+
+               <!--  <div class="progress"> <div class="progress-bar progress-bar-striped active uploadprog" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 10%"> <span class="sr-only">45% Complete</span></div></div> -->
+
+            </div>
+            <div class ="progressCountclass"></div>
+            
+             
+            <!-- <div>pushing...</div> -->
+            
+        <table id="example1" class="table table-bordered " cellspacing="0" width="100%">
+            <thead>
+                     <!-- <tr style="border-bottom: 1px solid #DDD;">
+                    <th colspan="2" >HR Information</th>
+                    <th colspan="2">Contact</th>
+                </tr> -->
+                <tr>
+                    {{ range $index, $elmt := .Headercol}}
+                    <th>{{$elmt}}</th>
+                    {{end}}
+                </tr>
+            </thead>
+            <tfoot>
+                    
+                    {{if eq .Tconf.withtotal "true"}}
+                    <tr >
+                        <th colspan="2" >TOTAL</th>
+                         <th align="right" class="c_t_tprice tot_align_right">000.00</th>
+                        <th></th>
+                       
+                         
+                    </tr>
+                    {{end}}
+                </tfoot>
+           
+        </table>
+
+        
+        
+    </div>
+</div>
+
+ <script>
+
+        function digits (number) { 
+            var n = parseFloat(number).toFixed(2)
+            return Number(n).toLocaleString('en');
+        }
+ 
+
+        back_storege("_LoanApplication");
+
+        var stat_done = 0
+        var ish = 0
+        var level = "{{.Tconf.level}}"
+        var last_url = "{{.AjaxURL}}"
+       var  last_search ="{{.Tconf.last_search}}"
+
+       var  last_arch = localStorage.getItem("last_arch_AjustmentEntry");
+        $("#arc option[value='"+last_arch+"'").attr("selected","selected");     
+        $("#arc").change(function(){
+            localStorage.setItem("last_arch_AjustmentEntry", $("#arc").val() );  
+            dtbl();
+        });
+
+       
+       dtbl();
+       function dtbl(){
+       var oTable =    $('#example1').dataTable( {
+                                "serverSide": true,
+                                "processing": true,
+                                "ajax": "{{.AjaxURL}}",
+                                "ordering" : false,
+                                destroy: true,
+                                "pageLength": {{.Tconf.pageLength}},
+                                'displayStart': {{.Tconf.displayStart}},
+                                "oSearch": {"sSearch": last_search},
+                                "sDom": '<"top"iflp>rt<"bottom"i>',
+                                /* "sScrollX": "100%",
+                                "sScrollYInner": "110%", */
+                                 
+                                "footerCallback": function ( row, data, start, end, display ) {
+                                    //console.log(data[1])
+
+                                    var loan_total =0
+
+                                    for (var i = 0; i < data.length; i++) {
+                                             loan_total =loan_total+  parseFloat(data[i][2].trim().replace(',', ''))
+
+                                         
+
+                                        }
+                                        $('.c_t_tprice').html(digits(loan_total) )
+
+                                    
+                                 }   
+                                ,
+                                "initComplete": function() {
+                                    
+                                    var $searchInput = $('div.dataTables_filter input');
+
+                                    $searchInput.unbind();
+
+                                    $searchInput.bind('keyup', function(e) {
+                                        if(e.keyCode == 13) {
+                                            oTable.fnFilter(this.value); 
+                                        }
+                                    });
+                                },
+
+                                createdRow: function( row, data, dataIndex ) {
+
+                                    $( row ).find('td:eq(2)').attr('align', 'right');
+                                    
+                                }
+
+                            } ) ;
+            $('#example1').on( 'draw.dt', function () {
+               //   console.log(oTable.ajax.params());
+               //alert(params)
+               //console.log(oTable.dataTable().fnSettings())
+               if(level=='1'){
+               var params = oTable.oApi._fnAjaxParameters(oTable.dataTable().fnSettings());
+               localStorage.setItem("last_url_LoanApplication", last_url); 
+               localStorage.setItem("last_start_LoanApplication", params.start);
+               localStorage.setItem("last_length_LoanApplication",params.length);
+               localStorage.setItem("last_search_LoanApplication",params.search.value);
+               }
+            });
+
+        }
+
+        $(document).ready(function() {
+        
+
+
+
+
+        });
+        function Modalfunc(a,v){
+            //console.log(v)
+            $.get(a,
+                    {
+                      Assign_ID:'{{.Tconf.hdr_id}}'
+                    }
+                    ,
+
+                    function(data,status){
+                        $("#basic").html(data);
+                        //$(".dr-js").select2();
+                        
+                    });
+            //return false;
+        }
+        
+        function func_edit(a,b){
+            $.get(a,
+                    function(data,status){
+                     $("#ContentID").html(data);
+                    $(".dr-js").select2();
+
+                    }
+                );
+            return false
+        }
+       
+        function Modalfuncdelete (a,b,c) {
+            //a=link //b=dtl_id
+            clicked =c
+            //console.log(a)
+            $.get(a,
+                    {
+                      dtl_id:b 
+                    },
+                    function(data,status){
+                        $("#modalSession").html(data);
+                    });
+            return false;
+        }
+        
+        function Dodelete (a) {
+            $.post(a,$( ".formDelete" ).serialize()
+            ,
+            function(data,status){
+                var ret_data ="";
+                ret_data = data[1];
+                if (data[1] == 'Success'){
+                    $('#modalSession').modal('hide') 
+                    //clicked.closest("tr").remove();
+                    PageRefresher("1");
+                }else{
+                   alert(data[1]); 
+                }
+            });
+        return false;
+        }
+       
+
+       
+			function PageRefresher(lev){
+            
+                  var fromlr = "{{.Tconf.fromlr}}"
+                  if (fromlr != "1") {
+                  
+                $.get("/transaction/loan_consolidation/details?rights={{.Tconf.rights}}&hdr_id={{.Tconf.hdr_id}}&member={{.Tconf.member}}",
+                    function(data,status){
+                    $("#ContentID").html(data);
+                    //$('#basic').modal('hide')
+                    }
+                );
+            } else {
+                 
+                 $.get("/transaction/loan_consolidation/details?rights={{.Tconf.rights}}&hdr_id={{.Tconf.hdr_id}}&member={{.Tconf.member}}&fromlr=1&lrid={{.Tconf.lrid}}",
+                    function(data,status){
+                    $("#ContentID").html(data);
+                    //$('#basic').modal('hide')
+                    }
+                );
+
+                
+
+                }
+        
+        }
+
+
+        function Back(url){
+           
+                $.get(url,
+                    function(data,status){
+                    $("#ContentID").html(data);
+                    //$('#basic').modal('hide')
+                    }
+                );
+            }
+        
+
+        
+       
+
+
+         $("#arc").change(function(){
+            dtbl();
+        });
+
+        function nav_back(c_url) {
+            var  last_length = localStorage.getItem("last_length_LoanApplication")
+            var  last_start = localStorage.getItem("last_start_LoanApplication")
+            var  last_search = localStorage.getItem("last_search_LoanApplication")
+            var  url_last = c_url
+           // console.log(url_last);
+             $.get(url_last,'last_length='+last_length +'&last_start='+last_start+'&last_search='+last_search,
+                    function(data,status){
+                    $("#ContentID").html(data);
+                    $(".dr-js").select2();
+
+                    }
+                );  
+            return false
+        }
+
+  
+</script>
+
+
+
+
+<div class="lower_table"></div>

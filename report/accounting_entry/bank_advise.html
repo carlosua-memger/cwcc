@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<style type="text/css">
+	#example1 tr td{
+		font-family: "Times New Roman", Times, serif;
+		border: 1px solid #000000;
+		padding: 0px;
+		font-size:14px
+
+	}
+	#example1 tr th{
+		font-family: "Times New Roman", Times, serif;
+		border: 1px solid #000000;
+		padding: 0px;
+		font-size:16px
+
+	}
+	
+	
+
+
+</style>
+<body>
+
+
+<bold>
+<font size="4">
+Bank: {{ .Tconf.bank_name}} <br>
+Transaction Type: {{ .Tconf.lpartype_name}}<br>
+Date: {{ .Tconf.date}}
+</font></bold>
+ 
+
+<table id="example1" cellspacing="0" cellspacing="0" width="832" border="1">
+	<thead class="tbl_data">
+	        
+	    <tr>
+	        <th class="header">Rec No.</th>
+	        <th class="header">Account No.</th>
+	        <th class="header">Member Name</th>
+	        <th class="header">Amount</th>
+	        
+	       
+		
+		</tr>
+
+
+		{{ range $index, $elmt := .Arr_data}}
+	    <tr>
+	        <td>{{index $elmt 2}}</td>
+            <td>{{index $elmt 3}}</td>
+            <td>{{index $elmt 4}}</td>
+	        <td style="text-align: right;">{{index $elmt 5}}</td>
+	        
+	       
+	    </tr>
+	     {{end}}
+
+	</thead>
+</table>
+
+<TABLE id="Table5" cellSpacing="0" cellPadding="0" width="832" border="0">
+    <TR>
+        <TD align="center">__________________________________</TD>
+        <TD align="center">__________________________________</TD>
+    </TR>
+    <TR>
+       
+        <BR>
+        <BR>
+        <BR>
+        <BR>
+        <TD align="center">Prepared by</TD>
+        <TD align="center">Reviewed by</TD>
+    </TR>
+</TABLE>
+	
+</body>
+
+
+
+</html>

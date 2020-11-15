@@ -1,0 +1,33 @@
+
+
+
+
+
+
+
+<div class="modal-dialog modal-sm">
+	<div class="modal-content">
+		
+		<form class="IdFormDeleteMember" method="POST" onsubmit="return Dodelete('{{.delete_url}}')"  >
+			<input type="hidden" value="{{.RecID}}" name="rec_no">
+			<input type="hidden" value="2" name="type">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h4 class="modal-title">Delete this record ?</h4>
+			</div>
+			<!-- <div class="modal-body">
+				 Modal body goes here
+			</div> -->
+			<div class="modal-footer">
+				<button type="button" class="btn default" data-dismiss="modal">Cancel</button>
+				<button type="submit" class="btn blue">Yes</button>
+			</div>
+		</form>
+	</div>
+	<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->
+
+<!-- /.modal -->
+
+<script type="text/javascript">

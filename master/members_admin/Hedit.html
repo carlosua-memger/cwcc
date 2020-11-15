@@ -1,0 +1,407 @@
+{{$Org_id := .Conf.Org_id}}
+
+<style type="text/css">
+.darkClass
+{
+    background-color: gray;
+    filter:alpha(opacity=50); /* IE */
+    opacity: 0.5; /* Safari, Opera */
+    -moz-opacity:0.50; /* FireFox */
+    z-index: 20;
+    height: 100%;
+    width: 100%;
+    background-repeat:no-repeat;
+    background-position:center;
+    position:absolute;
+    top: 0px;
+    left: 0px;
+}
+</style>
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Edit Member Admin Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+
+
+
+
+<div class="row">
+<!-- <div class="col-md-6">
+
+
+<h3 class="form-section">Member Information</h3> -->
+
+
+
+		<form id="CreateTransaction" class="form-horizontal center-div"  method="Post" onsubmit="return DoCreateTransaction()">
+	
+					<div class="form-horizontal">
+						
+						  <div class="portlet-body ">
+                                   
+                                               		 <div class="container" style="width: 50%">
+
+                                               		 	<label class="control-label"><b>ID</b></label>
+													<input type="text" name="id" value="{{.Conf.id}}"  placeholder="ID" id="id" class="form-control " maxlength="50" disabled>
+
+													<label class="control-label" for="title"><b>Username</b><span class="required" aria-required="true">*</span></label>
+													<input type="email" name="username_user" value="{{.Conf.username_user}}"  placeholder="Username/email address" id="username_user" class="form-control " maxlength="50">
+
+													<input type="checkbox" id="chkpassword" name="chkpassword" value="chkpassword"> Change password<br>
+
+
+													<label class="control-label"><b>Enabled</b><span class="required" aria-required="true">*</span>
+													</label>
+													<input type="text" name="enabled" value="{{.Conf.enabled}}"  placeholder="Select date" id="enabled" class="form-control date-picker">
+
+													<label class="control-label"><b>Disabled</b><span class="required" aria-required="true">*</span>
+													</label>
+													<input type="text" name="disabled" value="{{.Conf.disabled}}"  placeholder="Select date" id="disabled" class="form-control date-picker">
+
+													<label class="control-label"><b>System Role</b></label>
+							
+														<select name="sysrole" class="form-control" > 
+														 	{{$sysrole  := .Conf.sysrole }}
+														 	{{range  $key ,$val := .Ls_role}}
+															{{ $loop_id  := index  $val 0 }}
+															{{if eq $sysrole $loop_id }}	
+														 		<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+														 	{{else}}	
+														 		<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+															{{end}}
+															{{end}}
+
+														</select>
+
+														<label class="control-label"><b>Last Touch</b></label>
+													<input type="text" name="lasttouch" value="{{.Conf.lasttouch}}"   id="lasttouch" class="form-control " maxlength="50" disabled="">
+
+													<label class="control-label"><b>Last Touched</b></label>
+													<input type="text" name="lasttouched" value="{{.Conf.lasttouched}}"   id="lasttouched" class="form-control " maxlength="50" disabled="">
+
+
+													
+
+													<input type="hidden" name="fname" value="{{.Conf.fname}}">
+													<input type="hidden" name="password" >
+
+
+                                               		 	
+                                               		 </div>
+                                               		</div>
+
+                                            
+                                        </div>
+                                    </div>
+						
+<div class="form-actions">
+	<div class="col-md-offset-3 col-md-9">
+		<button type="submit" class="btn blue submit_btn"  onclick="return DoCreateTransaction()">Update Member </button>
+		<button class="btn default" onclick="javascript:nav_back('/master/members_admin?rights={{.Conf.rights}}')" type="button">Go back</button>
+
+		
+	</div>
+</div>
+</form>
+						
+		<div id='ajax_loader' style="position: fixed; left: 50%; top: 50%; display: none;">
+    <img src="/src/metronic_3.1.2/images/throbber.gif">
+
+</div>		
+<div id="darkLayer" class="darkClass" style="display:none"></div>
+				
+
+
+</div>	
+
+
+</div>
+
+
+
+
+	
+
+</div>
+
+
+
+
+
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	
+</div>
+<!-- <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
+ <script src='http://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/js/bootstrapvalidator.min.js'></script>
+
+ -->
+
+<script type="text/javascript">
+
+
+	function emailIsValid (email) {
+   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+}
+
+	//$(document).ready(function() {
+	
+	/*    $('#CreateTransaction').bootstrapValidator({
+	        // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+	        feedbackIcons: {
+	            valid: 'glyphicon glyphicon-ok',
+	            invalid: 'glyphicon glyphicon-remove',
+	            validating: 'glyphicon glyphicon-refresh'
+	        },
+	        fields: {
+	            username_user: {
+	                validators: {
+	                   emailAddress: {
+	                        message: 'Please supply a valid email address'
+	                    },
+	                    notEmpty: {
+	                    message: 'Email required'
+	                	},
+	                    remote: {
+	                        message: 'The Email address is not available',
+	                        url: '/signup-verify-email_validate',
+	                        type: 'POST'
+	                    }
+	                }
+	            },						
+				
+	        
+	        }
+
+	    })
+			
+	 	
+	        .on('success.form.bv', function(e) {
+	            $('#success_message').slideDown({ opacity: "show" }, "slow") // Do something ...
+	                $('#CreateTransaction').data('bootstrapValidator').resetForm();
+
+	            // Prevent form submission
+	            e.preventDefault();
+
+	            // Get the form instance
+	            var $form = $(e.target);
+
+	            // Get the BootstrapValidator instance
+	            var bv = $form.data('bootstrapValidator');
+
+	            // Use Ajax to submit form data
+	            $.post($form.attr('action'), $form.serialize(), function(result) {
+	                console.log(result);
+	            }, 'json');
+	        });*/
+
+	//});
+
+			
+
+
+				function generatePassword(len){
+    			var pwd = [], cc = String.fromCharCode, R = Math.random, rnd, i;
+    			pwd.push(cc(48+(0|R()*10))); // push a number
+    			pwd.push(cc(65+(0|R()*26))); // push an upper case letter
+
+    			for(i=2; i<len; i++){
+       			rnd = 0|R()*62; // generate upper OR lower OR number
+       			pwd.push(cc(48+rnd+(rnd>9?7:0)+(rnd>35?6:0)));
+			    }	
+
+    // shuffle letters in password
+    			return pwd.sort(function(){ return R() - .5; }).join('');
+			}
+
+			//document.getElementById("password").innerHTML = generatePassword();
+			
+
+			
+				
+
+
+
+			var currentDate = new Date();  
+			 /*$('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });*/
+
+            		
+          	if ("{{.Conf.terminated}}"=="NULL"){
+			$("[name=terminated]").val("").change();
+					}
+
+			
+			var terminated_date = "{{.Conf.terminated}}"
+			if ($('[name=terminated]').val()=="") {
+
+				terminated_date =null
+			}
+					
+
+
+			
+			$("#select_id").val("val2").change();
+			$("[name=stat]").val("{{.Conf.stat}}").change();
+			$("[name=bank], [name=branch] " ).select2();
+			
+			//document.getElementById('stat').selectedIndex="{{.Conf.stat}}";
+			// $('input[name=name]').focus()
+		//	$("[name=name] , [name=customer]").select2();
+		
+			function DoCreateTransaction(){
+				$(".submit_btn").attr("disabled", true);
+				document.getElementById("darkLayer").style.display = "";
+
+				var checkemailvalid = emailIsValid($('[name=username_user]').val())	
+				console.log(checkemailvalid)
+
+				if (checkemailvalid == true)
+
+				{
+
+				var checkBox = document.getElementById("chkpassword");
+				if (checkBox.checked == true){
+					
+					var password = generatePassword(10);
+					console.log(password);
+					$("[name=password]").val(password).change();
+
+
+				}
+				var ret_msg= ""
+				$.get("/json_func",
+                    {
+                       //qdata : "Branch_Save 'Add','programmer',1,0,'"+$('[name=sup_name]').val()+"' ,'"+$('[name=sort]').val()+"' ,'"+$('[name=remarks]').val()+"'"
+                       qdata : "Members_SaveCredentials '{{.Conf.username_sess}}', {{.Conf.Org_id}}, {{.Conf.id}},'"+$('[name=username_user]').val()+"', '"+$('[name=password]').val()+"', '"+$('[name=enabled]').val()+"', '"+$('[name=disabled]').val()+"', '"+$('[name=sysrole]').val()+"'"
+
+
+                       		
+                    }
+                    ,
+                    function(data,status){
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									console.log(data[i][0])
+
+									//console.log(data[i][0])
+									//alert(ret_msg)
+									//$('#basic').modal('hide')
+					            	//dtbl()
+					            	//console.log("success here")
+					            	//$("#item_tagsdata").show()
+					            	//$(".submit_btn").prop('disabled', true);
+					            	$(".c_item_id").val(data[i][0])
+									var checkBoxPassword = document.getElementById("chkpassword");
+									if (checkBoxPassword.checked == true){
+					            	send_email();
+									}
+									else{
+										Dobatchsave()
+									}
+					            	
+								//return false;
+			                    }else{
+			                    	alert(ret_msg)
+			                    }
+		                         
+		                    }
+	                    }
+                    });	
+					
+                    return false; }
+                    else {
+                    	alert("Username must be a valid email address.")
+                    }
+		                /*$('#basic').modal('hide')
+		            	dtbl()
+			         	return false*/
+			        	
+			}
+
+			function Dobatchsave(membersid){
+						alert("Save Success")
+                        	nav_back('/master/members_admin?rights={{.Conf.rights}}')
+				                
+				                }
+		
+	function generatePassword(len){
+    			var pwd = [], cc = String.fromCharCode, R = Math.random, rnd, i;
+    			pwd.push(cc(48+(0|R()*10))); // push a number
+    			pwd.push(cc(65+(0|R()*26))); // push an upper case letter
+
+    			for(i=2; i<len; i++){
+       			rnd = 0|R()*62; // generate upper OR lower OR number
+       			pwd.push(cc(48+rnd+(rnd>9?7:0)+(rnd>35?6:0)));
+			    }	
+
+    // shuffle letters in password
+    			return pwd.sort(function(){ return R() - .5; }).join('');
+	}
+
+
+	 function send_email(){
+
+	 	$('#ajax_loader').show();
+
+          
+         $.post("/master/members_admin/email?rights={{.Conf.rights}}",$( "#CreateTransaction" ).serialize()
+
+         	 ,
+		        function(data,status){
+		        	if(data=='Success'){
+		        			$('#ajax_loader').hide();
+		        			document.getElementById("darkLayer").style.display = "none";
+		            		Dobatchsave()
+		            		
+			        }else{
+			        	$('#ajax_loader').hide();
+			        	document.getElementById("darkLayer").style.display = "none";
+			        	alert("Save success but email notification not sent.");
+			        	
+			        }	
+
+		        });
+	 			return false
+        }
+
+		
+            					
+			
+
+		
+	
+	    
+ </script>
+
+

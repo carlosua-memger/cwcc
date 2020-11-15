@@ -1,0 +1,446 @@
+<html>
+    <head>  
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+                <!-- <title style="font-size: 16px;">Paired logs Report</title> -->
+            <style type="text/css">
+                .rpt_date {
+                    float: right;
+                    
+                }
+                .page_header{
+                    margin-bottom: 5px;
+                    /*display: inline; */
+                }
+                .name{
+                    /*float: left;*/
+                    margin-bottom: 3px;
+                    font-family: Arial; 
+                }
+                .covered_data{
+                    /*float: right;*/
+                    font-family: Arial; 
+                }
+                .pic_logo {
+                    width: 200px;
+
+                }
+                table{
+                    width: 100%;
+                   
+                }
+                
+                .dtatbl {
+                
+                border: 0.99px solid #e2e2e2;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 14px;
+                border-spacing: 20px 100px;
+                }
+
+                .dtatbl th{
+                    border: 0.99px solid #e2e2e2;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 14px;
+                }
+
+                .dtatbl td {
+                    border: 0.99px solid #e2e2e2;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 14px;
+                }
+                th, td {
+                    /*padding: 2px;*/
+                    padding: 2px;
+                }
+                th{
+                    
+                    background-color: whiteSmoke;
+                    /*background-image: -webkit-linear-gradient*/
+                    
+                }
+                body {
+                    font-size: 14px;
+                }
+                .logo{
+                    width: 200px;
+                    margin-bottom: 5px;
+                }
+                .page_footer{
+                    margin-top: 20px;
+                    display: inline-block;
+                    width: 100%;
+                }
+                .signaturemember{
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: left;
+                    font-family: inherit;
+                }
+                .signatureleft{
+                    margin-left: 10%;
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: left;
+                    font-family: inherit; 
+                }
+                .signatureright{
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: right;
+                    font-family: inherit; 
+                }
+                .tbl_foor{
+                    margin-top: 10px;
+                }
+                .tbl_foor td div{
+                    border-top: 0.99px solid black; 
+                    width: 50%;
+                }
+                .isred {
+                    color: red;
+                }
+                .log_sum{
+                    margin-top: 10px;
+                }
+                td div{
+                    font-size: 12px;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+                td div b{
+                    font-size: 12px;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+
+                label{
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 14px;
+
+                }
+
+                #header{
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 14px;
+                display: inline-block; 
+                text-align: left; 
+                width: 100%
+
+                }
+
+                p{
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 14px;
+
+                }
+
+                #right {
+    
+                 text-align: right;
+                }
+                 #right2 {
+    
+                float: right
+                }
+            </style>
+
+            </head>
+
+            
+                
+            <div class="tools">
+                    <a class="collapse" href="javascript:;">
+                    </a>
+                    <a class="config" data-toggle="modal" href="#portlet-config">
+                    </a>
+                    <a class="reload" href="javascript:;">
+                    </a>
+                    <a class="remove" href="javascript:;">
+                    </a>
+                </div>
+            <body>
+                <div class="htl" style="font-size: 14px;margin-bottom: 10px;"> 
+                    <!--  Paired logs Report -->
+                </div>
+                        
+                   
+                           
+                             <table border=0 cellspacing="0">
+                             <tr>
+                             <td>
+                                <b><label class="control-label col-md-4">{{.Tconf.report_name}}</label></b>
+                             </td>
+                              <td align=right>
+                                <label class="control-label col-md-4">Printed date : {{get_datetime}}</label>
+                             </td>
+                            </tr>
+                                    
+
+                       
+                            
+                      
+                            </table>
+                           
+                         
+                       
+                       <div class="form-group c_datefrom" id=header>
+
+                       <label id=header>Date From: {{.Tconf.strt_date_display}}</label>        
+                        </div>
+                        
+                        <div class="form-group c_dateto" id=header>
+                        <label id=header>Date To: {{.Tconf.end_date_display}}</label>
+                        </div>
+
+                        <div class="form-group c_asof" id=header>
+                         
+                            Asof: {{.Tconf.asof}}
+                            </div>
+
+                        <div class="form-group c_member" id=header>
+                         
+                            Member: {{.Tconf.member_name}}
+                            </div>
+                      
+                        <div class="form-group c_group" id=header>
+                         
+                        Group: {{.Tconf.group_name}}
+                        </div>
+                        
+                         <div class="form-group c_partner" id=header>
+                       
+                          Partner: {{.Tconf.partner_name}}
+                          
+                        
+                        </div>
+                          <div class="form-group c_loantype" id=header>
+                        
+                         Loan Type: {{.Tconf.loantype_name}}
+                            
+                        </div>
+                           <div class="form-group c_paymode" id=header>
+                        
+                          Payment mode: {{.Tconf.paymode}}
+                                  
+                        </div>
+                         
+                           <div class="form-group c_bank" id=header>
+                       
+                          Bank: {{.Tconf.bank_name}}
+                                     
+                        </div>
+                         
+
+                         <div class="form-group c_status" id=header>
+                       
+                          Status: {{.Tconf.status_name}}
+                        </div>
+                          <div class="form-group c_coor" id=header>
+                     
+                          SLOA: {{.Tconf.coor_name}}
+                              
+                        </div>
+
+                        <div class="form-group c_trantype" id=header>
+                     
+                                Transaction Type: {{.Tconf.trantype_name}}
+                                    
+                              </div>
+
+                              
+                        <div class="form-group c_laetype" id=header>
+                     
+                            Loan Adjustment Type: {{.Tconf.laetype_name}}
+                                
+                          </div>
+
+                          
+                        <div class="form-group c_aetype" id=header>
+                     
+                            Adjustment Type: {{.Tconf.aetype_name}}
+                                
+                          </div>
+
+                          <div class="form-group c_lptype" id=header>
+                     
+                            Loan Payment Type: {{.Tconf.lptype_name}}
+                                
+                          </div>
+
+                          <div class="form-group c_othdtltype" id=header>
+                     
+                            Other Disbursement Detail Type: {{.Tconf.othdtltype_name}}
+                                
+                          </div>
+
+                          <div class="form-group c_partregioncoop" id=header>
+                     
+                            Partner Region Coop: {{.Tconf.partregioncoop_name}}
+                                
+                          </div>
+
+                        <div class="form-group c_filter" id=header>
+                       
+                          Filter : {{.Tconf.filter}}
+                        </div>
+                          
+
+
+                         
+                {{$arr_hval := .Hdata}}
+                <table class="dtatbl" id="headerTable">
+                    <tbody>
+                        <tr>
+                            {{range $key,$hval := .Hdata}}
+                            <th {{ col_attrib $key $arr_hval}} >{{col_trim_header $hval}}</th>
+                            {{end}}
+                        </tr>
+                        {{range $Dataarr := .Data }}
+                        <tr>
+                           
+                            {{range $key, $val := $Dataarr}}
+                            <td  {{ col_attrib $key $arr_hval}} > {{$val}}</td>
+                            {{end}}
+                        </tr>
+                        {{end}}
+                    </tbody>    
+                </table>
+                <br>       
+                 {{footer_ads}}     
+
+ 
+            
+
+
+
+    </body>
+
+
+<script type="text/javascript">
+
+        $('.c_datefrom').hide();
+
+        var show_datefrom = '{{.Tconf.show_datefrom}}'
+        if (show_datefrom == '1') {
+
+         $('.c_datefrom').show();
+        }
+        console.log(show_datefrom)
+
+        var show_dateto = '{{.Tconf.show_dateto}}'
+        if ( show_dateto == '0') {
+
+            $('.c_dateto').hide();
+        }else{
+
+             $('.c_dateto').show();
+        }
+
+       
+         var show_group = '{{.Tconf.show_group}}'
+        if ( show_group == '0') {
+
+        $('.c_group').hide();
+        }
+
+        var show_member = '{{.Tconf.show_member}}'
+        if ( show_member == '0') {
+
+        $('.c_member').hide();
+        }
+
+
+         var show_partner = '{{.Tconf.show_partner}}'
+        if ( show_partner == '0') {
+
+        $('.c_partner').hide();
+        }
+
+         var show_loantype = '{{.Tconf.show_loantype}}'
+        if ( show_loantype == '0') {
+
+        $('.c_loantype').hide();
+        }
+
+         var show_paymode = '{{.Tconf.show_paymode}}'
+        if ( show_paymode == '0') {
+        $('.c_paymode').hide();
+        }
+        var show_bank = '{{.Tconf.show_bank}}'
+        if ( show_bank == '0') {
+
+        $('.c_bank').hide();
+        }
+
+        var show_filter = '{{.Tconf.show_filter}}'
+        if ( show_filter == '0') {
+
+        $('.c_filter').hide();
+        }
+
+         var show_status = '{{.Tconf.show_status}}'
+        if ( show_status == '0') {
+
+        $('.c_status').hide();
+        }
+
+
+         var show_coor = '{{.Tconf.show_coor}}'
+        if ( show_coor == '0') {
+
+        $('.c_coor').hide();
+        }
+
+        var show_trantype = '{{.Tconf.show_trantype}}'
+        if ( show_trantype == '0') {
+
+        $('.c_trantype').hide();
+        }
+
+        var show_laetype = '{{.Tconf.show_laetype}}'
+        if ( show_laetype == '0') {
+
+        $('.c_laetype').hide();
+        }
+
+        var show_aetype = '{{.Tconf.show_aetype}}'
+        if ( show_aetype == '0') {
+
+        $('.c_aetype').hide();
+        }
+
+
+        var show_asof = '{{.Tconf.show_asof}}'
+        if ( show_asof == '0') {
+
+        $('.c_asof').hide();
+        }
+
+        var show_lptype = '{{.Tconf.show_lptype}}'
+        if ( show_lptype == '0') {
+
+        $('.c_lptype').hide();
+        }
+
+        var show_othdtltype = '{{.Tconf.show_othdtltype}}'
+        if ( show_othdtltype == '0') {
+
+        $('.c_othdtltype').hide();
+        }
+
+        var show_partregioncoop = '{{.Tconf.show_partregioncoop}}'
+        if ( show_partregioncoop == '0') {
+
+        $('.c_partregioncoop').hide();
+        }
+
+
+
+
+
+</script>
+
+</html>
+
+

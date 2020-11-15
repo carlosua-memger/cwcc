@@ -1,0 +1,148 @@
+
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Edit Holiday Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<form id="CreateTransaction" class="form-horizontal"  method="Post" onsubmit="return DoCreateTransaction()">
+
+					<div class="form-body">
+
+						<input type="hidden" name="h_id" value="{{.Conf.h_id}}">
+						<div class="form-group">
+							<label class="col-md-3 control-label">Holiday Date <span class="required" aria-required="true">
+								* </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="holidaydate" class="form-control date-picker" placeholder="date" maxlength="50" value="{{func_intertaceToString .Holiday.Holidaydate}}" Required>
+								<!-- <span class="help-block">
+								A block of help text. </sapan> -->
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-md-3 control-label">Name</label>
+							<div class="col-md-4">
+								
+								<input type="text" name="name" placeholder="Name"  maxlength="50" class="form-control createAct" value="{{func_intertaceToString .Holiday.Name}}">
+							</div>
+						</div>
+
+							
+						<div class="form-group">
+							<label class="col-md-3 control-label">remarks</label>
+							<div class="col-md-4">
+								
+								<input type="text" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct" value="{{func_intertaceToString .Holiday.Remarks}}">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-md-3 control-label">Special</label>
+								<div class="col-md-4">
+								<select name="special" class="form-control input-small dr-js" > 
+									{{$spl := func_intertaceToString .Holiday.Special }}
+									{{ if eq $spl "1" }}
+									<option  value="1" selected>yes</option>
+									<option  value="0" >no</option>
+									{{else}}
+									<option  value="1" >yes</option>
+									<option  value="0" selected>no</option>
+									{{end}}
+									
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Regular</label>
+								<div class="col-md-4">
+								<select name="regular" class="form-control input-small dr-js" > 
+									{{$reg := func_intertaceToString .Holiday.Regular }}
+
+									{{ if eq $reg "1" }}
+									<option  value="1" selected>yes</option>
+									<option  value="0" >no</option>
+									{{else}}
+									<option  value="1" >yes</option>
+									<option  value="0" selected>no</option>
+									{{end}}
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Regular 100 date<span class="required" aria-required="true">
+								* </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="regular_100" class="form-control date-picker" placeholder="date" maxlength="50" value="{{func_intertaceToString .Holiday.Regular_100}}">
+								<!-- <span class="help-block">
+								A block of help text. </sapan> -->
+							</div>
+						</div>
+
+
+						<div class="form-actions fluid">
+							<div class="col-md-offset-3 col-md-9">
+								<button class="btn btn-circle blue" type="submit">Submit</button>
+								<button class="btn btn-circle default" id ="" type="button" onclick="Navigate('/timekeeping/holidays?rights={{.Conf.rights}}')">Cancel</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+
+			<script type="text/javascript">
+			 $('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+			$('input[name=trandate]').focus()
+			$(".dr-js").select2();
+			 var rghts = '{{.Conf.rights}}'
+			
+			$( "select[name=regular]" ).change(function() {
+			  	
+				if($('select[name=regular]').val() == "1"){
+					$("input[name=regular_100]").prop('required',true);	
+				}else{
+					$("input[name=regular_100]").prop('required',false);	
+				}		
+			});
+
+			function DoCreateTransaction(){
+				$.post("/timekeeping/holidays/edit",$( "#CreateTransaction" ).serialize()
+		        ,
+		        function(data,status){
+		            alert(data.Message)
+		            if(data.Status==true){
+		            	$(".createAct").val("")
+		            	$.get("/timekeeping/holidays?rights={{.Conf.rights}}",
+                    		 function(data,status){
+		                     $("#ContentID").html(data);
+		                    }
+		                );
+					}
+		        });
+	 		return false
+			}
+
+			</script>
+

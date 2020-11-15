@@ -1,0 +1,149 @@
+<!-- <Form> -->
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+		<form id="transdetnew" method="Post" onsubmit="javascript: return DocreateTrasDet()">
+			<input type="hidden" name="hdr_id" value="{{.Tconf.hdr_id}}">	
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">New Transaction Details swipe via barcode*</h4>
+				</div>
+				<!-- <div class="modal-body">
+				 -->	 <!-- modal data here -->
+
+					<div class="form-horizontal">
+							<!-- <div class="form-group">
+								<label class="col-md-3 control-label">Item</label>
+								<div class="col-md-4">
+									<input type="text" name="item" placeholder="Item" id="item"  class="form-control input-large"  required>
+								</div>
+							</div> -->
+
+							<div class="form-group">
+								<label class="col-md-3 control-label">Item-barcode</label>
+									<div class="col-md-4">
+										<input type="text" name="item" id="iditem" placeholder="item"   class="form-control createAct" required>
+										<span class="h_barcode help-block">
+														 </span>
+									</div>
+									
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Qty</label>
+									<div class="col-md-4">
+										<input type="number" value="1" name="qty" placeholder="Qty"  maxlength="5" class="form-control createAct" required>
+									</div>
+							</div>		
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Remarks</label>
+									<div class="col-md-4">
+										<input type="text" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct">
+									</div>
+							</div>
+
+							<div id="prefix_608463787855" class="Metronic-alerts alert alert-success fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button><span class="c_retdata"></span></div>
+										  									
+					</div>
+					 <!-- end modal data here -->
+				<!-- </div> -->
+				<div class="modal-footer">
+					<button type="button" class="btn default" data-dismiss="modal">Close</button>
+					<!-- <button type="submit" class="btn blue"  >Add New</button>
+					<button type="submit" class="btn blue btn_sa" onclick="javascript:DocreateTrasDet('AS');">Save&Addnew</a> -->
+				</div>
+
+		<!--  -->
+				<!-- /.modal-content -->
+		</form>
+	</div>
+		<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->					
+					
+
+
+<script type="text/javascript">
+ 	$('.form_datetime').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+	
+ 	$("#prefix_608463787855").hide();
+
+	setTimeout(function (){
+       $('#iditem').focus();
+    	
+    }, 500);
+
+	var rights = '{{.Tconf.rights}}' 
+			function DocreateTrasDet(a){
+				$.post("/inventory/location_order/details/DaddHandler",
+					//$( "#transdetnew" ).serialize()
+					{
+						hdr_id 		: $("input[name=hdr_id]").val() ,
+						item 		: a,
+						qty 		: $("input[name=qty]").val() ,
+						remarks 	: $("input[name=remarks]").val() ,
+					}
+		        
+		        ,
+		        function(data,status){
+		        	//alert(data[1])
+		        	$("#prefix_608463787855").show();
+		            $(".c_retdata").html(data[0]);
+		            
+		            if(data[1]=='Success'){
+		            	
+		            }
+		            
+		        });
+
+		        $("input[name=item]").val("")
+		        //$("input[name=unit_cost]").	val("")
+	 			return false
+			}
+	
+	$("input[name=item]").on('keydown', function(e) {
+		$(".h_barcode").html("")
+		$("#prefix_608463787855").hide();
+		if(e.keyCode === 13)
+	   		$.get("/inventory/customer_sales/details/Ajax/Ajax_getItem_isbarcode?",
+	   			{
+	   				barcode: $("input[name=item]").val() ,
+	   				mode:  1,
+	   			}
+	   			,
+        		function(data,status){
+        			console.log(data)
+        			//console.log(data[1])
+        			if (data){
+        				//$("input[name=unit_cost]").val(data[0])
+        				DocreateTrasDet(data[0])
+        			}else{
+        				//$("input[name=unit_cost]").val("")
+        				//alert("no item found.")
+        				$(".h_barcode").html("no item found.")
+        				$("input[name=item]").val("")
+        			}
+               	}
+	   			
+            );
+
+	    	
+	});
+	
+	$('#basic').unbind('hidden.bs.modal');
+	$('#basic').on('hidden.bs.modal', function () {
+		$.get("/inventory/location_order/details?rights="+rights+"&ID={{.Tconf.hdr_id}}",
+    		 function(data,status){
+             $("#ContentID").html(data);
+             $('#basic').modal('hide')
+            }
+        );
+	})
+
+</script>

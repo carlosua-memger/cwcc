@@ -1,0 +1,164 @@
+<!-- <Form> -->
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+		<form id="transdetnew" method="Post" onsubmit="javascript: return DocreateTrasDet()">
+			<input type="hidden" name="hdr_id" value="{{.Tconf.hdr_id}}">	
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">New Transaction Details</h4>
+				</div>
+				<!-- <div class="modal-body">
+				 -->	 <!-- modal data here -->
+
+					<div class="form-horizontal">
+							<div class="form-group">
+								<label class="col-md-3 control-label">Item</label>
+								<div class="col-md-4">
+									<input type="text" name="item" placeholder="Item" id="item"  class="form-control input-large"  required>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Qty</label>
+									<div class="col-md-4">
+										<input type="text" name="qty" placeholder="Qty"  maxlength="8" value="1.00" class="form-control createAct num_f" required>
+									</div>
+							</div>		
+							<div class="form-group">
+								<label class="col-md-3 control-label">Remarks</label>
+									<div class="col-md-4">
+										<textarea name="remarks" placeholder="remarks"  maxlength="200" class="form-control createAct"></textarea>
+									</div>
+							</div>
+										  									
+					</div>
+					 <!-- end modal data here -->
+				<!-- </div> -->
+				<div class="errorDv">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn default" data-dismiss="modal">Go Back</button>
+					<button type="submit" class="btn blue">Save </button>
+					<button type="button" class="btn blue btn_sa" onclick="javascript:DocreateTrasDet('AS');">Save & Add new</button>
+				</div>
+
+		<!--  -->
+				<!-- /.modal-content -->
+		</form>
+	</div>
+		<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->					
+					
+
+
+<script type="text/javascript">
+ 	$('.form_datetime').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+	
+
+	var rights = '{{.Tconf.rights}}' 
+	var assignmentID = '{{.Tconf.location}}' 
+			function DocreateTrasDet(a){
+				
+
+				if(!$('#transdetnew')[0].checkValidity()){
+					$('.val_err').show();
+				 	return false;
+				}
+				$( ".errorDv" ).html("")
+				if ($("input[name=qty]").val()<=0){
+					var htdata  = '<div class="alert alert-danger"> <strong>Error: </strong>  Invalid Qty  (must be greater than 0)?</div>'
+					$( ".errorDv" ).html(htdata)
+					return false;
+				}
+				
+				$.post("/inventory/internal_return/details/DaddHandler",$( "#transdetnew" ).serialize()
+		        ,
+		        function(data,status){
+		        	alert(data[1])
+		            if(data[1]=='Success'){
+		            	
+		            	$("input[name=item]").select2("val", ""); 
+		            	
+		            	if(a!="AS"){
+			            	$.get("/inventory/internal_return/details?rights="+rights+"&ID={{.Tconf.hdr_id}}",
+	                    		 function(data,status){
+			                     $("#ContentID").html(data);
+			                     $('#basic').modal('hide')
+			                    }
+			                );
+			            }else{
+			            	$( "#item" ).select2('open')
+			            		$('[name=qty]').val("1")
+ 							
+ 							$('[name=remarks]').val("")
+
+			            }	
+		            }
+		        });
+	 			return false
+			}
+	
+	function repoFormatResult( repo ) {
+	    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div></div>";
+
+	    return markup;
+	}
+	function repoFormatSelection( repo ) {
+        return repo.full_name;
+    }
+    		
+	$( "#item" ).select2({
+	    placeholder: "Search for Items",
+	    minimumInputLength: 2,
+	    //multiple: false,
+	    //allowClear: true,
+	    tags: true,
+	    ajax: {
+		        url: "/inventory/internal_return/details/Ajax/Ajax_getItem?assignmentID="+assignmentID+"&isbaseonassignid=1",
+	        //url: "/inventory/internal_return/details/Ajax/Ajax_getItem",
+	        dataType: "json",
+	        quietMillis: 250,
+	        data: function( term, page ) {
+	            return {
+	                // search term
+	                q: term
+	            };
+	        },
+	        results: function( data, page ) {
+	                // parse the results into the format expected by Select2.
+	                // since we are using custom formatting functions we do not need to alter the remote JSON data
+	                return { results: data.items };
+	        }
+	        
+	    },
+	    
+	    formatResult: repoFormatResult,
+	    formatSelection: repoFormatSelection,
+	    // apply css that makes the dropdown taller
+	    dropdownCssClass: "bigdrop",
+	    // we do not want to escape markup since we are displaying html in results
+	    escapeMarkup: function( m ) {
+	        return m;
+	    }
+	});		
+	setTimeout(function (){
+        $( "#item").select2('open')
+    	
+    }, 500);
+
+	$('.btn_sa').on('keydown', function(e) {
+	    if (e.which == 13) {
+	        e.preventDefault();
+	        DocreateTrasDet('AS')
+	    }
+	});
+	$('#basic').unbind('hidden.bs.modal');
+	
+</script>

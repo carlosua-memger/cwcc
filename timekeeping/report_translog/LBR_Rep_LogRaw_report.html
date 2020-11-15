@@ -1,0 +1,148 @@
+<html>
+	<head>
+				<title style="font-size: 16px;">Manning fullfillment Report</title>
+			<style type="text/css">
+				.rpt_date {
+					float: right;
+					
+				}
+				.page_header{
+					margin-bottom: 5px;
+					/*display: inline; */
+				}
+				.name{
+					/*float: left;*/
+					margin-bottom: 3px;
+					font-family: Arial; 
+				}
+				.covered_data{
+					/*float: right;*/
+					font-family: Arial; 
+				}
+				.pic_logo {
+					width: 200px;
+
+				}
+				table{
+					width: 100%;
+				}
+				
+				.dtatbl {
+				
+				border: 0.99px solid #B3B3B3;
+				border-collapse: collapse;
+				font-family: 'Arial Narrow', Arial, sans-serif;
+				font-size: 12px;
+				}
+
+				.dtatbl th{
+					border: 0.99px solid #B3B3B3;
+				border-collapse: collapse;
+				font-family: 'Arial Narrow', Arial, sans-serif;
+				font-size: 12px;
+				}
+
+				.dtatbl td {
+					border: 0.99px solid #B3B3B3;
+				border-collapse: collapse;
+				font-family: 'Arial Narrow', Arial, sans-serif;
+				font-size: 12px;
+				}
+				th, td {
+				    /*padding: 2px;*/
+				}
+				th{
+					
+					background-color: whiteSmoke;
+					/*background-image: -webkit-linear-gradient*/
+					
+				}
+				body {
+					font-size: 12px;
+				}
+				.logo{
+					width: 200px;
+					margin-bottom: 5px;
+				}
+				.page_footer{
+					margin-top: 20px;
+					display: inline-block;
+					width: 100%;
+				}
+				.signaturemember{
+					border-top: 0.99px solid black;
+					width: 25%;
+					float: left;
+					font-family: inherit;
+				}
+				.signatureleft{
+					margin-left: 10%;
+					border-top: 0.99px solid black;
+					width: 25%;
+					float: left;
+					font-family: inherit; 
+				}
+				.signatureright{
+					border-top: 0.99px solid black;
+					width: 25%;
+					float: right;
+					font-family: inherit; 
+				}
+				.tbl_foor{
+					margin-top: 10px;
+				}
+				.tbl_foor td div{
+					border-top: 0.99px solid black;	
+					width: 50%;
+				}
+				.isred {
+					color: red;
+				}
+				.log_sum{
+					margin-top: 10px;
+				}
+
+			</style></head>
+			
+
+			<body>
+				<div class="htl" style="font-size: 14px;margin-bottom: 10px;"> 
+					 Raw logs Report
+				</div>
+				
+				<table class="dtatbl">
+					<tbody>
+						<tr>
+							<th>Member</th>
+							<th>Assignment</th>
+							<th>Log Assign</th>
+							<th>Log ID</th>
+							<th>Logtime</th>
+							<th>lbr_logpair</th>
+							<th>lbr_logpaired</th>
+						</tr>
+						{{range $rep_list := .Lbr_rep_lograw_data }}
+						<tr>
+							<td>{{func_intertaceToString $rep_list.Member_name}}</td>
+							<td>{{func_intertaceToString $rep_list.Assignment_name}}</td>
+							<td>{{func_intertaceToString $rep_list.Logassign}}</td>
+							<td>{{func_intertaceToString $rep_list.Login}}</td>
+							<td>{{func_intertaceToString $rep_list.Logtime}}</td>
+							<td>{{func_intertaceToString $rep_list.Lbr_logpair}}</td>
+							<td>{{func_intertaceToString $rep_list.Lbr_logpaired}}</td>
+
+
+
+						</tr>
+						{{end}}
+					</tbody>	
+				</table>
+							
+
+
+			
+
+
+
+	</body>
+</html>

@@ -1,0 +1,109 @@
+{{ $Conf := .Conf}}
+{{ $Assign := .Assign}}
+
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			{{ $varLBR_LogHdr := .LBR_LogHdr }}
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Edit Transaction Form[{{$Conf.h_id}}]
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<form id="EditTransaction" class="form-horizontal"  method="Post" onsubmit="return DoEditTransaction()">
+					<input type="hidden" name="h_id" value="{{$varLBR_LogHdr.ID}}">
+						<div class="form-body">
+
+							<div class="form-group">
+								<label class="col-md-3 control-label">Transaction Date <span class="required" aria-required="true">
+									* </span></label>
+										<div class="col-md-4">
+											<input type="text" name="trandate" class="form-control date-picker" value="{{$varLBR_LogHdr.Transdate}}"  placeholder="date"  Required>
+														<!-- <span class="help-block">
+														A block of help text. </sapan> -->
+													</div>
+												</div>
+
+							<div class="form-group">
+													<label class="col-md-3 control-label">Assignment</label>
+														<div class="col-md-4">
+														<select name="lbr_assign" class="form-control input-xlarge dr-js" > 
+														 {{range $assignlist := $Assign }}
+														{{if eq $varLBR_LogHdr.Lbr_assign $assignlist.Id}}}
+														<option  selected value="{{$assignlist.Id}}">{{$assignlist.Name}}</option>
+														{{else}}
+														<option  value="{{$assignlist.Id}}">{{$assignlist.Name}}</option>
+           												{{end}}
+           												{{end}}
+           												</select>
+													</div>
+												</div>
+							<div class="form-group">
+													<label class="col-md-3 control-label">Log Filename </label>
+													<div class="col-md-4">
+														<input type="text" class="form-control" name="logfilename" placeholder="logfilename" value="{{$varLBR_LogHdr.Logfilename}}">
+														<!-- <span class="help-block">
+														A block of help text. </span> -->
+													</div>
+												</div>					
+							<div class="form-group">
+													<label class="col-md-3 control-label">Device</label>
+													<div class="col-md-4">
+														<input type="text" class="form-control" value="{{$varLBR_LogHdr.Device}}" name="device" placeholder="device" Required>
+														<!-- <span class="help-block">
+														A block of help text. </span> -->
+													</div>
+												</div>		
+							<div class="form-group">
+													<label class="col-md-3 control-label">remarks</label>
+													<div class="col-md-4">
+														
+														<input type="text" value="{{$varLBR_LogHdr.Remarks}}" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct">
+													</div>
+												</div>
+													  									
+						
+						<div class="form-actions fluid">
+												<div class="col-md-offset-3 col-md-9">
+													<button class="btn btn-circle blue" type="submit">Update</button>
+													<button class="btn btn-circle default" id ="" type="button" onclick="nav_back();">Cancel</button>
+												</div>
+											</div>
+						</div>
+				</form>
+			</div>
+			<script type="text/javascript">
+			
+			var rights ='{{$Conf.rights}}'
+			$(".date-picker").focus(function() {
+				$(".date-picker").datepicker("show");	
+			});	
+			$(".date-picker").focus();
+			function DoEditTransaction(){
+				$.post("/timekeeping/EditTransactionDetails",$( "#EditTransaction" ).serialize()
+		        ,
+		        function(data,status){
+		            if(data.Status==true){
+		            	alert(data.Message)
+		            	$(".createAct").val("")
+		    			//Navigate('/timekeeping?rights='+rights)        	
+		            	nav_back();
+		            }
+		        });
+	 		return false
+			}
+
+			</script>
+	

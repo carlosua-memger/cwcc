@@ -1,0 +1,196 @@
+<!-- <Form> -->
+		<div class="modal-dialog modal-lg">
+				<div class="modal-content" id="ModalCont">
+			
+					<form id="transdetnew" method="Post" onsubmit="javascript: return DocreateTrasDet()">
+						<input type="hidden" name="hdr_id" value="{{.Tconf.hdr_id}}">
+						<input type="hidden" name="id" value="{{.Tconf.id}}">	
+						<input type="hidden" name="member_id" value="{{.Tconf.member}}">	
+			
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+							<h4 class="modal-title">Edit Payment Detail</h4>
+						</div>
+						<!-- <div class="modal-body">
+							 -->
+						<!-- modal data here -->
+			
+						<div class="form-horizontal">
+			
+						
+								<div class="form-group">
+										<label class="col-md-3 control-label">Member<span class="required" aria-required="true">*</span></label>
+										<div class="col-md-6">
+											<input type="text" value="{{.Tconf.MemberName}}" name="member" placeholder="Search Member" id="member"  class="form-control"  required disabled>
+										</div>
+									</div>
+			
+									<div class="form-group">
+											<label class="col-md-3 control-label">Loan Amortization<span class="required" aria-required="true">*</span></label>
+											<div class="col-md-6">
+												<select name="lrdtl" id="lrdtl" class="form-control" aria-readonly="true" > 
+														<option value="{{.Tconf.lrdtl}}" selected>{{ .Tconf.LRDTLName}}</option>
+													 
+												</select>
+											</div>
+										</div>
+			
+			
+									<div class="form-group">
+										<label class="col-md-3 control-label">Amount<span class="required" aria-required="true">*</span></label>
+										<div class="col-md-4">
+											<input type="text" style="text-align: right" name="amount" id="amount" maxlength="100" class="form-control createAct num_f" required
+												onkeypress='return numbersOnly(this,event,true,true);' value="{{.Tconf.amt}}">
+										</div>
+			
+										<div class="col-md-4">
+											<label id="message"></label>
+			
+										</div>
+									</div>
+			
+			
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Remarks</label>
+								<div class="col-md-5">
+									<textarea name="remarks" placeholder="remarks" class="form-control createAct">{{.Tconf.remarks}}</textarea>
+								</div>
+			
+							</div>
+			
+						</div>
+						<!-- end modal data here -->
+						<!-- </div> -->
+						<div class="errorDv">
+						</div>
+						<div class="modal-footer">
+							<button type="button" id="btnGoBack" name="btnGoBack" class="btn default" data-dismiss="modal">Go Back</button>
+							<button type="submit" id="btnSubmit" name="btnSubmit" class="btn blue">Save </button>
+							
+								
+						</div>
+			
+						<!--  -->
+						<!-- /.modal-content -->
+					</form>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+			
+			
+			
+			<script type="text/javascript">
+			
+			
+		
+			
+				
+				num_val_init()
+				var rights = '{{.Tconf.rights}}'
+			
+				function DocreateTrasDet(a) {
+			
+					if (!$('#transdetnew')[0].checkValidity()) {
+						$('.val_err').show();
+						return false;
+					}
+					$(".errorDv").html("")
+					$('#lrdtl').prop('disabled', false);
+			
+					$("#btnGoBack").attr("disabled", true);
+					$("#btnSubmit").attr("disabled", true);
+					$.post("/transaction/loan_adjustment/details/DEditHandler", $("#transdetnew").serialize()
+						,
+						function (data, status) {
+							alert(data[1])
+							if (data[1] == 'Success') {
+			
+								$("input[name=member]").select2("val", "");
+			
+								if (a != "AS") {
+									$.get("/transaction/loan_adjustment/details?rights=" + rights + "&ID={{.Tconf.hdr_id}}",
+										function (data, status) {
+											//$("#ContentID").html(data);
+											$('#basic').modal('hide')
+											PageRefresher("1");
+										}
+									);
+								} 
+							}
+
+							else{
+								$("#btnGoBack").attr("disabled", false);
+								$("#btnSubmit").attr("disabled", false);
+							}
+						});
+					return false
+				}
+			
+			
+			
+				$('.btn_sa').on('keydown', function (e) {
+					if (e.which == 13) {
+						e.preventDefault();
+						DocreateTrasDet('AS')
+					}
+				});
+				$('#basic').unbind('hidden.bs.modal');
+			
+			
+				function PageRefresher(lev){
+					   
+					   $.get("/transaction/loan_adjustment/details?rights={{.Tconf.rights}}&ID={{.Tconf.hdr_id}}",
+						   function(data,status){
+						   $("#ContentID").html(data);
+						   //$('#basic').modal('hide')
+						   }
+					   );
+				   
+			   }
+			
+			
+			  
+			
+					function convertamountwithcomma(amount) {
+								console.log(parseFloat(amount.value.split(',').join('')).toFixed(2));
+								var amt = CommaFormatted(parseFloat(amount.value.split(',').join('')).toFixed(2));
+			
+			
+								document.getElementById('amount').value = amt
+			
+								//	 $("[name=amount]").val(formatter.format(amount)).trigger("change");
+			
+			
+							};
+			
+					function CommaFormatted(amount) {
+								var delimiter = ","; // replace comma if desired
+								var a = amount.split('.', 2)
+								var d = a[1];
+								var i = parseInt(a[0]);
+								if (isNaN(i)) { return ''; }
+								var minus = '';
+								if (i < 0) { minus = '-'; }
+								i = Math.abs(i);
+								var n = new String(i);
+								var a = [];
+								while (n.length > 3) {
+									var nn = n.substr(n.length - 3);
+									a.unshift(nn);
+									n = n.substr(0, n.length - 3);
+								}
+								if (n.length > 0) { a.unshift(n); }
+								n = a.join(delimiter);
+								if (d.length < 1) { amount = n; }
+								else { amount = n + '.' + d; }
+								amount = minus + amount;
+								return amount;
+							}
+			
+							$('#lrdtl').prop('disabled', true);
+			
+			
+			
+			</script>

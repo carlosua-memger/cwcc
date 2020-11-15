@@ -1,0 +1,173 @@
+<!DOCTYPE HTML>
+<html>
+        
+    <head>
+           
+           
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Portfolio at Risk per Partner</title>
+
+      <!--   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/Highcharts-4.2.6/js/highcharts.js" defer="defer" ></script>
+        <script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/Highcharts-4.2.6/js/highcharts-3d.js" defer="defer" ></script>
+        <script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/Highcharts-4.2.6/js/modules/exporting.js" defer="defer" ></script> -->
+        
+ 
+        <style type="text/css">
+/*#container {
+    height: 400px; 
+    min-width: 310px; 
+    max-width: 800px;
+    margin: 0 auto;
+}*/
+        td {
+            font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+            font-size: 12px;
+                width: 60%;
+        }
+        </style>
+        <script type="text/javascript">
+function open_url() {
+var url_to_open = "/dashboard/operations"
+				    console.log(url_to_open)
+				    var myWindow = window.open(url_to_open);
+					return false;
+				}
+                
+$(function () {
+
+    Highcharts.setOptions({
+    lang: {
+      decimalPoint: '.',
+      thousandsSep: ','
+    }
+});
+
+    
+
+
+ 
+
+
+$(function () {
+    $('#container3').highcharts({
+        chart: {
+        type: 'column'
+                },
+        title: {
+            text: 'Loan Portfolio at Risk'
+        },
+        subtitle: {
+            text: 'Loan Portfolio at Risk'
+        },
+        xAxis: {
+          /*   type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e. %b',
+                year: '%b'
+            },
+            title: {
+                text: 'Date'
+            }, */
+            type: 'category',
+            categories : {{.partner2}}
+            
+           
+        },
+        yAxis: [{
+            title: {
+                text: 'Percentage'
+            },
+            min: 0
+        },
+       ],
+        tooltip: {
+           // headerFormat: '<b>{series.name}</b><br>',
+            //pointFormat: '{point.x:%e. %b}: {point.y:.0f}'
+          // valueSuffix: '%'
+          formatter: function() {
+                return 'Partner: <b>'+ this.point.partner_name + '<b><br>Percentage: <b>'+ this.point.y +'%<br>Outstanding Loan Release: <b>' + Highcharts.numberFormat(this.point.olr,2) + '</b> <br> Portfolio at Risk (amount): <b>' + Highcharts.numberFormat(this.point.par,2) + '</b>';
+                
+                }
+        },
+
+
+       
+        plotOptions: {
+            spline: {
+                marker: {
+                    enabled: true
+                }
+            },
+
+         /*    series: {
+            cursor: 'pointer',
+            point: {
+                events: {
+                    click: function () {
+                        
+                        //alert('Category: ' + this.partner_id + ', value: ' + this.y);
+                        //Modalfunc(this.partner_id);
+                    }
+                }
+            }
+        } */
+        },
+
+
+
+       
+
+        
+
+        series: [{
+            
+            name: 'PAR Percentage',
+            data: {{.par_percentage2}}
+        },  
+
+          
+
+        ]
+    });
+}); 
+
+});
+//end graph 2
+
+
+
+
+
+        </script>
+
+    </head>
+    <div class="modal-dialog modal-lg">
+            <div class="modal-content" id="ModalCont">
+    <body>
+
+
+          
+                  
+                                
+        
+
+
+<img src="{{.item_image}}">
+</center>
+<hr>
+
+
+<div id="container3" >
+
+
+    </div>
+   
+
+</div>
+</div>
+    </body>
+
+   
+    </div>
+</html>

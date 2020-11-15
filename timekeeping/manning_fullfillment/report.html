@@ -1,0 +1,151 @@
+<html>
+	<head>
+				<title style="font-size: 16px;">Manning fullfillment Report</title>
+			<style type="text/css">
+				.rpt_date {
+					float: right;
+					
+				}
+				.page_header{
+					margin-bottom: 5px;
+					/*display: inline; */
+				}
+				.name{
+					/*float: left;*/
+					margin-bottom: 3px;
+					font-family: Arial; 
+				}
+				.covered_data{
+					/*float: right;*/
+					font-family: Arial; 
+				}
+				.pic_logo {
+					width: 200px;
+
+				}
+				table{
+					width: 100%;
+				}
+				
+				.dtatbl {
+				border: 0.99px solid #B3B3B3;
+				border-collapse: collapse;
+				font-family: 'Arial Narrow', Arial, sans-serif;
+				font-size: 8px;
+				}
+
+				.dtatbl th{
+					border: 0.99px solid #B3B3B3;
+				border-collapse: collapse;
+				font-family: 'Arial Narrow', Arial, sans-serif;
+				font-size: 8px;
+				}
+
+				.dtatbl td {
+					border: 0.99px solid #B3B3B3;
+				border-collapse: collapse;
+				font-family: 'Arial Narrow', Arial, sans-serif;
+				font-size: 8px;
+				}
+				th, td {
+				    /*padding: 2px;*/
+				}
+				th{
+					
+					background-color: whiteSmoke;
+					/*background-image: -webkit-linear-gradient*/
+					
+				}
+				body {
+					font-size: 8px;
+				}
+				.logo{
+					width: 200px;
+					margin-bottom: 5px;
+				}
+				.page_footer{
+					margin-top: 20px;
+					display: inline-block;
+					width: 100%;
+				}
+				.signaturemember{
+					border-top: 0.99px solid black;
+					width: 25%;
+					float: left;
+					font-family: inherit;
+				}
+				.signatureleft{
+					margin-left: 10%;
+					border-top: 0.99px solid black;
+					width: 25%;
+					float: left;
+					font-family: inherit; 
+				}
+				.signatureright{
+					border-top: 0.99px solid black;
+					width: 25%;
+					float: right;
+					font-family: inherit; 
+				}
+				.tbl_foor{
+					margin-top: 10px;
+				}
+				.tbl_foor td div{
+					border-top: 0.99px solid black;	
+					width: 50%;
+				}
+				.isred {
+					color: red;
+				}
+				.log_sum{
+					margin-top: 10px;
+				}
+
+			</style></head>
+			
+
+			<body>
+				<div class="htl" style="font-size: 10px;margin-bottom: 10px;"> 
+					Manning fullfillment Report
+				</div>
+				
+				<table style="font-size: 8px;">
+					<tbody>
+						<tr>
+							<td style="width: 1px;">Assigment:</td>
+							<td>{{.Assignment}}</td>
+						</tr>
+						<tr>
+							<td>Date:</td>
+							<td>{{.Date}}</td>
+						</tr>
+					</tbody>
+				</table>
+				<table class="dtatbl">
+					<tbody>
+						<tr>
+							<th>Assignment</th>
+							<th>Deployed</th>
+							<th>Present</th>
+							<th>Absent</th>
+							<th>Rating</th>
+						</tr>
+						{{range $rep_list := .Mfr_list_data }}
+						<tr>
+							<td>{{$rep_list.Assignment}}</td>
+							<td>{{$rep_list.Deployed}}</td>
+							<td>{{$rep_list.Present}}</td>
+							<td>{{$rep_list.Absent}}</td>
+							<td>{{$rep_list.Rating}}</td>
+
+						</tr>
+						{{end}}
+					</tbody>	
+				</table>
+							
+
+
+
+
+	</body>
+</html>

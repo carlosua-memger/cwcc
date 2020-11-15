@@ -1,0 +1,173 @@
+  <style type="text/css">
+  tr.hilight {
+    background: azure;
+  }
+  td.hilight {
+    background: azure ;
+  }
+  .txbxnd{
+    width: 50px;
+
+  }
+  .txblog{
+    width: 75px;
+
+  }
+  .ssuc{
+    border: solid 1px #2b8b3a;
+  }
+  .sfai{
+     border: solid 1px red;
+  }
+  </style>
+  
+  <div style="margin-bottom:10px;">
+    <table role="form" width="60%">
+      <tr>
+        <td >Assignment:</td>
+        <td>
+            <select name="lbr_assign" class="form-control dr-js" style="margin-bottom: 5px;" > 
+              <option  value="0">All</option>
+              {{range $assignlist := .LBR_Assign_Get }}
+                <option  value="{{$assignlist.Id}}">{{$assignlist.Name}}</option>
+              {{end}}
+            </select> 
+
+        </td>
+      </tr>
+      <tr>
+        <td>From:</td>
+        <td>
+          <input type="text" name="from" class="form-control input-medium  date-picker" placeholder="from" maxlength="50" style="margin-bottom: 5px;" >
+        </td>
+
+        <td>To:</td>
+        <td>
+         <input type="text" name="to" class="form-control input-medium  date-picker" placeholder="to" maxlength="50">
+        </td>
+
+      </tr>
+      <tr>
+        <td >Upload:</td>
+        <td>
+          
+          <form class="btn-group act_btn" id="fileinfo_N1" method="post"  enctype="multipart/form-data" onsubmit="return Uploadlog('N1')">
+              <fieldset>
+                  <div style="position:relative;">
+                      <a class="btn green" href="javascript:;">
+                          Upload VersatimeMasterPR0 <i class="fa fa-plus"></i>
+                          <input type="file" name="myfiles"style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent; width: 89px; height: 34px;' size="40"  accept=".dat" id="myfiles" onchange="return Uploadlog('N1');" >
+                      </a>
+                      &nbsp;
+                      <span class='label label-info' id="upload-file-info"></span>
+                  </div>
+              </fieldset>  
+          </form>
+
+
+        </td>
+      </tr>
+        
+    </table>
+  </div>    
+
+  
+
+<script>
+  var ass
+  var mem
+  var jsobj
+
+    $(".dr-js").select2();
+    $('.date-picker').datepicker({
+        rtl: Metronic.isRTL(),
+        orientation: "left",
+        autoclose: true
+    });
+
+
+    function Uploadlog(a){
+        stat_done =0
+        //pullingFuc()
+        var progressbarhtml ='<div class="progress"> <div class="progress-bar progress-bar-striped active uploadprog" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 10%"> <span class="sr-only">45% Complete</span></div></div> '
+        $(".progressclass").html(progressbarhtml)    
+        if(a=="C7"){
+            var fd = new FormData(document.getElementById("fileinfo_C7"));   
+        }else if(a=="N1"){
+            var fd = new FormData(document.getElementById("fileinfo_N1"));   
+        }else if(a=="VF300"){
+            var fd = new FormData(document.getElementById("fileinfo_VF300"));   
+        }else{
+
+            var fd = new FormData(document.getElementById("fileinfo")); 
+        }
+        
+        fd.append("label", "WEBUPLOAD");
+        $.ajax({
+          url: "/time_keep_uploader_do_upload",
+          type: "POST",
+          xhr: function() {  // custom xhr
+                var myXhr = $.ajaxSettings.xhr();
+                if(myXhr.upload){ // check if upload property exists
+                    myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // for handling the progress of the upload
+                }
+                return myXhr;
+            },
+          data: fd ,
+          enctype: 'multipart/form-data',
+          processData: false,  // tell jQuery not to process the data
+          contentType: false   // tell jQuery not to set contentType
+          //async: false
+        }).done(function( data,status ) {
+            stat_done =1
+            var ht =''
+            var success_count = 0
+            var error_count = 0
+            for (var i = 0; i < data.length; i++) { 
+                ht+='txt line:'+data[i].Txtline +', MsgID: ' + data[i].MsgID+' Msg: '+data[i].Msg + '<br>'
+                if(stringContains(data[i].Msg,"Error")) {
+                   error_count = error_count+1
+                }
+                if(stringContains(data[i].Msg,"Success")){
+                   success_count = success_count+1 
+                }
+            }
+            $(".progressclass").html("")
+                
+            var htdata =' <div class="Metronic-alerts alert alert-success fade in"><button type="button" '
+            htdata +='class="close" data-dismiss="alert" aria-hidden="true"></button><i class="fa-lg fa fa-'
+            htdata += 'warning"></i>  '
+            htdata += 'Upload Success.<br>'
+            htdata += 'Success count: '+ success_count +'<br>'
+            htdata += 'Error count: '+ error_count +'<br>'
+            htdata += ht
+            htdata += '</div>   '
+            $(".error_section").html(htdata); 
+            
+            
+        });
+        return false;
+    }
+
+    function pullingFuc(e){
+        //setTimeout(function(){
+            $.ajax({ url: "/AjaxPolling", success: function(data){
+            //Update your dashboard gauge
+            
+            $(".progressCountclass").html(data)
+           // salesGauge.setValue(data.value);
+
+            //Setup the next poll recursively
+                if (stat_done ==0) {
+                pullingFuc();
+                }else{
+                     $(".progressCountclass").html("")
+                }
+           
+            }, dataType: "json"});
+      //  }, 3000);
+
+    }
+
+
+</script>

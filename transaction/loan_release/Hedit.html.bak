@@ -1,0 +1,1550 @@
+{{$Org_id := .Tconf.org_id}}
+
+ <head>
+                <!-- <title style="font-size: 16px;">Paired logs Report</title> -->
+            <style type="text/css">
+table {
+	
+	font-size:	10px;
+	font-family: 'Roboto';
+	
+	
+	border-collapse: collapse;
+    border-spacing: 50px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    
+   
+}
+
+table td, table th { 
+	max-width:100px;
+	overflow-x: hidden;
+    overflow-y: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 3px;
+
+
+ }  
+
+ .headercolor {
+    background-color: #EFEBEB
+  }
+
+  .fontroboto {
+
+  	font-family: 'Roboto';
+  	font-size:	10px;
+  }
+
+  .row.header {
+  font-weight: 900;
+  color: #ffffff;
+  background: #ea6153;
+}
+.row.green {
+  background: #27ae60;
+}
+.cell {
+  padding: 1px 10px;
+  display: table-cell;
+}
+
+.table {
+  margin: 0 0 40px 0;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  display: table;
+}
+
+@media screen and (max-width: 580px) {
+  .row {
+    padding: 14px 0 7px;
+    display: block;
+  }
+  .row.header {
+    padding: 0;
+    height: 6px;
+  }
+  .row.header .cell {
+    display: none;
+  }
+  .row .cell {
+    margin-bottom: 10px;
+  }
+  .row .cell:before {
+    margin-bottom: 3px;
+    min-width: 150px;
+    font-size: 10px;
+    line-height: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #969696;
+    display: block;
+  }
+}
+#amt_generated2
+{
+     font-size:14px;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+.redfont {
+	color: #FF0000;
+}
+               </style></head>
+
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-file-text"></i>Edit Loan Application Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+
+
+
+
+<div class="row">
+<div class="col-md-6">
+
+
+<h3 class="form-section">LA ID {{.Tconf.la_id}}</h3>
+
+
+
+		<form id="CreateTransaction" class="form-horizontal"  method="Post" onsubmit="return DoEditTransaction()">
+	
+
+					<div class="form-horizontal">
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Received<span class="required" aria-required="true">*</span>
+							</label>
+							<div class="col-md-8">
+								<input type="text" name="received" placeholder="Select Date" class="form-control date-picker" maxlength="50" Required value="{{.Tconf.la_received}}">
+											<span class="help-block c_h_date" style="color:red;" ></span>
+											
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Tran date<span class="required" aria-required="true">*</span>
+							</label>
+							<div class="col-md-8">
+								<input type="text" name="trandate" placeholder="Select Date" class="form-control date-picker-notime" maxlength="50" Required value="{{.Tconf.la_trandate}}">
+											<span class="help-block c_h_date" style="color:red;" ></span>
+											
+							</div>
+						</div>
+
+						
+
+						<div class="form-group">
+								<label class="col-md-3 control-label">Member<span class="required" aria-required="true">*</span></label>
+								<div class="col-md-4">
+									<input type="text" name="member" placeholder="Search Member" id="member"  class="form-control input-large"  required  value="{{.Tconf.la_member}}">
+								</div>
+							</div>
+
+							<div class="form-group">
+							<label class="col-md-3 control-label">Partner</label>
+							<div class="col-md-8">
+								<select name="partner" class="form-control" > 
+
+									{{$partner_id  := .Tconf.la_partner }}
+								 	{{range  $key ,$val := .Ls_partner}}
+									{{ $loop_id  := index  $val 0 }}
+									{{if eq $partner_id $loop_id }}	
+								 		<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+								 	{{else}}	
+								 		<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+									{{end}}
+									{{end}}
+
+									</select>
+							</div>
+						</div>
+
+
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Loan Type</label>
+							<div class="col-md-8">
+								<select name="loantype" class="form-control" onchange="change_amt_generated()" > 
+								 	
+										{{$loantype_id  := .Tconf.la_loantype }}
+								 	{{range  $key ,$val := .Ls_loantype}}
+									{{ $loop_id  := index  $val 0 }}
+									{{if eq $loantype_id $loop_id }}	
+								 		<option value="{{ index  $val 0}}" selected data-defaultamt="{{ index  $val 3}}" data-defaultterm="{{ index  $val 4}}" data-defaultsfrate="{{ index  $val 5}}" data-defaultsfded="{{ index  $val 6}}" data-defaultsffeefix="{{ index  $val 7}}" data-defaultint = "{{ index $val 2}}">{{ index  $val 1}}</option>
+								 	{{else}}	
+								 		<option value="{{ index  $val 0}}" data-defaultamt="{{ index  $val 3}}" data-defaultterm="{{ index  $val 4}}" data-defaultsfrate="{{ index  $val 5}}" data-defaultsfded="{{ index  $val 6}}" data-defaultsffeefix="{{ index  $val 7}}" data-defaultint = "{{ index $val 2}}">{{ index  $val 1}}</option>
+									{{end}}
+									{{end}}
+								</select>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-md-3 control-label">Term (mos)<span class="required" aria-required="true">*</span>
+							</label>
+							<div class="col-md-8">
+								<input type="text" name="term" class="form-control" maxlength="50" Required onchange="change_amt_generated()" value="{{.Tconf.la_term}}" onkeypress='return numbersOnly(this,event,false,false);'>
+											<span class="help-block" style="color:red;" ></span>
+											
+							</div>
+						</div>	
+
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Pay Mode</label>
+							<div class="col-md-8">
+								<select name="paymode" class="form-control" id="paymode" > 
+								 	{{$paymode_id  := .Tconf.la_paymode }}
+								 	{{range  $key ,$val := .Ls_paymodes}}
+									{{ $loop_id  := index  $val 0 }}
+									{{if eq $paymode_id $loop_id }}	
+								 		<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+								 	{{else}}	
+								 		<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+									{{end}}
+									{{end}}
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Amount<span class="required" aria-required="true">*</span>
+							</label>
+							<div class="col-md-8">
+								<input type="text" id="amount" name="amount" placeholder="0" class="form-control" maxlength="50" Required style="text-align: right" onchange="convertamountwithcomma(this)" value="{{.Tconf.la_amt}}" onkeypress='return numbersOnly(this,event,false,false);'>
+											<span class="help-block" style="color:red;" ></sapan>
+											
+							</div>
+						</div>	
+
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Amortization per Payout</label>
+							<div class="col-md-8">
+								<input type="text" name="amt_per_pay" placeholder="0" class="form-control" maxlength="50" Required style="text-align: right" readonly="true">
+											
+											
+							</div>
+						</div>	
+
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Amount Generated</label>
+							<div class="col-md-8">
+								<input type="text" name="amt_generated" placeholder="0" class="form-control" maxlength="50" Required style="text-align: right" readonly="true" value="{{.Tconf.la_amt_generated}}">
+										
+											
+							</div>
+						</div>	
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Pay Sched</label>
+							<div class="col-md-8">
+								<input type="text" name="pay_sched" placeholder="Pay Sched" class="form-control" maxlength="50" value="{{.Tconf.la_paysched}}">
+											
+											
+							</div>
+						</div>	
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Purpose</label>
+							<div class="col-md-8">
+								<input type="text" name="purpose" placeholder="Purpose" class="form-control" maxlength="50" value="{{.Tconf.la_purpose}}">
+											
+											
+							</div>
+						</div>	
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Coor</label>
+							<div class="col-md-8">
+								<select name="coor" class="form-control" > 
+								 	{{$coor_id  := .Tconf.la_coor }}
+								 	{{range  $key ,$val := .Ls_coor}}
+									{{ $loop_id  := index  $val 0 }}
+									{{if eq $coor_id $loop_id }}	
+								 		<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+								 	{{else}}	
+								 		<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+									{{end}}
+									{{end}}
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Endorsed</label>
+							<div class="col-md-8">
+								<input type="text" name="endorsed" placeholder="Select Date" class="form-control date-picker" maxlength="50" Required value="{{.Tconf.la_coor_endorsed}}">
+											<span class="help-block c_h_date" style="color:red;" ></span>
+											
+							</div>
+						</div>	
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Remarks</label>
+							<div class="col-md-8">
+								
+							<!-- 	<input type="text" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct"> -->
+								<textarea name = "remarks" class="form-control createAct" >{{.Tconf.la_remarks}}</textarea>
+							</div>
+						</div>
+						
+					</div>
+
+					<!-- <div class="form-actions fluid">
+						<div class="col-md-offset-3 col-md-9">
+							<button type="submit" class="btn blue submit_btn">Save</button>
+							<button class="btn default" onclick="javascript:Navigate('/inventory/supplier_order?rights={{.Rights}}')" type="button">Cancel</button>
+						</div>
+					</div>
+ -->
+
+						
+				</form>
+
+
+</div>	
+
+<div class="col-md-6">
+
+
+			<div class="form-group">
+
+				<div class="col-md-10">
+				<b class = "fontroboto"><font size="4">Amount Generated:</b><label id="amt_generated2" ></label></font>
+
+				</div>
+
+				<div class="col-md-8">
+					<label id="listofloans_label"></label>
+					<table border="0" width="30%" id="listofloans" name="listofloans">
+					</table>	
+				</div>
+			</div>	
+			<div class="form-group">
+					<div class="col-md-8">
+						
+							<label id="covers_label"></label>
+							<table border="0" id="covers_table" width="100%"></table>
+							
+					</div>	
+						<div class="col-md-3">
+							<label id="covers2_label"></label>
+							<table border="0" id="covers2_table" width="100%"></table>	
+							<br>
+							<a  class="btn green act_btn btn-sm"  onclick="javascript:Modalfunc_savings_ledger(this);" id="savings_ledger">
+                   	 				Show Savings Ledger</a>
+                   	 		<br>
+                   	 		<br>
+                   	 		<a  class="btn green act_btn btn-sm"  onclick="javascript:Modalfunc_loans_ledger(this);" id="loans_ledger">
+                   	 				Show Loans Ledger</a>
+						
+						</div>
+
+
+
+					</div>
+			<div class="form-group">
+					<div class="col-md-12">
+						<label id="latestpaymentsfromchris_label"></label>
+						<table border="0" width="100%" id="latestpaymentsfromchris_table"></table>	
+					</div>
+			</div>
+
+</div>
+
+</div>
+
+<div class="form-actions fluid">
+	<div class="col-md-offset-3 col-md-9">
+			{{if eq .Tconf.Action_button_save "true"}}
+		<button type="submit" class="btn blue submit_btn" onclick="return DoCreateTransaction()">Save</button>
+		{{end}}
+		<button class="btn default" onclick="javascript:nav_back('/transaction/loan_applications?rights={{.Rights}}')" type="button">Go Back</button>
+		<button class="btn blue default" onclick=Nav2(event) type="button">Consolidation</button>
+		
+		{{if eq .Tconf.Action_button_post "true"}}
+		<div class="btn-group act_btn">
+			<a class="btn blue" href="#{{.Tconf.Add_post_button_url}}" onclick="javascript:func_post('{{.Tconf.Add_post_button_url}}');">
+			Post 
+			</a>
+		</div>
+		{{end}}
+
+		{{if eq .Tconf.Action_button_cancel "true"}}
+		<div class="btn-group act_btn">
+			<a class="btn blue" href="#{{.Tconf.Add_cancel_button_url}}" onclick="javascript:func_cancel('{{.Tconf.Add_cancel_button_url}}');">
+			Cancel 
+			</a>
+		</div>
+		{{end}}
+	</div>
+</div>
+
+
+</div>
+
+
+
+
+
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	
+</div>
+
+
+
+
+			<script type="text/javascript">
+
+				function Nav2(a){
+							$.get("{{.Tconf.LoanConso_url}}",
+								function(data,status){
+								$("#ContentID").html(data);
+								
+								}
+							);
+						return false
+						}
+
+			//	$("#savings_ledger").hide();
+			//	$("#loans_ledger").hide();
+				   $("[name=partner] , [name=loantype], [name=coor]").select2();
+
+
+			 $(document).ready( function () {
+  				displaydata();
+
+				});
+
+		    function displaydata(){
+		    	showAmtGenerated();
+		    	showListofLoans();
+		    	showCovers();
+		    	showLatestPayments();
+		    	showCovers2();
+		    }
+
+
+			function showAmtGenerated(){
+
+						var amt_generated = {{.Tconf.la_amt_generated}};
+						console.log(amt_generated)
+								 document.getElementById('amt_generated2').innerHTML = amt_generated;
+					 		 //$('#amt_generated2').text(amt_generated); 
+					  			 if (amt_generated < 0)	{
+				                    $('#amt_generated2').css("color", "red");
+				                    $('#amt_generated2').css("font-size", "18px");
+				                    $('#amt_generated2').css("font-weight", "900");
+				                    $('#amt_generated2').css("animation", "blinker 1s linear 3");
+				                    
+				                    }else{
+
+				                    	$('#amt_generated2').css("color", "black");
+				                    	$('#amt_generated2').css("font-size", "16px");
+				                    	$('#amt_generated2').css("font-weight", "900");
+				                    	$('#amt_generated2').css("animation", "blinker 1s linear 3");
+				                    }			 
+
+			}
+
+
+
+			function repoFormatResult( repo ) {
+				   //var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div></div>";
+				   var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+				    return markup;
+				}
+			function repoFormatSelection( repo ) {
+		        // $("input[name=unit_cost]").val(repo.price);
+		        return repo.full_name;
+		    }
+
+					$( "#member" ).select2({
+			    placeholder: "Search for Members",
+			    minimumInputLength: 3,
+			    multiple: false,
+			    allowClear: true,
+			    ajax: {
+			        url: "/master/members_search/search/Ajax/Ajax_getItem",
+
+					//url: "/inventory/adjustment_entry/details/Ajax/Ajax_getItem",
+			        dataType: "json",
+			        quietMillis: 250,
+			        data: function( term, page ) {
+			            return {
+			                // search term
+			                q: term
+			            };
+			        },
+			        results: function( data, page ) {
+			                // parse the results into the format expected by Select2.
+			                // since we are using custom formatting functions we do not need to alter the remote JSON data
+			                
+			                return { results: data.items };
+			        }
+
+
+			        
+			    },
+
+			    	initSelection: function( element, callback ) {
+					// the input tag has a value attribute preloaded that points to a preselected repository's id
+					// this function resolves that id attribute to an object that select2 can render
+					// using its formatResult renderer - that way the repository name is shown preselected
+
+					/*
+					var id = $( element ).val();
+					if ( id !== "" ) {
+						$.ajax( "inventory/location_order/details/Ajax/Ajax_getItem?isbaseonassignid=1&id=" + id, {
+							dataType: "json"
+						}).done( function( data ) {
+							callback( data );
+						});
+					}*/
+					var data = {'Id':{{.Tconf.la_member}},'full_name':"{{.Tconf.la_member_name}}"}
+					callback( data  );
+					
+				},
+
+			    formatResult: repoFormatResult,
+			    formatSelection: repoFormatSelection,
+			    // apply css that makes the dropdown taller
+			    dropdownCssClass: "bigdrop",
+			    // we do not want to escape markup since we are displaying html in results
+			    escapeMarkup: function( m ) {
+			        return m;
+
+
+
+			    }
+			});		
+
+
+			setTimeout(function (){
+		     //   $( "#member").select2('open')
+		    	
+		    }, 500);	
+
+
+		    	function showListofLoans() {
+								
+								//$('#listofloans').empty();
+
+		                    $.get("/json_func",
+		                    {
+		                       qdata : "rep_loanlist_member {{.Tconf.la_member}},1"
+
+		                    }
+		                    ,
+		                    function(data,status){
+		                        if( data!=null){
+
+		                        	var line="";
+		                        	var header="";
+		                        	var listofloanslabel="";
+
+		                        	listofloanslabel = '<b class = "fontroboto">List of Loans</b>';
+		                        	$('#listofloans_label').html(listofloanslabel);
+
+
+		                        	 header = '<tr><th class="row header green"><b>Trandate</b></th><th class="row header green"><b>Type of Loan</b></th><th class="row header green"><b>LA_Amount</b></th><th class="row header green"><b>Term</b></th><th class="row header green"><b>LR_Status</b></th><th class="row header green"><b>LA_Status</b></th><th class="row header green"><b>LR_Amount</b></th><th class="row header green"><b>Balance</b></th><th class="row header green"><b>Past_Due</b></th></tr>'   
+		                        	
+		                        	//var amt_generated = "";
+		                        	  $('#listofloans').prepend(header);
+
+				                    for (var i = 0; i < data.length; i++) {
+				                    	 	ret_msg = data[i][0]
+
+				                    	 	var myStr = data[i][8];
+      										myStr = myStr.replace(/,/g, "");
+
+				                    	 	if (myStr > 0) {
+				                    	 	
+							            	line = '<tr class="redfont"><td>' + data[i][0] + '</td><td>' + data[i][1] + '</td><td>' + data[i][2] + '</td><td>' + data[i][3] + '</td><td>' + data[i][4] + '</td><td>' + data[i][5] + '</td><td align="right">' + data[i][6] + '</td><td align="right">' + data[i][7] + '</td><td align="right">'+ data[i][8] + '</td>/tr>';
+  											//console.log(i);
+				                    		
+
+				                    		}else{
+
+				                    			line = '<tr><td>' + data[i][0] + '</td><td>' + data[i][1] + '</td><td>' + data[i][2] + '</td><td>' + data[i][3] + '</td><td>' + data[i][4] + '</td><td>' + data[i][5] + '</td><td align="right">' + data[i][6] + '</td><td align="right">' + data[i][7] + '</td><td align="right">'+ data[i][8] + '</td></tr>';
+  											//console.log(i);
+				                    	
+
+
+
+				                    		}
+				                    		$('#listofloans').append(line);
+				                    		console.log(line);
+
+				                     	 
+				                    }
+				                  
+
+
+				                    
+
+
+				                    //$("[name=amt_generated]").val(CommaFormatted(amt_generated)).trigger("change");
+				                   
+			
+
+			                    }
+		                    });	
+							
+		                    return false;
+					};
+					function showCovers() {
+								
+								//$('#covers_table').empty();
+
+		                    $.get("/json_func",
+		                    {
+		                       qdata : "LA_CreditScore 5,{{.Tconf.la_member}},{{.Tconf.la_loantype}},{{.Tconf.la_term}}"
+
+		                    }
+		                    ,
+
+		                    function(data,status){
+		                        if( data!=null){
+
+		                        	var line="";
+		                        	var header="";
+		                        	var listofloanslabel="";
+
+		                        	listofloanslabel = '<b class = "fontroboto">Earnings, Deductions and Covers</b>';
+		                        	$('#covers_label').html(listofloanslabel);
+
+		                        	 header = '<tr><th class="row header green"><b>Description</b></th><th class="row header green"><b>Amount</b></th></tr>';  
+		                        	
+		                        	//var amt_generated = "";
+		                        	  $('#covers_table').prepend(header);
+
+				                    for (var i = 0; i < data.length; i++) {
+				                    	 	ret_msg = data[i][0];
+
+				                    	 	
+
+				                    			line = '<tr><td>' + data[i][1] + '</td><td align="right">' + data[i][2] + '</td></tr>';
+  				
+				                    		$('#covers_table').append(line);
+				                    		console.log(line);
+
+				                     	 
+				                    }
+				       
+
+			                    }
+		                    });	
+							
+		                    return false;
+
+		                };
+
+		                	function showLatestPayments() {
+								
+								$('#latestpaymentsfromchris_table').empty();
+
+		                    $.get("/json_func",
+		                    {
+		                       qdata : "hris_get_payment_history 1,{{.Tconf.la_member}}"
+
+		                    }
+		                    ,
+		                    function(data,status){
+		                        if( data!=null){
+
+		                        	var line="";
+		                        	var header="";
+		                        	var listofloanslabel="";
+
+		                        	listofloanslabel = '<b class = "fontroboto">Latest Payments from CHRIS</b>';
+		                        	$('#latestpaymentsfromchris_label').html(listofloanslabel);
+
+		                        	
+
+
+
+		                        	 header = '<tr><th class="row header green"><b>Trandate</b></th><th class="row header green"><b>Description</b></th><th class="row header green"><b>Amount</b></th><th class="row header green"><b>Project</b></th></tr>'   
+		                        	
+		                        	//var amt_generated = "";
+		                        	  $('#latestpaymentsfromchris_table').prepend(header);
+
+				                    for (var i = 0; i < data.length; i++) {
+				                    	 	ret_msg = data[i][0]
+
+				                    	 	
+
+				                    			line = '<tr><td>' + data[i][0] + '</td><td>' + data[i][1] + '</td><td align="right">' + data[i][2] + '</td><td>' + data[i][3] + '</td></tr>';
+  											//console.log(i);
+				                    	
+
+
+
+				                    		
+				                    		$('#latestpaymentsfromchris_table').append(line);
+				                    		console.log(line);
+
+				                     	 
+				                    }
+				                  
+
+
+				                    
+
+
+				                    //$("[name=amt_generated]").val(CommaFormatted(amt_generated)).trigger("change");
+				                   
+			
+
+			                    }
+		                    });	
+							
+		                    return false;
+					};
+					
+
+					function showCovers2() {
+
+								$("#savings_ledger").show();
+								$("#loans_ledger").show();
+								
+								$('#covers2_table').empty();
+
+		                    $.get("/json_func",
+		                    {
+		                        qdata : "LA_CreditScore 6,{{.Tconf.la_member}},{{.Tconf.la_loantype}},{{.Tconf.la_term}}"
+
+		                    }
+		                    ,
+		                    function(data,status){
+		                        if( data!=null){
+
+		                        	var line="";
+		                        	var header="";
+		                        	var listofloanslabel="";
+
+		                        	listofloanslabel = '<b class = "fontroboto"><font color="white">.</font></b>';
+		                        	$('#covers2_label').html(listofloanslabel);
+
+		                        	
+
+
+
+		                        	 header = '<tr><th class="row header green"><b>Description</b></th><th class="row header green"><b>Amount</b></th></tr>'   
+		                        	
+		                        	//var amt_generated = "";
+		                        	  $('#covers2_table').prepend(header);
+
+				                    for (var i = 0; i < data.length; i++) {
+				                    	 	ret_msg = data[i][0]
+
+				                    	 	
+
+				                    			line = '<tr><td>' + data[i][1] + '</td><td align="right">' + data[i][2] + '</td></tr>';
+  											//console.log(i);
+				                    	
+
+
+
+				                    		
+				                    		$('#covers2_table').append(line);
+				                    		console.log(line);
+
+				                     	 
+				                    }
+				                  
+
+
+				                    
+
+
+				                    //$("[name=amt_generated]").val(CommaFormatted(amt_generated)).trigger("change");
+				                   
+			
+
+			                    }
+		                    });	
+							
+		                    return false;
+					};
+
+
+		   
+
+
+			$("#member").change(function () {
+					
+
+
+					$.get("/json_func",
+		                    {
+		                       qdata : "LA_CreditScore 8,"+$('[name=member]').val()+","+$('[name=loantype]').val()+","+$('[name=term]').val()
+
+		                    }
+		                    ,
+		                    function(data,status){
+		                        if( data!=null){
+		                        	
+		                        	var amt_generated = "";
+		                        	
+
+				                    for (var i = 0; i < data.length; i++) {
+				                    	 	ret_msg = data[i][0]
+							            	//$("input[name=customer]").val(ret_msg);
+							            	//console.log(alert(data[i][0]))
+					            	
+							            	amt_generated = data[i][0]
+							            	
+
+				                     		//console.log(amt_generated)  
+				                     	
+
+				                    }
+				                    $("[name=amt_generated]").val(CommaFormatted(amt_generated)).trigger("change");
+				                    $('#amt_generated2').text(CommaFormatted(amt_generated)); 
+				                      if (amt_generated < 0)	{
+				                    $('#amt_generated2').css("color", "red");
+				                    $('#amt_generated2').css("font-size", "18px");
+				                    $('#amt_generated2').css("font-weight", "900");
+				                    $('#amt_generated2').css("animation", "blinker 1s linear 3");
+				                    
+				                    }else{
+
+				                    	$('#amt_generated2').css("color", "black");
+				                    	$('#amt_generated2').css("font-size", "16px");
+				                    	$('#amt_generated2').css("font-weight", "900");
+				                    	$('#amt_generated2').css("animation", "blinker 1s linear 3");
+				                    }			 
+				                   
+			
+
+			                    }
+		                    });	
+							
+		                    return false;
+
+		                    });
+
+							$("#member").change(function () {
+								
+								$('#listofloans').empty();
+
+		                    $.get("/json_func",
+		                    {
+		                       qdata : "rep_loanlist_member "+$('[name=member]').val()+",1"
+
+		                    }
+		                    ,
+		                    function(data,status){
+		                        if( data!=null){
+
+		                        	var line="";
+		                        	var header="";
+		                        	var listofloanslabel="";
+
+		                        	listofloanslabel = '<b class = "fontroboto">List of Loans</b>';
+		                        	$('#listofloans_label').html(listofloanslabel);
+
+
+		                        	 header = '<tr><th class="row header green"><b>Trandate</b></th><th class="row header green"><b>Type of Loan</b></th><th class="row header green"><b>LA_Amount</b></th><th class="row header green"><b>Term</b></th><th class="row header green"><b>LR_Status</b></th><th class="row header green"><b>LA_Status</b></th><th class="row header green"><b>LR_Amount</b></th><th class="row header green"><b>Balance</b></th><th class="row header green"><b>Past_Due</b></th></tr>'   
+		                        	
+		                        	//var amt_generated = "";
+		                        	  $('#listofloans').prepend(header);
+
+				                    for (var i = 0; i < data.length; i++) {
+				                    	 	ret_msg = data[i][0]
+
+				                    	 	var myStr = data[i][8];
+      										myStr = myStr.replace(/,/g, "");
+
+				                    	 	if (myStr > 0) {
+				                    	 	
+							            	line = '<tr class="redfont"><td>' + data[i][0] + '</td><td>' + data[i][1] + '</td><td>' + data[i][2] + '</td><td>' + data[i][3] + '</td><td>' + data[i][4] + '</td><td>' + data[i][5] + '</td><td align="right">' + data[i][6] + '</td><td align="right">' + data[i][7] + '</td><td align="right">'+ data[i][8] + '</td>/tr>';
+  											//console.log(i);
+				                    		
+
+				                    		}else{
+
+				                    			line = '<tr><td>' + data[i][0] + '</td><td>' + data[i][1] + '</td><td>' + data[i][2] + '</td><td>' + data[i][3] + '</td><td>' + data[i][4] + '</td><td>' + data[i][5] + '</td><td align="right">' + data[i][6] + '</td><td align="right">' + data[i][7] + '</td><td align="right">'+ data[i][8] + '</td></tr>';
+  											//console.log(i);
+				                    	
+
+
+
+				                    		}
+				                    		$('#listofloans').append(line);
+				                    		console.log(line);
+
+				                     	 
+				                    }
+				                  
+
+
+				                    
+
+
+				                    //$("[name=amt_generated]").val(CommaFormatted(amt_generated)).trigger("change");
+				                   
+			
+
+			                    }
+		                    });	
+							
+		                    return false;
+					});
+
+									///////PAYMENT FROM CHRIS TABLE/////
+
+							$("#member").change(function () {
+								
+								$('#latestpaymentsfromchris_table').empty();
+
+		                    $.get("/json_func",
+		                    {
+		                       qdata : "hris_get_payment_history 1,"+$('[name=member]').val()
+
+		                    }
+		                    ,
+		                    function(data,status){
+		                        if( data!=null){
+
+		                        	var line="";
+		                        	var header="";
+		                        	var listofloanslabel="";
+
+		                        	listofloanslabel = '<b class = "fontroboto">Latest Payments from CHRIS</b>';
+		                        	$('#latestpaymentsfromchris_label').html(listofloanslabel);
+
+		                        	
+
+
+
+		                        	 header = '<tr><th class="row header green"><b>Trandate</b></th><th class="row header green"><b>Description</b></th><th class="row header green"><b>Amount</b></th><th class="row header green"><b>Project</b></th></tr>'   
+		                        	
+		                        	//var amt_generated = "";
+		                        	  $('#latestpaymentsfromchris_table').prepend(header);
+
+				                    for (var i = 0; i < data.length; i++) {
+				                    	 	ret_msg = data[i][0]
+
+				                    	 	
+
+				                    			line = '<tr><td>' + data[i][0] + '</td><td>' + data[i][1] + '</td><td align="right">' + data[i][2] + '</td><td>' + data[i][3] + '</td></tr>';
+  											//console.log(i);
+				                    	
+
+
+
+				                    		
+				                    		$('#latestpaymentsfromchris_table').append(line);
+				                    		console.log(line);
+
+				                     	 
+				                    }
+				                  
+
+
+				                    
+
+
+				                    //$("[name=amt_generated]").val(CommaFormatted(amt_generated)).trigger("change");
+				                   
+			
+
+			                    }
+		                    });	
+							
+		                    return false;
+					});
+
+							
+
+							///////COVERS START////////////////
+				$("#member").change(function () {
+								
+								$('#covers_table').empty();
+
+		                    $.get("/json_func",
+		                    {
+		                       qdata : "LA_CreditScore 5,"+$('[name=member]').val()+","+$('[name=loantype]').val()+","+$('[name=term]').val()
+
+		                    }
+		                    ,
+		                    function(data,status){
+		                        if( data!=null){
+
+		                        	var line="";
+		                        	var header="";
+		                        	var listofloanslabel="";
+
+		                        	listofloanslabel = '<b class = "fontroboto">Earnings, Deductions and Covers</b>';
+		                        	$('#covers_label').html(listofloanslabel);
+
+		                        	
+
+
+
+		                        	 header = '<tr><th class="row header green"><b>Description</b></th><th class="row header green"><b>Amount</b></th></tr>'   
+		                        	
+		                        	//var amt_generated = "";
+		                        	  $('#covers_table').prepend(header);
+
+				                    for (var i = 0; i < data.length; i++) {
+				                    	 	ret_msg = data[i][0]
+
+				                    	 	
+
+				                    			line = '<tr><td>' + data[i][1] + '</td><td align="right">' + data[i][2] + '</td></tr>';
+  											//console.log(i);
+				                    	
+
+
+
+				                    		
+				                    		$('#covers_table').append(line);
+				                    		console.log(line);
+
+				                     	 
+				                    }
+				                  
+
+
+				                    
+
+
+				                    //$("[name=amt_generated]").val(CommaFormatted(amt_generated)).trigger("change");
+				                   
+			
+
+			                    }
+		                    });	
+							
+		                    return false;
+					});
+
+							///////COVERS END////////////////
+
+
+					///////COVERS2 START////////////////
+				$("#member").change(function () {
+
+								$("#savings_ledger").show();
+								$("#loans_ledger").show();
+								
+								$('#covers2_table').empty();
+
+		                    $.get("/json_func",
+		                    {
+		                       qdata : "LA_CreditScore 6,"+$('[name=member]').val()+","+$('[name=loantype]').val()+","+$('[name=term]').val()
+
+		                    }
+		                    ,
+		                    function(data,status){
+		                        if( data!=null){
+
+		                        	var line="";
+		                        	var header="";
+		                        	var listofloanslabel="";
+
+		                        	listofloanslabel = '<b class = "fontroboto"><font color="white">.</font></b>';
+		                        	$('#covers2_label').html(listofloanslabel);
+
+		                        	
+
+
+
+		                        	 header = '<tr><th class="row header green"><b>Description</b></th><th class="row header green"><b>Amount</b></th></tr>'   
+		                        	
+		                        	//var amt_generated = "";
+		                        	  $('#covers2_table').prepend(header);
+
+				                    for (var i = 0; i < data.length; i++) {
+				                    	 	ret_msg = data[i][0]
+
+				                    	 	
+
+				                    			line = '<tr><td>' + data[i][1] + '</td><td align="right">' + data[i][2] + '</td></tr>';
+  											//console.log(i);
+				                    	
+
+
+
+				                    		
+				                    		$('#covers2_table').append(line);
+				                    		console.log(line);
+
+				                     	 
+				                    }
+				                  
+
+
+				                    
+
+
+				                    //$("[name=amt_generated]").val(CommaFormatted(amt_generated)).trigger("change");
+				                   
+			
+
+			                    }
+		                    });	
+							
+		                    return false;
+					});
+
+							///////COVERS END////////////////
+			   
+
+			  function change_amt_generated() {
+					
+
+
+					$.get("/json_func",
+		                    {
+		                       qdata : "LA_CreditScore 8,"+$('[name=member]').val()+","+$('[name=loantype]').val()+","+$('[name=term]').val()
+
+		                    }
+		                    ,
+		                    function(data,status){
+		                        if( data!=null){
+		                        	
+		                        	var amt_generated = "";
+		                        	
+
+				                    for (var i = 0; i < data.length; i++) {
+				                    	 	ret_msg = data[i][0]
+							            	//$("input[name=customer]").val(ret_msg);
+							            	//console.log(alert(data[i][0]))
+					            	
+							            	amt_generated = data[i][0]
+							            	
+
+				                     		//console.log(amt_generated)  
+				                     	
+
+				                    }
+				                    $("[name=amt_generated]").val(CommaFormatted(amt_generated)).trigger("change");
+				                    $('#amt_generated2').text(CommaFormatted(amt_generated)); 
+				                    if (amt_generated < 0)	{
+				                    $('#amt_generated2').css("color", "red");
+				                    $('#amt_generated2').css("font-size", "16px");
+				                    $('#amt_generated2').css("font-weight", "900");
+				                    $('#amt_generated2').css("animation", "blinker 1s linear 3");
+				                    }	else{
+
+				                    	$('#amt_generated2').css("color", "black");
+				                    	$('#amt_generated2').css("font-size", "16px");
+				                    	$('#amt_generated2').css("font-weight", "900");
+				                    	$('#amt_generated2').css("animation", "blinker 1s linear 3");
+				                    }			 
+				                   		                    	
+				                   
+				                   
+			
+
+			                    }
+		                    });	
+							
+		                    return false;
+					};
+
+ 			var currentDate = new Date();  
+			 /*$('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });*/
+			//$(".date-picker").datepicker("setDate",currentDate,"option", "dateFormat", "mm-dd-yy");
+			/* $(".date-picker").datetimepicker({
+       			 Format: 'mm-dd-yy hh:mm:ss'
+         		
+   			 }).datetimepicker("setDate", currentDate);*/
+
+   			 $( ".date-picker" ).datetimepicker( { format: 'mm/dd/yyyy hh:mm:ss' } );
+			$( ".date-picker" ).datetimepicker( "setDate", currentDate);  
+			$( ".date-picker-notime" ).datepicker( "setDate", currentDate); 
+
+				
+		/*	$(".date-picker").datetimepicker({
+   				 dateFormat: "yy-mm-dd",
+   					 timeFormat:  "hh:mm:ss"
+
+				});*/
+
+			//$('.date-picker').datepicker({"setDate": new Date() ,  autoclose: true });
+			//$('input[name=item_class]').focus();
+			//$("[name=item_class] , [name=supplier], [name=location]").select2();
+			var rghts = '{{.Rights}}'
+			
+
+			
+
+
+			function convertamountwithcomma(amount) {
+				console.log(parseFloat(amount.value.split(',').join('')).toFixed(2));
+				var amt = CommaFormatted(parseFloat(amount.value.split(',').join('')).toFixed(2));
+				 
+
+				document.getElementById('amount').value = amt
+
+			//	 $("[name=amount]").val(formatter.format(amount)).trigger("change");
+
+
+			};
+
+
+			const formatter = new Intl.NumberFormat('en-US', {
+ 			 style: 'currency',
+ 			 currency: 'PHP',
+  			minimumFractionDigits: 2
+			})
+
+			/*	function commaSeparateNumber(val){
+   					 while (/(\d+)(\d{3})/.test(val.toString())){
+     				 val = val.toString().replace(/(\d+)(\d{3})/, '$1'+','+'$2');
+    					}
+    					return val;
+  						}*/
+
+
+							function currencyFormat(num) {
+				  return 'P' + parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, 'P1,')
+				}
+
+				
+
+
+			function CommaFormatted(amount) {
+				var delimiter = ","; // replace comma if desired
+				var a = amount.split('.',2)
+				var d = a[1];
+				var i = parseInt(a[0]);
+				if(isNaN(i)) { return ''; }
+				var minus = '';
+				if(i < 0) { minus = '-'; }
+				i = Math.abs(i);
+				var n = new String(i);
+				var a = [];
+				while(n.length > 3) {
+					var nn = n.substr(n.length-3);
+					a.unshift(nn);
+					n = n.substr(0,n.length-3);
+				}
+				if(n.length > 0) { a.unshift(n); }
+				n = a.join(delimiter);
+				if(d.length < 1) { amount = n; }
+				else { amount = n + '.' + d; }
+				amount = minus + amount;
+				return amount;
+			}
+
+
+				function Modalfunc_savings_ledger(a,v){
+			        var url_to_open = "/report/Show_savings_ledger?"  + "&member="+$("input[name=member]").val()+"&trantype=0"
+    				var myWindow = window.open(url_to_open, "", "width=800,height=500");
+
+    			}
+
+			    function Modalfunc_loans_ledger(a,v){
+			        var url_to_open = "/report/Show_loans_ledger?"  + "&member="+$("input[name=member]").val()+"&trantype=0"
+    				var myWindow = window.open(url_to_open, "", "width=800,height=500");
+
+    	}
+
+
+    	function DoCreateTransaction(){
+				
+				var ret_msg= ""
+				var amt = $('[name=amount]').val();
+				amt = amt.replace(/,/g, "");
+				var amt_generated = $('[name=amt_generated]').val();
+				amt_generated = amt_generated.replace(/,/g, "");
+				$.get("/json_func",
+                    {
+                       //qdata : "Branch_Save 'Add','programmer',1,0,'"+$('[name=sup_name]').val()+"' ,'"+$('[name=sort]').val()+"' ,'"+$('[name=remarks]').val()+"'"
+                       qdata : "LA_SaveEdit '{{.Tconf.username}}',{{.Tconf.org_id}},{{.Tconf.la_id}}, '"+$('[name=trandate]').val()+"', "+$('[name=member]').val()+", "+$('[name=partner]').val()+","+$('[name=loantype]').val()+",'"+$('[name=purpose]').val()+"',"+amt+","+amt_generated+", "+$('[name=term]').val()+","+$('[name=paymode]').val()+",'"+$('[name=pay_sched]').val()+"', "+$('[name=coor]').val()+" ,'"+$('[name=endorsed]').val()+"','"+$('[name=received]').val()+"', '"+$('[name=remarks]').val()+"'" 
+
+                        
+
+                    }
+                    ,
+                    function(data,status){
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									//console.log(data[i][0])
+									//alert(ret_msg)
+									//$('#basic').modal('hide')
+					            	//dtbl()
+					            	//console.log("success here")
+					            	//$("#item_tagsdata").show()
+					            	//$(".submit_btn").prop('disabled', true);
+					            	$(".c_suprec_id").val(data[i][0])
+					            	alert("Save Success")
+									GotoList()
+								//return false;
+			                    }else{
+			                    	alert(ret_msg)
+			                    }
+		                         
+		                    }
+	                    }
+                    });	
+					
+                    return false;
+		                /*$('#basic').modal('hide')
+		            	dtbl()
+			         	return false*/
+			        	
+			}
+
+			function GotoList(){
+				Navigate('/transaction/loan_applications?rights={{.Tconf.rights}}');}
+
+
+				
+
+
+					$("#loantype").change(function () {
+
+								var defaultamt = $("[name=loantype]").select2().find(":selected").data("defaultamt")
+								var interest = $("[name=loantype]").select2().find(":selected").data("defaultint")
+								var sfRate = $("[name=loantype]").select2().find(":selected").data("defaultsfrate")
+								var term = $('[name=term]').val()
+								var amount = $('[name=amount]').val()
+								amount = amount.split(',').join('');
+
+							//	console.log("sf"+ sfRate)
+							//	console.log("term" + term)
+							//	console.log("interest" + interest)
+							//	console.log("amount" + amount)
+
+
+								var totInterest  = (((interest / 12) * term) / 100) * amount
+								var totSF  = amount * sfRate
+
+							//	console.log("totSF" + totSF)
+							//	console.log("totInterest" + totInterest)
+
+								if ($('[name=paymode]').val() == 1){
+								//		var total = parseFloat(totInterest) + parseFloat(amount) + parseFloat(totSF)
+										var amortization = (((parseFloat(totInterest) + parseFloat(amount) + parseFloat(totSF))/ term) /4).toFixed(2)
+
+										//Math.Round(((totInterest + txtAmt.Text + totSF) / txtTerm.Text) / 4, 2)
+
+								} else {
+
+									var amortization = (((parseFloat(totInterest) + parseFloat(amount) + parseFloat(totSF))/ term) /2).toFixed(2)
+								}
+							//	console.log("total"+ total )
+							//	console.log(amortization)
+
+								$("[name=amt_per_pay]").val(CommaFormatted(amortization)).trigger("change");
+
+
+								});
+
+								$("#paymode").change(function () {
+
+								var defaultamt = $("[name=loantype]").select2().find(":selected").data("defaultamt")
+								var interest = $("[name=loantype]").select2().find(":selected").data("defaultint")
+								var sfRate = $("[name=loantype]").select2().find(":selected").data("defaultsfrate")
+								var term = $('[name=term]').val()
+								var amount = $('[name=amount]').val()
+								amount = amount.split(',').join('');
+
+							//	console.log("sf"+ sfRate)
+							//	console.log("term" + term)
+							//	console.log("interest" + interest)
+							//	console.log("amount" + amount)
+
+
+								var totInterest  = (((interest / 12) * term) / 100) * amount
+								var totSF  = amount * sfRate
+
+							//	console.log("totSF" + totSF)
+							//	console.log("totInterest" + totInterest)
+
+						if ($('[name=paymode]').val() == 1){
+							//		var total = parseFloat(totInterest) + parseFloat(amount) + parseFloat(totSF)
+									var amortization = (((parseFloat(totInterest) + parseFloat(amount) + parseFloat(totSF))/ term) /4).toFixed(2)
+
+									//Math.Round(((totInterest + txtAmt.Text + totSF) / txtTerm.Text) / 4, 2)
+
+								} else {
+
+								var amortization = (((parseFloat(totInterest) + parseFloat(amount) + parseFloat(totSF))/ term) /2).toFixed(2)
+								}
+								console.log("total"+ total )
+								console.log(amortization)
+
+								$("[name=amt_per_pay]").val(CommaFormatted(amortization)).trigger("change");
+
+								});
+
+								$("#amount").change(function () {
+
+								var defaultamt = $("[name=loantype]").select2().find(":selected").data("defaultamt")
+								var interest = $("[name=loantype]").select2().find(":selected").data("defaultint")
+								var sfRate = $("[name=loantype]").select2().find(":selected").data("defaultsfrate")
+								var term = $('[name=term]').val()
+								var amount = $('[name=amount]').val()
+								amount = amount.split(',').join('');
+
+							//	console.log("sf"+ sfRate)
+							//	console.log("term" + term)
+							//	console.log("interest" + interest)
+							//	console.log("amount" + amount)
+
+
+								var totInterest  = (((interest / 12) * term) / 100) * amount
+								var totSF  = amount * sfRate
+
+							//	console.log("totSF" + totSF)
+							//	console.log("totInterest" + totInterest)
+
+						if ($('[name=paymode]').val() == 1){
+							//			var total = parseFloat(totInterest) + parseFloat(amount) + parseFloat(totSF)
+										var amortization = (((parseFloat(totInterest) + parseFloat(amount) + parseFloat(totSF))/ term) /4).toFixed(2)
+
+										//Math.Round(((totInterest + txtAmt.Text + totSF) / txtTerm.Text) / 4, 2)
+
+								} else {
+
+									var amortization = (((parseFloat(totInterest) + parseFloat(amount) + parseFloat(totSF))/ term) /2).toFixed(2)
+								}
+							//	console.log("total"+ total )
+							//	console.log(amortization)
+
+								$("[name=amt_per_pay]").val(CommaFormatted(amortization)).trigger("change");
+								
+
+
+								});
+
+								
+
+								function func_post(a,b){
+									if (confirm("You are about to post this transaction") == true) {
+									var htdata ='<div class="upload_top_info">'
+											htdata +=' <div class="upload_jif" style="background: url(/src/metronic_3.1.2/images/throbber.gif) center center no-repeat; height: 15px; width: 18px; display: inline-block;">'
+															
+											htdata +='</div>'
+											htdata +='<div class="upload_info" style="display: inline-block;">We are now posting your records. Please wait for a moment.</div>'
+											htdata += '</div>' 
+											$(".progressclass").html(htdata)
+									$.get(a,
+											function(data,status){
+												console.log(data)
+												$(".progressclass").html("")
+											// if(data.Message.includes("Success")){
+												if(data[0][1]=='Success'){
+														alert("Posting Success");
+														PageRefresher("1");
+                            
+                        
+                        }else{
+							alert("Unable to Post: "+ data[0][1]);
+							PageRefresher("1");
+                        }
+
+                    }
+                );
+            return false
+        } else {
+			PageRefresher("1");
+            }
+        }
+
+        function func_cancel(a,b){
+            if (confirm("You are about to cancel this transaction") == true) {
+            var htdata ='<div class="upload_top_info">'
+                       htdata +=' <div class="upload_jif" style="background: url(/src/metronic_3.1.2/images/throbber.gif) center center no-repeat; height: 15px; width: 18px; display: inline-block;">'
+                                    
+                    htdata +='</div>'
+                    htdata +='<div class="upload_info" style="display: inline-block;">  Where are now canceling your records.. please wait for a moment</div>'
+                    htdata += '</div>' 
+                     $(".progressclass").html(htdata)
+            $.get(a,
+                    function(data,status){
+                        $(".progressclass").html("")
+                        //if(data.Message.includes("Success")){
+                        if(data[0][1]=='Success'){
+                             
+                            
+                            
+							alert("Cancel Success");
+							PageRefresher("1");
+                           
+                        }else{
+							alert("Unable to Cancel: "+ data[0][1]);
+							PageRefresher("1");
+                           
+                        }
+
+                    }
+                );
+            return false
+        } else {
+			PageRefresher("1");
+            }
+        }
+
+		function PageRefresher(lev){
+            if(lev=='1'){
+                $.get("/transaction/loan_applications/HEditHandler?rights={{.Tconf.rights}}&h_id={{.Tconf.la_id}}",
+                    function(data,status){
+                    $("#ContentID").html(data);
+                     //$('#basic').modal('hide')
+                    }
+                );
+            }
+        }
+		
+
+		
+
+			
+			</script>
+
+
+
+
+

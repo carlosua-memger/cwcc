@@ -1,0 +1,42 @@
+<html>
+    <head>  
+    
+            </head>
+
+            
+                
+           
+         
+                {{$arr_hval := .Hdata}}
+                <table class="dtatbl" id="headerTable">
+                    <tbody>
+                        <tr>
+                            {{range $key,$hval := .Hdata}}
+                            <th {{ col_attrib $key $arr_hval}} >{{col_trim_header $hval}}</th>
+                            {{end}}
+                        </tr>
+                        {{range $Dataarr := .Data }}
+                        <tr>
+                           
+                            {{range $key, $val := $Dataarr}}
+                            <td  {{ col_attrib $key $arr_hval}} > {{$val}}</td>
+                            {{end}}
+                        </tr>
+                        {{end}}
+                    </tbody>    
+                </table>
+            
+
+ 
+            
+
+
+
+    </body>
+
+
+
+
+</html>
+
+

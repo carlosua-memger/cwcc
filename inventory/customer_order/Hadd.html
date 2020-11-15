@@ -1,0 +1,422 @@
+{{$Org_id := .Tconf.Org_id}}
+
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>New Order Entry Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+
+
+
+
+<div class="row">
+<div class="col-md-6">
+
+
+<h3 class="form-section">Order Entry</h3>
+
+
+
+		<form id="CreateTransaction" class="form-horizontal"  method="Post" onsubmit="return DoCreateTransaction()">
+	
+
+					<div class="form-horizontal">
+						<div class="form-group">
+							<label class="col-md-3 control-label">Location</label>
+							<div class="col-md-8">
+								<select name="location" id="location" class="form-control" > 
+								<option value="0">--Select Location-- </option>
+								 	{{range  $key ,$val := .Ls_location}}
+
+										<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+									{{end}}
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Transaction Date<span class="required" aria-required="true">*</span>
+							</label>
+							<div class="col-md-8">
+								<input type="text" name="transdate" placeholder="Select Date" class="form-control date-picker" maxlength="50" Required>
+											<span class="help-block c_h_date" style="color:red;" ></sapan>
+							</div>
+						</div>						
+						<div class="form-group">
+							<label class="col-md-3 control-label">Customer Name</label>
+							<div class="col-md-8">
+								<select name="customer"  class="form-control" > 
+								
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Sold By</label>
+							<div class="col-md-8">
+								<select name="soldby"  class="form-control" > 
+								 {{range  $key ,$val := .Ls_orgmem}}
+										<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+									{{end}}
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Remarks</label>
+							<div class="col-md-8">
+								
+							<!-- 	<input type="text" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct"> -->
+								<textarea name = "remarks" class="form-control createAct"></textarea>
+							</div>
+						</div>
+						
+					</div>
+
+					<!-- <div class="form-actions fluid">
+						<div class="col-md-offset-3 col-md-9">
+							<button type="submit" class="btn blue submit_btn">Save</button>
+							<button class="btn default" onclick="javascript:Navigate('/inventory/supplier_receipt?rights={{.Rights}}')" type="button">Cancel</button>
+						</div>
+					</div>
+ -->
+
+						
+				</form>
+
+
+</div>	
+
+<div class="col-md-6">
+
+			
+			<form id="item_tagsdata" class="form-horizontal"  method="Post" onsubmit="return Dobatchsave()">
+			<input type="hidden" name="suprec_id" class="c_suprec_id">
+
+				<table class="table table-bordered table-striped tbl_dtls" width="50%">
+					<tbody>
+					{{range  $key,$val := .Arr_tag}}
+						<tr>
+							<td style="width:15%">
+								 {{ index  $val 1}}
+							</td>
+							<td style="width:50%">
+								{{$datatype  := index  $val 3 }}
+								{{if eq $datatype `String` }}
+									<input type="text" class="value_input" name="value_input" placeholder="value" id="autocomplete_{{ index  $val 0}}" value="{{ index  $val 4}}">
+								{{end}}
+								{{if eq $datatype `Number` }}
+									<input type="number" name="value_input" class="value_input" placeholder="value" value="{{ index  $val 4}}">
+								{{end}}
+								
+								<input type="text" name="remarks" class="value_remarks" placeholder="remarks" value="{{ index  $val 5}}">
+								<input type="hidden" name ="tag" value="{{ index  $val 0}}">
+								<!-- <a onclick="javascript:func_sync( 0 ,{{ index  $val 0}},this,event );"> save</a> -->
+							</td>
+						
+						</tr>
+					
+					<script type="text/javascript">
+					{{$tagid := index  $val 0}}
+					//var json_data_$tagid = ["a","a2","a3","a3","a4","a5","a6","a7","1","101",]
+
+					
+					var  json_data_{{$tagid}} = [""]    
+		    	       
+			        {{$retdata := Sql_list "string paramenter" $Org_id $tagid}}
+			        
+
+			        {{range  $kkey,$vval := $retdata}}
+						json_data_{{$tagid}}.push( "{{ index  $vval 0}}" )
+					{{end}}
+
+			        $('#autocomplete_{{$tagid}}' ).autocomplete({
+			            	source: json_data_{{$tagid}}
+			            });
+					</script>
+					
+					{{end}}
+					</tbody>
+				</table>
+				<!-- <div class="form-actions fluid">
+					<div class="col-md-offset-3 col-md-9">
+						<button type="submit" class="btn blue">Save All</button>
+						<button class="btn default" onclick="javascript:Navigate('/inventory/item?rights={{.Rights}}')" type="button">Cancel</button>
+					</div>
+				</div> -->
+						
+			</form>	
+
+</div>
+
+</div>
+
+<div class="form-actions fluid">
+	<div class="col-md-offset-3 col-md-9">
+		<button type="submit" class="btn blue submit_btn" onclick="return DoCreateTransaction()">Save</button>
+		<button class="btn default" onclick="javascript:nav_back('/inventory/customer_order?rights={{.Rights}}')" type="button">Go Back</button>
+	</div>
+</div>
+
+
+</div>
+
+
+
+
+
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	
+</div>
+
+
+
+
+			<script type="text/javascript">
+			var currentDate = new Date();  
+			
+			 /*$('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });*/
+			
+			$(".date-picker").datepicker("setDate",currentDate);
+			$('.date-picker').datepicker().on('changeDate', function(ev){
+    $('.date-picker').datepicker('hide');
+});
+			//$('.date-picker').datepicker({"setDate", currentDate:  ,  autoclose: true });
+			$('input[name=item_class]').focus();
+			$("[name=item_class] , [name=soldby] , [name=customer] , [name=location]").select2();
+			var rghts = '{{.Rights}}'
+			function DoCreateTransaction(){
+				var d_date = $("[name=transdate]").val();
+				var parts =d_date.split('/');
+				var mydate = new Date(parts[2],parts[0]-1,parts[1]); 
+				var tem_curdate = new Date();
+				tem_curdate.setDate(tem_curdate.getDate()-6);
+				if(d_date==""){
+					$(".c_h_date").html('valid date required.');
+					return false;
+				}
+	
+
+				$(".submit_btn").text("Saving").attr("disabled", true);
+				
+				/*if (tem_curdate >  mydate){
+					$(".c_h_date").html('Minimum date allowed is '+ tem_curdate.toLocaleString(	) + '.');
+					return false;
+				}*/
+				var ret_msg= ""
+				$.get("/json_func",
+                    {
+                       //qdata : "Branch_Save 'Add','programmer',1,0,'"+$('[name=sup_name]').val()+"' ,'"+$('[name=sort]').val()+"' ,'"+$('[name=remarks]').val()+"'"
+                       qdata : "SIS_CusOrdHdr_Save 'Add', '{{.Tconf.username}}', 0, {{.Tconf.Org_id}}, "+$('[name=location]').val()+", '"+$('[name=transdate]').val()+"','"+$('[name=customer]').val()+"','"+$('[name=soldby]').val()+"','"+$('[name=remarks]').val()+"'"
+
+                    }
+                    ,
+                    function(data,status){
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									//console.log(data[i][0])
+									//alert(ret_msg)
+									//$('#basic').modal('hide')
+					            	//dtbl()
+					            	//console.log("success here")
+					            	//$("#item_tagsdata").show()
+					            	//$(".submit_btn").prop('disabled', true);
+					            	$(".c_suprec_id").val(data[i][0])
+									Dobatchsave(data[i][0])
+								//return false;
+			                    }else{
+			                    	alert(ret_msg)
+			                    }
+		                         
+		                    }
+	                    }
+                    });	
+					
+                    return false;
+		                /*$('#basic').modal('hide')
+		            	dtbl()
+			         	return false*/
+			        	
+			}
+
+			function func_sync(item , tag , t,event){
+				//console.log($(event.target).closest("tr").find('.value_input').val())
+
+				var suprec_id =  $(".c_suprec_id").val()
+				var text_val =  $(event.target).closest("tr").find('.value_input').val()
+				var text_val_remarks =  $(event.target).closest("tr").find('.value_remarks').val()
+
+
+				//console.log("SIS_itemtags_save 'Update', '{{.Tconf.username}}', {{.Tconf.Org_id}}, "+item_id+", "+tag+", '"+text_val+"', '"+text_val_remarks+"'")
+
+				//SIS_itemtags_save 'Update', @formuser, @org, @item, @tag, @value, @remakrs
+
+				$.get("/json_func",
+                    {
+                       //qdata : "Branch_Save 'Add','programmer',1,0,'"+$('[name=sup_name]').val()+"' ,'"+$('[name=sort]').val()+"' ,'"+$('[name=remarks]').val()+"'"
+                       qdata : "SIS_CusOrdTags_Save 'Update', '{{.Tconf.username}}', {{.Tconf.Org_id}}, "+suprec_id+", "+tag+", '"+text_val+"', '"+text_val_remarks+"'"
+					}
+                    ,
+                    function(data,status){
+                    	console.log(data)
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									console.log(data[i][0])
+									alert(ret_msg)
+									
+								//return false;
+			                    }else{
+			                    	alert(ret_msg)
+			                    }
+		                         
+		                    }
+	                    }
+                    });
+
+			}
+
+			function Dobatchsave(hid){
+				$.post("/inventory/customer_order/HaddTagHandler",
+                    $("#item_tagsdata").serialize()
+					,
+                    function(data,status){
+                    	var errcount = 0 
+                    	if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        
+		                        if (data[i][0]=="HasError"){
+									errcount = errcount + 1
+								//return false;
+			                    }
+			                }
+						}
+						if (errcount>0){
+	                    	alert(errcount)
+	                    	alert("Opsss something went wrong")
+                        }else{
+                        	//alert("Save Success")
+                        	
+                        	$.get("/inventory/customer_order/details?rights={{.Rights}}&ID="+hid,
+				                function(data,status){
+				                 $("#ContentID").html(data);
+				                
+				                }
+				            );
+
+
+                        } 
+                        
+                    });
+
+				return false;
+
+
+			}
+
+			var cor_d = $("[name=customer]").select2().find(":selected").data("id")
+	$("[name=courier]").val(cor_d).trigger("change");
+	
+	$("[name=customer]").on("select2-close", function() { 
+		var cor_d = $("[name=customer]").select2().find(":selected").data("id")
+		var cus_soldby = $("[name=customer]").select2().find(":selected").data("soldby")
+		console.log(cus_soldby)
+		$("[name=courier]").val(cor_d).trigger("change");
+		
+		$("[name=soldby]").val(cus_soldby).trigger("change");
+		
+
+	});
+	
+	$("[name=customer]").on("select2-close", function() { 
+		
+		var soldby = $("[name=customer]").select2().find(":selected").data("soldby")
+		console.log(soldby)
+		
+		$("[name=soldby]").val(soldby).trigger("change");
+
+		
+
+	});
+
+
+
+			var ret_msg= ""
+			$("#location").change(function () {
+					$.get("/json_func",
+                    {
+                       qdata : "sis_locationcustomer_get 4, "+$('[name=location]').val()+""
+
+                    }
+                    ,
+                    function(data,status){
+                        if( data!=null){
+                        	var ht_data = "";
+                        	var soldby = "";
+
+		                    for (var i = 0; i < data.length; i++) {
+		                    	 	ret_msg = data[i][0]
+					            	//$("input[name=customer]").val(ret_msg);
+					            	//console.log(alert(data[i][0]))
+
+					            	ht_data += '<option value="'+data[i][0]+'" selected data-soldby='+data[i][4]+'>'+data[i][1]+'</option>'
+					            	soldby = data[i][4]
+		                     		console.log(soldby)    
+
+		                    }
+		                    $("[name=customer]").html(ht_data);
+
+		                    $("[name=customer]").select2();
+
+
+		                    $("[name=soldby]").val(soldby).trigger("change");
+		                     
+		                     
+
+	                    }
+                    });	
+					
+                    return false;
+			});
+						
+			</script>
+
+
+
+
+

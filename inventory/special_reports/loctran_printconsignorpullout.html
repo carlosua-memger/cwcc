@@ -1,0 +1,306 @@
+<html>
+    <head>
+                <!-- <title style="font-size: 16px;">Paired logs Report</title> -->
+            <style type="text/css">
+                .rpt_date {
+                    float: right;
+                    
+                }
+                .page_header{
+                    margin-bottom: 5px;
+                    /*display: inline; */
+                }
+                .name{
+                    /*float: left;*/
+                    margin-bottom: 3px;
+                    font-family: Arial; 
+                }
+                .covered_data{
+                    /*float: right;*/
+                    font-family: Arial; 
+                }
+                .alr{
+                   vertical-align:middle;
+                }
+                .pic_logo {
+                    width: 200px;
+
+                }
+                table{
+                    width: 100%;
+                }
+                
+                .dtatbl {
+                
+                border: 0.99px solid #B3B3B3;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 12px;
+                }
+
+                .dtatbl th{
+                    border: 0.99px solid #B3B3B3;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 12px;
+                }
+
+                .dtatbl td {
+                    border: 0.99px solid #B3B3B3;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 12px;
+                }
+                th, td {
+                    /*padding: 2px;*/
+                      font-size: 12px;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+                th{
+                    
+                    background-color: whiteSmoke;
+                    /*background-image: -webkit-linear-gradient*/
+                    
+                }
+                body {
+                    font-size: 12px;
+                }
+                .logo{
+                    width: 200px;
+                    margin-bottom: 5px;
+                }
+                .page_footer{
+                    margin-top: 20px;
+                    display: inline-block;
+                    width: 100%;
+                }
+                .signaturemember{
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: left;
+                    font-family: inherit;
+                }
+                .signatureleft{
+                    margin-left: 10%;
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: left;
+                    font-family: inherit; 
+                }
+                .signatureright{
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: right;
+                    font-family: inherit; 
+                }
+                .tbl_foor{
+                    margin-top: 10px;
+                }
+                .tbl_foor td div{
+                    border-top: 0.99px solid black; 
+                    width: 50%;
+                }
+                .isred {
+                    color: red;
+                }
+                .log_sum{
+                    margin-top: 10px;
+                }
+                td div{
+                    font-size: 12px;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+                td div b{
+                    font-size: 12px;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+            </style></head>
+                
+
+            <body>
+              
+    <!--            {{.Conf.org_id}}
+               {{.Conf.trnID }} "mars" -->
+
+              <!--  {{ $currentCategoryUrl := .Conf.org_id | printf "%s%s" "," | printf "%s%s" .Conf.trnID }}
+               {{$currentCategoryUrl}}
+
+ -->
+                {{$sql_str := combine_string `sis_loctra_custom 10,` .Conf.org_id "," .Conf.trnID }}
+                {{$conf_data := tpl_sql_row $sql_str }}
+               
+                 {{$sql_str3 := combine_string `sis_loctra_custom 11,` .Conf.org_id "," .Conf.trnID }}
+                {{$conf_data3 := tpl_sql_row $sql_str3 }}
+                
+                
+                <font face="Arial">
+                <table width="100%">
+                    <tr>
+                    <td colspan = "2" align = "right">{{index $conf_data  3}} - {{index $conf_data  4}} - {{index $conf_data  6}} -  {{index $conf_data  9}}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <center colspan = "2"><b> CONSIGNOR PULL-OUT AUTHORIZATION </b> </center></td>
+                            <tr>
+
+
+                    <tr>
+                        <td>DATE : {{index $conf_data  1}} </b><br>
+                            <b> {{index $conf_data  23}} <br>
+                                SCO MANAGER <br>
+                                {{index $conf_data  24}}</b> <br>
+                            THIS IS TO REQUEST YOUR GOOD OFFICE TO ALLOW THE PULLOUT OF THE FOLLOW ITEMS FROM <BR>
+                            <b> {{index $conf_data  8}}</b><br>
+                            BRAND NAME: {{index $conf_data  2}}</B>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            DEPT/SUBDEPT/CLASSCODE: {{index $conf_data  5}}</B>
+
+
+                         </td>
+                                       
+                                       
+                        
+                    </tr>
+                   
+                </table>
+
+                
+                {{$sql_str2 := combine_string `sis_loctra_custom 4,` .Conf.org_id "," .Conf.trnID }}
+
+              {{$data_list := tpl_sql $sql_str2 }}
+                
+                <br>
+                <br>
+               
+
+                <table width="100%" >
+                    <tr>
+                        <th align="left"><b>SKU NO.</th>
+                        <th align="left"><b>DESCRIPTION</th>
+                        <th align="right"><b>QTY</th>
+                        <th align="right"><b>Unit Price</th>
+                        <th align="right"><b>Total Price</th>
+                       
+                    </tr>        
+
+                    
+                    <tr>
+                       {{range  $key1, $val1stloop := $data_list}}
+                            <tr> 
+                            {{range $key, $val := $val1stloop}}
+                                {{if gt $key 1 }}
+                                <td align="right">{{$val}}</td>
+                                {{else}}
+                                <td>{{$val}}</td>
+                                {{end}}
+                            {{end}}
+                            </tr>
+                           
+                        {{end}}
+                    </tr>
+                    <tr>
+                        <td><b>Total Record/s : </td>
+                        <td><b></td>
+                        <td align="right"><b>{{index $conf_data3  0}}</td>
+                        <td><b></td>
+                        <td align="right"><b>{{index $conf_data3  1}}</td>
+                        
+                    </tr>     
+                        <td> TOTAL NO. OF BOXES: {{index $conf_data  10}} </td>
+                    </tr>
+                    <tr>
+                    <td colspan="5">
+                    <br>
+                      NOTE: CHECKING OF ITEMS (ACTUAL ITEMS VS. CPOA) SHALL BE THE RESPONSIBILITY OF THE STORE 
+                      CONSIGNOR DEMO PERSONNEL DM SHALL RANDOMLY CHECK ITEMS AND SIGN/NOTE BASED ON BOX 
+                      COUNT ONLY
+                     
+                    </td>
+
+                </table>
+                <br>
+                <table witdth = 100%>
+                    <tr>
+                        <td colspan = "4"> THE FOLLOWING PERSON/S ARE AUTHORIZED TO PULL OUT ABOVE ITEMS: </td>    
+                    <tr>
+                        <td>NAME</td>
+                        <td>SIGNATURE</td>
+                        <td>NAME</td>
+                        <td>SIGNATURE</td>
+                    </tr>
+                    <tr>
+                        <td>{{index $conf_data  11}}</td>
+                        <td>________________________</td>
+                        <td>{{index $conf_data  15}}</td>
+                        <td>________________________</td>
+                    </tr>
+                    <tr>
+                        <td>{{index $conf_data  12}}</td>
+                        <td>________________________</td>
+                        <td>{{index $conf_data  16}}</td>
+                        <td>________________________</td>
+                    </tr>
+                    <tr>
+                        <td>{{index $conf_data  13}}</td>
+                        <td>________________________</td>
+                        <td>{{index $conf_data  17}}</td>
+                        <td>________________________</td>
+                    </tr>
+                    <tr>
+                        <td>{{index $conf_data  14}}</td>
+                        <td>________________________</td>
+                        <td>{{index $conf_data  18}}</td>
+                        <td>________________________</td>
+                    </tr>
+                    <tr>
+                        <br>
+                    </tr>
+                    <tr>
+                        <td><br>REQUESTED/PREPARED BY:</td>
+                        <td>APPROVED BY:</td>
+                        <td>ENDORSED BY:</td>
+                    </tr>  
+                    <tr>
+                        <td>______________________</td>
+                        <td>______________________</td>
+                        <td>______________________</td>
+                    </tr>  
+                    <tr>
+                        <td>STORE CONSIGNOR DEMO</td>
+                        <td>SC REPRESENTATIVE</td>
+                        <td>SCO MANAGER</td>
+                    </tr>   
+                    <tr>
+                        <td><br>NOTED BY:</td>
+                        <td>RELEASED BY:</td>
+                        <td>RECEIVED BY:</td>
+                    </tr>  
+                    <tr>
+                        <td>______________________</td>
+                        <td>______________________</td>
+                        <td>______________________</td>
+                    </tr>   
+                     <tr>
+                        <td>SELLING SUPERVISOR/CONSIGNOR <BR> 
+                            WAREHOUSE SUPERVISOR</td>
+                        <td>RDU SUPERVISOR</td>
+                        <td>SC REPRESENTATIVE</td>
+                    </tr>  
+                     <tr>
+                   <td> 
+                   <br>Run date: {{get_datetime}}&nbsp;(<b>{{index $conf_data  0}})
+                   </td>
+                   </tr> 
+                </table>
+  
+
+
+               
+                        
+
+
+
+
+
+    </body>
+    
+</html>

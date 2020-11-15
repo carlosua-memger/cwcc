@@ -1,0 +1,200 @@
+<!-- <Form> -->
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+		<form id="transdetnew" method="Post" onsubmit="javascript: return DocreateTrasDet()">
+			<input type="hidden" name="hdr_id" value="{{.Tconf.hdr_id}}">	
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">New Transaction Details*</h4>
+				</div>
+				<!-- <div class="modal-body">
+				 -->	 <!-- modal data here -->
+
+					<div class="form-horizontal">
+							<div class="form-group">
+								<label class="col-md-3 control-label">Item</label>
+								<div class="col-md-4">
+									<input type="text" name="item" placeholder="Item" id="item"  class="form-control input-large"  required>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Qty</label>
+									<div class="col-md-4">
+										<input type="number" name="qty" placeholder="Qty"  maxlength="8" value="1.00" class="form-control createAct num_f" required>
+									</div>
+							</div>		
+							<div class="form-group">
+								<label class="col-md-3 control-label">Unit Price</label>
+									<div class="col-md-4">
+										<input type="text" name="unit_cost" placeholder="Unit Price"  value="00.00" maxlength="100" class="form-control createAct num_f" required>
+									</div>
+							</div>							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Remarks</label>
+									<div class="col-md-4">
+										<input type="text" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct">
+									</div>
+							</div>
+							<div class="form-group val_err" hidden>
+								<label class="col-md-10 control-label" style="color:red;">
+							opps something is missing</label>
+							</div>
+										  									
+ 					 <!-- end modal data here -->
+				<!-- </div> -->
+				<div class="modal-footer">
+					<button type="button" class="btn default" data-dismiss="modal">Go Back</button>
+					<button type="submit" class="btn blue">Save(Crtl+s)</button>
+					<button type="button" class="btn blue btn_sa" onclick="javascript:DocreateTrasDet('AS');">Save & Add new(ctl+a)</button>
+				</div>
+
+		<!--  -->
+				<!-- /.modal-content -->
+		</form>
+	</div>
+		<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->					
+					
+
+
+<script type="text/javascript">
+ 	$('.form_datetime').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+	
+
+	var rights = '{{.Tconf.rights}}' 
+			function DocreateTrasDet(a){
+				if(!$('#transdetnew')[0].checkValidity()){
+					$('.val_err').show();
+				 	return false;
+				}
+				$.post("/inventory/brochure/details/DaddHandler",$( "#transdetnew" ).serialize()
+		        ,
+		        function(data,status){
+		        	alert(data[1])
+		            if(data[1]=='Success'){
+		            	
+		            	$("input[name=item]").select2("val", ""); 
+		            	
+		            	if(a!="AS"){
+		            		$('#basic').modal('hide')
+			            	/*$.get("/inventory/customer_sales/details?rights="+rights+"&ID={{.Tconf.hdr_id}}",
+	                    		 function(data,status){
+			                     $("#ContentID").html(data);
+			                     $('#basic').modal('hide')
+			                    }
+			                );*/
+			            }else{
+			            	$( "#item" ).select2('open')
+			            }	
+		            }
+		        });
+	 			return false
+			}
+	
+	function repoFormatResult( repo ) {
+	    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div></div>";
+
+	    return markup;
+	}
+	function repoFormatSelection( repo ) {
+        $("input[name=unit_cost]").val(repo.price);
+        return repo.full_name;
+    }
+    
+		$( "#item" ).select2({
+		    placeholder: "Search for Items",
+		    minimumInputLength: 2,
+		    multiple: false,
+		    allowClear: true,
+		    ajax: {
+		        url: "/inventory/brochure/details/Ajax/Ajax_getItem",
+		        dataType: "json",
+		        quietMillis: 250,
+		        data: function( term, page ) {
+		            return {
+		                // search term
+		                q: term,
+
+		            };
+		        },
+		        results: function( data, page ) {
+		                // parse the results into the format expected by Select2.
+		                // since we are using custom formatting functions we do not need to alter the remote JSON data
+		                return { results: data.items };
+		        }
+		        
+		    },
+		    
+		    formatResult: repoFormatResult,
+		    formatSelection: repoFormatSelection,
+		    // apply css that makes the dropdown taller
+		    dropdownCssClass: "bigdrop",
+		    // we do not want to escape markup since we are displaying html in results
+		    escapeMarkup: function( m ) {
+		        return m;
+		    }
+		});		
+	
+	setTimeout(function (){
+        $( "#item").select2('open')
+    	
+    }, 500);
+	
+	$('.btn_sa').on('keydown', function(e) {
+	    if (e.which == 13) {
+	        e.preventDefault();
+	        DocreateTrasDet('AS')
+	    }
+	});
+
+	$('#basic').unbind('hidden.bs.modal');
+	$('.num_f').keyup(function(e) {
+		var regex = new RegExp("^[0-9]+(.[0-9]{1,6})?$");
+		console.log(regex.test(this.value))
+		if (!regex.test(this.value)) {
+			this.value = '';
+		}
+	});
+
+	$('#basic').unbind('hidden.bs.modal');
+	$('#basic').on('hidden.bs.modal', function () {
+		$.get("/inventory/brochure/details?rights="+rights+"&ID={{.Tconf.hdr_id}}",
+    		 function(data,status){
+             $("#ContentID").html(data);
+             $('#basic').modal('hide')
+            }
+        );
+	})
+
+	/*$( "input" ).keypress(function( event ) {
+		if ((e.which || e.keyCode) == 123) {
+        alert("fresh");
+   		}
+	});*/
+
+	
+	$("input").keypress(function(event) {
+		console.log(event.which)
+	    if ((event.which == 115 && event.ctrlKey) && !(event.which == 19)) {
+	    //alert("Ctrl-S pressed");
+	    DocreateTrasDet("")
+	    event.preventDefault();
+	    return false;
+	    }
+	    if ((event.which == 97 && event.ctrlKey) && !(event.which == 19)) {
+           DocreateTrasDet('AS')
+		   event.preventDefault();
+		   return false;
+        }
+
+	});
+	
+</script>

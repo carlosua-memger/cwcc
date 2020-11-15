@@ -1,0 +1,603 @@
+{{$Org_id := .Tconf.Org_id}}
+<style type="text/css">
+	.fa-question{
+		margin-top: 10px;
+		width: 40px;
+	}
+	.yellow {
+    color: #FFCA28;
+    margin-top: 10px;
+		width: 40px;
+		font-size: 20px;
+			}
+</style>
+
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>New Item Location Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+
+
+
+
+<div class="row">
+<div class="col-md-6">
+
+
+<h3 class="form-section">Item info</h3>
+
+
+
+				<form id="CreateTransaction" class="form-horizontal"  method="Post" onsubmit="return DoCreateTransaction()">
+					<div class="form-horizontal">
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Location</label>
+							<div class="col-md-8">
+								<select name="location" class="form-control" > 
+								 	{{range  $key ,$val := .Ls_location}}
+										<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+									{{end}}
+								</select>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-md-3 control-label">Item</label>
+							<div class="col-md-8">
+								<input type="text" name="item" placeholder="Item" id="item"  class="form-control"  required>
+							</div>
+						</div>
+
+							<div class="form-group">
+					<label class="col-md-3 control-label">Unit Price (to Customer)<span class="required" aria-required="true"></span>
+					</label>
+					<div class="col-md-8 form-inline" >
+						<input type="text" name="uprice"  placeholder="Unit Price" class="form-control input-small createAct num_f" value="00.00" maxlength="50">
+
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+									<label>Effectivity</label>
+					<input type="text" name="uprice_date" placeholder="Select Date" class="form-control input-small date-picker" maxlength="50" Required>
+					<i class="glyphicon glyphicon-exclamation-sign yellow" data-toggle="tooltip" data-placement="bottom" data-delay='{"hide":"5000"}'  title="Warning: updating effectivity date may affect suggested amount on transaction."></i>
+					
+						<span class="help-block c_h_date" style="color:red;" ></span>
+					</div>
+					
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Unit Cost (from Supplier)<span class="required" aria-required="true"></span>
+					</label>
+						<div class="col-md-8 form-inline" >
+						<input type="text" name="ucost" placeholder="Unit Cost" class="form-control input-small createAct num_f" value="00.00" maxlength="50" >
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+									<label>Effectivity</label>
+					<input type="text" name="ucost_date" placeholder="Select Date" class="form-control input-small date-picker" maxlength="50" Required>
+					<i class="glyphicon glyphicon-exclamation-sign yellow" data-toggle="tooltip" data-placement="bottom" data-delay='{"hide":"5000"}'  title="Warning: updating effectivity date may affect suggested amount on transaction."></i>
+					
+						<span class="help-block c_h_date" style="color:red;" ></span>
+					</div>
+				</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">SKU<span class="required" aria-required="true"></span></label>
+							<div class="col-md-8">
+								<input type="text" name="sku" placeholder="SKU" class="form-control" maxlength="50" >
+							</div>
+						</div>
+
+						<div class="form-group">
+					<label class="col-md-3 control-label">Commission<span class="required" aria-required="true"></span>
+					</label>
+					<div class="col-md-8 form-inline">
+					<label> Percentage </label>
+						<input type="text" name="commper"  placeholder="" class="form-control input-small createAct num_f" value="0" maxlength="50">
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+					<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount </label>
+						<input type="text" name="commamt"  placeholder="" class="form-control input-small createAct num_f" value="00.00" maxlength="50">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Tax<span class="required" aria-required="true"></span>
+					</label>
+					<div class="col-md-8 form-inline">
+					<label> Percentage </label>
+						<input type="text" name="taxper"  placeholder="" class="form-control input-small createAct num_f" value="0" maxlength="50">
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+					<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount </label>
+						<input type="text" name="taxamt"  placeholder="" class="form-control input-small createAct num_f" value="00.00" maxlength="50">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Advertisement<span class="required" aria-required="true"></span>
+					</label>
+					<div class="col-md-8 form-inline">
+					<label> Percentage </label>
+						<input type="text" name="adsper"  placeholder="" class="form-control input-small createAct num_f" value="0" maxlength="50">
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+					<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount </label>
+						<input type="text" name="adsamt"  placeholder="" class="form-control input-small createAct num_f" value="00.00" maxlength="50">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Freight<span class="required" aria-required="true"></span>
+					</label>
+					<div class="col-md-8 form-inline">
+					<label> Percentage </label>
+						<input type="text" name="freightper"  placeholder="" class="form-control input-small createAct num_f" value="0" maxlength="50">
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+					<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount </label>
+						<input type="text" name="freightamt"  placeholder="" class="form-control input-small createAct num_f" value="00.00" maxlength="50">
+					</div>
+				</div>
+
+							<div class="form-group">
+							<label class="col-md-3 control-label">Item Group<span class="required" aria-required="true"></span></label>
+							<div class="col-md-8">
+								<input type="text" name="item_group" placeholder="Item Group" class="form-control" maxlength="50" >
+							</div>
+						</div>
+
+
+
+						
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Remarks</label>
+							<div class="col-md-8">
+								<textarea name = "remarks" class="form-control createAct"></textarea>
+							</div>
+						</div>
+					</div>
+				</form>
+
+</div>	
+
+<div class="col-md-6">
+
+			
+			<form id="item_tagsdata" class="form-horizontal"  method="Post" onsubmit="return Dobatchsave()">
+			<input type="hidden" name="item_id" class="c_item_id">
+
+				<table class="table table-bordered table-striped tbl_dtls" width="50%"  >
+					<tbody>
+					{{range  $key,$val := .Arr_itemtag}}
+						<tr>
+							<td style="width:15%">
+								 {{ index  $val 1}}
+							</td>
+							<td style="width:50%">
+								{{$datatype  := index  $val 3 }}
+								{{if eq $datatype `String` }}
+									<input type="text" class="value_input" name="value_input" placeholder="value" id="autocomplete_{{ index  $val 0}}" value="{{ index  $val 4}}">
+								{{end}}
+								{{if eq $datatype `Number` }}
+									<input type="number" name="value_input" class="value_input" placeholder="value" value="{{ index  $val 4}}">
+								{{end}}
+								
+							
+								<input type="hidden" name ="tag" value="{{ index  $val 0}}">
+								<!-- <a onclick="javascript:func_sync( 0 ,{{ index  $val 0}},this,event );"> save</a> -->
+							</td>
+						
+						</tr>
+					
+					<script type="text/javascript">
+					{{$tagid := index  $val 0}}
+					
+
+					$('#autocomplete_{{$tagid}}').autocomplete({
+					    source: function (request, response) {
+					        jQuery.get("/inventory/auto_complete", {
+					            query: request.term ,
+					            tag: '{{$tagid}}' ,
+					            org: '{{$Org_id}}'
+					        }, function (data) {
+					            var arr_data =[];
+					           	if( data!=null){
+						            for (var i = 0; i < data.length; i++) {
+			                        	arr_data.push(data[i][0]);
+			                        }
+			                    }    
+					            response(arr_data);
+					        });
+					    },
+					    minLength: 3
+					});
+					
+					</script>
+					
+					{{end}}
+					</tbody>
+				</table>
+				<!-- <div class="form-actions fluid">
+					<div class="col-md-offset-3 col-md-9">
+						<button type="submit" class="btn blue">Submit</button>
+						<button class="btn default" onclick="javascript:Navigate('/inventory/item?rights={{.Rights}}')" type="button">Cancel</button>
+					</div>
+				</div> -->
+						
+				</form>	
+
+
+</div>
+
+</div>
+
+
+
+<div class="form-actions fluid">
+	<div class="col-md-offset-3 col-md-9">
+		<button type="submit" class="btn blue submit_btn" onclick="return DoCreateTransaction()">Save</button>
+		<button class="btn default" onclick="javascript:nav_back('/inventory/location_items?rights={{.Rights}}')" type="button">Go Back</button>
+	</div>
+</div>
+
+
+</div>
+
+
+
+
+
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	
+</div>
+
+
+
+
+
+			<script type="text/javascript">
+			var currentDate = new Date();  
+			 /*$('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });*/
+			
+			$('.date-picker').datepicker("setDate", new Date());
+			$('input[name=item_class]').focus();
+			$("[name=item_class] , [name=supplier], [name=location]").select2();
+			var rghts = '{{.Rights}}'
+			function DoCreateTransaction(){
+				/* var ret_msg= ""
+				var str_name = $('[name=name]').val();
+				var str_name_ln = str_name.length;
+				if(str_name_ln==0){
+					alert("Please fillup required field (marked with asterisk).")
+					return false
+				} */
+				$.get("/json_func",
+                    {
+                       //qdata : "Branch_Save 'Add','programmer',1,0,'"+$('[name=sup_name]').val()+"' ,'"+$('[name=sort]').val()+"' ,'"+$('[name=remarks]').val()+"'"
+                       qdata : "SIS_Location_Item_Save 'Add', '{{.Tconf.username}}', 0, {{.Tconf.Org_id}}, "+$('[name=item]').val()+", "+$('[name=location]').val()+",'"+$('[name=remarks]').val()+"', "+$('[name=uprice]').val()+","+$('[name=ucost]').val()+",'"+$('[name=sku]').val()+"',"+$('[name=commper]').val()+","+$('[name=commamt]').val()+", '"+$('[name=uprice_date]').val()+"',"+$('[name=taxper]').val()+","+$('[name=taxamt]').val()+","+$('[name=adsper]').val()+", "+$('[name=adsamt]').val()+", "+$('[name=freightper]').val()+", "+$('[name=freightamt]').val()+" , '"+$('[name=ucost_date]').val()+"', '"+$('[name=item_group]').val()+"'"
+					}
+                    ,
+                    function(data,status){
+                    	console.log(data)
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+								/*	console.log(data[i][0])
+									alert(ret_msg)
+									$('#basic').modal('hide')
+					            	dtbl()
+					            	console.log("success here")
+					            	$("#item_tagsdata").show()
+					            	$(".submit_btn").prop('disabled', true);*/
+					            	$(".c_item_id").val(data[i][0])
+					            	Do_save_img(data[i][0])
+					            	Dobatchsave()
+								//return false;
+			                    }else{
+			                    	alert(ret_msg)
+			                    }
+		                         
+		                    }
+	                    }
+                    });	
+					
+                    return false;
+		                /*$('#basic').modal('hide')
+		            	dtbl()
+			         	return false*/
+			        	
+			}
+
+/*
+	function repoFormatResult( repo ) {
+	    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div><div>Uprice: "+ repo.price +"</div><div>Unit Cost:"+ repo.ucost +"</div><div>SKU: "+ repo.sku +"</div><div>Comm per: "+ repo.comm_per +"</div><div>Comm amt: "+ repo.comm_amt +"</div><div>Remarks: "+ repo.remarks +"</div></div>";
+
+	    return markup;
+	}
+*/
+	function repoFormatResult( repo ) {
+		var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div></div>";
+
+	    return markup;
+	}
+	function repoFormatSelection( repo ) {
+        $("input[name=uprice]").val(repo.price);
+
+        $("input[name=uprice]").val(repo.price);
+       
+        $("input[name=sku]").val(repo.sku);
+        $("input[name=commper]").val(repo.comm_per);
+        $("input[name=commamt]").val(repo.comm_amt);
+        $("[name=remarks]").val(repo.remarks);
+
+        $("input[name=taxper]").val(repo.tax_per);
+        $("input[name=taxamt]").val(repo.tax_amt);
+        $("input[name=adsper]").val(repo.ads_per);
+        $("input[name=adsamt]").val(repo.ads_amt);
+        $("input[name=freightper]").val(repo.freight_per);
+        $("input[name=freightamt]").val(repo.freight_amt);
+        $("input[name=uprice_date]").val(repo.uprice_date);
+        
+
+        return repo.full_name;
+    }
+
+    function item_init () {
+    	$( "#item" ).select2({
+			    placeholder: "Search for Items",
+			    minimumInputLength: 2,
+			    multiple: false,
+			    allowClear: true,
+			    ajax: {
+			        url: "/inventory/location_items/Ajax_getItem?location="+ $("[name=location]").val() ,
+			        dataType: "json",
+			        quietMillis: 250,
+			        data: function( term, page ) {
+			            return {
+			                // search term
+			                q: term,
+
+			            };
+			        },
+			        results: function( data, page ) {
+			                // parse the results into the format expected by Select2.
+			                // since we are using custom formatting functions we do not need to alter the remote JSON data
+			                return { results: data.items };
+			        }
+			        
+			    },
+			    
+			    formatResult: repoFormatResult,
+			    formatSelection: repoFormatSelection,
+			    // apply css that makes the dropdown taller
+			    dropdownCssClass: "bigdrop",
+			    // we do not want to escape markup since we are displaying html in results
+			    escapeMarkup: function( m ) {
+			        return m;
+			    }
+			});	
+
+    }
+    item_init();	
+	$("[name=location]").on("select2-close", function() { 
+		item_init();
+	});
+
+		
+	
+	
+
+			function Do_save_img(itemID){
+				/*var ret_msg= ""
+				console.log("SIS_Item_Image_Save '{{.Tconf.username}}',"+itemID+", {{.Tconf.Org_id}}, "+ $(".c_img_src").val())
+				$.get("/json_func",
+                    {
+                       //qdata : "Branch_Save 'Add','programmer',1,0,'"+$('[name=sup_name]').val()+"' ,'"+$('[name=sort]').val()+"' ,'"+$('[name=remarks]').val()+"'"
+                       qdata : "SIS_Item_Image_Save '{{.Tconf.username}}',"+itemID+", {{.Tconf.Org_id}}, '"+ $(".c_img_src").val() + "'"
+					}
+                    ,
+                    function(data,status){
+                        console.log(data)
+                    });	*/
+
+				
+				$.post("/inventory/location_items/HaddHandler",
+                    {
+                       Image_dr : $(".c_img_dir").val() ,
+                       Item_id : itemID ,
+                       Item_name : $('[name=name]').val() , 
+                    }
+                    ,
+                    function(data,status){
+                        console.log('upload resizer here...')
+                        console.log(data)
+                    });	
+
+					
+                    return false;
+		              
+			        	
+			}
+
+
+
+			function func_sync(item , tag , t,event){
+				//console.log($(event.target).closest("tr").find('.value_input').val())
+
+				var item_id =  $(".c_item_id").val()
+				var text_val =  $(event.target).closest("tr").find('.value_input').val()
+				var text_val_remarks =  $(event.target).closest("tr").find('.value_remarks').val()
+
+
+				//console.log("SIS_itemtags_save 'Update', '{{.Tconf.username}}', {{.Tconf.Org_id}}, "+item_id+", "+tag+", '"+text_val+"', '"+text_val_remarks+"'")
+
+				//SIS_itemtags_save 'Update', @formuser, @org, @item, @tag, @value, @remakrs
+
+				$.get("/json_func",
+                    {
+                       //qdata : "Branch_Save 'Add','programmer',1,0,'"+$('[name=sup_name]').val()+"' ,'"+$('[name=sort]').val()+"' ,'"+$('[name=remarks]').val()+"'"
+                       qdata : "SIS_itemtags_save 'Update', '{{.Tconf.username}}', {{.Tconf.Org_id}}, "+item_id+", "+tag+", '"+text_val+"', '"+text_val_remarks+"'"
+					}
+                    ,
+                    function(data,status){
+                    	console.log(data)
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									console.log(data[i][0])
+									alert(ret_msg)
+									
+								//return false;
+			                    }else{
+			                    	alert(ret_msg)
+			                    }
+		                         
+		                    }
+	                    }
+                    });
+
+			}
+
+			function Dobatchsave(){
+				$.post("/inventory/location_items/HaddTagHandler",
+                    $("#item_tagsdata").serialize()
+					,
+                    function(data,status){
+                    	var errcount = 0 
+                    	if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        
+		                        if (data[i][0]=="HasError"){
+									errcount = errcount + 1
+								//return false;
+			                    }
+			                }
+						}
+						if (errcount>0){
+	                    	alert(errcount)
+	                    	alert("Opsss something went wrong")
+                        }else{
+                        	alert("Save Success")
+                        	nav_back('/inventory/location_items?rights={{.Rights}}')
+                        } 
+                        
+                    });
+
+				return false;
+
+
+			}
+			
+			function progressHandlingFunction(e){
+	            if(e.lengthComputable){
+	                $('.uploadprog').attr({value:e.loaded,max:e.total});
+	                var percentprog = (e.loaded / e.total) * 100
+	                //console.log(percentprog)
+	                $('.uploadprog').attr({style:"width: "+percentprog+"%"})
+	                if (percentprog >70) {
+	                   $(".progressclass").html("")
+	                   var htdata ='<div class="upload_top_info">'
+	                       htdata +=' <div class="upload_jif" style="background: url(/src/metronic_3.1.2/images/throbber.gif) center center no-repeat; height: 15px; width: 18px; display: inline-block;">'
+	                                    
+	                    htdata +='</div>'
+	                    htdata +='<div class="upload_info" style="display: inline-block;"> Uploading records...</div>'
+	                    htdata += '</div>' 
+	                     $(".progressclass").html(htdata)
+	                };
+	                
+
+	            }
+	        }
+	        
+			function Uploadlog(a){
+	            stat_done =0
+	            var progressbarhtml ='<div class="progress"> <div class="progress-bar progress-bar-striped active uploadprog" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 10%"> <span class="sr-only">45% Complete</span></div></div> '
+	            $(".progressclass").html(progressbarhtml)    
+	            var fd = new FormData(document.getElementById("fileinfo_N1"));   
+	            console.log(fd)
+	            fd.append("label", "WEBUPLOAD");
+	            $.ajax({
+	              url: "/do_image_upload?hid=temp_img&device="+a,
+	              type: "POST",
+	              xhr: function() {  // custom xhr
+	                    var myXhr = $.ajaxSettings.xhr();
+	                    if(myXhr.upload){ // check if upload property exists
+	                        myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // for handling the progress of the upload
+	                    }
+	                    return myXhr;
+	                },
+	              data: fd ,
+	              enctype: 'multipart/form-data',
+	              processData: false,  // tell jQuery not to process the data
+	              contentType: false   // tell jQuery not to set contentType
+	              
+	            }).done(function( data,status ) {
+	            	console.log(data)
+	            	$(".progressclass").html("")
+	            	$(".thumbnail").html(data.Base64_image)
+	            	$(".c_img_src").val(data.Base64_image)
+	            	$(".c_img_dir").val(data.Image_ser_url)
+	                
+
+	            });
+	            return false;
+	        }
+
+
+	        $('.num_f').keyup(function(e) {
+		var regex = /^\d+(\.\d{0,2})?$/g;
+		if (!regex.test(this.value)) {
+		    this.value = '';
+		}
+	});
+
+	        $(function () {
+ 		 $('[data-toggle="tooltip"]').tooltip()
+			})
+
+
+			</script>
+
+
+
+
+

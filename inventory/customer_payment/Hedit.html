@@ -1,0 +1,475 @@
+{{$Org_id := .Conf.org_id}}
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Edit Customer Payment Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+
+
+
+
+<div class="row">
+<div class="col-md-6">
+
+
+<h3 class="form-section">Customer Payment = {{.Conf.custpay_id}}</h3>
+
+
+<form id="CreateTransaction" class="form-horizontal"  method="Post" onsubmit="return DoEditTransaction()">
+
+
+			<div class="form-horizontal">
+				<div class="form-group">
+					<label class="col-md-3 control-label">Transaction Date<span class="required" aria-required="true">*</span>
+					</label>
+					<div class="col-md-8">
+						<input type="text" name="transdate" value="{{.Conf.custpay_transdate}}" placeholder="Name" class="form-control date-picker" maxlength="50" Required>
+							<span class="help-block c_h_date" style="color:red;" ></span>
+									
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label">Customer</label>
+					<div class="col-md-8">
+						<select name="customer" class="form-control" > 
+						 	{{$customer  := .Conf.custpay_customer }}
+						 	{{range  $key ,$val := .Ls_customer}}
+							{{ $loop_id  := index  $val 0 }}
+							{{if eq $customer $loop_id }}	
+						 		<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+						 	{{else}}	
+						 		<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+							{{end}}
+							{{end}}
+
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label">Pay Type</label>
+					<div class="col-md-8">
+						<select name="paytype"  class="form-control" > 
+						 	
+							{{$paytype  := .Conf.custpay_paytype }}
+						 	{{range  $key ,$val := .Ls_customerpaytype}}
+							{{ $loop_id  := index  $val 0 }}
+							{{if eq $paytype $loop_id }}	
+						 		<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+						 	{{else}}	
+						 		<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+							{{end}}
+							{{end}}
+						</select>
+					</div>
+				</div>
+				<div class="form-group" id="check_date">
+					<label class="col-md-3 control-label">Check Date
+					</label>
+					<div class="col-md-8">
+						<input type="text" name="checkdate" value="{{.Conf.custpay_checkdate}}" placeholder="Name" class="form-control date-picker" maxlength="50" >
+							<span class="help-block cd_h_date" style="color:red;" ></span>
+									
+					</div>
+
+				</div>		
+				<div class="form-group">		
+					<label class="col-md-3 control-label">Pay Institution</label>
+					<div class="col-md-8">
+						<select name="pay_ins" class="form-control" > 
+						 	{{$customer  := .Conf.custpay_payIns }}
+						 	{{range  $key ,$val := .Ls_bank}}
+							{{ $loop_id  := index  $val 0 }}
+							{{if eq $customer $loop_id }}	
+						 		<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+						 	{{else}}	
+						 		<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+							{{end}}
+							{{end}}
+
+						</select>
+					</div>
+				</div>
+
+				<!-- <div class="form-group">
+					<label class="col-md-3 control-label">Pay Institution</label>
+						<div class="col-md-8">
+							<input type="text" name="pay_ins" placeholder="Pay Institution"  maxlength="50" class="form-control createAct" value="{{.Conf.custpay_payIns}}">
+						</div>
+				</div> -->
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Pay Reference</label>
+						<div class="col-md-8">
+							<input type="text" name="pay_ref" placeholder="Pay Reference"  maxlength="50" class="form-control createAct" value="{{.Conf.custpay_payRef}}">
+						</div>
+				</div>	
+				
+				<div class="form-group">
+					<label class="col-md-3 control-label">Pay Amount</label>
+						<div class="col-md-4">
+							<input type="text" name="pay_amount" placeholder="Pay Amount"  maxlength="50" class="form-control createAct numf" value="{{.Conf.custpay_payAmt}}" onkeypress='return numbersOnly(this,event,true,false);' >
+							<span class="help-block c_h_pay_amount" style="color:red;" ></span>
+						</div>
+				</div>
+
+					
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Remarks</label>
+					<div class="col-md-8">
+						<textarea name = "remarks" class="form-control createAct">{{.Conf.custpay_remarks}}</textarea>
+					</div>
+				</div>
+				
+			
+				
+			</div>
+
+
+		
+		
+		</form>
+	
+</div>	
+
+<div class="col-md-6">
+
+
+	<form id="item_tagsdata" class="form-horizontal"  method="Post" onsubmit="return Dobatchsave()" >
+		<input type="hidden" name="suprec_id" class="c_item_id" value="{{.Conf.custpay_id}}">
+
+			<table class="table table-bordered table-striped tbl_dtls" width="50%"  >
+				<tbody>
+				{{range  $key,$val := .Arr_tag}}
+					<tr>
+						<td style="width:15%">
+							 {{ index  $val 1}} 
+						</td>
+						<td style="width:50%">
+							{{$datatype  := index  $val 3 }}
+							{{if eq $datatype `String` }}
+								<input type="text" class="value_input" name="value_input" placeholder="value" id="autocomplete_{{ index  $val 0}}" value="{{ index  $val 4}}">
+							{{end}}
+							{{if eq $datatype `Number` }}
+								<input type="number" name="value_input" class="value_input" placeholder="value" value="{{ index  $val 4}}">
+							{{end}}
+							
+							<input type="text" name="remarks" class="value_remarks" placeholder="remarks" value="{{ index  $val 5}}">
+							<input type="hidden" name ="tag" value="{{ index  $val 0}}">
+							<!-- <a onclick="javascript:func_sync( 0 ,{{ index  $val 0}},this,event );"> save</a> -->
+						</td>
+					
+					</tr>
+				
+				<script type="text/javascript">
+				{{$tagid := index  $val 0}}
+				//var json_data_$tagid = ["a","a2","a3","a3","a4","a5","a6","a7","1","101",]
+
+				
+				var  json_data_{{$tagid}} = [""]    
+		       
+		        {{$retdata := Sql_list "temp var for extend data" $Org_id $tagid}}
+		        
+
+		        {{range  $kkey,$vval := $retdata}}
+					json_data_{{$tagid}}.push( "{{ index  $vval 0}}" )
+				{{end}}
+
+		        $('#autocomplete_{{$tagid}}' ).autocomplete({
+		            	source: json_data_{{$tagid}}
+		            });
+				</script>
+				
+				{{end}}
+				</tbody>
+			</table>
+	</form>
+
+</div>
+
+
+</div>
+
+	<div class="form-actions fluid">
+		<div class="col-md-offset-3 col-md-9">
+			<button type="submit" onclick="return DoEditTransaction()" class="btn blue submit_btn">Update</button>
+			<button class="btn default" onclick="javascript:nav_back('/inventory/customer_payment?rights={{.Rights}}')" type="button">Go Back</button>
+		</div>
+	</div>
+
+</div>
+
+
+
+
+
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	
+</div>
+
+
+		
+			<script type="text/javascript">
+			$('.date-picker').datepicker({"setDate": new Date() ,  autoclose: true });
+            $('input[name=item_class]').focus()
+			$("[name=customer] , [name=paytype], [name=pay_ins]").select2();
+
+						//var currentDate = new Date();  
+						//$('.date-picker').datepicker({autoclose: true});
+						//$('.date-picker').datepicker("setDate", new Date());
+
+            var d_date = $("[name=checkdate]").val();
+
+				if(d_date=="NULL"){
+						$('.err_help').hide();
+						var currentDate = new Date();  
+						$('.date-picker').datepicker({autoclose: true});
+						$('.date-picker').datepicker("setDate", new Date());
+				}
+				if(d_date==""){
+						$('.err_help').hide();
+						var currentDate = new Date();  
+						$('.date-picker').datepicker({autoclose: true});
+						$('.date-picker').datepicker("setDate", new Date());
+				}
+
+			  	
+			function checkDate_B(d) {
+				if(d=='1'){
+					$("#check_date").hide();
+				}else{
+					$("#check_date").show();
+				}
+			}
+			$("[name=paytype]").on("select2-close", function (e) {
+				checkDate_B(this.value);
+			});
+			checkDate_B('{{.Conf.custpay_paytype}}');
+			console.log('{{.Conf.custpay_paytype}}')
+			
+			num_val_init()
+			function NullToZero (val) {
+				if(val ) {
+					return val
+				}else{
+					return 0 
+				}
+			}
+            function DoEditTransaction(){
+
+				var c_date = $("[name=checkdate]").val();
+				var c_parts =c_date.split('/');
+				var mydate = new Date(c_parts[2],c_parts[0]-1,c_parts[1]); 
+				var tem_curdate = new Date();
+				tem_curdate.setDate(tem_curdate.getDate());
+				if(c_date==""){
+					$(".cd_h_date").html('valid date required.');
+					return false;
+				}
+
+				/*if (tem_curdate < mydate ){
+					$(".cd_h_date").html('Date must not be greater than today '+ tem_curdate.toLocaleString(	) + '.');
+					return false;
+				}
+*/
+
+            	var d_date = $("[name=transdate]").val();
+				var parts =d_date.split('/');
+				var mydate = new Date(parts[2],parts[0]-1,parts[1]); 
+				var tem_curdate = new Date();
+				tem_curdate.setDate(tem_curdate.getDate()-6);
+				if(d_date==""){
+					$(".c_h_date").html('valid date required.');
+					return false;
+				}
+				if (tem_curdate >  mydate){
+					$(".c_h_date").html('Minimum date allowed is '+ tem_curdate.toLocaleString(	) + '.');
+					return false;
+				}
+				if ($('[name=pay_amount]').val()<=0) {
+					$(".c_h_pay_amount").html('Please input a valid amount.');
+					$('input[name=pay_amount]').focus();
+					return false;
+				}
+
+				$.get("/json_func",
+                    {
+                    	
+
+                    	qdata : "SIS_CusPayHdr_Save 'Edit', '{{.Conf.username}}', {{.Conf.custpay_id}}, {{.Conf.org_id}},'"+$('[name=transdate]').val()+"','"+$('[name=customer]').val()+"','"+NullToZero($('[name=paytype]').val() )+"','"+$('[name=pay_ins]').val()+"','"+$('[name=pay_ref]').val()+"','"+$('[name=pay_amount]').val() +"','" +$('[name=remarks]').val()+"','"+$('[name=checkdate]').val()+"'"
+
+                    }
+                    ,
+                    function(data,status){
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									//alert(ret_msg)
+									//$('#basic').modal('hide')
+					            	//dtbl()
+					            	console.log("success here")
+									Dobatchsave()
+									//return false;
+			                    }else{
+			                    	console.log("fail")
+			                    	alert(ret_msg)
+			                    }
+		                    }
+	                    }
+                    });	
+					return false;
+			}
+
+			function func_sync(item , tag , t,event){
+				//console.log($(event.target).closest("tr").find('.value_input').val())
+
+				var item_id =  $(".c_item_id").val();
+				var text_val =  $(event.target).closest("tr").find('.value_input').val();
+				var text_val_remarks =  $(event.target).closest("tr").find('.value_remarks').val();
+
+				$.get("/json_func",
+                    {
+                    	qdata : "SIS_CusBilTags_Save 'Update', '{{.Conf.username}}', {{.Conf.org_id}}, "+item_id+", "+tag+", '"+text_val+"', '"+text_val_remarks+"'"
+						
+						
+					}
+                    ,
+                    function(data,status){
+                    	console.log(data)
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									console.log(data[i][0])
+									alert(ret_msg)
+									
+								//return false;
+			                    }else{
+			                    	alert(ret_msg)
+			                    }
+		                         
+		                    }
+	                    }
+                    });
+
+			}
+			
+			function Dobatchsave(){
+				$.post("/inventory/customer_payment/HaddTagHandler",
+                    $("#item_tagsdata").serialize()
+					,
+                    function(data,status){
+                    	var errcount = 0 
+                    	if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        
+		                        if (data[i][0]=="HasError"){
+									errcount = errcount + 1
+								//return false;
+			                    }
+			                }
+						}
+						if (errcount>0){
+	                    	alert(errcount)
+	                    	alert("Opsss something went wrong")
+                        }else{
+                        	//alert("Save Success")
+                        	PageRefresher('1')
+                        } 
+                        
+                    });
+
+				return false;
+
+
+			}
+
+	function repoFormatResult( repo ) {
+	    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+	    return markup;
+	}
+
+	function repoFormatSelection( repo ) {
+	                return repo.full_name;
+	            }
+	$( "#leader" ).select2({
+    placeholder: "Search for Name",
+     minimumInputLength: 2,
+        multiple: false,
+        allowClear: true,
+    ajax: {
+        url: "/Ajax/GetMembers",
+        dataType: "json",
+        quietMillis: 250,
+        data: function( term, page ) {
+            return {
+                // search term
+                q: term
+            };
+        },
+        results: function( data, page ) {
+                // parse the results into the format expected by Select2.
+                // since we are using custom formatting functions we do not need to alter the remote JSON data
+                return { results: data.items };
+        }
+        
+    }, 
+	initSelection: function( element, callback ) {
+		// the input tag has a value attribute preloaded that points to a preselected repository's id
+		// this function resolves that id attribute to an object that select2 can render
+		// using its formatResult renderer - that way the repository name is shown preselected
+		var id = $( element ).val();
+		if ( id !== "" ) {
+			$.ajax( "/Ajax/GetMembers?id=" + id, {
+				dataType: "json"
+			}).done( function( data ) {
+				callback( data );
+			});
+		}
+	},
+
+    
+    formatResult: repoFormatResult,
+    formatSelection: repoFormatSelection,
+    // apply css that makes the dropdown taller
+    dropdownCssClass: "bigdrop",
+    // we do not want to escape markup since we are displaying html in results
+    escapeMarkup: function( m ) {
+        return m;
+    }
+});
+//$('input[name=name]').select2('open');
+			
+			</script>
+	

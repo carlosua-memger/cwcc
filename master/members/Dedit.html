@@ -1,0 +1,206 @@
+<!-- <Form> -->
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+		<form id="transdetnew" method="Post" onsubmit="javascript: return DoeditTrasDet()">
+			<input type="hidden" name="hdr_id" value="{{.Tconf.hdr_id}}">	
+			<input type="hidden" name="id" value="{{.Tconf.id}}">	
+			<input type="hidden" name="isSuspended">
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">Edit Contribution</h4>
+				</div>
+				<!-- <div class="modal-body">
+				 -->	 <!-- modal data here -->
+
+
+
+					<div class="form-horizontal">
+
+
+							<div class="form-group">
+									<label class="col-md-3 control-label">Transaction Type</label>
+									<div class="col-md-8">
+										<select name="trantype" class="form-control" id="trantype">
+			
+											{{$trantype  := .Tconf.trantype }}
+											{{range  $key ,$val := .Ls_trantype}}
+											{{ $loop_id  := index  $val 0 }}
+											{{if eq $trantype $loop_id }}
+											<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+											{{else}}
+											<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+											{{end}}
+											{{end}}
+			
+										</select>
+									</div>
+								</div>
+
+						
+								<div class="form-group">
+										<label class="col-md-3 control-label">Limit<span class="required" aria-required="true">*</span></label>
+										<div class="col-md-4">
+											<input type="text" style="text-align: right" name="limit" id="limit" placeholder="limit"
+												maxlength="100" class="form-control createAct num_f" required
+												onkeypress='return numbersOnly(this,event,true,false);' value="{{.Tconf.limit}}">
+										</div>
+			
+								</div>
+										
+								
+		
+								<div class="form-group">
+									<label class="col-md-3 control-label">Deductible<span class="required" aria-required="true">*</span></label>
+									<div class="col-md-4">
+										<input type="text" style="text-align: right" name="deductible" id="deductible" placeholder="deductible"
+											 maxlength="100" class="form-control createAct num_f" required
+											onkeypress='return numbersOnly(this,event,true,false);' value="{{.Tconf.deductible}}">
+									</div>
+		
+									<div class="col-md-4">
+										<label id="message"></label>
+		
+									</div>
+
+								
+								</div>
+
+								<div class="form-group">
+										<label class="col-md-3 control-label">Suspended</label>
+										<div class="col-md-4">
+										<input type="checkbox" class="checkbox" id="suspended" name="suspended" value="suspended">
+										
+									</div>
+									  </div>
+		
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Remarks</label>
+									<div class="col-md-5">
+										<textarea name = "remarks" class="form-control createAct">{{.Tconf.remarks}}</textarea>
+									</div>
+
+							</div>
+										  									
+					</div>
+
+					 <!-- end modal data here -->
+				<!-- </div> -->
+				<div class="errorDv">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn default" data-dismiss="modal">Go Back</button>
+					<button type="submit" class="btn blue">Update changes</button>
+				</div>
+
+		<!--  -->
+				<!-- /.modal-content -->
+		</form>
+	</div>
+		<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->					
+					
+
+
+<script type="text/javascript">
+ 	
+ 	num_val_init() //for number auto zero
+	var rights = '{{.Tconf.rights}}' 
+
+	if ({{.Tconf.suspended_trigger}} == 1) {
+		$( "#suspended").prop('checked', true);
+		$("[name=isSuspended]").val("1");
+	}
+	else
+	{
+		$("[name=isSuspended]").val("0");
+	}
+	
+	console.log({{.Tconf.suspended_trigger}})
+
+ 				/* $('#activated').on('change', function () {
+			        if(this.checked){
+			            this.value = this.checked ? 1 : 0;
+			            $('input[name=activated]:checked').val(this.value)
+			            alert(this.value);
+			        }
+			        if(!this.checked){
+			            this.value = this.checked ? 1 : 0;
+			            $('input[name=activated]:checked').val(this.value)
+			            alert(this.value);
+			        }
+
+ 				}).change();  */
+
+
+			//$("select").attr("disabled", "disabled");
+			
+			function DoeditTrasDet(a){
+
+				
+				if(!$('#transdetnew')[0].checkValidity()){
+					$('.val_err').show();
+				 	return false;
+				}
+				$( ".errorDv" ).html("")
+
+
+			        /* if(this.checked){
+			            this.value = this.checked ? 1 : 0;
+			            $('input[name=activated]').val(this.value)
+			            alert(this.value);
+			        }
+			        if(!this.checked){
+			            this.value = this.checked ? 1 : 0;
+			            $('input[name=activated]').val(this.value)
+			            alert(this.value);
+			        } */
+
+
+				$.post("/master/members/contribution/DEditHandler",$( "#transdetnew" ).serialize()
+
+		        ,
+		        function(data,status){
+		        	alert(data[1])
+		            if(data[1]=='Success'){
+		            	$(".createAct").val("")
+			            	$.get("/master/members/contribution?rights="+rights+"&ID={{.Tconf.hdr_id}}",
+	                    		 function(data,status){
+			                     $("#ContentID").html(data);
+			                     $('#basic').modal('hide')
+			                    }
+			                );
+			        }	
+				
+		        });
+	 			return false
+			}
+	setTimeout(function (){
+     //   $( "#item").select2('open')
+    	
+    }, 500);
+
+
+			
+
+				$("#suspended").change(function () {
+
+				var suspended = document.getElementById("suspended");
+				if (suspended.checked == true){
+					
+					
+					
+					$("[name=isSuspended]").val("1").change();
+
+
+				}
+				else {
+					$("[name=isSuspended]").val("0").change();
+				}
+
+			});
+
+</script>

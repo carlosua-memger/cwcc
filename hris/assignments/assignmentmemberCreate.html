@@ -1,0 +1,244 @@
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box green">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Member Assignment Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<form id="MemberAssignmentDoCreate" class="form-horizontal"  method="Post" onsubmit="return MemberAssignmentDoCreate()">
+					<input type="hidden" name="lbr_assign" value="{{.Htdata.assignmentid}}">
+					<div class="form-body">
+						<div class="form-group">
+							<label class="col-md-3 control-label">Member/s</label>
+							<div class="col-md-4">
+								<input type="text" name="member" placeholder="member" id="member"  class="form-control input-large dr-js createAct" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Leader</label>
+							<div class="col-md-4">
+								<input type="text" name="leader" placeholder="Leader" id="leader"  class="form-control createAct" >
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-md-3 control-label">Employee #</label>
+							<div class="col-md-4">
+								<input type="text" name="emp_id" placeholder="Employee Number" id="emp_id"  class="form-control createAct" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">processaccess</label>
+								<div class="col-md-4">
+								<select name="processaccess" class="form-control input-large dr-js clsAssign createAct" required>
+								<option value="1">Yes</option>
+								<option value="0">No</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Date<span class="required" aria-required="true">
+								* </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="txdate" class="form-control date-picker createAct" placeholder="Date" maxlength="50" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Device ID<span class="required createAct dvID" aria-required="true">
+								* </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="device_id"class="form-control " placeholder="Device ID" maxlength="50" >
+							</div>
+
+
+							<a  class="btn green act_btn" data-toggle='modal' href='#basic'  onclick="javascript:Modalfunc(this);">
+                   	 			Display duplicate<i class="fa fa-plus"></i></a>
+
+
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Remarks<span class="required" aria-required="true">
+								* </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="remarks" class="form-control createAct" placeholder="Remarks" maxlength="50" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Enable<span class="required" aria-required="true">
+								* </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="enable" class="form-control date-picker createAct" placeholder="Enable" maxlength="50" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Disable<span class="required createAct" aria-required="true">
+								* </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="disable" class="form-control date-picker createAct" placeholder="Disable" maxlength="50" >
+							</div>
+						</div>
+						
+
+					</div>
+
+					
+					<div class="form-actions fluid">
+						<div class="col-md-offset-3 col-md-9">
+							<button class="btn btn-circle blue" type="submit">Save</button>
+							<a class="btn btn-circle blue" onclick="javascript:MemberAssignmentDoCreate('AS');">Save&Addnew</a>
+							<button class="btn btn-circle default" onclick="javascript:Navigate('/assignment/AssignmentMembers?rights={{.Htdata.rights}}&ID={{.Htdata.assignmentid}}')" type="button">Cancel</button>
+						</div>
+					</div>
+				</form>
+				<!-- END FORM-->
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	
+</div>
+
+<script type="text/javascript">
+	
+	
+	/* $('.date-picker').datepicker({
+        rtl: Metronic.isRTL(),
+        orientation: "left",
+        autoclose: true
+    }); */
+
+
+			var currentDate = new Date();  
+			$('.date-picker').datepicker({autoclose: true});
+			$('.date-picker').datepicker("setDate", new Date());
+
+    function Modalfunc(a,v){
+        $.get("/get_duplicate_dev_id",
+                {
+                  device_id: $('input[name=device_id]').val()
+                }
+                ,
+
+                function(data,status){
+                    $("#basic").html(data);
+                    
+                });
+        //return false;
+    }
+
+	function MemberAssignmentDoCreate(a){
+	
+		$.post("/assignment/AssignmentMembersCreate",$( "#MemberAssignmentDoCreate" ).serialize()
+	        ,
+	        function(data,status){
+	            alert(data.Message)
+	            if(data.Message=='Success'){
+	            	$("#member").select2("val", ""); 
+	            	$(".dvID").val("")
+	            	if(a=!'AS'){
+	            		Navigate('/assignment/AssignmentMembers?rights={{.Htdata.rights}}&ID={{.Htdata.assignmentid}}')	
+	            	}
+	            	
+	            }
+	        });
+		return false
+	}
+
+	function repoFormatResult( repo ) {
+	    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+	    return markup;
+	}
+
+	function repoFormatSelection( repo ) {
+        return repo.full_name;
+    }
+	$( "#leader" ).select2({
+	    placeholder: "Search for Address",
+	     minimumInputLength: 2,
+	        multiple: true,
+	        allowClear: true,
+	    ajax: {
+	        url: "/Ajax/GetMembers?sp=orgmem_get",
+	        dataType: "json",
+	        quietMillis: 250,
+	        data: function( term, page ) {
+	            return {
+	                // search term
+	                q: term
+	            };
+	        },
+	        results: function( data, page ) {
+	                // parse the results into the format expected by Select2.
+	                // since we are using custom formatting functions we do not need to alter the remote JSON data
+	                return { results: data.items };
+	        }
+	        
+	    },
+	    
+	    formatResult: repoFormatResult,
+	    formatSelection: repoFormatSelection,
+	    // apply css that makes the dropdown taller
+	    dropdownCssClass: "bigdrop",
+	    // we do not want to escape markup since we are displaying html in results
+	    escapeMarkup: function( m ) {
+	        return m;
+	    }
+	    
+	});
+	$( "#member" ).select2({
+	    placeholder: "Search for Address",
+	     minimumInputLength: 2,
+	        multiple: true,
+	        allowClear: true,
+	    ajax: {
+	        url: "/Ajax/GetMembers?sp=orgmem_get",
+	        dataType: "json",
+	        quietMillis: 250,
+	        data: function( term, page ) {
+	            return {
+	                // search term
+	                q: term
+	            };
+	        },
+	        results: function( data, page ) {
+	                // parse the results into the format expected by Select2.
+	                // since we are using custom formatting functions we do not need to alter the remote JSON data
+	                return { results: data.items };
+	        }
+	        
+	    },
+	    
+	    formatResult: repoFormatResult,
+	    formatSelection: repoFormatSelection,
+	    // apply css that makes the dropdown taller
+	    dropdownCssClass: "bigdrop",
+	    // we do not want to escape markup since we are displaying html in results
+	    escapeMarkup: function( m ) {
+	        return m;
+	    }
+	    
+	});
+	$('input[name=name]').select2('open');
+</script>						

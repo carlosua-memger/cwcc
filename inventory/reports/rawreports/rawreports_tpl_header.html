@@ -1,0 +1,365 @@
+<html>
+    <head>  
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+                <!-- <title style="font-size: 16px;">Paired logs Report</title> -->
+            <style type="text/css">
+                .rpt_date {
+                    float: right;
+                    
+                }
+                .page_header{
+                    margin-bottom: 5px;
+                    /*display: inline; */
+                }
+                .name{
+                    /*float: left;*/
+                    margin-bottom: 3px;
+                    font-family: Arial; 
+                }
+                .covered_data{
+                    /*float: right;*/
+                    font-family: Arial; 
+                }
+                .pic_logo {
+                    width: 200px;
+
+                }
+                table{
+                    width: 100%;
+                   
+                }
+                
+                .dtatbl {
+                
+                border: 0.99px solid #e2e2e2;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 14px;
+                border-spacing: 20px 100px;
+                }
+
+                .dtatbl th{
+                    border: 0.99px solid #e2e2e2;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 14px;
+                }
+
+                .dtatbl td {
+                    border: 0.99px solid #e2e2e2;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 14px;
+                }
+                th, td {
+                    /*padding: 2px;*/
+                    padding: 2px;
+                }
+                th{
+                    
+                    background-color: whiteSmoke;
+                    /*background-image: -webkit-linear-gradient*/
+                    
+                }
+                body {
+                    font-size: 14px;
+                }
+                .logo{
+                    width: 200px;
+                    margin-bottom: 5px;
+                }
+                .page_footer{
+                    margin-top: 20px;
+                    display: inline-block;
+                    width: 100%;
+                }
+                .signaturemember{
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: left;
+                    font-family: inherit;
+                }
+                .signatureleft{
+                    margin-left: 10%;
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: left;
+                    font-family: inherit; 
+                }
+                .signatureright{
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: right;
+                    font-family: inherit; 
+                }
+                .tbl_foor{
+                    margin-top: 10px;
+                }
+                .tbl_foor td div{
+                    border-top: 0.99px solid black; 
+                    width: 50%;
+                }
+                .isred {
+                    color: red;
+                }
+                .log_sum{
+                    margin-top: 10px;
+                }
+                td div{
+                    font-size: 12px;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+                td div b{
+                    font-size: 12px;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+
+                label{
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 14px;
+
+                }
+
+                #header{
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 14px;
+                display: inline-block; 
+                text-align: left; 
+                width: 100%
+
+                }
+
+                p{
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 14px;
+
+                }
+
+                #right {
+    
+                 text-align: right;
+                }
+                 #right2 {
+    
+                float: right
+                }
+            </style>
+
+            </head>
+
+            
+                
+            <div class="tools">
+                    <a class="collapse" href="javascript:;">
+                    </a>
+                    <a class="config" data-toggle="modal" href="#portlet-config">
+                    </a>
+                    <a class="reload" href="javascript:;">
+                    </a>
+                    <a class="remove" href="javascript:;">
+                    </a>
+                </div>
+            <body>
+                <div class="htl" style="font-size: 14px;margin-bottom: 10px;"> 
+                    <!--  Paired logs Report -->
+                </div>
+                        
+                   
+                           
+                             <table border=0 cellspacing="0">
+                             <tr>
+                             <td>
+                                <b><label class="control-label col-md-4">{{.Tconf.reportname_name}}</label></b>
+                             </td>
+                              <td align=right>
+                                <label class="control-label col-md-4">Printed date : {{get_datetime}}</label>
+                             </td>
+                            </tr>
+                                    
+
+                       
+                            
+                      
+                            </table>
+                           
+                         
+                       
+                       <div class="form-group c_datefrom" id=header>
+
+                       <label id=header>Date From: {{.Tconf.strt_date_display}}</label>        
+                        </div>
+                        
+                        <div class="form-group c_dateto" id=header>
+                        <label id=header>Date To: {{.Tconf.end_date_display}}</label>
+                        </div>
+
+                         <div class="form-group c_item" id=header>
+                                
+
+                            {{if ne .Tconf.item "0"}}
+                          {{$sql_str := combine_string `SIS_Item_Get 18,` .Tconf.org_id "," .Tconf.item }}
+                            {{$conf_data := tpl_sql_row $sql_str }}
+                           
+
+                        Item: {{index $conf_data  0}}
+
+                        {{else}}
+                        Item: All
+                         {{end}}
+                        
+           
+                        </div>
+                      
+                        <div class="form-group c_location" id=header>
+                         
+                        Location: {{.Tconf.location_name}}
+                        </div>
+                        
+                         <div class="form-group c_supplier" id=header>
+                       
+                          Supplier: {{.Tconf.supplier_name}}
+                          
+                        
+                        </div>
+                          <div class="form-group c_trnID" id=header>
+                        
+                         Transaction ID: {{.Tconf.trn_id}}
+                            
+                        </div>
+                           <div class="form-group c_soldby" id=header>
+                        
+                          Sold by: {{.Tconf.soldby_name}}
+                                  
+                        </div>
+                         
+                           <div class="form-group c_customer" id=header>
+                       
+                          Customer: {{.Tconf.customer_name}}
+                                     
+                        </div>
+                         
+
+                         <div class="form-group c_transferfr" id=header>
+                       
+                          Transfer from: {{.Tconf.transferfrom_name}}
+                        </div>
+                          <div class="form-group c_transferto" id=header>
+                     
+                          Transfer to: {{.Tconf.transferto_name}}
+                              
+                        </div>
+
+                        <div class="form-group c_filter" id=header>
+                       
+                          Filter : {{.Tconf.filter}}
+                        </div>
+                          
+
+
+                         
+                {{$arr_hval := .Hdata}}
+                <table class="dtatbl" id="headerTable">
+                    <tbody>
+                        <tr>
+                            {{range $key,$hval := .Hdata}}
+                            <th {{ col_attrib $key $arr_hval}} >{{col_trim_header $hval}}</th>
+                            {{end}}
+                        </tr>
+                        {{range $Dataarr := .Data }}
+                        <tr>
+                           
+                            {{range $key, $val := $Dataarr}}
+                            <td  {{ col_attrib $key $arr_hval}} > {{$val}}</td>
+                            {{end}}
+                        </tr>
+                        {{end}}
+                    </tbody>    
+                </table>
+                <br>       
+                 {{footer_ads}}     
+
+ <!-- <font size="2"><b><label>Powered by Memgertech Inc.</b> <i><label>Inventory like a <b>boss</b>... Try us for free.</label></i></font></label>   -->
+            
+
+
+
+    </body>
+
+
+<script type="text/javascript">
+      
+        var show_datefrom = '{{.Tconf.show_datefrom}}'
+        if (show_datefrom == '0') {
+
+         $('.c_datefrom').hide();
+        }
+
+        var show_dateto = '{{.Tconf.show_dateto}}'
+        if ( show_dateto == '0') {
+
+            $('.c_dateto').hide();
+        }else{
+
+             $('.c_dateto').show();
+        }
+
+        var show_location = '{{.Tconf.show_location}}'
+        if ( show_location == '0') {
+
+       // $('.c_location').hide();
+        }
+
+         var show_supplier = '{{.Tconf.show_supplier}}'
+        if ( show_supplier == '0') {
+
+        $('.c_supplier').hide();
+        }
+
+         var show_id = '{{.Tconf.show_id}}'
+        if ( show_id == '0') {
+
+        $('.c_trnID').hide();
+        }
+
+         var show_soldby = '{{.Tconf.show_soldby}}'
+        if ( show_soldby == '0') {
+
+        $('.c_soldby').hide();
+        }
+
+         var show_customer = '{{.Tconf.show_customer}}'
+        if ( show_customer == '0') {
+        $('.c_customer').hide();
+        }
+          var show_transferto = '{{.Tconf.show_transferto}}'
+        if ( show_transferto == '0') {
+
+        $('.c_transferto').hide();
+        }
+
+        var show_transferfr = '{{.Tconf.show_transferfr}}'
+        if ( show_transferfr == '0') {
+
+        $('.c_transferfr').hide();
+        }
+
+         var show_filter = '{{.Tconf.show_filter}}'
+        if ( show_filter == '0') {
+
+        $('.c_filter').hide();
+        }
+
+
+         var show_item = '{{.Tconf.show_item}}'
+        if ( show_item == '0') {
+
+        $('.c_item').hide();
+        }
+
+
+
+</script>
+
+</html>
+
+

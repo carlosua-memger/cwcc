@@ -1,0 +1,113 @@
+<!-- <Form> -->
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+		<form id="transdetnew" method="Post" onsubmit="javascript: return DocreateTrasDet()">
+			<input type="hidden" name="h_id" value="{{.h_id}}">	
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">Add Reference</h4>
+				</div>
+				<!-- <div class="modal-body">
+				 -->	 <!-- modal data here -->
+
+					<div class="form-horizontal">
+							<div class="form-group">
+								<label class="col-md-3 control-label">Tag References:</label>
+								<div class="col-md-4">
+									<input type="text" name="item" placeholder="Item" id="item"  class="form-control input-large"  required>
+								</div>
+							</div>
+							
+							
+										  									
+					</div>
+					 <!-- end modal data here -->
+				<!-- </div> -->
+				<div class="modal-footer">
+					<button type="button" class="btn default" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn blue">Save</button>
+				</div>
+
+		<!--  -->
+				<!-- /.modal-content -->
+		</form>
+	</div>
+		<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->					
+					
+
+
+<script type="text/javascript">
+ 	$('.form_datetime').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+	
+
+	var rights = '{{.Tconf.rights}}' 
+			function DocreateTrasDet(a){
+				$.post("/inventory/location_reciept/details/add_reference",$( "#transdetnew" ).serialize()
+		        ,
+		        function(data,status){
+		        	console.log(data)
+		        	alert('save success')
+		        	PageRefresher('2')
+		        	$('#basic').modal('hide')
+
+		        });
+	 			return false
+			}
+		
+
+	function repoFormatResult( repo ) {
+	    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.id +" - "+ repo.full_name + "</div> <div class='select2-result-repository__description'>" +repo.trndate+ "</div></div>";
+
+	    return markup;
+	}
+
+	function repoFormatSelection( repo ) {
+        return repo.full_name;
+    }
+    		
+	$( "#item" ).select2({
+	    placeholder: "Search for Items",
+	    minimumInputLength: 0,
+	    multiple: true,
+	    allowClear: true,
+	    ajax: {
+	        url: "/inventory/location_reciept/details/Ajax/Ajax_getRef?h_id={{.h_id}}",
+	        dataType: "json",
+	        quietMillis: 250,
+	        data: function( term, page ) {
+	            return {
+	                // search term
+	                q: term
+	            };
+	        },
+	        results: function( data, page ) {
+	                // parse the results into the format expected by Select2.
+	                // since we are using custom formatting functions we do not need to alter the remote JSON data
+	                return { results: data.items };
+	        }
+	        
+	    },
+	    
+	    formatResult: repoFormatResult,
+	    formatSelection: repoFormatSelection,
+	    // apply css that makes the dropdown taller
+	    dropdownCssClass: "bigdrop",
+	    // we do not want to escape markup since we are displaying html in results
+	    escapeMarkup: function( m ) {
+	        return m;
+	    }
+	});		
+	setTimeout(function (){
+        $( "#item").select2('open')
+    	
+    }, 1000);
+
+</script>

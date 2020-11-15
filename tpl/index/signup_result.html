@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Memger</title>
+  <meta name="Memger" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+ <!--  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+ -->
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="/src/tpl/index/css/normalize.css">
+  <link rel="stylesheet" href="/src/tpl/index/css/skeleton.css">
+  <link rel="stylesheet" href="/src/tpl/index/css/custom.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <!-- <link rel="icon" type="image/png" href="images/favicon.png"> -->
+
+  </style>
+</head>
+<body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<div style="width: 138px;
+    position: absolute;
+    z-index: 10;
+    margin-left: -32px;
+    margin-top: 21px;">
+
+  <div  style="    width: 208px;
+    height: 27px;
+    -ms-transform: rotate(320deg);
+    -webkit-transform: rotate(320deg);
+    transform: rotate(320deg);
+    color: #661070;
+    min-width: 80px;
+    background-image: url('/src/tpl/index/images/beta2.jpg');"  > </div>
+</div>
+ <div class="container">
+    <nav class="navbar">
+      <div class="container">
+        <ul class="navbar-list">
+          <li class="navbar-item"><a class="navbar-link" href="#intro">Contact</a></li>
+          
+          <li class="navbar-item"><a class="navbar-link" href="#examples">Pricing </a></li>
+          <li class="navbar-item"><a class="navbar-link" href="#" data-popover="#moreNavPopover">Software and services</a>
+          </li>
+          
+        </ul>
+      </div>
+    </nav>
+
+
+
+
+    <section class="header six columns">
+    
+      <h5 style="    width: 330px; font-family: consolas;    font-style: italic; color:#661070;margin: auto;"><b style="    font-size: 30px;">Smart solution </b>by members, for members</h5>
+      <a class="button button-primary" href="/login" style="margin-top: 40px;">Sign in</a>
+    
+   </section>   
+
+   <section class="four columns" style="margin-top: 50px;">
+      <h4 style=" font-family: consolas; color:#661070;">Sign Up</h4>
+    <form method="Post" Action="/Signup">
+      <input class="u-full-width" type="text"   name="lastname"   placeholder="Lastname">
+      <input class="u-full-width" type="text"   name="firstname"   placeholder="Firstname" >
+      <input class="u-full-width" type="text"   name="middlename" placeholder="Middlename" >
+      <input class="u-full-width" type="email"  name="email"      placeholder="Email">
+      <input class="u-full-width" type="text"   name="contactno"  placeholder="Mobile number">
+      <input class="u-full-width" type="text"   name="a1"         placeholder="Assignment Name on latest timesheet?">
+      <input class="u-full-width" type="text"   name="a2"         placeholder="Biometrics ID on latest Timesheet?">
+      <input class="button-primary" type="submit" value="Sign Up">
+    </form>
+   </section>
+      
+  
+        
+    
+
+  </div>
+
+  <div class="footer" style="width: 100%;
+    height: 50px;
+    bottom: 0;
+    left: 0;margin-left: 20px;">
+    <div class="four columns"> 
+      <!-- <div> <a href="#" onclick="TogetherJS(this); return false;" style="font-size: small; background-image: url('/src/tpl/index/images/wrench.png');">Remote Assistance</a></div> -->
+      <!-- <div> <a href="#" class="leave_message" id="leave_message">Leave us Message</a></div> -->
+      <a href="#" onclick="TogetherJS(this); return false;">
+      <img src="/src/tpl/index/images/wrench.png" style="margin-top: 1px; width: 30px;"/>
+    </a>
+    </div> 
+
+    
+
+   
+    <div class="four columns" style="font-size: small;     color: #6D6B6B;">
+      2015 © Copyright Memger Technologies. All rights reserved.  
+    </div>
+  </div>
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<script>
+  function OnSignup(str) {
+    xhttp.open("POST", "/Signup", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("lastname=marlon&lname=Ford");
+  }
+</script>
+
+
+<script src="https://togetherjs.com/togetherjs-min.js"></script>
+
+<!--Start of HappyFox Live Chat Script-->
+<script>
+  window.HFCHAT_CONFIG = {
+       EMBED_TOKEN: "b5558fb0-4fb0-11e5-b68f-f519327d98e7",
+       ACCESS_TOKEN: "a70e469cc900433dbdb58008330bd925",
+       HOST_URL: "https://www.happyfoxchat.com",
+       ASSETS_URL: "https://d1l7z5ofrj6ab8.cloudfront.net/visitor"
+   };
+
+  (function() { 
+    var scriptTag = document.createElement('script');
+    scriptTag.type = 'text/javascript';
+    scriptTag.async = true;
+    scriptTag.src = window.HFCHAT_CONFIG.ASSETS_URL + '/js/widget-loader.js';
+
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(scriptTag, s);
+  })();
+</script>
+<!--End of HappyFox Live Chat Script-->
+  
+  <style type="text/css">
+  #hfc-cleanslate .hfc-badge.hfc-badge-bottom {
+      /*right: 1639px;*/
+     /* margin-left: 20px;*/
+      left: 50px;
+      width: 120px;
+      /*bottom:-10px;*/ 
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border-radius: 5px;
+  }
+  #hfc-cleanslate.hfc-chat-container {
+    position: fixed
+  }
+  #hfc-cleanslate .hfc-badge-title {
+    font-size: small;
+  }
+</style>
+
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Top Aging Past Due Per Partner</title>
+
+        
+        <style type="text/css">
+/*#container {
+    height: 400px; 
+    min-width: 310px; 
+    max-width: 800px;
+    margin: 0 auto;
+}*/
+        td {
+            font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+            font-size: 12px;
+                width: 60%;
+        }
+        </style>
+        <script type="text/javascript">
+            
+$(function () {
+
+    Highcharts.setOptions({
+    lang: {
+      decimalPoint: '.',
+      thousandsSep: ','
+    }
+});
+
+    $('#container').highcharts({
+        chart: {
+            type: 'column',
+            height: '650',
+            decimalPoint: '.',
+            thousandsSep: ','
+           /* options3d: {
+                enabled: true,
+                alpha: 10,
+                beta: 25,
+                depth: 70
+            }*/
+        },  
+
+        title: {
+            text: 'Top Aging Past Due Per Partner'
+        },
+        
+       
+        plotOptions: {
+            column: {
+                depth: 25,
+                stacking: 'normal'
+            }
+        },
+        xAxis: {
+            
+            type: 'category',
+            labels: {
+                rotation: -60,
+                style: {
+                    fontSize: '14px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            },
+            categories: {{.categories}}
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Amount (Php)'
+            },
+           
+
+        },
+        series: [
+           
+            
+          
+           
+            {
+            name: 'Last 5 Months and up',
+            data: {{.age151up}},
+            color: '#8B0000'
+            
+            },
+
+            {
+            name: 'Last 4 Months',
+            data: {{.age121150}},
+            color: '#FF0000'
+            
+            },
+
+            {
+            name: 'Last 3 Months',
+            data: {{.age91120}},
+            color: '#FFA500',
+            
+            },
+
+            {
+            name: 'Last 2 Months',
+            data: {{.age6190}},
+            color: '#FFFF00'
+            
+            },
+
+            {
+            name: 'Last 1 Month',
+            data: {{.age3160}},
+            color: '#9ACD32'
+
+            
+            },
+            {
+            name: 'Current Month',
+            data: {{.age130}},
+            color: '#008000'
+            
+            }
+
+
+
+        ]
+    });
+});
+</script>
+
+<div id="container" ></div>
+
+
+</html>

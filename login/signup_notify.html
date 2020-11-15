@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<!-- 
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.2.0
+Version: 3.1.2
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Contact: support@keenthemes.com
+Follow: www.twitter.com/keenthemes
+Like: www.facebook.com/keenthemes
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
+-->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+<meta charset="utf-8"/>
+<title>Memger</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="" name="description"/>
+<meta content="" name="author"/>
+<!-- BEGIN GLOBAL MANDATORY STYLES -->
+<!-- <link href="/src/metronic_3.1.2/metronic/metronic/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/> -->
+
+
+<!-- <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+<script src="https://apis.google.com/js/api:client.js"></script> -->
+
+
+<link href="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="/src/metronic_3.1.2/metronic/assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+<link href="/src/metronic_3.1.2/metronic/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+<!-- END GLOBAL MANDATORY STYLES -->
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link href="/src/metronic_3.1.2/metronic/assets/global/plugins/select2/select2.css" rel="stylesheet" type="text/css"/>
+<link href="/src/metronic_3.1.2/metronic/assets/admin/pages/css/login.css" rel="stylesheet" type="text/css"/>
+<!-- END PAGE LEVEL SCRIPTS -->
+<!-- BEGIN THEME STYLES -->
+<link href="/src/metronic_3.1.2/metronic/assets/global/css/components.css" rel="stylesheet" type="text/css"/>
+<link href="/src/metronic_3.1.2/metronic/assets/global/css/plugins.css" rel="stylesheet" type="text/css"/>
+<link href="/src/metronic_3.1.2/metronic/assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
+<link id="style_color" href="/src/metronic_3.1.2/metronic/assets/admin/layout/css/themes/default.css" rel="stylesheet" type="text/css"/>
+<!-- END THEME STYLES -->
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.5.3/css/bootstrapValidator.min.css" rel="stylesheet" type="text/css"/>
+
+<link rel="shortcut icon" href="favicon.ico"/>
+
+
+
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+  <script src="https://apis.google.com/js/api:client.js"></script>
+  <script>
+  var googleUser = {};
+  var startApp = function() {
+    gapi.load('auth2', function(){
+      // Retrieve the singleton for the GoogleAuth library and set up the client.
+      auth2 = gapi.auth2.init({
+        client_id: '849655928151-alk6l63onuv5dne9a004i88ofgssln7f.apps.googleusercontent.com',
+        cookiepolicy: 'single_host_origin',
+        // Request scopes in addition to 'profile' and 'email'
+        //scope: 'additional_scope'
+      });
+      attachSignin(document.getElementById('customBtn'));
+    });
+  };
+
+  function attachSignin(element) {
+    console.log(element.id);
+    auth2.attachClickHandler(element, {},
+        function(googleUser) {
+          onSignUp(googleUser)	
+          /*document.getElementById('name').innerText = "Signed in: " +
+              googleUser.getBasicProfile().getName();*/
+        
+        }, function(error) {
+          alert(JSON.stringify(error, undefined, 2));
+        });
+  }
+  </script>
+  <style type="text/css">
+    #customBtn {
+    /*  display: inline-block;*/
+    /*  background: white;
+      color: #444;
+      width: 190px;
+      border-radius: 5px;
+      border: thin solid #888;
+      box-shadow: 1px 1px 1px grey;
+      white-space: nowrap;*/
+    }
+    #customBtn:hover {
+     /* cursor: pointer;*/
+    }
+    span.label {
+      /*font-family: serif;
+      font-weight: normal;*/
+    }
+    span.icon {
+     /* background: url('/identity/sign-in/g-normal.png') transparent 5px 50% no-repeat;
+      display: inline-block;
+      vertical-align: middle;
+      width: 42px;
+      height: 42px;*/
+    }
+    span.buttonText {
+      /*display: inline-block;
+      vertical-align: middle;
+      padding-left: 42px;
+      padding-right: 42px;
+      font-size: 14px;
+      font-weight: bold;*/
+      /* Use the Roboto font that is loaded in the <head> */
+      /*font-family: 'Roboto', sans-serif;*/
+    }
+
+
+
+
+
+
+
+
+
+    .spinner {
+	  display: inline-block;
+	  opacity: 0;
+	  width: 0;
+
+	  -webkit-transition: opacity 0.25s, width 0.25s;
+	  -moz-transition: opacity 0.25s, width 0.25s;
+	  -o-transition: opacity 0.25s, width 0.25s;
+	  transition: opacity 0.25s, width 0.25s;
+	}
+
+	.has-spinner.active {
+	  cursor:progress;
+	}
+
+	.has-spinner.active .spinner {
+	  opacity: 1;
+	  width: auto; /* This doesn't work, just fix for unkown width elements */
+	}
+
+	.has-spinner.btn-mini.active .spinner {
+	    width: 10px;
+	}
+
+	.has-spinner.btn-small.active .spinner {
+	    width: 13px;
+	}
+
+	.has-spinner.btn.active .spinner {
+	    width: 16px;
+	}
+
+	.has-spinner.btn-large.active .spinner {
+	    width: 19px;
+	}
+
+  </style>
+
+
+
+<style type="text/css">
+	.login .content {
+    	width: 65%;
+	}
+</style>
+
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<meta name="google-signin-client_id" content="849655928151-alk6l63onuv5dne9a004i88ofgssln7f.apps.googleusercontent.com">
+</head>
+<!-- BEGIN BODY -->
+<!-- DOC: Apply "page-header-f	ixed-mobile" and "page-footer-fixed-mobile" class to body element to force fixed header or footer in mobile devices -->
+<!-- DOC: Apply "page-sidebar-closed" class to the body and "page-sidebar-menu-closed" class to the sidebar menu element to hide the sidebar by default -->
+<!-- DOC: Apply "page-sidebar-hide" class to the body to make the sidebar completely hidden on toggle -->
+<!-- DOC: Apply "page-sidebar-closed-hide-logo" class to the body element to make the logo hidden on sidebar toggle -->
+<!-- DOC: Apply "page-sidebar-hide" class to body element to completely hide the sidebar on sidebar toggle -->
+<!-- DOC: Apply "page-sidebar-fixed" class to have fixed sidebar -->
+<!-- DOC: Apply "page-footer-fixed" class to the body element to have fixed footer -->
+<!-- DOC: Apply "page-sidebar-reversed" class to put the sidebar on the right side -->
+<!-- DOC: Apply "page-full-width" class to the body element to have full width page without the sidebar menu -->
+<body class="login">
+<!-- BEGIN LOGO -->
+<div class="beta_test btn green" style=" -ms-transform: rotate(20deg); /* IE 9 */
+    -webkit-transform: rotate(20deg); /* Safari */
+    transform: rotate(20deg);"
+    > beta version </div>
+<div class="logo">
+	<a href="index.html">
+	<img src="/src/metronic_3.1.2/images/login_logo.jpg" style="margin-top: 1px;"alt="logo" class="logo-default"/>
+	</a>
+</div>
+<!-- END LOGO -->
+<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+<div class="menu-toggler sidebar-toggler">
+</div>
+<!-- END SIDEBAR TOGGLER BUTTON -->
+<!-- BEGIN LOGIN -->
+
+
+<div class="content row">
+	
+	<div class="note note-success">
+		<h4 class="block">Email Notification Success.</h4>
+		
+		<!-- <p>
+			 jquery.notific8 is a notification plug-in that was inspired by the notification style introduced in Windows 8. For more info Check out <a href="https://github.com/willsteinmetz/jquery-notific8" target="_blank">
+			the official github respository </a>
+		</p> -->
+
+	</div>
+	<h3>Personal Information</h3>
+	<hr>
+	<form class="form-horizontal" action="/signupeviaemail" id="reg_form" method="post">
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="title">Organization:<span class="required" aria-required="true">*</span></label>
+			<div class="col-md-5">
+				<input type="text" class="form-control"  name="orgName" value="{{.org_name}}" placeholder="Organization">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="title" >Email:<span class="required" aria-required="true">*</span></label>
+			<div class="col-md-5">
+				<input type="text" class="form-control" name="email" value="{{.email}}"  placeholder="Email">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="title">Password:<span class="required" aria-required="true">*</span></label>
+			<div class="col-md-5">
+				<input type="password" class="form-control" name="password" placeholder="password">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="title">Re-Password:<span class="required" aria-required="true">*</span></label>
+			<div class="col-md-5">
+				<input type="password" class="form-control" name="repassword" placeholder="re-password">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="title">Lastname:<span class="required" aria-required="true">*</span></label>
+			<div class="col-md-5">
+				<input type="text" class="form-control"  name="lastname" placeholder="Lastname">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="title">Firstname:<span class="required" aria-required="true">*</span></label>
+			<div class="col-md-5">
+				<input type="text" class="form-control" name="firstname" placeholder="Firstname">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="title">Middlename:</label>
+			<div class="col-md-5">
+				<input type="text" class="form-control" name="middlename" placeholder="Middlename">
+			</div>
+		</div>
+
+		
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="title"></label>
+			<div class="col-md-5">
+				<input type="submit" class="btn green-meadow btn-lg" id="notific8_show" value="Save Settings">
+				
+			</div>
+		</div>
+	</form>
+
+
+</div>
+
+<div class="row">
+		<div class="copyright">
+			
+			
+				 <p>© Copyright Memger Tech Inc | <a href="mailto:contactus@memger.com">Contact us</a> </p>
+				
+		</div>
+	</div>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
+<script src='http://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/js/bootstrapvalidator.min.js'></script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+	    $('#reg_form').bootstrapValidator({
+	        // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+	        feedbackIcons: {
+	            valid: 'glyphicon glyphicon-ok',
+	            invalid: 'glyphicon glyphicon-remove',
+	            validating: 'glyphicon glyphicon-refresh'
+	        },
+	        fields: {
+	            orgName: {
+	                /*validators: {
+	                        stringLength: {
+	                        min: 2,
+	                    },
+	                        notEmpty: {
+	                        message: 'Please supply your Organization'
+	                    },
+
+	                }*/
+	                validators: {
+                    // The validator will create an Ajax request
+                    // sending { username: 'its value' } to the back-end
+                    notEmpty: {
+                    message: 'The Organization is required'
+                	},
+                    remote: {
+                        message: 'The Organization is not available',
+                        url: '/signup-verify-email_validate',
+                        type: 'POST'
+                    }
+                }
+	            },
+	            
+	           	email: {
+	                validators: {
+	                   emailAddress: {
+	                        message: 'Please supply a valid email address'
+	                    },
+	                    notEmpty: {
+	                    message: 'The Organization is required'
+	                	},
+	                    remote: {
+	                        message: 'The Email address is not available',
+	                        url: '/signup-verify-email_validate',
+	                        type: 'POST'
+	                    }
+	                }
+	            },
+						
+			password: {
+	            validators: {
+	                identical: {
+	                    field: 'repassword',
+	                    message: 'Confirm your password below - type same password please'
+	                },
+	                notEmpty: {
+                        message: 'Please supply your password'
+                    }
+	            }
+	        },
+	        repassword: {
+	            validators: {
+	                identical: {
+	                    field: 'password',
+	                    message: 'The password and its confirm are not the same'
+	                },
+	                notEmpty: {
+                        message: 'Please confirm password'
+                    }
+	                
+	            }
+	         },
+			lastname: {
+                validators: {
+                        stringLength: {
+                        min: 2,
+                    },
+                        notEmpty: {
+                        message: 'Please supply your Lastname'
+                    }
+                }
+            },
+            firstname: {
+                validators: {
+                        stringLength: {
+                        min: 2,
+                    },
+                        notEmpty: {
+                        message: 'Please supply your Firstname'
+                    }
+                }
+            },
+            
+	            
+
+	            
+	            }
+	        })
+			
+	 	
+	        .on('success.form.bv', function(e) {
+	            $('#success_message').slideDown({ opacity: "show" }, "slow") // Do something ...
+	                $('#reg_form').data('bootstrapValidator').resetForm();
+
+	            // Prevent form submission
+	            e.preventDefault();
+
+	            // Get the form instance
+	            var $form = $(e.target);
+
+	            // Get the BootstrapValidator instance
+	            var bv = $form.data('bootstrapValidator');
+
+	            // Use Ajax to submit form data
+	            $.post($form.attr('action'), $form.serialize(), function(result) {
+	                console.log(result);
+	            }, 'json');
+	        });
+	});
+	
+</script>
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

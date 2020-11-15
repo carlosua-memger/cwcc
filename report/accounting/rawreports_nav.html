@@ -1,0 +1,680 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<style type="text/css">
+.dropdown-menu > li > .dropdown-menu-item {
+   clear: both;
+    color: #333;
+    display: block;
+    padding: 3px 20px;
+    white-space: nowrap;
+    margin: 5px 0;
+    width: 100%;
+    text-align: left;
+    text-decoration: none;
+    outline: none;
+    cursor: pointer;
+    -moz-user-select: none;
+    user-select: none;
+}
+.dropdown-menu > li:hover .dropdown-menu-item,
+.dropdown-menu > li:focus .dropdown-menu-item{
+    background-color: #f5f5f5;
+    color: #262625;
+}
+.dropdown-menu > li > .dropdown-menu-item.checkbox {
+    margin: 0;
+    font-weight: normal;
+}
+.dropdown-menu > li > .dropdown-menu-item.checkbox input {
+    display: none;
+}
+</style>
+
+
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Accounting
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<form id="CreateTransaction" class="form-horizontal" target ="_blank">
+				<!--action="/inventory/reports/do_print/" method="Get" -->
+
+					<div class="form-body">
+							
+											
+					   
+					
+
+							<div class="form-group">
+							<label class="col-md-3 control-label">Released Date / Issued Date :
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="date" id="date" placeholder="Select Date" class="form-control date-picker-notime"
+									maxlength="50">	
+						
+								</div>
+							</div>
+
+
+							<div class="form-group c_group">
+									<label class="col-md-3 control-label">Group :</label>
+									<div class="col-md-4">
+										<select name="group" id="group" class="form-control">
+											<option value="0">All</option>	 
+											{{range  $key ,$val := .Ls_group}}
+											<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+											{{end}}
+										</select>
+									</div>
+								</div>
+
+								<div class="form-group">
+										<label class="col-md-3 control-label">Partner :</label>
+										<div class="col-md-4">
+											<select name="partner" id="partner" class="form-control">
+												<option value="0">All</option>	 
+												{{range  $key ,$val := .Ls_partner}}
+												<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+												{{end}}
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group">
+											<label class="col-md-3 control-label">Transaction Type :</label>
+											<div class="col-md-4">
+												<select name="lpartype" id="lpartype" class="form-control">
+													<option value="0">All</option>	 
+													{{range  $key ,$val := .Ls_lpartype}}
+													<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+													{{end}}
+												</select>
+											</div>
+										</div>
+
+										<div class="form-group">
+													<label class="col-md-3 control-label">Bank :</label>
+													<div class="col-md-4">
+														<select name="bank" id="bank" class="form-control">
+															<option value="0">All</option>	 
+															{{range  $key ,$val := .Ls_bank}}
+															<option value="{{ index  $val 0}}" data-format = "{{ index  $val 3}}" data-filename="{{ index  $val 4}}" data-fileextension="{{ index  $val 5}}">{{ index  $val 1}}</option>
+															{{end}}
+														</select>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-md-3 control-label">Coop :</label>
+													<div class="col-md-4">
+														<select name="coop" id="coop" class="form-control">
+															<option value="0">All</option>	 
+															{{range  $key ,$val := .Ls_coop}}
+															<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+															{{end}}
+														</select>
+													</div>
+												</div>
+
+												<div class="form-group">
+														<label class="col-md-3 control-label">Pay mode :</label>
+														<div class="col-md-4">
+															<select name="paymode" id="paymode" class="form-control">
+																<option value="0">All</option>	 
+																{{range  $key ,$val := .Ls_paymode}}
+																<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+																{{end}}
+															</select>
+														</div>
+													</div>
+
+
+												<div class="form-group">
+														<label class="col-md-3 control-label">Member :<span class="required"
+																aria-required="true">*</span></label>
+														<div class="col-md-4">
+															<input type="text" name="member" placeholder="Search Member" id="member" class="form-control"
+																required>
+														</div>
+													</div>
+
+													<div class="form-group c_code">
+														<label class="col-md-3 control-label">RCBC Code :</label>
+														<div class="col-md-2">
+															<select name="code" id="code" class="form-control">
+																<option value="AC">AC</option>	 
+																<option value="AD">AD</option>	 
+																<option value="AE">AE</option>	 
+																
+															</select>
+														</div>
+													</div>
+
+													<div class="form-group c_sequence">
+														<label class="col-md-3 control-label">Sequence:</label>
+														<div class="col-md-2">
+															
+															<input type="number" id=sequence value="1" class="form-control">
+
+														</div>
+													</div>
+													
+													{{if eq .Tempconf.ActionBut_setcv "true"}}
+													<div class="form-group">
+														<label class="col-md-3 control-label">CV # : </label>
+														<div class="col-md-2">
+															<input type="text" name="cv" id="cv" class="form-control">
+														</div>
+													</div>
+													{{end}}
+								
+											
+											
+					
+
+													
+
+						<div class="form-actions fluid">
+							<div class="col-md-12 col-md-12">
+								<!-- <button class="btn btn-circle blue" type="submit">Print</button> -->
+								<a onclick="javascript:gen_det();" class="btn blue">Print</a>
+								<a onclick="javascript:bank_advice();" class="btn blue">Bank Advice</a>
+								<a onclick="javascript:debit_memo();" class="btn blue">Debit Memo</a>
+								<a onclick="javascript:transmittal();" class="btn blue">Transmittal</a>
+								<a onclick="javascript:transmittal2();" class="btn blue">Transmittal (Prepared)</a>
+								<a onclick="javascript:dm_summary();" class="btn blue">DM Summary</a>
+								<a onclick="javascript:textfile();" class="btn blue">Textfile</a>
+								{{if eq .Tempconf.ActionBut_setcv "true"}}
+								<a onclick="javascript:setCV();" class="btn blue">Set CV</a>
+								{{end}}
+								
+							</div>
+						</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+
+var member_name
+		function repoFormatResult( repo ) {
+		    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+		    return markup;
+		}
+
+		function repoFormatSelection( repo ) {
+	       member_name = repo.full_name;
+		   return repo.full_name;
+	    }
+		
+	
+
+		$("#member").select2({
+		placeholder: "Search for Members",
+		minimumInputLength: 3,
+		multiple: false,
+		allowClear: false,
+		ajax: {
+			url: "/master/members_search/search/Ajax/Ajax_getItem",
+
+			//url: "/inventory/adjustment_entry/details/Ajax/Ajax_getItem",
+			dataType: "json",
+			quietMillis: 250,
+			data: function (term, page) {
+				return {
+					// search term
+					q: term
+				};
+			},
+			results: function (data, page) {
+				// parse the results into the format expected by Select2.
+				// since we are using custom formatting functions we do not need to alter the remote JSON data
+
+				return { results: data.items };
+			}
+
+
+
+		},
+
+
+		formatResult: repoFormatResult,
+		formatSelection: repoFormatSelection,
+		// apply css that makes the dropdown taller
+		dropdownCssClass: "bigdrop",
+		// we do not want to escape markup since we are displaying html in results
+		escapeMarkup: function (m) {
+			return m;
+
+
+
+		}
+	});
+
+
+	/*$('.date-picker').datepicker({
+					 rtl: Metronic.isRTL(),
+					 orientation: "left",
+					 autoclose: true
+			 });*/
+	//$(".date-picker").datepicker("setDate",currentDate,"option", "dateFormat", "mm-dd-yy");
+	/* $(".date-picker").datetimepicker({
+					 Format: 'mm-dd-yy hh:mm:ss'
+					
+			 }).datetimepicker("setDate", currentDate);*/
+
+		var currentDate = new Date();
+		$(".date-picker-notime").datepicker({autoclose: true}).datepicker("setDate", currentDate);
+
+		$("[name=partner] , [name=loantype], [name=bank], [name=group], [name=lpartype], [name=paymode], [name=coop]  ").select2();
+		//$('.date-picker').datepicker({"setDate": new Date() ,  autoclose: true });
+		$('#limitAlert').hide()
+		
+		
+
+			
+
+
+		//SIS_SupRec_Register 1, @@id, @@org, @@location, '@@from','@@to',@@supplier
+	
+
+		function bank_advice(a, v) {
+			var member = $('[name=member]').val();
+		if (member > 0) {
+			member = member;
+
+		} else {
+			member = 0;
+		}
+				var group = $('[name=group]').val();
+                var group_name= $("#group option:selected").text();
+				var partner = $('[name=partner]').val();
+                var partner_name= $("#partner option:selected").text();
+				var paymode = $('[name=paymode]').val();
+                var paymode_name= $("#paymode option:selected").text();
+                var bank = $('[name=bank]').val();
+                var bank_name= $("#bank option:selected").text();
+				var date =$('[name=date]').val();
+					date =  date.replace('/', '-');
+					date = date.replace('/', '-');
+				var coop = $('[name=coop]').val();
+                var coop_name= $("#coop option:selected").text();
+				var lpartype = $('[name=lpartype]').val();
+                var lpartype_name= $("#lpartype option:selected").text();
+
+				if (lpartype == 0)
+				{
+					alert("Please select specific transaction.")
+				}
+				else {
+
+
+				var url_to_open = "/report/accounting/bank_advise?" + "&date="+ date +"&group="+group+"&group_name="+group_name+"&partner="+partner+"&partner_name="+partner_name+"&paymode="+paymode+"&paymode_name="+paymode_name+"&bank="+bank+"&bank_name="+bank_name+"&coop="+coop+"&coop_name="+coop_name+"&lpartype="+lpartype+"&lpartype_name="+lpartype_name + "&member=" + member
+
+				var myWindow = window.open(url_to_open, "", "width=800,height=500");
+				}	
+				}
+
+
+				function debit_memo(a, v) {
+					var member = $('[name=member]').val();
+		if (member > 0) {
+			member = member;
+
+		} else {
+			member = 0;
+		}
+					var group = $('[name=group]').val();
+					var group_name= $("#group option:selected").text();
+					var partner = $('[name=partner]').val();
+					var partner_name= $("#partner option:selected").text();
+					var paymode = $('[name=paymode]').val();
+					var paymode_name= $("#paymode option:selected").text();
+					var bank = $('[name=bank]').val();
+					var bank_name= $("#bank option:selected").text();
+					var date =$('[name=date]').val();
+						date =  date.replace('/', '-');
+						date = date.replace('/', '-');
+					var coop = $('[name=coop]').val();
+					var coop_name= $("#coop option:selected").text();
+					var lpartype = $('[name=lpartype]').val();
+					var lpartype_name= $("#lpartype option:selected").text();
+					
+
+					if (bank == 0)
+					{
+						alert("Please select specific bank.")
+					}
+					else {
+
+
+					var url_to_open = "/report/accounting/debit_memo?" + "&date="+ date +"&group="+group+"&partner="+partner+"&paymode="+paymode+"&bank="+bank+"&coop="+coop+"&lpartype="+lpartype + "&member=" + member 
+
+					var myWindow = window.open(url_to_open, "", "width=800,height=500");
+					}	
+			}
+
+			function textfile(a, v) {
+
+				var format = $("[name=bank]").select2().find(":selected").data("format")
+				var filename = $("[name=bank]").select2().find(":selected").data("filename")
+				var fileextension = $("[name=bank]").select2().find(":selected").data("fileextension")
+				var member = $('[name=member]').val();
+		if (member > 0) {
+			member = member;
+
+		} else {
+			member = 0;
+		}
+					var group = $('[name=group]').val();
+					var group_name= $("#group option:selected").text();
+					var partner = $('[name=partner]').val();
+					var partner_name= $("#partner option:selected").text();
+					var paymode = $('[name=paymode]').val();
+					var paymode_name= $("#paymode option:selected").text();
+					var bank = $('[name=bank]').val();
+					var bank_name= $("#bank option:selected").text();
+					var date =$('[name=date]').val();
+						date =  date.replace('/', '-');
+						date = date.replace('/', '-');
+					var coop = $('[name=coop]').val();
+					var coop_name= $("#coop option:selected").text();
+					var lpartype = $('[name=lpartype]').val();
+					var lpartype_name= $("#lpartype option:selected").text();
+					var code = $('[name=code]').val();
+					var sequence = document.getElementById("sequence").value;
+
+					if (bank == 0)
+					{
+						alert("Please selec specific bank.")
+					}
+					else {
+						$(".submit_btn").text("Downloading").attr("disabled", true);
+
+					var url_to_open = "/report/accounting/do_textfile_download?" + "&transdate="+ date +"&group="+group+"&partner="+partner+"&paymode="+paymode+"&bank="+bank+"&coop="+coop+"&lpartype="+lpartype + "&member=" + member + "&format=" + format +"&filename=" + filename + "&fileextension=" + fileextension + "&code=" + code + "&sequence=" +  sequence
+					window.location.href = url_to_open;
+					//var myWindow = window.open(url_to_open, "", "width=800,height=500");
+					}	
+			}
+
+			function transmittal(a, v) {
+				var member = $('[name=member]').val();
+		if (member > 0) {
+			member = member;
+
+		} else {
+			member = 0;
+		}
+			var group = $('[name=group]').val();
+			var group_name= $("#group option:selected").text();
+			var partner = $('[name=partner]').val();
+			var partner_name= $("#partner option:selected").text();
+			var paymode = $('[name=paymode]').val();
+			var paymode_name= $("#paymode option:selected").text();
+			var bank = $('[name=bank]').val();
+			var bank_name= $("#bank option:selected").text();
+			var date =$('[name=date]').val();
+				date =  date.replace('/', '-');
+				date = date.replace('/', '-');
+			var coop = $('[name=coop]').val();
+			var coop_name= $("#coop option:selected").text();
+			var lpartype = $('[name=lpartype]').val();
+			var lpartype_name= $("#lpartype option:selected").text();
+
+			if (bank == 0)
+			{
+				alert("Please select specific bank.")
+			}
+			else {
+
+
+			var url_to_open = "/report/accounting/transmittal?" + "&date="+ date +"&group="+group+"&partner="+partner+"&paymode="+paymode+"&bank="+bank+"&coop="+coop+"&lpartype="+lpartype+"&coop_name="+coop_name+"&bank_name="+bank_name + "&member=" + member
+
+			var myWindow = window.open(url_to_open, "", "width=800,height=500");
+			}	
+	}
+			 	
+	function transmittal2(a, v) {
+		var member = $('[name=member]').val();
+		if (member > 0) {
+			member = member;
+
+		} else {
+			member = 0;
+		}
+			var group = $('[name=group]').val();
+			var group_name= $("#group option:selected").text();
+			var partner = $('[name=partner]').val();
+			var partner_name= $("#partner option:selected").text();
+			var paymode = $('[name=paymode]').val();
+			var paymode_name= $("#paymode option:selected").text();
+			var bank = $('[name=bank]').val();
+			var bank_name= $("#bank option:selected").text();
+			var date =$('[name=date]').val();
+				date =  date.replace('/', '-');
+				date = date.replace('/', '-');
+			var coop = $('[name=coop]').val();
+			var coop_name= $("#coop option:selected").text();
+			var lpartype = $('[name=lpartype]').val();
+			var lpartype_name= $("#lpartype option:selected").text();
+
+			if (bank == 0)
+			{
+				alert("Please select specific bank.")
+			}
+			else {
+
+
+			var url_to_open = "/report/accounting/transmittal2?" + "&date="+ date +"&group="+group+"&partner="+partner+"&paymode="+paymode+"&bank="+bank+"&coop="+coop+"&lpartype="+lpartype+"&coop_name="+coop_name+"&bank_name="+bank_name + "&member=" + member
+
+			var myWindow = window.open(url_to_open, "", "width=800,height=500");
+			}	
+	}
+
+	function dm_summary(a, v) {
+		var member = $('[name=member]').val();
+		if (member > 0) {
+			member = member;
+
+		} else {
+			member = 0;
+		}
+			var group = $('[name=group]').val();
+			var group_name= $("#group option:selected").text();
+			var partner = $('[name=partner]').val();
+			var partner_name= $("#partner option:selected").text();
+			var paymode = $('[name=paymode]').val();
+			var paymode_name= $("#paymode option:selected").text();
+			var bank = $('[name=bank]').val();
+			var bank_name= $("#bank option:selected").text();
+			var date =$('[name=date]').val();
+				date =  date.replace('/', '-');
+				date = date.replace('/', '-');
+			var coop = $('[name=coop]').val();
+			var coop_name= $("#coop option:selected").text();
+			var lpartype = $('[name=lpartype]').val();
+			var lpartype_name= $("#lpartype option:selected").text();
+
+		
+
+
+			var url_to_open = "/report/accounting/dm_summary?" + "&date="+ date +"&group="+group+"&partner="+partner+"&paymode="+paymode+"&bank="+bank+"&coop="+coop+"&lpartype="+lpartype+"&coop_name="+coop_name+"&bank_name="+bank_name + "&member=" + member
+
+			var myWindow = window.open(url_to_open, "", "width=800,height=500");
+				
+	}
+
+                function gen_det() {
+                    
+                    /* $('#limitAlert').hide()
+					
+                    var strt_date = $('#reportrange').data('daterangepicker').startDate.format('YYYY-MM-DD');
+				
+                    var strt_date_display = $('#reportrange').data('daterangepicker').startDate.format('DDMMMYYYY');
+                    var end_date  = $('#reportrange').data('daterangepicker').endDate.format('YYYY-MM-DD');
+                    var end_date_display = $('#reportrange').data('daterangepicker').endDate.format('DDMMMYYYY');
+                    var df =$('#reportrange').data('daterangepicker').endDate - $('#reportrange').data('daterangepicker').startDate
+                    if(df> 2693000000){ //limit 31 days
+
+                     $('#limitAlert').show()
+                      return false; 
+                        
+                    } */
+                   // console.log(df)
+                  //  var itemid = $("#item").select2("val"); 
+                   // var itemkey = document.getElementById("key").value;
+                    var group = $('[name=group]').val();
+                    var group_name= $("#group option:selected").text();
+                    var reportname = $('[name=reportname]').val();
+                    var report_name= $("[name=reportname] option:selected").text();
+                    var export_type = $('[name=export_type]').val();
+                    var partner = $('[name=partner]').val();
+                    var partner_name= $("#partner option:selected").text();
+					
+                    //alert(soldby);
+                   
+                    var loantype = $('[name=loantype]').val();
+                    var loantype_name= $("#loantype option:selected").text();
+                    var paymode = $('[name=paymode]').val();
+                    var paymode_name= $("#paymode option:selected").text();
+                    var bank = $('[name=bank]').val();
+                    var bank_name= $("#bank option:selected").text();
+                    var filter_name= $('[name=filter]').val();
+                    var status= $('[name=status]').val();
+					var status_name= $("#status option:selected").text();
+					var coor= $('[name=coor]').val();
+					var coor_name= $("#coor option:selected").text();
+					var trantype= $('[name=trantype]').val();
+					var trantype_name= $("#trantype option:selected").text();
+					var laetype= $('[name=laetype]').val();
+					var laetype_name= $("#laetype option:selected").text();
+					var template = $("[name=reportname]").select2().find(":selected").data("template");
+                    var member= $('[name=member]').val();
+					var aetype= $('[name=aetype]').val();
+					var aetype_name= $("#aetype option:selected").text();
+					var asof =$('[name=date]').val();
+					asof =  asof.replace('/', '-');
+					asof = asof.replace('/', '-');
+					var lptype= $('[name=lptype]').val();
+					var lptype_name= $("#lptype option:selected").text();
+					
+
+                    
+
+                    
+                 
+
+                
+                  var url_to_open = "/report/do_print?date="+asof+"&reportname="+reportname+"&export_type="+export_type+"&group="+group+"&group_name="+group_name+"&partner="+partner+"&partner_name="+partner_name+"&loantype="+loantype+"&loantype_name="+loantype_name+"&paymode="+paymode+"&paymode_name="+paymode_name+"&bank="+bank+"&bank_name="+bank_name+"&filter_name="+filter_name+"&status="+status+"&status_name="+status_name+"&coor="+coor+"&coor_name="+coor_name+"&trantype="+trantype+"&trantype_name="+trantype_name+"&template="+template+"&report_name=" + report_name + "&member=" + member + "&member_name=" + member_name + "&laetype=" + laetype + "&laetype_name=" + laetype_name + "&aetype=" + aetype + "&aetype_name=" + aetype_name + "&asof=" + asof + "&lptype=" + lptype + "&lptype_name=" + lptype_name
+
+
+                /*  item_id=" + itemid + "&datefrom="+strt_date+"&dateto="+end_date+"&item_key="+itemkey+"&location="+location+"&tranchkbox="+tranchkjoin*/
+                    console.log(url_to_open)
+
+                    //alert(url_to_open)
+                    //return false;    
+                    var myWindow = window.open(url_to_open);
+                    return false;
+                }
+
+
+                $(function(){
+    $( '.dropdown-menu li' ).on( 'click', function( event ) {
+        var $checkbox = $(this).find('.checkbox');
+        if (!$checkbox.length) {
+            return;
+        }
+        var $input = $checkbox.find('input');
+        var $icon = $checkbox.find('span.glyphicon');
+        if ($input.is(':checked')) {
+            $input.prop('checked',false);
+            $icon.removeClass('glyphicon-check').addClass('glyphicon-unchecked')
+        } else {
+            $input.prop('checked',true);
+            $icon.removeClass('glyphicon-unchecked').addClass('glyphicon-check')
+        }
+        return false;
+    }); 
+});
+
+
+function setCV(a,b){
+            if (confirm("You are about to set CV") == true) {
+                
+				var member = $('[name=member]').val();
+		if (member > 0) {
+			member = member;
+
+		} else {
+			member = 0;
+		}
+			var group = $('[name=group]').val();
+			var group_name= $("#group option:selected").text();
+			var partner = $('[name=partner]').val();
+			var partner_name= $("#partner option:selected").text();
+			var paymode = $('[name=paymode]').val();
+			var paymode_name= $("#paymode option:selected").text();
+			var bank = $('[name=bank]').val();
+			var bank_name= $("#bank option:selected").text();
+			var date =$('[name=date]').val();
+				date =  date.replace('/', '-');
+				date = date.replace('/', '-');
+			var coop = $('[name=coop]').val();
+			var coop_name= $("#coop option:selected").text();
+			var lpartype = $('[name=lpartype]').val();
+			var lpartype_name= $("#lpartype option:selected").text();  
+			var cv = $('[name=cv]').val();
+
+           
+            $.get("/report/accounting/setCV?" + "&date="+ date +"&group="+group+"&partner="+partner+"&paymode="+paymode+"&bank="+bank+"&coop="+coop+"&lpartype="+lpartype+"&coop_name="+coop_name+"&bank_name="+bank_name + "&member=" + member + "&cv=" + cv
+			,
+                    function(data,status){
+                        console.log(data)
+                        $(".progressclass").html("")
+                      
+                        if(data[0][1]=='Success'){
+                            
+                            alert('Success!')
+                            
+                        
+                        }else{
+                            alert(data[0][1])
+                            };
+                            
+                            
+                           
+                        });
+
+			}
+
+}
+
+                 
+           
+       
+
+
+
+               
+               		
+                </script>

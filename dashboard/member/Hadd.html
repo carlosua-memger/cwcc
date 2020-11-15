@@ -1,0 +1,362 @@
+<style type="text/css">
+	.info_bg {
+
+		background-color: #003BAF;
+		border-radius: 10px !important;
+		box-shadow: 7px 8px 5px grey !important;
+    	
+	}       
+
+
+	.info_text {
+
+		color: #F9FDFF;
+
+	}
+	.header {
+		background-color: #003BAF;
+		border-color: #003BAF;
+		border-top-right-radius: 10px !important;
+		border-top-left-radius: 10px !important; 
+		border-bottom-left-radius: 10px !important;
+		border-bottom-right-radius: 10px !important;
+		border-width: thick;
+		box-shadow: 7px 8px 5px grey !important;
+
+
+	}
+
+	.rounded {
+  border-radius: 30px;
+  background: #000; 
+			}
+
+	.portlet_body {
+
+			border: 1px solid #003BAF !important;
+			border-bottom-right-radius: 10px !important;
+			border-bottom-left-radius: 10px !important; 
+     		-moz-border-radius: 5px !important; 
+			-webkit-border-radius: 5px !important; 
+			padding: 10px !important;
+			box-sizing: border-box !important;
+			font-size: 11px !important;
+			display:block !important;
+	}		
+
+	.blue_table{
+			border-color: #003BAF;
+	}
+
+	h3
+	{ font-weight: bold;
+		}
+	.solid_blue{
+
+				border: 1px solid #003BAF !important;
+				background-color: #003BAF;
+				border-top-right-radius: 10px !important;
+				border-top-left-radius: 10px !important; 
+				border-bottom-right-radius: 10px !important;
+				border-bottom-left-radius: 10px !important; 
+				box-shadow: 7px 8px 5px grey !important;
+	}
+
+	element{
+		min-height: 726px !important;
+	}
+    </style>
+
+<div class="col-md-12">
+					<!-- BEGIN PROFILE SIDEBAR -->
+					
+						<!-- PORTLET MAIN -->
+						<div class="portlet solid info_bg">
+							<!-- SIDEBAR USERPIC -->
+						
+									
+
+							<!-- END SIDEBAR USERPIC -->
+							<!-- SIDEBAR USER TITLE -->
+							<div class="profile-usertitle">
+								<div class="profile-usertitle-name info_text">
+									 <b><h3>{{.Tconf.name}}</h3></b>
+								</div>
+								<div class="profile-usertitle-job info_text">
+									 <i class="fa fa-calendar"></i> Member Since: {{.Tconf.membersince}}
+								</div>
+								<div class="profile-usertitle-job info_text">
+									  <i class="fa fa-info-circle"></i> Status: {{.Tconf.status}}
+								</div>
+							</div>
+						</div>
+				
+
+
+<div class="row">
+	<div class="col-md-12" id="outstanding">
+		<!-- BEGIN Portlet PORTLET-->
+		<div class="portlet box header">
+			<div class="portlet-title solid_blue">
+				<div class="caption">
+					<i class="fa fa-picture"></i>Loan Outstanding Balance
+				</div>
+				
+			</div>
+			<div class="portlet-body portlet_body">
+				<table width="100%" class="table table-condensed table-hover" id="myCurrentLoans" >
+					
+				</table>
+			</div>
+		</div>
+		<!-- END Portlet PORTLET-->
+	</div>
+	</div>	
+
+<div class="row">
+	<div class="col-md-4">
+					<!-- BEGIN Portlet PORTLET-->
+					<div class="portlet box header solid">
+						<div class="portlet-title solid_blue">
+							<div class="caption">
+								<i class="fa fa-picture"></i>Contributions
+							</div>
+							
+						</div>
+
+						<div class="portlet-body portlet_body">
+							<table width="100%" class="table table-condensed table-hover " id="mycontributions">
+								
+							</table>
+						</div>
+					</div>
+					<!-- END Portlet PORTLET-->
+				</div>
+
+				<div class="col-md-6">
+					<!-- BEGIN Portlet PORTLET-->
+					
+				</div>
+
+				<div class="col-md-8">
+					<!-- BEGIN Portlet PORTLET-->
+					<div class="portlet box header">
+						<div class="portlet-title solid_blue">
+							<div class="caption">
+								<i class="fa fa-picture"></i>Fully Paid Loans
+							</div>
+							
+						</div>
+						<div class="portlet-body portlet_body">
+							<table width="100%" class="table table-condensed table-hover" id="myloans" >
+								
+							</table>
+						</div>
+					</div>
+					<!-- END Portlet PORTLET-->
+				</div>
+
+
+
+</div>
+
+
+
+
+
+
+<script type="text/javascript">
+
+function Modalfunc(a,v){
+            console.log(a)
+            $.get(a,
+            	{Assign_ID:'{{.Tconf.member_id}}'},
+
+                    function(data,status){
+                        $("#basic").html(data);
+                    });
+        };
+
+
+	$(document).ready( function () {
+  displaydata();
+
+});
+
+	 
+
+	function displaydata() {
+			getmycontribution();
+			getmyloans();
+			getmycurrentloans();
+
+	}
+
+	function getmycontribution() {
+								
+								$('#mycontributions').empty();
+
+		                    $.get("/json_func",
+		                    {
+		                       qdata : "LedgerS_Display 2,{{.Tconf.member_id}},0"
+
+		                   
+		                    }
+		                    ,
+		                    function(data,status){
+		                        if( data!=null){
+
+		                        	var line="";
+		                        	var header="";
+
+		                        	 header = '<thead class="blue_table"><tr><th>Type</th><th style="text-align: center;">Amount</th></tr></thead>';
+		                        	  $('#mycontributions').prepend(header);
+
+		                        	
+		                     
+				                    for (var i = 0; i < data.length; i++) {
+				                    	 	ret_msg = data[i][0]
+
+				                    			line = '<tr><td><a  data-toggle=modal href=#basic  onclick="javascript:Modalfunc(\'/report/Show_savings_ledger_modal?member={{.Tconf.member_id}}&trantype=' + data[i][0] + '\',this);">'+ data[i][1] +'</a> </td> <td style="direction:rtl; margin-right:10%">' + data[i][2] + '</td></tr>';
+												
+												
+
+
+				                    			
+  									
+				                    		
+				                    		$('#mycontributions').append(line);
+				                    		console.log(line);
+
+				                     	 
+				                    }
+				                  
+
+
+				                    
+
+
+				                    //$("[name=amt_generated]").val(CommaFormatted(amt_generated)).trigger("change");
+				                   
+			
+
+			                    }
+		                    });	
+							
+		                    return false;
+					};
+
+	function getmyloans() {
+								
+								$('#myloans').empty();
+
+		                    $.get("/json_func",
+		                    {
+		                       qdata : "lrhdr_get 1,{{.Tconf.Org_id}},0,{{.Tconf.member_id}}"
+		                       
+
+		                   
+		                    }
+		                    ,
+		                    function(data,status){
+		                        if( data!=null){
+
+		                        	var line="";
+		                        	var header="";
+
+		                        	 header = '<thead><tr><th>PN #</th><th>Date</th><th>Loan Type</th><th style="text-align: center;">Loan Amount</th><th></th></tr></thead>';
+		                        	  $('#myloans').prepend(header);
+
+		                        	
+		                     
+				                    for (var i = 0; i < data.length; i++) {
+				                    	 	ret_msg = data[i][0]
+
+				                    			line = '<tr><td><a  data-toggle=modal href=#basic  onclick="javascript:Modalfunc(\'/report/Show_loans_ledger_modal?member={{.Tconf.member_id}}&lrid=' + data[i][0] + '\',this);">' + data[i][1] + '</a> </td><td>' + data[i][2] + '</td><td>' + data[i][3] + '</td><td style="direction:rtl; margin-right:10%">' + data[i][4]+ '</td></tr>';
+												
+												
+
+
+				                    		
+				                    		$('#myloans').append(line);
+				                    		console.log(line);
+
+				                     	 
+				                    }
+				                  
+
+
+				                    
+
+
+				                    //$("[name=amt_generated]").val(CommaFormatted(amt_generated)).trigger("change");
+				                   
+			
+
+			                    }
+								
+		                    });	
+							
+		                    return false;
+					};
+
+
+					function getmycurrentloans() {
+								
+								$('#myCurrentLoans').empty();
+
+		                    $.get("/json_func",
+		                    {
+		                       qdata : "lrhdr_get 2,{{.Tconf.Org_id}},0,{{.Tconf.member_id}}"
+		                      
+
+		                   
+		                    }
+		                    ,
+		                    function(data,status){
+		                        if( data!=null){
+
+		                        	var line="";
+		                        	var header="";
+
+		                        	 header = '<thead><tr><th>PN #</th><th>Date</th><th>Loan Type</th><th style="text-align: center;">Balance</th><th style="text-align: center;">Past Due</th><th></th></tr></thead>';
+		                        	  $('#myCurrentLoans').prepend(header);
+
+		                        	
+		                     
+				                    for (var i = 0; i < data.length; i++) {
+				                    	 	ret_msg = data[i][0]
+
+				                    			line = '<tr> <td><a  data-toggle=modal href=#basic  onclick="javascript:Modalfunc(\'/report/Show_loans_ledger_modal?member={{.Tconf.member_id}}&lrid=' + data[i][0] + '\',this);">' + data[i][1] + '</a> </td><td>' + data[i][2] + '</td><td>' + data[i][3] + '</td><td align="right">' + data[i][4]+ '</td><td align="right">' + data[i][5]+ '</td></tr>';
+												
+												
+												
+
+
+				                    		
+				                    		$('#myCurrentLoans').append(line);
+				                    		console.log(line);
+
+				                     	 
+				                    }
+				                  
+
+
+				                    
+
+
+				                    //$("[name=amt_generated]").val(CommaFormatted(amt_generated)).trigger("change");
+				                   
+			
+
+			                    }
+		                    });	
+							
+		                    return false;
+					};
+
+
+
+
+					
+</script>

@@ -1,0 +1,323 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Top Aging Past Due Per Partner</title>
+
+     
+        <script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/Highcharts-4.2.6/js/highcharts.js" defer="defer" ></script>
+        <script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/Highcharts-4.2.6/js/highcharts-3d.js" defer="defer" ></script>
+        <script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/Highcharts-4.2.6/js/modules/exporting.js" defer="defer" ></script>
+       
+ 
+        <style type="text/css">
+/*#container {
+    height: 400px; 
+    min-width: 310px; 
+    max-width: 800px;
+    margin: 0 auto;
+}*/
+        td {
+            font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+            font-size: 12px;
+                width: 60%;
+        }
+        </style>
+        <script type="text/javascript">
+function open_url() {
+var url_to_open = "/dashboard/operations"
+				    console.log(url_to_open)
+				    var myWindow = window.open(url_to_open);
+					return false;
+				}
+                
+$(function () {
+
+    Highcharts.setOptions({
+    lang: {
+      decimalPoint: '.',
+      thousandsSep: ','
+    }
+});
+
+    $('#container').highcharts({
+        chart: {
+            type: 'column',
+            height: '650',
+            decimalPoint: '.',
+            thousandsSep: ','
+           /* options3d: {
+                enabled: true,
+                alpha: 10,
+                beta: 25,
+                depth: 70
+            }*/
+        },  
+        title: {
+            text: '{{.graph_title}}'
+        },
+        subtitle: {
+            text: 'Top Aging Past Due Per Partner'
+        },
+        plotOptions: {
+            column: {
+                depth: 25,
+                stacking: 'normal'
+            }
+        },
+        xAxis: {
+            
+            type: 'category',
+            labels: {
+                rotation: -60,
+                style: {
+                    fontSize: '14px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            },
+            categories: {{.categories}}
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Amount (Php)'
+            },
+           
+
+        },
+        series: [
+           
+            
+          
+           
+            {
+            name: 'Age 151-Up',
+            data: {{.age151up}},
+            color: '#8B0000'
+            
+            },
+
+            {
+            name: 'Age 121-150',
+            data: {{.age121150}},
+            color: '#FF0000'
+            
+            },
+
+            {
+            name: 'Age 91-120',
+            data: {{.age91120}},
+            color: '#FFA500',
+            
+            },
+
+            {
+            name: 'Age 61-90',
+            data: {{.age6190}},
+            color: '#FFFF00'
+            
+            },
+
+            {
+            name: 'Age 31-60',
+            data: {{.age3160}},
+            color: '#9ACD32'
+
+            
+            },
+            {
+            name: 'Age 1-30',
+            data: {{.age130}},
+            color: '#008000'
+            
+            }
+
+
+
+        ]
+    });
+});
+  
+// graph 2
+
+
+ $(function () {
+    $('#container2').highcharts({
+        chart: {
+        zoomType: 'xy'
+                },
+        title: {
+            text: 'Loan Release Report'
+        },
+        subtitle: {
+            text: 'Loan Release Report'
+        },
+        xAxis: {
+          /*   type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e. %b',
+                year: '%b'
+            },
+            title: {
+                text: 'Date'
+            }, */
+            categories : {{.date}},
+            text: 'Date'
+        },
+        yAxis: [{
+            title: {
+                text: 'Value'
+            },
+            min: 0
+        },
+        {
+        title: {
+                text: 'Count'
+            },
+            labels: {
+            format: '{value}',
+            style: {
+                color: Highcharts.getOptions().colors[0]
+            }
+        },
+            opposite: true
+        }],
+        tooltip: {
+           // headerFormat: '<b>{series.name}</b><br>',
+            //pointFormat: '{point.x:%e. %b}: {point.y:.0f}'
+        },
+
+
+       
+        plotOptions: {
+            spline: {
+                marker: {
+                    enabled: true
+                }
+            }
+        },
+
+       
+
+        
+
+        series: [{
+            type: 'column',
+            name: 'LA Value',
+            data: {{.la_value}}
+        },  
+
+            {
+            type: 'column',
+            name: 'LR Value',
+            data: {{.lr_value}}
+        },  
+
+            {
+            name: 'LA Volume',
+            type: 'spline',
+            data: {{.la_volume}},
+            yAxis: 1
+            },
+            {
+            name: 'LR Volume',
+            type: 'spline',
+            data: {{.lr_volume}},
+            yAxis: 1
+            }
+
+        ]
+    });
+}); 
+
+
+$(function () {
+    $('#container3').highcharts({
+        chart: {
+        zoomType: 'xy'
+                },
+        title: {
+            text: 'Loan Portfolio at Risk'
+        },
+        subtitle: {
+            text: 'Loan Portfolio at Risk'
+        },
+        xAxis: {
+          /*   type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e. %b',
+                year: '%b'
+            },
+            title: {
+                text: 'Date'
+            }, */
+            type: 'category'
+           
+        },
+        yAxis: [{
+            title: {
+                text: 'Percentage'
+            },
+            min: 0
+        },
+       ],
+        tooltip: {
+           // headerFormat: '<b>{series.name}</b><br>',
+            //pointFormat: '{point.x:%e. %b}: {point.y:.0f}'
+        },
+
+
+       
+        plotOptions: {
+            spline: {
+                marker: {
+                    enabled: true
+                }
+            }
+        },
+
+       
+
+        
+
+        dataseries: [{
+            type: 'column',
+            name: 'Portfolio at Risk',
+            
+            tooltip: {
+            valueSuffix: '%'
+        },
+            data: {{.par_percentage}}
+        }  
+
+          
+
+        ]
+    });
+}); 
+//end graph 2
+
+
+
+        </script>
+    </head>
+    <body>
+
+
+  
+        
+
+
+<img src="{{.item_image}}">
+</center>
+<hr>
+<div id="container" ></div>
+
+
+
+<div id="container2" ></div>
+
+<div id="container3" ></div>
+
+    </body>
+</html>

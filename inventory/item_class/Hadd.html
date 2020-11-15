@@ -1,0 +1,107 @@
+
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+				<!-- BEGIN FORM-->
+		<form id="CreateTransaction" class="form-horizontal"  method="Post" onsubmit="return DoCreateTransaction()">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+			<h4 class="modal-title">Item Class Addnew</h4>
+		</div>
+
+					<div class="form-horizontal">
+
+						<div class="form-group">
+								<label class="col-md-3 control-label">Parent</label>
+								<div class="col-md-4">
+									<select name="parent" class="form-control" > 
+								 	
+								 	{{if eq .Tconf.parentID ""}}
+								 		<option value="null"> Default Parent</option>
+								 	{{else}}
+								 		<option value="{{.Tconf.parentID}}" selected> {{.Tconf.parentID}}</option>
+									{{end}}
+								 	</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Name<span class="required" aria-required="true">*</span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="name" placeholder="Name" class="form-control" maxlength="50" Required>
+											<!-- <span class="help-block">
+											A block of help text. </sapan> -->
+							</div>
+						</div>
+											
+						<div class="form-group">
+							<label class="col-md-3 control-label">Remarks</label>
+							<div class="col-md-4">
+								
+							<!-- 	<input type="text" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct"> -->
+								<textarea name = "remarks" class="form-control createAct"></textarea>
+							</div>
+						</div>
+						
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn default" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn blue">Submit</button>
+						
+					</div>
+				</form>
+			</div>
+			</div>
+
+			<script type="text/javascript">
+			var currentDate = new Date();  
+			 /*$('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });*/
+			$('.date-picker').datepicker("setDate", new Date());
+			//$('.date-picker').val(currentDate)			
+			$('input[name=trandate]').focus()
+			$("[name=parent]").select2();
+			 var rghts = '{{.Rights}}'
+			function DoCreateTransaction(){
+				var ret_msg= ""
+				$.get("/json_func",
+                    {
+                       qdata : "sis_itemclass_save 'Add', '{{.Tconf.username}}', 0, {{.Tconf.Org_id}}, '"+$('[name=name]').val()+"', "+$('[name=parent]').select2('val')+", '"+$('[name=remarks]').val()+"'"
+                    	
+                    }
+                    ,
+                    function(data,status){
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									alert(ret_msg)
+									$('#basic').modal('hide')
+					            	nav_back();
+					            	//dtbl()
+					            	console.log("success here")
+									//return false;
+			                    }else{
+			                    	console.log("fail")
+			                    	alert(ret_msg)
+			                    }
+		                         
+		                    }
+	                    }
+                    });	
+					
+                    return false;
+		                /*$('#basic').modal('hide')
+		            	dtbl()
+			         	return false*/
+			        	
+			}
+
+			</script>
+

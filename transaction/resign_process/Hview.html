@@ -1,0 +1,380 @@
+{{$Org_id := .Tconf.Org_id}}
+
+<head>
+	<!-- <title style="font-size: 16px;">Paired logs Report</title> -->
+	<style type="text/css">
+		table {
+
+			font-size: 10px;
+			font-family: 'Roboto';
+
+
+			border-collapse: collapse;
+			border-spacing: 50px;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+
+
+		}
+
+		table td,
+		table th {
+			max-width: 100px;
+			overflow-x: hidden;
+			overflow-y: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			padding: 3px;
+
+
+		}
+
+		.headercolor {
+			background-color: #EFEBEB
+		}
+
+		.fontroboto {
+
+			font-family: 'Roboto';
+			font-size: 10px;
+		}
+
+		.row.header {
+			font-weight: 900;
+			color: #ffffff;
+			background: #ea6153;
+		}
+
+		.row.green {
+			background: #27ae60;
+		}
+
+		.cell {
+			padding: 1px 10px;
+			display: table-cell;
+		}
+
+		.table {
+			margin: 0 0 40px 0;
+			width: 100%;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+			display: table;
+		}
+
+		@media screen and (max-width: 580px) {
+			.row {
+				padding: 14px 0 7px;
+				display: block;
+			}
+
+			.row.header {
+				padding: 0;
+				height: 6px;
+			}
+
+			.row.header .cell {
+				display: none;
+			}
+
+			.row .cell {
+				margin-bottom: 10px;
+			}
+
+			.row .cell:before {
+				margin-bottom: 3px;
+				min-width: 150px;
+				font-size: 10px;
+				line-height: 10px;
+				font-weight: bold;
+				text-transform: uppercase;
+				color: #969696;
+				display: block;
+			}
+		}
+
+		#amt_generated2 {
+			font-size: 14px;
+		}
+
+		@keyframes blinker {
+			50% {
+				opacity: 0;
+			}
+		}
+
+		.redfont {
+			color: #FF0000;
+		}
+	</style>
+</head>
+
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-file-text"></i>Edit Resign Process Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+
+
+
+
+				<div class="row">
+					<div class="col-md-6">
+
+
+						<h3 class="form-section">Resign Process {{.Tconf.id}}</h3>
+
+
+
+						<form id="CreateTransaction" class="form-horizontal" method="Post" >
+							<input type="hidden" name="id" value="{{.Tconf.id}}">
+
+							<div class="form-horizontal">
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Tran date<span class="required" aria-required="true">*</span>
+									</label>
+									<div class="col-md-8">
+										<input type="text" name="trandate" id="trandate" placeholder="Select Date"
+											class="form-control" maxlength="50" Required value="{{.Tconf.trandate}}" readonly="true">
+										<span class="help-block c_h_date" style="color:red;"></span>
+
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Proctype</label>
+									<div class="col-md-8">
+										<select name="proctype" class="form-control" id="proctype" disabled>
+
+											{{$proctype_id  := .Tconf.proctype }}
+											{{range  $key ,$val := .Ls_proctype}}
+											{{ $loop_id  := index  $val 0 }}
+											{{if eq $proctype_id $loop_id }}
+											<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+											{{else}}
+											<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+											{{end}}
+											{{end}}
+
+										</select>
+									</div>
+								</div>
+
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Member</label>
+									<div class="col-md-8">
+										<input type="text" value="{{.Tconf.member_name}}" name="member" placeholder="Search Member" id="member"  class="form-control" readonly="true" >
+									</div>
+								</div>
+
+								
+								<div class="form-group">
+									<label class="col-md-3 control-label">Remarks</label>
+									<div class="col-md-8">
+
+										<!-- 	<input type="text" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct"> -->
+										<textarea name="remarks" class="form-control createAct">{{.Tconf.remarks}}</textarea>
+										<button type="submit" class="btn blue submit_btn" onclick="return DoSaveRemarks()">Save Remarks</button>
+									</div>
+								</div>
+
+							</div>
+
+						</form>
+
+
+					</div>
+
+				</div>
+				<div class="form-actions fluid">
+					<div class="col-md-offset-3 col-md-9">
+						
+						<button class="btn default" onclick="javascript:nav_back('/transaction/resign_process?rights={{.Rights}}')"
+							type="button">Go Back</button>
+					</div>
+				</div>
+
+
+			</div>
+
+
+
+
+
+		</div>
+	</div>
+
+
+
+
+</div>
+
+</div>
+
+
+
+
+<script type="text/javascript">
+
+$(".date-picker").datetimepicker({ format: 'mm/dd/yyyy hh:mm:ss' });
+	$(".date-picker").datepicker({autoclose: true });
+	$(".date-picker-notime").datepicker({autoclose: true });
+
+function repoFormatResult(repo) {
+		//var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div></div>";
+		var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+		return markup;
+	}
+	function repoFormatSelection(repo) {
+		// $("input[name=unit_cost]").val(repo.price);
+		return repo.full_name;
+	}
+
+	$("#member").select2({
+		placeholder: "Search for Members",
+		minimumInputLength: 3,
+		multiple: false,
+		allowClear: true,
+		ajax: {
+			url: "/master/members_search/search/Ajax/Ajax_getItem",
+
+			//url: "/inventory/adjustment_entry/details/Ajax/Ajax_getItem",
+			dataType: "json",
+			quietMillis: 250,
+			data: function (term, page) {
+				return {
+					// search term
+					q: term
+				};
+			},
+			results: function (data, page) {
+				// parse the results into the format expected by Select2.
+				// since we are using custom formatting functions we do not need to alter the remote JSON data
+
+				return { results: data.items };
+			}
+
+
+
+		},
+
+		initSelection: function (element, callback) {
+			// the input tag has a value attribute preloaded that points to a preselected repository's id
+			// this function resolves that id attribute to an object that select2 can render
+			// using its formatResult renderer - that way the repository name is shown preselected
+
+			/*
+			var id = $( element ).val();
+			if ( id !== "" ) {
+				$.ajax( "inventory/location_order/details/Ajax/Ajax_getItem?isbaseonassignid=1&id=" + id, {
+					dataType: "json"
+				}).done( function( data ) {
+					callback( data );
+				});
+			}*/
+			var data = { 'Id': {{.Tconf.member}}, 'full_name': "{{.Tconf.MemberName}}" }
+		callback(data);
+					
+				},
+
+	formatResult: repoFormatResult,
+		formatSelection: repoFormatSelection,
+			// apply css that makes the dropdown taller
+			dropdownCssClass: "bigdrop",
+				// we do not want to escape markup since we are displaying html in results
+				escapeMarkup: function(m) {
+					return m;
+
+
+
+				}
+			});
+
+
+	
+	
+
+	
+	function DoSaveRemarks() {
+
+			
+			$.get("/json_func",
+				{
+					//qdata : "Branch_Save 'Add','programmer',1,0,'"+$('[name=sup_name]').val()+"' ,'"+$('[name=sort]').val()+"' ,'"+$('[name=remarks]').val()+"'"
+					qdata: "ARLR_SaveEditRemarks '{{.Tconf.username}}',{{.Tconf.id}}, '" + $('[name=remarks]').val() +"'"
+
+				}
+				,
+				function (data, status) {
+					//json_personnel = data
+					if (data != null) {
+						for (var i = 0; i < data.length; i++) {
+							//alert(data[i][0]);
+
+							ret_msg = data[i][1]
+							if (data[i][1] == "Success") {
+								//console.log(data[i][0])
+								//alert(ret_msg)
+								//$('#basic').modal('hide')
+								//dtbl()
+								//console.log("success here")
+								//$("#item_tagsdata").show()
+								//$(".submit_btn").prop('disabled', true);
+								alert(ret_msg)
+								$(".c_suprec_id").val(data[i][0])
+								GotoList()
+								//return false;
+							} else {
+								alert(ret_msg)
+							}
+
+						}
+					}
+				});
+
+			return false;
+
+
+			}
+
+	
+
+	function GotoList() {
+		$.get("/transaction/resign_process?rights={{.Rights}}",
+			function (data, status) {
+				$("#ContentID").html(data);
+
+			}
+
+		);
+	}
+
+
+	
+
+	
+	var rghts = '{{.Rights}}'
+
+
+
+
+
+	
+
+</script>

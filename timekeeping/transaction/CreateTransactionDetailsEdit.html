@@ -1,0 +1,168 @@
+<!-- <Form> -->
+{{$varLbr_assign_name := .Lbr_assign_name }}
+{{$varLbr_daycode_get :=.Lbr_daycode_get}}
+{{$varHtconf := .Htconf}}
+{{range $LBR_LOGDTL := .LBR_LOGDTL }}
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+		<form id="transdetedit" method="Post" onsubmit="javascript: return DoeditTrasDet()">
+			<input type="hidden" name="dtl_id" value="{{$varHtconf.dtl_id}}">
+			<input type="hidden" name="hdr_id" value="{{$LBR_LOGDTL.Hdr}}">	
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">Edit Transaction Details [ {{$LBR_LOGDTL.Id}} ]</h4>
+				</div>
+				<!-- <div class="modal-body">
+				 -->	 <!-- modal data here -->
+
+				 	
+					
+					<div class="form-horizontal">
+							<div class="form-group">
+								<label class="col-md-3 control-label">Assignment</label>
+									<div class="col-md-4">
+									<select name="lbr_assign" class="form-control form-control input-xlarge dr-js clsAssign" > 
+										{{range $assignlist := $varLbr_assign_name }}
+										{{if eq $assignlist.Id $LBR_LOGDTL.Lbr_assign }}
+										<option  value="{{$assignlist.Id}}" selected>{{$assignlist.Name}}</option>
+										{{else}}
+										<option  value="{{$assignlist.Id}}">{{$assignlist.Name}}</option>
+										{{end}}
+										{{end}}
+										</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label">Member:</label>
+									<div class="col-md-4">
+									<select name="memberid" id="drpmember" class="form-control dr-js " data-placeholder="Select..." required> 
+									</select>
+								</div>
+							</div>		
+							<div class="form-group">
+								<label class="col-md-3 control-label">Day code</label>
+								<div class="col-md-4">
+									<select name="daycode_id" class="form-control"  > 
+										{{range $lbr_daycode_get := $varLbr_daycode_get }}
+										{{if eq $lbr_daycode_get.Id $LBR_LOGDTL.Lbr_daycode }}
+										<option  value="{{$lbr_daycode_get.Id}}" selected>{{$lbr_daycode_get.Name}}
+										</option>
+										{{else}}
+										<option  value="{{$lbr_daycode_get.Id}}">{{$lbr_daycode_get.Name}}</option>
+										{{end}}
+										{{end}}
+									</select>
+								</div>
+							</div>	
+
+							<div class="form-group">
+								<label class="col-md-3 control-label">Date time<span class="required" aria-required="true">*</span>
+								</label>
+								<div class="col-md-4">
+									<input type="text" name="trndatetime" placeholder="Date time" class="form-control form_datetime" value ="{{$LBR_LOGDTL.Logtime}}" maxlength="50" Required>
+												<!-- <span class="help-block">
+												A block of help text. </sapan> -->
+								</div>
+							</div>			
+							<div class="form-group">
+								<label class="col-md-3 control-label">Type</label>
+								<div class="col-md-4">
+									<select name="trntype" class="form-control"  > 
+										
+										<option  value="In">In</option>
+										<option  value="Out">out</option>
+										<option  value="Output">Output</option>
+									</select>
+								</div>
+							</div>	
+							<div class="form-group">
+								<label class="col-md-3 control-label">Output</label>
+									<div class="col-md-4">
+										<input type="text" name="output" placeholder="Output"  maxlength="10" class="form-control createAct" value ="{{$LBR_LOGDTL.Logoutput}}" >
+									</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label">remarks</label>
+									<div class="col-md-4">
+										<input type="text" name="remarks" placeholder="remarks"  alue ="{{$LBR_LOGDTL.Remarks}}"  maxlength="100" class="form-control createAct">
+									</div>
+							</div>
+										  									
+					</div>
+					
+					 <!-- end modal data here -->
+				<!-- </div> -->
+				<div class="modal-footer">
+					<button type="button" class="btn default" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn blue">Update changes</button>
+				</div>
+
+		<!--  -->
+				<!-- /.modal-content -->
+		</form>
+	</div>
+		<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->					
+					
+
+
+
+<script type="text/javascript">
+			var right = '{{$varHtconf.rights}}'
+			function DoeditTrasDet(){
+				$.post("/timekeeping/CreateTransactionDetailsEdit",$( "#transdetedit" ).serialize()
+		        ,
+		        function(data,status){
+		            if(data.Status==true){
+		            	alert(data.Message)
+		            	$(".createAct").val("")
+		            	$.get("/timekeeping/CreateTransactionDetails?rights="+right+"&ID="+data.ID,
+                    		function(data,status){
+			                    $('#basic').modal('hide')
+			                    $("#ContentID").html(data);
+			                }
+		                );
+
+		            }
+		        });
+	 		return false
+			}
+			$(".clsAssign").on("select2-close", function() { 
+				$.get("/timekeeping/CreateTransactionDetails/ajaxgetmemberbyassigment?assigmentID="+this.value,
+            		function(data,status){
+                   		var ht =''
+                   		for (var i = 0; i < data.length; i++) { 
+						    if({{$LBR_LOGDTL.Memberid}} == data[i].Member_id){
+						    	ht+='<option value="'+data[i].Member_id+'" selected>'+data[i].Name+'</option>'
+						    }else{
+						    	ht+='<option value="'+data[i].Member_id+'" >'+data[i].Name+'</option>'
+						    }
+						}
+				        $('#drpmember').html(ht);
+				        $('#drpmember').select2();	
+					}
+                );
+			})
+
+			$.get("/timekeeping/CreateTransactionDetails/ajaxgetmemberbyassigment?assigmentID="+{{$LBR_LOGDTL.Lbr_assign}},
+            		function(data,status){
+                   		var ht =''
+                   		for (var i = 0; i < data.length; i++) { 
+						    if({{$LBR_LOGDTL.Memberid}} == data[i].Member_id){
+						    	ht+='<option value="'+data[i].Member_id+'" selected>'+data[i].Name+'</option>'
+						    }else{
+						    	ht+='<option value="'+data[i].Member_id+'" >'+data[i].Name+'</option>'
+						    }
+						}
+				        $('#drpmember').html(ht);
+				        $('#drpmember').select2();	
+					}
+                );
+		$('#drpmember').select2("val","");	
+</script>
+
+
+{{end}}

@@ -1,0 +1,161 @@
+<!-- <Form> -->
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+		<form id="transdetnew" method="Post" onsubmit="javascript: return DoeditTrasDet()">
+			<input type="hidden" name="hdr_id" value="{{.Tconf.suprec_detail_hdr_id}}">
+			<input type="hidden" name="id" value="{{.Tconf.suprec_detail_id}}">	
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">Edit Transaction Details</h4>
+				</div>
+				<!-- <div class="modal-body">
+				 -->	 <!-- modal data here -->
+					<div class="form-horizontal">
+							<div class="form-group">
+								<label class="col-md-3 control-label">Item</label>
+								<div class="col-md-4">
+									<input type="text" name="item" placeholder="Item" id="item"  class="form-control"  value="{{.Tconf.suprec_detail_item}}" required>
+								
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Qty</label>
+									<div class="col-md-4">
+										<input type="text"  value="{{.Tconf.suprec_detail_qty}}"  name="qty" placeholder="Qty"  maxlength="10" class="form-control createAct" onkeypress='return numbersOnly(this,event,false,true);' required>
+									</div>
+							</div>		
+							<div class="form-group">
+								<label class="col-md-3 control-label">Unit Cost</label>
+									<div class="col-md-4">
+										<input type="text" name="unit_cost" placeholder="Unit Cost"  maxlength="100" class="form-control createAct" onkeypress='return numbersOnly(this,event,true,false);' value="{{.Tconf.suprec_detail_ucost}}"  required>
+									</div>
+							</div> 
+							<div class="form-group">
+								<label class="col-md-3 control-label">Remarks</label>
+									<div class="col-md-4">
+										<input type="text" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct" value="{{.Tconf.suprec_detail_remarks}}">
+									</div>
+							</div>
+					</div>
+					 <!-- end modal data here -->
+				<!-- </div> -->
+				<div class="errorDv">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn default" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn blue">Update changes</button>
+				</div>
+
+		<!--  -->
+				<!-- /.modal-content -->
+		</form>
+	</div>
+		<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->					
+					
+
+
+<script type="text/javascript">
+ 	$('.form_datetime').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+	
+
+	var rights = '{{.Tconf.rights}}' 
+	var assignmentID = '{{.Tconf.location}}' 
+			function DoeditTrasDet(a){
+				
+
+
+				$.post("/inventory/adjustment_entry/details/DEditHandler",$( "#transdetnew" ).serialize()
+		        ,
+		        function(data,status){
+		        	alert(data[1])
+		            if(data[1]=='Success'){
+		            	$(".createAct").val("")
+			            	$.get("/inventory/adjustment_entry/details?rights="+rights+"&ID={{.Tconf.suprec_detail_hdr_id}}",
+	                    		 function(data,status){
+			                     $("#ContentID").html(data);
+			                     $('#basic').modal('hide')
+			                    }
+			                );
+			        }	
+				
+		        });
+	 			return false
+			}
+	
+	function repoFormatResult( repo ) {
+	    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div></div>";
+
+	    return markup;
+	}
+	function repoFormatSelection( repo ) {
+		$("input[name=unit_cost]").val(repo.price);
+        return repo.full_name;
+    }
+    		
+	$( "#item" ).select2({
+			    placeholder: "Search for Item",
+			     minimumInputLength: 2,
+			        multiple: false,
+			        allowClear: true,
+			    ajax: {
+		        url: "/inventory/adjustment_entry/details/Ajax/Ajax_getItem?assignmentID="+assignmentID+"&isbaseonassignid=1",
+				        //url: "/inventory/customer_return/details/Ajax/Ajax_getItem",
+			        dataType: "json",
+			        quietMillis: 250,
+			        data: function( term, page ) {
+			            return {
+			                // search term
+			                q: term
+			            };
+			        },
+			        results: function( data, page ) {
+			                // parse the results into the format expected by Select2.
+			                // since we are using custom formatting functions we do not need to alter the remote JSON data
+			                return { results: data.items };
+			        }
+			        
+			    }, 
+				initSelection: function( element, callback ) {
+					// the input tag has a value attribute preloaded that points to a preselected repository's id
+					// this function resolves that id attribute to an object that select2 can render
+					// using its formatResult renderer - that way the repository name is shown preselected
+					/*var id = $( element ).val();
+					if ( id !== "" ) {
+						$.ajax( "inventory/adjustment_entry/details/Ajax/Ajax_getItem?isbaseonassignid=1&id=" + id, {
+							dataType: "json"
+						}).done( function( data ) {
+							callback( data );
+						});
+					}*/
+					var data = {'Id':{{.Tconf.suprec_detail_item}},'full_name':"{{.Tconf.suprec_detail_itemname}}",'price':{{.Tconf.suprec_detail_ucost}}}
+					
+					//var data = {'Id':{{.Tconf.suprec_detail_item}},'full_name':"{{.Tconf.suprec_detail_itemname}}"}
+					callback( data  );
+				},
+
+			    
+			    formatResult: repoFormatResult,
+			    formatSelection: repoFormatSelection,
+			    // apply css that makes the dropdown taller
+			    dropdownCssClass: "bigdrop",
+			    // we do not want to escape markup since we are displaying html in results
+			    escapeMarkup: function( m ) {
+			        return m;
+			    }
+			});		
+	setTimeout(function (){
+     //   $( "#item").select2('open')
+    	
+    }, 500);
+
+
+</script>

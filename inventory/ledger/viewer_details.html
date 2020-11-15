@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<style type="text/css">
+	#example1 tr td{
+		font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+		border: 1px solid #cecece;
+		padding: 5px;
+		font-size:large
+
+	}
+	#example1 tr th{
+		font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+		border: 1px solid #cecece;
+		padding: 5px;
+		font-size:large
+
+	}
+	table tr{
+		/*font-size: 18px;
+    font-family: monospace;*/
+
+	}
+
+
+</style>
+<body>
+
+
+
+
+<table  style="display: inline-block; width: 40%;">
+    <tr>
+        <td>Item Name :</td>
+        <td>{{.Tconf.item_name}}</td>
+    </tr>
+    <tr>
+        <td>Location Name :</td>
+        <td>{{.Tconf.location_name}}</td>
+    </tr>
+    <tr>
+        <td>Unit Price :</td>
+        <td>{{.Tconf.uprice}}</td>
+    </tr>
+    <tr>
+        <td>Status :</td>
+        <td>{{.Tconf.status}}</td>
+    </tr>
+    <tr>
+        <td>Ledger Running Bal. :</td>
+        <td>{{.Tconf.runbal}}</td>
+    </tr>
+</table>
+
+<hr>
+<table id="example1" class="table table-bordered " cellspacing="0" width="100%">
+	<thead class="tbl_data">
+	         <!-- <tr style="border-bottom: 1px solid #DDD;">
+	        <th colspan="2" >HR Information</th>
+	        <th colspan="2">Contact</th>
+	    </tr> -->
+	    <tr>
+	        <th>Trans date</th>
+	        <th>Description</th>
+	        <th>TranID</th>
+	        <th>QTY</th>
+	        <th>Running Bal</th>
+	        <th>Header Remarks</th>
+	        <th>Detail Remarks</th>
+		
+		</tr>
+	    	
+		{{ range $index, $elmt := .Arr_data}}
+	    <tr>
+	        <td>{{index $elmt 0}}</td>
+	        <td>{{index $elmt 1}}</td>
+	        <td>{{index $elmt 2}}</td>
+	        <td style="text-align: right;">{{index $elmt 3}}</td>
+	        <td style="text-align: right;">{{index $elmt 4}}</td>
+	        <td>{{index $elmt 5}}</td>
+	        <td>{{index $elmt 6}}</td>
+	       
+	       
+	    </tr>
+	     {{end}}
+
+	</thead>
+</table>
+	
+</body>
+
+</html>

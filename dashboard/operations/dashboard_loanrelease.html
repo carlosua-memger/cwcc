@@ -1,0 +1,145 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Top Aging Past Due Per Partner</title>
+
+        
+        <style type="text/css">
+/*#container {
+    height: 400px; 
+    min-width: 310px; 
+    max-width: 800px;
+    margin: 0 auto;
+}*/
+        td {
+            font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+            font-size: 12px;
+                width: 60%;
+        }
+        </style>
+        <script type="text/javascript">
+            
+$(function () {
+
+    Highcharts.setOptions({
+    lang: {
+      decimalPoint: '.',
+      thousandsSep: ','
+    }
+});
+
+$(function () {
+    $('#container2').highcharts({
+        chart: {
+        zoomType: 'xy'
+            
+                },
+        title: {
+            text: 'Loan Release Report'
+        },
+        subtitle: {
+            text: 'Loan Release Report'
+        },
+        xAxis: {
+          /*   type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e. %b',
+                year: '%b'
+            },
+            title: {
+                text: 'Date'
+            }, */
+            categories : {{.date}},
+            text: 'Date'
+        },
+        yAxis: [{
+            title: {
+                text: 'Value'
+            },
+            min: 0
+        },
+        {
+        title: {
+                text: 'Count'
+            },
+            labels: {
+            format: '{value}',
+            style: {
+                color: Highcharts.getOptions().colors[0]
+            }
+        },
+            opposite: true
+        }],
+        tooltip: {
+           // headerFormat: '<b>{series.name}</b><br>',
+            //pointFormat: '{point.x:%e. %b}: {point.y:.0f}'
+        },
+
+
+       
+        plotOptions: {
+            spline: {
+                marker: {
+                    enabled: true
+                }
+            },
+
+            series: {
+                cursor: 'pointer',
+                point: {
+                    events: {
+                        click: function () {
+                            window.open('/report/do_print?' +  this.url, "", "width=800,height=500")
+                        }
+                    }
+                }
+            }
+
+            
+        },
+
+       
+
+        
+
+        series: [{
+          type: 'column',
+            name: 'LA Value',
+            data: {{.la_value}}
+           // url: {{.url}}
+        },  
+
+            {
+            type: 'column',
+            name: 'LR Value',
+            data: {{.lr_value}}
+            },
+            {
+            name: 'LA Volume',
+            type: 'spline',
+            data: {{.la_volume}},
+            yAxis: 1
+            },
+
+            {
+            name: 'LR Volume',
+            type: 'spline',
+            data: {{.lr_volume}},
+            yAxis: 1
+            }
+
+            ]
+            
+
+      
+    });
+}); 
+});
+
+</script>
+
+<div id="container2" ></div>
+
+
+</html>

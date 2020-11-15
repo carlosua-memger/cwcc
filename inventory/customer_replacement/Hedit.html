@@ -1,0 +1,332 @@
+{{$Org_id := .Conf.org_id}}
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Edit Customer Replacement Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+
+
+
+
+<div class="row">
+<div class="col-md-6">
+
+
+	<h3 class="form-section">Customer Replacement ID = {{.Conf.cust_rep_id}}</h3>
+
+
+	<form id="CreateTransaction" class="form-horizontal"  method="Post" onsubmit="return DoEditTransaction()">
+
+
+		<div class="form-horizontal">
+			<div class="form-group">
+				<label class="col-md-3 control-label">Location</label>
+				<div class="col-md-8">
+					<select name="location" id="location" class="form-control" > 
+					 	{{$location_id  := .Conf.cust_rep_location }}
+					 	{{range  $key ,$val := .Ls_location}}
+						{{ $loop_id  := index  $val 0 }}
+						{{if eq $location_id $loop_id }}	
+					 		<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+					 	{{else}}	
+					 		<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+						{{end}}
+						{{end}}
+
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-3 control-label">Transaction Date<span class="required" aria-required="true">*</span>
+				</label>
+				<div class="col-md-8">
+					<input type="text" name="transdate" value="{{.Conf.cust_rep_trndate}}" placeholder="Name" class="form-control date-picker" maxlength="50" Required>
+								<span class="help-block c_h_date" style="color:red;" ></sapan>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-3 control-label">Customer</label>
+				<div class="col-md-8">
+					<select name="customer" class="form-control" > 
+					 	{{$custid := .Conf.cust_rep_customer }}
+					 	{{range  $key ,$val := .Ls_customer}}
+						{{ $loop_id  := index  $val 0 }}
+						{{if eq $custid $loop_id }}	
+					 		<option value="{{ index  $val 0}}" data-id="{{ index  $val 2}}" selected>{{ index  $val 1}}</option>
+					 	{{else}}	
+					 		<option value="{{ index  $val 0}}" data-id="{{ index  $val 2}}">{{ index  $val 1}}</option>
+						{{end}}
+						{{end}}
+
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-3 control-label">Remarks</label>
+				<div class="col-md-8">
+					<textarea name = "remarks" class="form-control createAct">{{.Conf.cust_rep_remarks}}</textarea>
+				</div>
+			</div>
+			
+		</div>
+
+	</form>
+	
+</div>	
+
+<div class="col-md-6">
+
+
+		<form id="item_tagsdata" class="form-horizontal"  method="Post" onsubmit="return Dobatchsave()" >
+			<input type="hidden" name="suprec_id" class="c_item_id" value="{{.Conf.suprec_id}}">
+
+				<table class="table table-bordered table-striped tbl_dtls" width="50%"  >
+					<tbody>
+					{{range  $key,$val := .Arr_tag}}
+						<tr>
+							<td style="width:15%">
+								 {{ index  $val 1}}
+							</td>
+							<td style="width:50%">
+								{{$datatype  := index  $val 3 }}
+								{{if eq $datatype `String` }}
+									<input type="text" class="value_input" name="value_input" placeholder="value" id="autocomplete_{{ index  $val 0}}" value="{{ index  $val 4}}">
+								{{end}}
+								{{if eq $datatype `Number` }}
+									<input type="number" name="value_input" class="value_input" placeholder="value" value="{{ index  $val 4}}">
+								{{end}}
+								
+								<input type="text" name="remarks" class="value_remarks" placeholder="remarks" value="{{ index  $val 5}}">
+								<input type="hidden" name ="tag" value="{{ index  $val 0}}">
+								<!-- <a onclick="javascript:func_sync( 0 ,{{ index  $val 0}},this,event );"> save</a> -->
+							</td>
+						
+						</tr>
+					
+					<script type="text/javascript">
+					{{$tagid := index  $val 0}}
+					//var json_data_$tagid = ["a","a2","a3","a3","a4","a5","a6","a7","1","101",]
+
+					
+					var  json_data_{{$tagid}} = [""]    
+			       
+			        {{$retdata := Sql_list "temp var for extend data" $Org_id $tagid}}
+			        
+
+			        {{range  $kkey,$vval := $retdata}}
+						json_data_{{$tagid}}.push( "{{ index  $vval 0}}" )
+					{{end}}
+
+			        $('#autocomplete_{{$tagid}}' ).autocomplete({
+			            	source: json_data_{{$tagid}}
+			            });
+					</script>
+					
+					{{end}}
+					</tbody>
+				</table>
+				<!-- <div class="form-actions fluid">
+					<div class="col-md-offset-3 col-md-9">
+						<button type="submit" class="btn blue">Save All</button>
+						<button class="btn default" onclick="javascript:Navigate('/inventory/supplier_receipt?rights={{.Rights}}')" type="button">Cancel</button>
+					</div>
+				</div> -->
+						
+			</form>
+
+</div>
+
+
+</div>
+
+	<div class="form-actions fluid">
+		<div class="col-md-offset-3 col-md-9">
+			<button type="submit" onclick="return DoEditTransaction()" class="btn blue submit_btn">Update</button>
+			<button class="btn default" onclick="javascript:nav_back('/inventory/customer_replacement?rights={{.Rights}}')" type="button">Go Back</button>
+		</div>
+	</div>
+
+</div>
+
+
+
+
+
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	
+</div>
+
+
+		
+			<script type="text/javascript">
+			$('.date-picker').datepicker({"setDate": new Date() ,  autoclose: true });
+            $('input[name=item_class]').focus()
+			$("[name=location] , [name=customer]").select2();
+
+            function DoEditTransaction(){
+            	var d_date = $("[name=transdate]").val();
+				var parts =d_date.split('/');
+				var mydate = new Date(parts[2],parts[0]-1,parts[1]); 
+				var tem_curdate = new Date();
+				tem_curdate.setDate(tem_curdate.getDate()-30);
+				if(d_date==""){
+					$(".c_h_date").html('valid date required.');
+					return false;
+				}
+			/*	if (tem_curdate >  mydate){
+					$(".c_h_date").html('Minimum date allowed is '+ tem_curdate.toLocaleString(	) + '.');
+					return false;
+				}*/
+				$.get("/json_func",
+                    {
+                    	
+                    	qdata : "SIS_CusRepHdr_Save 'Edit', '{{.Conf.username}}', {{.Conf.cust_rep_id}}, {{.Conf.org_id}}, "+$('[name=location]').val()+", '"+$('[name=transdate]').val()+"', '"+$('[name=customer]').val()+"','"+$('[name=remarks]').val()+"'"
+                    }
+                    ,
+                    function(data,status){
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									//alert(ret_msg)
+									//$('#basic').modal('hide')
+					            	//dtbl()
+					            	console.log("success here")
+									Dobatchsave()
+									//return false;
+			                    }else{
+			                    	console.log("fail")
+			                    	alert(ret_msg)
+			                    }
+		                    }
+	                    }
+                    });	
+					return false;
+			}
+
+
+	
+
+			function func_sync(item , tag , t,event){
+				//console.log($(event.target).closest("tr").find('.value_input').val())
+
+				var item_id =  $(".c_item_id").val();
+				var text_val =  $(event.target).closest("tr").find('.value_input').val();
+				var text_val_remarks =  $(event.target).closest("tr").find('.value_remarks').val();
+
+				$.get("/json_func",
+                    {
+                    	qdata : "SIS_CusSalTags_Save 'Update', '{{.Conf.username}}', {{.Conf.org_id}}, "+item_id+", "+tag+", '"+text_val+"', '"+text_val_remarks+"'"
+						
+						
+					}
+                    ,
+                    function(data,status){
+                    	console.log(data)
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									console.log(data[i][0])
+									alert(ret_msg)
+									
+								//return false;
+			                    }else{
+			                    	alert(ret_msg)
+			                    }
+		                         
+		                    }
+	                    }
+                    });
+
+			}
+			
+			function Dobatchsave(){
+				$.post("/inventory/customer_replacement/HaddTagHandler",
+                    $("#item_tagsdata").serialize()
+					,
+                    function(data,status){
+                    	var errcount = 0 
+                    	if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        
+		                        if (data[i][0]=="HasError"){
+									errcount = errcount + 1
+								//return false;
+			                    }
+			                }
+						}
+						if (errcount>0){
+	                    	alert(errcount)
+	                    	alert("Opsss something went wrong")
+                        }else{
+                        	//alert("Save Success")
+                        	Navigate('/inventory/customer_replacement/details?rights={{.Rights}}&ID={{.Conf.cust_rep_id}}')
+                        } 
+                        
+                    });
+
+				return false;
+
+
+			}
+
+
+
+			var ret_msg= ""
+			$("#location").change(function () {
+					$.get("/json_func",
+                    {
+                       qdata : "sis_locationcustomer_get 2, "+$('[name=location]').val()+""
+
+                    }
+                    ,
+                    function(data,status){
+                        if( data!=null){
+                        	var ht_data = "";
+
+		                    for (var i = 0; i < data.length; i++) {
+		                    	 	ret_msg = data[i][0]
+					            	//$("input[name=customer]").val(ret_msg);
+					            	//console.log(alert(data[i][0]))
+					            	ht_data += '<option value="'+data[i][0]+'">'+data[i][1]+'</option>'
+		                     		    
+		                    }
+		                    $("[name=customer]").html(ht_data);
+	                    }
+                    });	
+					
+                    return false;
+			});	
+
+			</script>
+	

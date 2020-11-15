@@ -1,0 +1,320 @@
+<html>
+    <head>
+                <!-- <title style="font-size: 16px;">Paired logs Report</title> -->
+            <style type="text/css">
+                .rpt_date {
+                    float: right;
+                    
+                }
+                .page_header{
+                    margin-bottom: 5px;
+                    /*display: inline; */
+                }
+                .name{
+                    /*float: left;*/
+                    margin-bottom: 3px;
+                    font-family: Arial; 
+                }
+                .covered_data{
+                    /*float: right;*/
+                    font-family: Arial; 
+                }
+                .pic_logo {
+                    width: 200px;
+
+                }
+                table{
+                    width: 100%;
+                }
+                
+                .dtatbl {
+                
+                border: 0.99px solid #B3B3B3;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 10px;
+                }
+
+                .dtatbl th{
+                    border: 0.99px solid #B3B3B3;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 10px;
+                }
+
+                .dtatbl td {
+                    border: 0.99px solid #B3B3B3;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 10px;
+                }
+                th, td {
+                    /*padding: 2px;*/
+                      font-size: 16px;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+                th{
+                    
+                    background-color: whiteSmoke;
+                    /*background-image: -webkit-linear-gradient*/
+                    
+                }
+                body {
+                    font-size: 10px;
+                }
+                .logo{
+                    width: 200px;
+                    margin-bottom: 5px;
+                }
+                .page_footer{
+                    margin-top: 20px;
+                    display: inline-block;
+                    width: 100%;
+                }
+                .signaturemember{
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: left;
+                    font-family: inherit;
+                }
+                .signatureleft{
+                    margin-left: 10%;
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: left;
+                    font-family: inherit; 
+                }
+                .signatureright{
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: right;
+                    font-family: inherit; 
+                }
+                .tbl_foor{
+                    margin-top: 10px;
+                }
+                .tbl_foor td div{
+                    border-top: 0.99px solid black; 
+                    width: 50%;
+                }
+                .isred {
+                    color: red;
+                }
+                .log_sum{
+                    margin-top: 10px;
+                }
+                td div{
+                    font-size: 10px;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+
+                }
+                td div b{
+                    font-size: 10px;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+
+            /*    table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+tr {
+    border-bottom: 1px solid #ccc;
+}
+
+th {
+    text-align: left;    
+}*/
+            </style></head>
+                
+
+               
+            <body>
+              
+
+              <div class="logo">
+                    <a href="/">
+                    <img src="/src/metronic_3.1.2/logo/gak.jpg" height = "100" width = "200" style="margin-top: 1px;"alt="logo" class="logo-default"/>
+                    </a>
+                </div>
+
+    <!--            {{.Conf.org_id}}
+               {{.Conf.trnID }} "mars" -->
+
+              <!--  {{ $currentCategoryUrl := .Conf.org_id | printf "%s%s" "," | printf "%s%s" .Conf.trnID }}
+               {{$currentCategoryUrl}}
+
+ -->
+                {{$sql_str := combine_string `SIS_SupOrd_Custom 4,` .Conf.org_id "," .Conf.trnID }}
+                {{$conf_data := tpl_sql_row $sql_str }}
+
+                  
+               
+                <table width="100%">
+
+                     <tr>
+                               <td>
+                               </td> 
+                             <td align="right">
+                              <font face="arial"><center><b> PURCHASE ORDER # {{index $conf_data  0}}</center></font></b>
+                             </td>
+
+                     </tr>     
+                    <tr>
+                        
+                        <td><b>Location:</b> {{index $conf_data  1}}</td>
+                        <td><b>Term:</b> {{index $conf_data 10}} </td>
+                        
+                    </tr>
+                    <tr>
+                        
+                        <td><b>Date:</b> {{index $conf_data  2}}</td>
+                        
+                    </tr>
+
+                     <tr>
+                        
+                        <td><b>Supplier:</b> {{index $conf_data  7}}</td>
+                       
+                        
+                    </tr>
+
+                     <tr>
+                        
+                        <td><b>Address:</b> {{index $conf_data  8}}</td>
+                        
+                        
+                    </tr>
+
+                     <tr>
+                        
+                        <td><b>Contact Person / Number:</b> {{index $conf_data  11}}</td>
+                        
+                        
+                    </tr>
+                   
+
+                </table>
+
+
+                {{$sql_str2 := combine_string `SIS_SupOrd_Custom 3,` .Conf.org_id "," .Conf.trnID }}
+
+              {{$data_list := tpl_sql $sql_str2 }}
+                
+            
+                <br>
+
+                
+
+                <table width="100%" border="1">
+                    <tr>
+                        <th align="left" width="7%"><b>Record #</th>
+                        <th align="left" width="35%"><b>Item</th>
+                            
+                        <th align="right" width="5%"><b>UoM</th>
+                        <th align="right" width="5%"><b>Qty</th>
+                        <th align="right" width="10%"><b>Amount</th>
+                        <th align="right" width="10%"><b>Total</th>
+                        <th align="right"><b>Charging / Particulars</th>
+                        
+                    </tr>        
+
+    
+                     <tr>
+                       {{range  $key1, $val1stloop := $data_list}}
+                            <tr> 
+                            
+                             <td>{{index $val1stloop  0}}</td>
+                             <td>{{index $val1stloop  1}}</td>
+                             <td align="right">{{index $val1stloop  6}}</td>
+                             <td align="right">{{index $val1stloop  2}}</td>
+                             <td align="right">{{index $val1stloop  3}}</td>
+                             <td align="right">{{index $val1stloop  4}}</td>
+                             <td align="right">{{index $val1stloop  5}}</td>
+
+
+                            </tr>
+                         
+                        {{end}}
+                    </tr>
+                  <!--   <tr>
+                        <td><b>Total Record/s : <script type="text/javascript">
+    document.write(total_rec)
+ 
+
+    </script></td>
+                     
+                    </tr>    
+
+
+ -->
+
+                    <tr>
+                        <th align="left"><b><u> {{index $conf_data  5}}</u> </th>
+                        <th><b></th>
+                        <th><b></th>
+                       
+                        <th align="right"><b><u>{{index $conf_data  4}}</u></th>
+                         <th><b></th>
+                        <th align="right"><b><u>{{index $conf_data  9}}</u></th>
+                         <th><b></th>
+
+
+                       
+                    </tr>     
+
+                </table>
+
+
+                <br>
+
+
+<table>
+    <tr>
+
+                        <td><b>Remarks:</b> {{index $conf_data 3}} </td>
+    </tr>
+</table>
+               
+                        
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+ <table>
+                    <tr> 
+                        <td align="left" width="25%" style="font-size: 12px;">
+                            <b>Prepared by: <u>JOVANY GONZALES</u>
+                         
+                               
+
+                        </td>
+                   
+                        <td align="left" width="25%" style="font-size: 12px;"><b>Reviewed By: <u>BABES GONZALES</u>  </td> 
+                        <td align="left" width="25%" style="font-size: 12px;"><b>Approved By: <u>JOYCE GALLARDO</u>  </td> 
+                        <td align="left" width="25%" style="font-size: 12px;"><b>Noted By: <u>GARY U. QUEMADO</u>  </td> 
+                    </tr>      
+                   <tr>
+                   <td colspan="4" > 
+                   <b> PRINTED BY:</b> {{.Conf.username}} @  {{get_datetime}}
+                   </td>
+                   </tr>
+                   <tr>
+                         <td align="left" width="20%" style="font-size: 12px;"> <b>Status:</b> {{index $conf_data  6}}</td>
+                   </tr>
+                   <tr>
+                    <td colspan="4">
+                    {{footer_ads}}
+                   <!-- <font size="2"><b>Powered by Memgertech Inc.</b> <i>Inventory like a <b>boss</b>... Try us for free.</i></font> -->
+                    </td>
+                   </tr>
+
+                </table>
+    
+    </body>
+</html>

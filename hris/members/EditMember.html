@@ -1,0 +1,365 @@
+
+{{.Monthdays}}
+{{$member := .MemberList}}
+{{$MemberGender := .MemberGender}}
+{{$OrgList := .Org}}
+{{$months := .Months}}
+{{$monthdays := .Monthdays}}
+{{$MemberCivilStatus := .MemberCivilStatus}}
+{{range $memberlist :=$member}}
+
+<!-- <Form> -->
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+		<form id="EditMember" method="Post" onsubmit="javascript: return DoEditMember()">
+			<input type="hidden" name="rec_no" value="{{.ID}}">	
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">Edit Account</h4>
+				</div>
+				<!-- <div class="modal-body">
+				 -->	 <!-- modal data here -->
+
+					<div  class="form-horizontal">
+													<div class="form-group">
+														<label class="col-md-3 control-label">Org</label>
+															<div class="col-md-4">
+															<select name="org" class="form-control"> 
+															 {{range $orglist := $OrgList }}
+															<option  value="{{$orglist.Org_id}}">{{$orglist.Org_name}}</option>
+	           														{{end}}
+	           												</select>
+														</div>
+													</div>
+
+													<!-- <div class="form-group">
+														<label class="col-md-3 control-label">Disable Date <span class="required" aria-required="true">
+															* </span>
+														</label>
+														<div class="col-md-4">
+															<input type="text" name="trandate" class="form-control date-picker" placeholder="date" maxlength="50" Required>
+														</div>
+													</div>-->
+
+														<div class="form-group">
+															<label class="col-md-3 control-label">Employee # </label>
+															<div class="col-md-4">
+																<input type="text" name="hris" id="idemp" value="{{$memberlist.Hris_id}}" placeholder="Employee Number" class="form-control createAct" maxlength="50">
+																<!-- <span class="help-block">
+																A block of help text. </span> -->
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="col-md-3 control-label">FirstName <span class="required" aria-required="true">
+															* </span></label>
+															<div class="col-md-4">
+																<input type="text" name="firstname" id="idfname" value="{{$memberlist.Firstname}}" placeholder="FirstName" class="form-control createAct" maxlength="50" Required>
+																<!-- <span class="help-block">
+																A block of help text. </span> -->
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-3 control-label">Middlename  <span class="required" aria-required="true">
+										* </span></label>
+															<div class="col-md-4">
+																<input type="text" name="middlename" id="idmname" value="{{$memberlist.Middlename}}" placeholder="Middlename" class="form-control createAct" maxlength="50" Required>
+																<!-- <span class="help-block">
+																A block of help text. </span> -->
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-3 control-label">
+																Lastname 
+																<span class="required" aria-required="true">
+																* </span>
+															</label>
+															<div class="col-md-4">
+																<input type="text" value="{{$memberlist.Lastname}}" id="idlname" maxlength="50" name="lastname" placeholder="Lastname" class="form-control createAct" Required>
+																<!-- <span class="help-block">
+																A block of help text. </span> -->
+															</div>
+														</div>
+															<div class="form-group">
+															<label class="col-md-3 control-label">Suffixname</label>
+															<div class="col-md-4">
+																<input type="text" value="{{$memberlist.Suffixname}}" name="suffixname" placeholder="Suffixname" class="form-control createAct">
+																<!-- <span class="help-block">
+																A block of help text. </span> -->
+															</div>
+														</div>
+															<div class="form-group">
+															<label class="col-md-3 control-label">Maidenname</label>
+															<div class="col-md-4">
+																<input type="text" value="{{$memberlist.Maidenname}}" name="maidenname" placeholder="Maidenname" class="form-control createAct">
+																<!-- <span class="help-block">
+																A block of help text. </span> -->
+															</div>
+														</div>
+															<div class="form-group">
+														
+																	<label class="col-md-3 control-label">Gender</label>
+																	<div class="col-md-4">
+																	<select name="gender" class="form-control" > 
+																	 {{range $MemberGender := $MemberGender }}
+																	 {{if eq $MemberGender.Name $memberlist.Gender}}
+
+		               													<option value="{{$MemberGender.Name}}"  selected>{{$MemberGender.Name}}</option>
+		               														{{else}}
+		               													<option value="{{$MemberGender.Name}}">{{$MemberGender.Name}}</option>
+		               														{{end}}
+		               														{{end}}
+		               													</select>
+																</div>
+															</div>
+														
+														<div class="form-group">
+															<label class="col-md-3 control-label">Birthday <span class="required" aria-required="true">
+															* </span></label>
+															<div class="col-md-4 form-inline">
+																	
+
+																<select name="bday_month" id="bmonth" onchange="javascript:bdate(this);" class="form-control input-small">
+																	{{range $mon := $months}}
+																	{{if eq $mon.Id $memberlist.Bmonth}}
+																	<option value ="{{$mon.Id}}" selected>{{$mon.Month}}</option>
+																	{{else}}
+																	<option value ="{{$mon.Id}}">{{$mon.Month}}</option>
+																	{{end}}
+																	{{end}}
+																</select>
+
+																<select name="bday_day" id="bday" class="form-control input-xsmall createAct" >
+																	{{range $days :=$monthdays}}
+																	{{if eq $days.Day $memberlist.Bday}}
+																	<option value ="{{$days.Day}}" selected>{{$days.Day}}</option>
+																	{{else}}
+																	<option value ="{{$days.Day}}">{{$days.Day}}</option>
+																	{{end}}
+																	{{end}}
+																</select>
+												
+
+
+																<input type="text" name="bday_year" value="{{$memberlist.Byear}}" placeholder="YYYY" id="mask_byear" class="form-control input-xsmall createAct" onfocus="javascript:bftxt(this,1)" Required onblur="AjaxValidate(this,'name','idname')" >
+																<span class="help-inline" id="idivayr"></span>
+															</div>
+														</div>	
+
+														<hr>
+
+														<div class="form-group">
+															<label class="col-md-3 control-label">Address</label>
+															<div class="col-md-4">
+																<input type="text" value="{{$memberlist.Address}}" name="address" placeholder="address" class="form-control  createAct">
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-3 control-label">postcode</label>
+															<div class="col-md-4">
+																<input type="text" name="postcode" placeholder="postcode" id="mask_postcode"  value = "{{$memberlist.Postcode}}" class="form-control input-large  createAct" required>
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="col-md-3 control-label">TIN</label>
+															<div class="col-md-4">
+																<input type="text" name="TIN" placeholder="TIN"  value="{{$memberlist.Tin}}" id="mask_TIN" class="form-control input-inline input-medium createAct " onfocus="javascript:bftxt(this,3)" onblur="AjaxValidate(this,'TIN','idtin')" >
+																<span class="help-inline" id="idtin"></span>
+																<span class="help-block">999-999-999-000</span>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-3 control-label">SSS</label>
+															<div class="col-md-4">
+																<input type="text" name="SSS" value="{{$memberlist.SSS}}" placeholder="SSS" id="mask_SSS" class="form-control input-inline input-medium createAct " onfocus="javascript:bftxt(this,3)" onblur="AjaxValidate(this,'SSS','idSSS')" >
+																<span class="help-inline" id="idSSS" ></span>
+																<span class="help-block">99-9999999-9</span>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-3 control-label">GSIS</label>
+															<div class="col-md-4">
+																<input type="text" name="GSIS" value="{{$memberlist.GSIS}}" placeholder="GSIS" id="mask_GSIS" class="form-control input-inline input-medium createAct " onfocus="javascript:bftxt(this,3)" onblur="AjaxValidate(this,'GSIS','idGSIS')" >
+																<span class="help-inline" id="idGSIS"></span>
+																<span class="help-block">99999999999</span>
+															</div>
+														</div>
+														
+														<div class="form-group">
+															<label class="col-md-3 control-label">Pagibig</label>
+															<div class="col-md-4">
+																<input type="text" name="Pagibig" value="{{$memberlist.Pagibig}}" placeholder="Pagibig"  id="mask_Pagibig" class="form-control input-inline input-medium createAct " onfocus="javascript:bftxt(this,3)" onblur="AjaxValidate(this,'Pagibig','idpagibig')" >
+																<span class="help-inline" id="idpagibig"></span>
+																<span class="help-block" >9999-9999-9999</span>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-3 control-label">PHealth</label>
+															<div class="col-md-4">
+																<input type="text" name="PHealth" value="{{$memberlist.Phealth}}" placeholder="PHealth"   id="mask_PHealth"  class="form-control input-inline input-medium  createAct " onfocus="javascript:bftxt(this,3)" onblur="AjaxValidate(this,'PHealth','idphilh')" >
+																<span class="help-inline" id="idphilh"></span>
+																<span class="help-block">99-999999999-9</span>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-3 control-label">mobileno</label>
+															<div class="col-md-4">
+																<input type="text" name="mobileno" value="{{$memberlist.Mobileno}}" placeholder="mobileno" id="mask_cphone"  class="form-control  createAct">
+																<span class="help-block">+63-XXXXXXXXXX</span>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-3 control-label">telno</label>
+															<div class="col-md-4">
+																<input type="text" name="telno" value="{{$memberlist.Telno}}" placeholder="telno" id="mask_phone"class="form-control createAct">
+																<span class="help-block">+63-XXX-XXX-XXXX</span>
+															</div>
+														</div>	
+														<div class="form-group">
+															<label class="col-md-3 control-label">Email Address</label>
+															<div class="col-md-4">
+																<input type="text" name="email" value="{{$memberlist.Email}}" placeholder="Email Address"  maxlength="50" class="form-control  createAct">
+															</div>
+														</div>				
+														
+														<div class="form-group">
+																	<label class="col-md-3 control-label">Civil Status</label>
+																	<div class="col-md-4">
+																	<select name="civil_stat" class="form-control" > 
+																	  {{range $MemberCivilStatus := $MemberCivilStatus }}
+																	  {{if eq $MemberCivilStatus.Name $memberlist.Civilstatus}}
+		               													<option value="{{$MemberCivilStatus.Name}}" selected>{{$MemberCivilStatus.Name}}</option>
+		               															{{else}}
+		               													<option value="{{$MemberCivilStatus.Name}}">{{$MemberCivilStatus.Name}}</option>
+		               														{{end}}
+		               														{{end}}
+		               													</select>
+																</div>
+															</div>
+															
+														<div class="form-group">
+															<label class="col-md-3 control-label">remarks</label>
+															<div class="col-md-4">
+																
+																<textarea class="form-control createAct" rows="3" name="remarks">{{$memberlist.Remarks}}</textarea>
+															</div>
+														</div>
+														<div class="form-group" hidden>
+															<label class="col-md-3 control-label">Username</label>
+															<div class="col-md-4">
+																<div class="input-group">
+																	<input type="hidden" name="username" value="{{$memberlist.Username}}" placeholder="Username" class="form-control createAct">
+																	<span class="input-group-addon input-circle-right">
+																	<i class="fa fa-user"></i>
+																	</span>
+																</div>
+															</div>
+														</div>
+
+													</div>
+					 <!-- end modal data here -->
+				<!-- </div> -->
+				<div class="modal-footer">
+					<button type="button" class="btn default" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn blue">Update changes</button>
+				</div>
+
+		<!--  -->
+				<!-- /.modal-content -->
+		</form>
+	</div>
+		<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->
+							
+											
+
+{{end}}											
+
+<script type="text/javascript">
+$('select[name=org]').focus();
+masking()
+	
+function repoFormatResult( repo ) {
+    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+    return markup;
+}
+
+function repoFormatSelection( repo ) {
+                return repo.full_name;
+            }
+$( "#mask_postcode" ).select2({
+    placeholder: "Search for Address",
+     minimumInputLength: 3,
+        multiple: false,
+        allowClear: true,
+    ajax: {
+        url: "/Ajax/GetPostalcode",
+        dataType: "json",
+        quietMillis: 250,
+        data: function( term, page ) {
+            return {
+                // search term
+                q: term
+            };
+        },
+        results: function( data, page ) {
+                // parse the results into the format expected by Select2.
+                // since we are using custom formatting functions we do not need to alter the remote JSON data
+                return { results: data.items };
+        }
+        
+    },
+	initSelection: function( element, callback ) {
+		// the input tag has a value attribute preloaded that points to a preselected repository's id
+		// this function resolves that id attribute to an object that select2 can render
+		// using its formatResult renderer - that way the repository name is shown preselected
+		var id = $( element ).val();
+		if ( id !== "" ) {
+			$.ajax( "/Ajax/GetPostalcode?id=" + id, {
+				dataType: "json"
+			}).done( function( data ) {
+				callback( data );
+			});
+		}
+	},
+
+    
+    formatResult: repoFormatResult,
+    formatSelection: repoFormatSelection,
+    // apply css that makes the dropdown taller
+    dropdownCssClass: "bigdrop",
+    // we do not want to escape markup since we are displaying html in results
+    escapeMarkup: function( m ) {
+        return m;
+    }
+});
+
+function DoEditMember(){
+	$.post("/Member/DoEditMember",$("#EditMember" ).serialize()
+        ,
+        function(data,status){
+        	//console.log(data)
+        	//Navigate('/AllAccount')
+           	if(data.Message!="Success"){
+                alert("opss.." + data.Message)
+            }else{
+                if(status="success"){
+                	alert(status)
+                    //$('#modalSession').modal('hide') 
+           			$('#basic').modal('hide')
+                	
+                }
+            }
+
+           	//$('#basic').modal('hide')
+           	//Navigate('/member?rights={{.Rights}}')
+        });
+	return false
+}
+
+</script>

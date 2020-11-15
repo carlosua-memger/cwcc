@@ -1,0 +1,150 @@
+<!-- <Form> -->
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+		<form id="transdetnew" method="Post" onsubmit="javascript: return DoeditTrasDet('AS')">
+			<input type="hidden" name="hdr_id" value="{{.Tconf.lar_la}}">
+			<input type="hidden" name="id" value="{{.Tconf.lar_id}}">	
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">Edit Loan Consolidation</h4>
+				</div>
+				<!-- <div class="modal-body">
+				 -->	 <!-- modal data here -->
+				 <div class="form-horizontal">
+						<div class="form-group">
+								<label class="col-md-3 control-label">Loans</label>
+								<div class="col-md-6">
+									<select name="lrdtl" id="lrdtl" class="form-control createAct" aria-readonly="true" > 
+											
+												<option value="{{ .Tconf.lar_lrdtl}}" selected>{{ .Tconf.lar_lrdtl_name}}</option>
+												
+												
+										  
+									</select>
+								</div>
+							</div>
+			
+								
+					
+						
+						<div class="form-group">
+							<label class="col-md-3 control-label">Amount</label>
+								<div class="col-md-4">
+									<input type="Amount" value={{.Tconf.lar_amt}} name="amount" placeholder="amount"  maxlength="15" class="form-control createAct" required onkeypress='return numbersOnly(this,event,true,false);'>
+								</div>
+						</div>		
+						
+						<div class="form-group">
+							<label class="col-md-3 control-label">Remarks</label>
+								<div class="col-md-4">
+									<textarea name="remarks"  placeholder="remarks" class="form-control createAct">{{.Tconf.lar_remarks}}</textarea>
+								</div>
+
+						</div>
+																		  
+				
+				</div>
+				 <!-- end modal data here -->
+			<!-- </div> -->
+			<div class="errorDv">
+			</div>
+			<div class="modal-footer">
+				<button type="button" id="btnGoBack" name="btnGoBack" class="btn default" data-dismiss="modal">Go Back</button>
+				<button type="submit" id="btnSubmit" name="btnSubmit" class="btn blue">Update Changes </button>
+				
+			</div>
+
+	<!--  -->
+			<!-- /.modal-content -->
+	</form>
+</div>
+	<!-- /.modal-content -->
+</div>
+<!-- /.modal-dialog -->					
+		
+
+
+<script type="text/javascript">
+ 	
+
+ 	
+	var rights = '{{.Tconf.rights}}' 
+
+
+	function DoeditTrasDet(a){
+		if(!$('#transdetnew')[0].checkValidity()){
+					$('.val_err').show();
+				 	return false;
+				}
+				$("#btnGoBack").attr("disabled", true);
+				$("#btnSubmit").attr("disabled", true);
+
+			
+    			$('#lrdtl').prop('disabled', false);
+				
+				$.post("/transaction/loan_consolidation/details/DEditHandler",$( "#transdetnew" ).serialize()
+		        ,
+		        function(data,status){
+		        	alert(data[1])
+		            if(data[1]=='Success'){
+		            	$(".createAct").val("")
+			            $('#basic').modal('hide')
+		                PageRefresher('1')
+
+			        }	
+					else{
+						$("#btnGoBack").attr("disabled", false);
+						$("#btnSubmit").attr("disabled", false);
+					}
+				
+		        });
+	 			return false
+			}
+	
+		
+			function PageRefresher(lev){
+            
+			var fromlr = "{{.Tconf.fromlr}}"
+			if (fromlr != "1") {
+			
+		  $.get("/transaction/loan_consolidation/details?rights={{.Tconf.rights}}&hdr_id={{.Tconf.hdr_id}}&member={{.Tconf.member}}",
+			  function(data,status){
+			  $("#ContentID").html(data);
+			  //$('#basic').modal('hide')
+			  }
+		  );
+	  } else {
+		   
+		   $.get("/transaction/loan_consolidation/details?rights={{.Tconf.rights}}&hdr_id={{.Tconf.hdr_id}}&member={{.Tconf.member}}&fromlr=1&lrid={{.Tconf.lrid}}",
+			  function(data,status){
+			  $("#ContentID").html(data);
+			  //$('#basic').modal('hide')
+			  }
+		  );
+
+		  
+
+		  }
+  
+  }
+	
+
+	$('#basic').unbind('hidden.bs.modal');
+
+	$("#lrdtl").change(function () {
+		var amt = $("[name=lrdtl]").select2().find(":selected").data("amt")
+		$("[name=amount]").val(amt).trigger("change");
+
+	});
+	
+
+	$('#lrdtl').prop('disabled', true);
+
+	
+
+
+	
+
+</script>

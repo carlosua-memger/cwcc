@@ -1,0 +1,320 @@
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Raw Reports
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<!-- <form id="CreateTransaction" class="form-horizontal" target ="_blank" action="/inventory/custom_report/do_print" method="Get"> -->
+				<form id="CreateTransaction" class="form-horizontal">
+					<div class="form-body">
+							
+						<div id="warnerr" class="Metronic-alerts alert alert-warning fade in" hidden>
+							date range greater than 16 days	
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Report Name:<span class="required" aria-required="true">
+								* </span></label>
+								<div class="col-md-4">
+									<select name="reportname" class="reportname form-control input-xlarge dr-js" required>
+										<option value="0">Select</option>	
+										 {{range  $key1, $val1stloop := .Report_list}}
+										<option  value="{{index $val1stloop  3}}">{{index $val1stloop  1}}</option>
+										{{end}}
+									</select>
+
+
+								</div>
+						</div>
+
+						<div class="form-group c_datefrom">
+							<label class="col-md-3 control-label">Date From :<span class="required" aria-required="true">
+								* </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="datefrom" id="datefrom"class="form-control date-picker" placeholder="Date from" maxlength="50" Required>
+							</div>
+						</div>
+						<div class="form-group c_dateto">
+							<label class="col-md-3 control-label">Date To :<span class="required" aria-required="true">
+								* </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="dateto" id="dateto"class="form-control date-picker" placeholder="Date to:" maxlength="50" Required>
+							</div>
+						</div>
+
+						<div class="form-group c_location">
+							<label class="col-md-3 control-label">Location</label>
+								<div class="col-md-4">
+								<select name="location" id="location" class="form-control" required>
+								<option value="0">All</option>	 
+								{{range $locationlist := .Location_Get }}
+								<option  value="{{$locationlist.Id}}">{{$locationlist.Name}}</option>
+								{{end}}
+									</select>
+							</div>
+						</div>
+						<div class="form-group c_supplier">
+							<label class="col-md-3 control-label">Supplier</label>
+								<div class="col-md-4">
+								<select name="supplier" id="supplier" class="form-control input-xlarge dr-js clsAssign" required>
+								<option value="0">All</option>	 
+								{{range $supplierlist := .Supplier }}
+								<option  value="{{$supplierlist.Id}}">{{$supplierlist.Name}}</option>
+								{{end}}
+									</select>
+							</div>
+						</div>
+						<div class="form-group c_trantype">
+							<label class="col-md-3 control-label">Transaction Type</label>
+								<div class="col-md-4">
+								<select name="trantype" id="trantype" class="form-control input-xlarge dr-js clsAssign" required>
+								<option value=" ">All</option>	 
+								<option  value="CusPay">CusPay</option>
+								<option  value="AdjEnt">AdjEnt</option>
+								<option  value="CusRep">CusRep</option>
+								<option  value="CusRet">CusRet</option>
+								<option  value="CusSal">CusSal</option>
+								<option  value="IntIss">IntIss</option>
+								<option  value="IntRet">IntRet</option>
+								<option  value="LocRec">LocRec</option>
+								<option  value="LocTra">LocTra</option>
+								<option  value="SupRec">SupRec</option>
+								<option  value="SupRep">SupRep</option>
+								<option  value="SupRet">SupRet</option>
+
+									</select>
+							</div>
+						</div>
+						<div class="form-group c_transaction">
+							<label class="col-md-3 control-label">Transaction ID</label>
+							<div class="col-md-4">
+								<input type="number" name="trn_id" id="trn_id"class="form-control" value="0" placeholder="Transaction ID:" maxlength="10">
+							</div>
+						</div>
+
+						<div class="form-group c_soldby">
+							<label class="col-md-3 control-label">Sold by</label>
+							<div class="col-md-4">
+								<input type="text" name="soldby" class="form-control soldby"  placeholder="Sold by">
+							</div>
+						</div>
+
+						<div class="form-group c_customer">
+							<label class="col-md-3 control-label">Customer</label>
+								<div class="col-md-4">
+								<select name="customer" id="customer" class="form-control input-xlarge dr-js clsAssign" required>
+								<option value="0">All</option>	 
+								{{range $CustomerList := .CustomerList }}
+								<option  value="{{$CustomerList.Id}}">{{$CustomerList.Name}}</option>
+								{{end}}
+									</select>
+							</div>
+						</div>
+
+						<div class="form-group c_transferto">
+							<label class="col-md-3 control-label">Transfer To</label>
+								<div class="col-md-4">
+								<select name="transferto" id="transferto" class="form-control input-xlarge dr-js clsAssign" required>
+								<option value="0">All</option>	 
+								{{range $locationlist := .Location_Get }}
+								<option  value="{{$locationlist.Id}}">{{$locationlist.Name}}</option>
+								{{end}}
+									</select>
+							</div>
+						</div>
+
+						<div class="form-group c_transferfrom">
+							<label class="col-md-3 control-label">Transfer From</label>
+								<div class="col-md-4">
+								<select name="transferfrom" id="transferfrom" class="form-control input-xlarge dr-js clsAssign" required>
+								<option value="0">All</option>	 
+								{{range $locationlist := .Location_Get }}
+								<option  value="{{$locationlist.Id}}">{{$locationlist.Name}}</option>
+								{{end}}
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Export type:</label>
+							<div class="col-md-4">
+								<select name="export_type" class="form-control input-large dr-js"> 
+								<option value="print">Print</option>
+								<option value="excel">Excel</option>
+								<option value="word">Word</option>
+								<option value="pdf">PDF</option>	
+								</select>
+							</div>
+						</div>
+
+						<div class="form-actions fluid">
+							<div class="col-md-offset-3 col-md-9">
+								<a class="btn btn-circle blue"  onclick="javascript:Do_print();">Print</a>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">	
+		$( "#transdetnew" ).serialize()
+		$('.date-picker').datepicker({"setDate": new Date() ,  autoclose: true });
+		$("[name=location]").select2();
+			
+			function Do_print() {
+				console.log($( "#CreateTransaction" ).serialize());
+				console.log("wetwew")
+				console.log("the value")
+				console.log($("[name=location]").val());
+				var url = "/inventory/custom_report/do_print?reportname="+$("[name=reportname]").val()+"&datefrom="+$("[name=datefrom]").val() +"&dateto="+ $("[name=dateto]").val() +"&location="+$("[name=location]").val()+"&supplier="+ $("[name=supplier]").val()+"&trantype="+ $("[name=trantype]").val()+"&trandate="+ $("[name=trandate]").val()+"&trn_id="+$("[name=trn_id]").val()+"&soldby="+$("[name=soldby]").val()+"&customer="+$("[name=customer]").val()+"&transferto="+$("[name=transferto]").val()+"&transferfrom="+$("[name=transferfrom]").val()
+				///alert(url)
+				window.open(url, '_blank');
+				return false;
+			}	
+			$('.c_datefrom').hide()
+			$('.c_dateto').hide()
+			$('.c_location').hide()
+			$('.c_supplier').hide()
+			$('.c_trantype').hide()
+
+			$('.c_transaction').hide()
+			$('.c_soldby').hide()
+			$('.c_customer').hide()
+			$('.c_transferto').hide()
+			$('.c_transferfrom').hide()
+
+			$(".dr-js").select2();
+			
+		//SIS_SupRec_Register 1, @@id, @@org, @@location, '@@from','@@to',@@supplier
+			$('.reportname').change(function(){
+			$('.c_datefrom').hide()
+			$('.c_dateto').hide()
+			$('.c_location').hide()
+			$('.c_supplier').hide()
+			$('.c_transaction').hide()
+
+			$('.c_soldby').hide()
+			$('.c_customer').hide()
+			$('.c_transferto').hide()
+			$('.c_transferfrom').hide()
+
+			
+
+        	if(stringContains($(this).val(),"@@location")) {
+        		$('.c_location').show();	         
+            }else{
+            	$('.c_location').hide();	
+            }
+        	if(stringContains($(this).val(),"@@datefrom")) {
+        		$('.c_datefrom').show();	         
+            }else{
+            	$('.c_datefrom').hide();	
+            }
+            if(stringContains($(this).val(),"@@dateto")) {
+        		$('.c_dateto').show();	         
+            }else{
+            	$('.c_dateto').hide();	
+            }
+            if(stringContains($(this).val(),"@@supplier")) {
+        		$('.c_supplier').show();	         
+            }else{
+            	$('.c_supplier').hide();	
+            }
+            if(stringContains($(this).val(),"@@trantype")) {
+        		$('.c_trantype').show();	         
+            }else{
+            	$('.c_trantype').hide();	
+            }
+            if(stringContains($(this).val(),"@@id")) {
+        		$('.c_transaction').show();	         
+            }else{
+            	$('.c_transaction').hide();	
+            }
+            if(stringContains($(this).val(),"@@sold_by")) {
+        		$('.c_soldby').show();	         
+            }else{
+            	$('.c_soldby').hide();	
+            }
+            if(stringContains($(this).val(),"@@customer")) {
+        		$('.c_customer').show();	         
+            }else{
+            	$('.c_customer').hide();	
+            }
+            if(stringContains($(this).val(),"@@transferto")) {
+        		$('.c_transferto').show();	         
+            }else{
+            	$('.c_transferto').hide();	
+            }
+            if(stringContains($(this).val(),"@@transferfr")) {
+        		$('.c_transferfrom').show();	         
+            }else{
+            	$('.c_transferfrom').hide();	
+            }
+            
+        });
+		
+
+		function repoFormatResult( repo ) {
+		    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+		    return markup;
+		}
+
+		function repoFormatSelection( repo ) {
+	        return repo.full_name;
+	    }
+
+
+		$( ".soldby" ).select2({
+		    placeholder: "Search for members",
+		    minimumInputLength: 2,
+		    multiple: false,
+		    allowClear: true,
+		    ajax: {
+		        url: "/Ajax/GetMembers?isbaseonassignid=1&isbaseOrg=1",
+		        dataType: "json",
+		        quietMillis: 250,
+		        data: function( term, page ) {
+		            return {
+		                // search term
+		                q: term
+		            };
+		        },
+		        results: function( data, page ) {
+		                // parse the results into the format expected by Select2.
+		                // since we are using custom formatting functions we do not need to alter the remote JSON data
+		                return { results: data.items };
+		        }
+		        
+		    },
+		    
+		    formatResult: repoFormatResult,
+		    formatSelection: repoFormatSelection,
+		    // apply css that makes the dropdown taller
+		    dropdownCssClass: "bigdrop",
+		    // we do not want to escape markup since we are displaying html in results
+		    escapeMarkup: function( m ) {
+		        return m;
+		    }
+		});	
+
+</script>

@@ -1,0 +1,218 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>{{.graph_title}}</title>
+
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <style type="text/css">
+/*#container {
+    height: 400px; 
+    min-width: 310px; 
+    max-width: 800px;
+    margin: 0 auto;
+}*/
+        td {
+            font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+            font-size: 12px;
+                width: 60%;
+        }
+        </style>
+        <script type="text/javascript">
+$(function () {
+    $('#container').highcharts({
+        chart: {
+            type: 'column'
+           /* options3d: {
+                enabled: true,
+                alpha: 10,
+                beta: 25,
+                depth: 70
+            }*/
+        },
+        title: {
+            text: '{{.graph_title}}'
+        },
+        subtitle: {
+            text: 'Sales volume vs. balance per location<br><div style="font-size: 8px;">{{.startdate}} - {{.enddate}}</div>'
+        },
+        plotOptions: {
+            column: {
+                depth: 25
+            }
+        },
+        xAxis: {
+            type: 'category',
+            labels: {
+                rotation: -60,
+                style: {
+                    fontSize: '14px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            }
+        },
+        yAxis: {
+            title: {
+                text: null
+            }
+        },
+        series: [{
+            name: 'Total Sales',
+            data: {{.graph1_data}}
+            
+            },
+            {
+            name: 'Ending Balance',
+            data: {{.graph1_data2}}
+            
+        }
+        ]
+    });
+});
+  
+// graph 2
+
+
+$(function () {
+    $('#container2').highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: 'Sales trend vs. volume per date<br><div style="font-size: 8px;">{{.startdate}} - {{.enddate}}</div>'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e. %b',
+                year: '%b'
+            },
+            title: {
+                text: 'Date'
+            },
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            min: 0
+        },
+        tooltip: {
+            headerFormat: '<b>{series.name}</b><br>',
+            pointFormat: '{point.x:%e. %b}: {point.y:.0f}'
+        },
+
+        plotOptions: {
+            spline: {
+                marker: {
+                    enabled: true
+                }
+            }
+        },
+
+        series: [{
+            name: ' Total Sales',
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: {{.graph2_data}}
+        },  
+
+            {
+            name: 'Ending Balance',
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: {{.graph2_data2}}
+        },  
+
+
+        ]
+    });
+});
+
+//end graph 2
+
+
+
+        </script>
+    </head>
+    <body>
+
+
+<script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/Highcharts-4.2.6/js/highcharts.js" defer="defer" ></script>
+<script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/Highcharts-4.2.6/js/highcharts-3d.js" defer="defer" ></script>
+<script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/Highcharts-4.2.6/js/modules/exporting.js" defer="defer" ></script>
+
+
+<center>
+<table  style="display: inline-block; width: 40%;">
+    <tr>
+        <td>Item :</td>
+        <td>{{.item_name}}</td>
+    </tr>
+     <tr>
+        <td>Supplier Name :</td>
+        <td>{{.supplier_name}}</td>
+    </tr>
+     <tr>
+        <td>Beginning Volume :</td>
+        <td>{{.beg_vol_isnum}}</td>
+    </tr>
+     <tr>
+        <td>Supplier Reciept Volume :</td>
+        <td>{{.suprec_vol_isnum}}</td>
+    </tr>
+     <tr>
+        <td>Customer Sale Volume :</td>
+        <td>{{.cussal_vol_isnum}}</td>
+    </tr>
+    <tr>
+        <td>Adjustment Entry Volume :</td>
+        <td>{{.adjent_vol_isnum}}</td>
+    </tr>
+    <tr>
+        <td>Ending Volume :</td>
+        <td>{{.end_vol_isnum}}</td>
+    </tr>
+    <tr>
+        <td>Supplier Reciept Last Trans date :</td>
+        <td>{{.suprec_lasttrandate}}</td>
+    </tr>
+    <tr>
+        <td>Supplier Reciept Count :</td>
+        <td>{{.suprec_count_isnum}}</td>
+    </tr>
+    <tr>
+        <td>Customer Sale Last Trans Date :</td>
+        <td>{{.cussal_lasttrandate}}</td>
+    </tr>
+    <tr>
+        <td>Customer Sale Count :</td>
+        <td>{{.cussal_count_isnum}}</td>
+    </tr>
+    <tr>
+        <td>Adjustment Entry Last Trans Date :</td>
+        <td>{{.adjent_lasttrandate}}</td>
+    </tr>
+    <tr>
+        <td>Adjustment Entry Count :</td>
+        <td>{{.adjent_count_isnum}}</td>
+    </tr>
+    
+</table>
+
+<img src="{{.item_image}}">
+</center>
+<hr>
+<div id="container" ></div>
+
+
+
+<div id="container2" ></div>
+
+    </body>
+</html>

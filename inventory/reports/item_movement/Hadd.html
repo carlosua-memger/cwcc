@@ -1,0 +1,283 @@
+
+{{$Org_id := .Tconf.Org_id}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.js"></script>
+
+<div class="portlet box grey-cascade" id="dpanel">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="fa fa-globe"></i>Item Movement Report
+        </div>
+        <div class="tools">
+            <a href="javascript:;" class="collapse">
+            </a>
+            <a href="#portlet-config" data-toggle="modal" class="config">
+            </a>
+            <a href="javascript:;" class="reload">
+            </a>
+            <a href="javascript:;" class="remove">
+            </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        
+
+        <!-- content here -->
+        <div class="row">
+            <div class="col-md-6">    
+                <div class="col-md-6">
+                    <label class="control-label">Item</label>
+                    <div>
+                        <input type="text" name="item" placeholder="Item" id="item"  class="form-control">   
+                    </div>
+
+
+                </div>
+                 <div class="col-md-1">
+                -OR-
+                </div>
+                <div class="col-md-5">
+                    <label class="control-label">Item Name (product filter)</label>
+                    <div>
+                        <input type="text" name="key" placeholder="key word" id="key" class="form-control" >
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+       
+        <div class="row">
+    
+            <div class="col-md-6">
+                 <hr>
+                <label class="control-label">Date:</label>
+                <div>
+                    <div id="reportrange" class="form-control pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                        <i class="glyphicon glyphicon-calendar fa fa-calendar "></i>&nbsp;
+                        <span></span> <b class="caret"></b>
+                    </div>
+                </div>
+
+                <label class="control-label">Location</label>
+                <div>
+                    <select name="location" class="form-control" > 
+                    {{range  $key ,$val := .Arr_location}}
+                        <option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+                    {{end}}
+                    </select>
+                </div>    
+                <hr>
+                 <label class="control-label">Note: Please select atleast one</label>
+                <div class="checkbox">
+                     <label>
+                        <input type="checkbox" value="cussal" name="tranchkbox" >
+                        Customer Sales
+                    </label>
+                </div>
+                
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="cusret" name="tranchkbox">
+                        Customer Return
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="cusrep" name="tranchkbox">
+                        Customer Replacement
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="loctra" name="tranchkbox">
+                        Location Transfer
+                    </label>
+                </div>    
+                
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="locrec" name="tranchkbox">
+                        Location Receipt
+                    </label>
+                </div>
+
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="suprec" name="tranchkbox">
+                        Supplier Receipt
+                    </label>
+                </div>
+                
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="supret" name="tranchkbox">
+                        Supplier Return
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="suprep" name="tranchkbox">
+                        Supplier Replacement
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="adjent" name="tranchkbox">
+                        Adjustment Entry
+                    </label>
+                </div>
+
+            
+                <hr>    
+                <button type="button" class="btn btn-success" onclick="javascript:gen_det();" >Generate Detail</button>
+                <button type="button" class="btn btn-success" onclick="javascript:gen_sum();" >Generate Summary</button>
+                <button type="button" class="btn btn-success" onclick="javascript:gen_top();" >Generate Top Movers</button>
+                <button type="button" class="btn btn-success" onclick="javascript:gen_least();" >Generate Least Movers</button>
+            
+            </div>
+
+           
+     
+        </div>
+
+
+
+        <!-- end content here -->
+
+    </div>
+
+
+
+</div>
+
+ 
+
+ <script>
+
+    var currentDate = new Date();  
+    $(".date-picker").datepicker("setDate",currentDate);
+
+    function repoFormatResult( repo ) {
+        var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div></div>";
+
+        return markup;
+    }
+
+    function repoFormatSelection( repo ) {
+        return repo.full_name;
+    }
+            
+    $( "#item" ).select2({
+        placeholder: "Search for Items",
+        minimumInputLength: 2,
+        multiple: false,
+        allowClear: true,
+        ajax: {
+            url: "/inventory/adjustment_entry/details/Ajax/Ajax_getItem",
+            dataType: "json",
+            quietMillis: 250,
+            data: function( term, page ) {
+                return {
+                    // search term
+                    q: term
+                };
+            },
+            results: function( data, page ) {
+                    // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to alter the remote JSON data
+                    return { results: data.items };
+            }
+            
+        },
+        
+        formatResult: repoFormatResult,
+        formatSelection: repoFormatSelection,
+        // apply css that makes the dropdown taller
+        dropdownCssClass: "bigdrop",
+        // we do not want to escape markup since we are displaying html in results
+        escapeMarkup: function( m ) {
+            return m;
+        }
+    });
+
+
+</script>
+
+
+
+
+<script type="text/javascript">
+                $(function() {
+                   
+                    
+                    
+                    //var start = moment().subtract(29, 'days');
+                    //var end = moment();
+
+                    var start = moment().subtract(1, 'month').startOf('month')
+                    var end = moment().subtract(1, 'month').endOf('month')
+                    
+
+                    function cb(start, end) {
+                        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                    }
+
+                    $('#reportrange').daterangepicker({
+                        startDate: start,
+                        endDate: end,
+                        ranges: {
+                           'Today': [moment(), moment()],
+                           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                           'This Month': [moment().startOf('month'), moment().endOf('month')],
+                           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                        }
+                    }, cb);
+
+                    cb(start, end);
+                    
+                });
+
+                function gen_det() {
+                    
+                    $('#limitAlert').hide()
+                    var strt_date = $('#reportrange').data('daterangepicker').startDate.format('YYYY-MM-DD ');
+                    var end_date  = $('#reportrange').data('daterangepicker').endDate.format('YYYY-MM-DD ');
+                    var df =$('#reportrange').data('daterangepicker').endDate - $('#reportrange').data('daterangepicker').startDate
+                    if(df> 31708799999){ //limit 1yr
+                    //    $('#limitAlert').show()
+                        return false;
+                        
+                    }
+                    console.log(df)
+                    var itemid = $("#item").select2("val"); 
+                    var itemkey = document.getElementById("key").value;
+                    var location = $('[name=location]').val()
+                    console.log(strt_date)
+                    console.log(end_date)
+
+                    /*var aj_url ="&item_id=" + itemid + "&datefrom="+strt_date+"&dateto="+end_date
+                    console.log(aj_url)*/
+
+                     
+            var favorite = [];
+            
+            $.each($("input[name='tranchkbox']:checked"), function(){            
+                favorite.push($(this).val());
+            });
+            var tranchkjoin = "";
+            tranchkjoin = tranchkjoin + favorite.join(" ");
+ 
+                    
+                  var url_to_open = "/inventory/reports/item_movement/viewer?item_id=" + itemid + "&datefrom="+strt_date+"&dateto="+end_date+"&item_key="+itemkey+"&location="+location+"&tranchkbox="+tranchkjoin
+                    console.log(url_to_open)    
+                    var myWindow = window.open(url_to_open);
+                    return false;
+                }
+
+                </script>
+
+
+
+
+

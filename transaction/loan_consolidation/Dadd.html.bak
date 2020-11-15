@@ -1,0 +1,174 @@
+<!-- <Form> -->
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+		<form id="transdetnew" method="Post" onsubmit="javascript: return DocreateTrasDet()">
+			<input type="hidden" name="hdr_id" value="{{.Tconf.hdr_id}}">	
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">Add Loan Consolidation</h4>
+				</div>
+					<!-- <div class="modal-body">
+				 -->	 <!-- modal data here -->
+
+					<div class="form-horizontal">
+							<div class="form-group">
+									<label class="col-md-3 control-label">Loan</label>
+									<div class="col-md-6">
+										<select name="lrdtl" id="lrdtl" class="form-control" > 
+												<option value=0 data-amt=0>Select</option>
+											 {{range  $key ,$val := .Ls_loans}}
+												<option value="{{ index  $val 0}}" data-amt="{{ index  $val 2}}">{{ index  $val 1}}</option>
+											{{end}}
+										</select>
+									</div>
+								</div>
+				
+									
+						
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Amount</label>
+									<div class="col-md-4">
+										<input type="Amount" name="amount" placeholder="amount"  maxlength="15" class="form-control createAct num_f" required onkeypress='return numbersOnly(this,event,true,false);'>
+									</div>
+							</div>		
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Remarks</label>
+									<div class="col-md-4">
+										<textarea name="remarks"  placeholder="remarks" class="form-control createAct"></textarea>
+									</div>
+
+							</div>
+										  									
+					
+					</div>
+					 <!-- end modal data here -->
+				<!-- </div> -->
+				<div class="errorDv">
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="btnGoBack" name="btnGoBack" class="btn default" data-dismiss="modal">Go Back</button>
+					<button type="submit" id="btnSubmit" name="btnSubmit" class="btn blue">Save </button>
+					<button type="button" id="btnSubmitAdd" name="btnSubmitAdd" class="btn blue btn_sa" onclick="javascript:DocreateTrasDet('AS');">Save & Add new</button>
+				</div>
+
+		<!--  -->
+				<!-- /.modal-content -->
+		</form>
+	</div>
+		<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->					
+			
+
+
+<script type="text/javascript">
+ 	
+	 $("[name=lrdtl]").select2();
+ 	
+	var rights = '{{.Tconf.rights}}' 
+	
+			function DocreateTrasDet(a){
+				
+
+
+				if(!$('#transdetnew')[0].checkValidity()){
+					$('.val_err').show();
+				 	return false;
+				}
+				$("#btnGoBack").attr("disabled", true);
+				$("#btnSubmit").attr("disabled", true);
+				$("#btnSubmitAdd").attr("disabled", true);
+				
+
+				$.post("/transaction/loan_consolidation/details/DaddHandler",$( "#transdetnew" ).serialize()
+		        ,
+		        function(data,status){
+		        	alert(data[1])
+		            if(data[1]=='Success'){
+		            	      	
+		            	
+		            	if(a!="AS"){
+			            	
+			                   //  $("#ContentID").html(data);
+			                     $('#basic').modal('hide')
+								 PageRefresher("1")
+			                    }
+			               
+			            else{
+			            	$( "#lrdtl" ).select2('open')
+			            	$('[name=amount]').val("00.00")
+ 							
+ 							$('[name=remarks]').val("")
+			            }	
+		            }
+					else{
+						$("#btnGoBack").attr("disabled", false);
+						$("#btnSubmit").attr("disabled", false);
+						$("#btnSubmitAdd").attr("disabled", false);
+					}
+		        });
+	 			return false
+			}
+	
+	function repoFormatResult( repo ) {
+	    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div></div>";
+
+	    return markup;
+	}
+	function repoFormatSelection( repo ) {
+        // $("input[name=unit_cost]").val(repo.price);
+        return repo.full_name;
+    }
+
+
+	function PageRefresher(lev){
+            
+			var fromlr = "{{.Tconf.fromlr}}"
+			if (fromlr != "1") {
+			
+		  $.get("/transaction/loan_consolidation/details?rights={{.Tconf.rights}}&hdr_id={{.Tconf.hdr_id}}&member={{.Tconf.member}}",
+			  function(data,status){
+			  $("#ContentID").html(data);
+			  //$('#basic').modal('hide')
+			  }
+		  );
+	  } else {
+		   
+		   $.get("/transaction/loan_consolidation/details?rights={{.Tconf.rights}}&hdr_id={{.Tconf.hdr_id}}&member={{.Tconf.member}}&fromlr=1&lrid={{.Tconf.lrid}}",
+			  function(data,status){
+			  $("#ContentID").html(data);
+			  //$('#basic').modal('hide')
+			  }
+		  );
+
+		  
+
+		  }
+  
+  }
+
+	$('.btn_sa').on('keydown', function(e) {
+	    if (e.which == 13) {
+	        e.preventDefault();
+	        DocreateTrasDet('AS')
+	    }
+	});
+	$('#basic').unbind('hidden.bs.modal');
+	
+
+	var ret_msg= ""
+
+	$("#lrdtl").change(function () {
+		var amt = $("[name=lrdtl]").select2().find(":selected").data("amt")
+		$("[name=amount]").val(amt).trigger("change");
+
+	});
+			
+
+						
+	
+</script>

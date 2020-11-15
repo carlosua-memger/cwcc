@@ -1,0 +1,306 @@
+{{$Org_id := .Conf.org_id}}
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Edit Bank Information Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+
+
+
+
+
+<div class="row">
+<div class="col-md-6"> 
+
+<h3 class="form-section">Bank Information ID = {{.Conf.bank_id}}</h3>
+
+
+<form id="CreateTransaction" class="form-horizontal"  method="Post" onsubmit="return DoEditTransaction()">
+	<div class="form-horizontal">
+
+				<div class="form-group">
+						<div class="form-group">
+							<label class="col-md-3 control-label">Bank Code<span class="required" aria-required="true">*</span>
+							</label>
+							<div class="col-md-8">
+								<input type="text" name="name"  value="{{.Conf.bank_name}}" placeholder="Bank Code" class="form-control" maxlength="100" required>
+											<!--  <span class="help-block with-errors">
+											A block of help text. </span> --> 
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Bank Name
+							</label>
+							<div class="col-md-8">
+								<input type="text" name="lname" value="{{.Conf.bank_longname}}" placeholder="Bank Name" class="form-control" maxlength="100">
+											<!--  <span class="help-block with-errors">
+											A block of help text. </span> --> 
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Remarks</label>
+							<div class="col-md-8">
+								<textarea name = "remarks" class="form-control createAct">{{.Conf.item_remarks}}</textarea>
+							</div>
+						</div>
+
+	</div>
+
+
+	<div class="form-actions fluid">
+		<div class="col-md-offset-3 col-md-9">
+			<button type="submit"  class="btn blue submit_btn">Update</button>
+			<button class="btn default" onclick="javascript:nav_back('/inventory/banks?rights={{.Conf.rights}}')" type="button">Go Back</button>
+		</div>
+	</div>
+</form>
+	
+</div>	
+
+
+
+					
+<div class="col-md-6">
+	
+			<form id="item_tagsdata" class="form-horizontal"  method="Post" onsubmit="return Dobatchsave()">
+				<input type="hidden" name="item_id" class="c_item_id" value="{{.Conf.item_id}}">
+				<table class="table table-bordered table-striped tbl_dtls" width="50%"  >
+					<tbody>
+					{{range  $key,$val := .Arr_itemtag}}
+						<tr>
+							<td style="width:15%">
+								 {{ index  $val 1}}
+							</td>
+							<td style="width:50%">
+								{{$datatype  := index  $val 3 }}
+								{{if eq $datatype `String` }}
+									<input type="text" class="value_input" name="value_input" placeholder="value" id="autocomplete_{{ index  $val 0}}" value="{{ index  $val 4}}">
+								{{end}}
+								{{if eq $datatype `Number` }}
+									<input type="number" name="value_input" class="value_input" placeholder="value" value="{{ index  $val 4}}">
+								{{end}}
+								
+								
+								<input type="hidden" name ="tag" value="{{ index  $val 0}}">
+								<!-- <a onclick="javascript:func_sync( 0 ,{{ index  $val 0}},this,event );"> save</a> -->
+							</td>
+						
+						</tr>
+					
+					<script type="text/javascript">
+					{{$tagid := index  $val 0}}
+					
+
+					$('#autocomplete_{{$tagid}}').autocomplete({
+					    source: function (request, response) {
+					        jQuery.get("/inventory/auto_complete", {
+					            query: request.term ,
+					            tag: '{{$tagid}}' ,
+					            org: '{{$Org_id}}'
+					        }, function (data) {
+					            var arr_data =[];
+					           	if( data!=null){
+						            for (var i = 0; i < data.length; i++) {
+			                        	arr_data.push(data[i][0]);
+			                        }
+			                    }    
+					            response(arr_data);
+					        });
+					    },
+					    minLength: 3
+					});
+					
+					</script>
+					
+					{{end}}
+					</tbody>
+				</table>
+
+<!-- 
+				<div class="form-actions fluid">
+					<div class="col-md-offset-3 col-md-9">
+						<button type="submit" class="btn blue">Update</button>
+						<button class="btn default" onclick="javascript:Navigate('/inventory/location_items?rights={{.Rights}}')" type="button">Cancel</button>
+					</div>
+			</div>	 -->
+		
+
+
+		</form>
+
+</div>
+
+
+</div>
+
+	
+
+</div>
+
+
+
+
+
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	
+</div>
+		
+			<script type="text/javascript">
+			$('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+
+
+            var d_date = $("[name=transdate]").val();
+
+				if(d_date=="NULL"){
+					var currentDate = new Date(); 
+					$('.err_help').hide();
+					$(".date-picker").datepicker("setDate",currentDate);
+				}
+				if(d_date==""){
+					var currentDate = new Date(); 
+					$('.err_help').hide();
+					$(".date-picker").datepicker("setDate",currentDate);
+				}
+
+
+			$("[name=location]").select2();
+
+            function DoEditTransaction(){
+				$.get("/json_func",
+                    {
+                   	qdata : "SIS_FinIns_Save 'Edit', '{{.Conf.username}}', {{.Conf.bank_id}} , {{.Conf.bank_org}}, '"+$('[name=name]').val()+"', '"+$('[name=lname]').val()+"','"+$('[name=remarks]').val()+"'"
+
+
+                    }
+                    ,
+                    function(data,status){
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									//alert(ret_msg)
+									//Do_save_img(data[i][0])
+
+									$('#basic').modal('hide')
+					            	//dtbl()
+					            	console.log("success here")
+					            	Dobatchsave()
+									//return false;
+			                    }else{
+			                    	console.log("fail")
+			                    	alert(ret_msg)
+			                    }
+		                    }
+	                    }
+                    });	
+					return false;
+			}
+
+			
+
+			
+
+			function func_sync(item , tag , t,event){
+				//console.log($(event.target).closest("tr").find('.value_input').val())
+
+				var item_id =  $(".c_item_id").val();
+				var text_val =  $(event.target).closest("tr").find('.value_input').val();
+				var text_val_remarks =  $(event.target).closest("tr").find('.value_remarks').val();
+
+				$.get("/json_func",
+                    {
+                       qdata : "SIS_itemtags_save 'Update', '{{.Conf.username}}', {{.Conf.org_id}}, "+item_id+", "+tag+", '"+text_val+"', '"+text_val_remarks+"'"
+					}
+                    ,
+                    function(data,status){
+                    	console.log(data)
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									console.log(data[i][0])
+									alert(ret_msg)
+									
+								//return false;
+			                    }else{
+			                    	alert(ret_msg)
+			                    }
+		                         
+		                    }
+	                    }
+                    });
+
+			}
+			
+			function Dobatchsave(){
+				$.post("/inventory/banks/HaddTagHandler",
+                    $("#item_tagsdata").serialize()
+					,
+                    function(data,status){
+                    	var errcount = 0 
+                    	if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        
+		                        if (data[i][0]=="HasError"){
+									errcount = errcount + 1
+								//return false;
+			                    }
+			                }
+						}
+						if (errcount>0){
+	                    	alert(errcount)
+	                    	alert("Opsss something went wrong")
+                        }else{
+                        	alert("Save Success")
+                        	//Navigate('/inventory/banks?rights={{.Rights}}')
+                        	nav_back('/inventory/banks?rights={{.Conf.rights}}');
+                        } 
+                        
+                    });
+
+				return false;
+
+
+			}
+			
+	
+	
+
+
+</script>
+	

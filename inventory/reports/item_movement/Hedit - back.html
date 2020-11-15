@@ -1,0 +1,116 @@
+
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+				<!-- BEGIN FORM-->
+		<form id="CreateTransaction" class="form-horizontal"  method="Post" onsubmit="return DoEditTransaction()">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h4 class="modal-title">Item Class Edit</h4>
+			</div>
+
+			<div class="form-horizontal">
+				<div class="form-group">
+					<label class="col-md-3 control-label">Item Class</label>
+					<div class="col-md-4">
+						<select name="item_class" class="form-control" > 
+						 	{{$item_itemclassID  := .Conf.item_itemclass }}
+						 	{{.Conf}}
+						 	{{range  $Ls_itemClass,$val := .Ls_itemClass}}
+							{{ $loop_id  := index  $val 0 }}
+							{{if eq $item_itemclassID $loop_id }}	
+						 		<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+						 	{{else}}	
+						 		<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+							{{end}}
+							{{end}}
+
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label">Supplier</label>
+					<div class="col-md-4">
+						<select name="supplier" class="form-control" > 
+						 	{{$item_itemclassID  := .Conf.item_supplier }}
+						 	{{range  $Ls_supplier,$val := .Ls_supplier}}
+							{{ $loop_id  := index  $val 0 }}
+							{{if eq $item_itemclassID $loop_id }}	
+						 		<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+						 	{{else}}	
+						 		<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+							{{end}}
+							{{end}}
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Name<span class="required" aria-required="true">*</span>
+					</label>
+					<div class="col-md-4">
+						<input type="text" name="name" value="{{.Conf.item_name}}" placeholder="Name" class="form-control" maxlength="50" Required>
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+					</div>
+				</div>
+									
+				<div class="form-group">
+					<label class="col-md-3 control-label">Remarks</label>
+					<div class="col-md-4">
+						
+					<!-- 	<input type="text" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct"> -->
+						<textarea name = "remarks"  class="form-control createAct">{{.Conf.item_remarks}}</textarea>
+					</div>
+				</div>
+				
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn default" data-dismiss="modal">Close</button>
+				<button type="submit" class="btn blue">Submit</button>
+				
+			</div>
+		</form>
+	</div>
+</div>
+
+			<script type="text/javascript">
+			$('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+            $('input[name=item_class]').focus()
+			$("[name=item_class] , [name=supplier]").select2();
+
+            function DoEditTransaction(){
+				$.get("/json_func",
+                    {
+                    	qdata : "SIS_Item_Save 'Edit', '{{.Conf.username}}', {{.Conf.item_id}} , {{.Conf.org_id}}, '"+$('[name=name]').val()+"', "+$('[name=item_class]').val()+", "+$('[name=supplier]').val()+",'"+$('[name=remarks]').val()+"'"
+
+                    }
+                    ,
+                    function(data,status){
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									alert(ret_msg)
+									$('#basic').modal('hide')
+					            	dtbl()
+					            	console.log("success here")
+									//return false;
+			                    }else{
+			                    	console.log("fail")
+			                    	alert(ret_msg)
+			                    }
+		                    }
+	                    }
+                    });	
+					return false;
+			}
+
+			</script>
+	

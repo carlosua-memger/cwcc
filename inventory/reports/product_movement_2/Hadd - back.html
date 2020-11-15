@@ -1,0 +1,113 @@
+
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+				<!-- BEGIN FORM-->
+		<form id="CreateTransaction" class="form-horizontal"  method="Post" onsubmit="return DoCreateTransaction()">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+			<h4 class="modal-title">Item Class Addnew</h4>
+		</div>
+
+					<div class="form-horizontal">
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Item Class</label>
+							<div class="col-md-4">
+								<select name="item_class" class="form-control" > 
+								 	{{range  $Ls_itemClass,$val := .Ls_itemClass}}
+										<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+									{{end}}
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Supplier</label>
+							<div class="col-md-4">
+								<select name="supplier" class="form-control" > 
+								 	{{range  $Ls_supplier,$val := .Ls_supplier}}
+										<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+									{{end}}
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Name<span class="required" aria-required="true">*</span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="name" placeholder="Name" class="form-control" maxlength="50" Required>
+											<!-- <span class="help-block">
+											A block of help text. </sapan> -->
+							</div>
+						</div>
+											
+						<div class="form-group">
+							<label class="col-md-3 control-label">Remarks</label>
+							<div class="col-md-4">
+								
+							<!-- 	<input type="text" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct"> -->
+								<textarea name = "remarks" class="form-control createAct"></textarea>
+							</div>
+						</div>
+						
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn default" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn blue">Submit</button>
+						
+					</div>
+				</form>
+			</div>
+			</div>
+
+			<script type="text/javascript">
+			var currentDate = new Date();  
+			 /*$('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });*/
+			$('.date-picker').datepicker("setDate", new Date());
+			//$('.date-picker').val(currentDate)			
+			$('input[name=item_class]').focus()
+			$("[name=item_class] , [name=supplier]").select2();
+			 var rghts = '{{.Rights}}'
+			function DoCreateTransaction(){
+				var ret_msg= ""
+				$.get("/json_func",
+                    {
+                       //qdata : "Branch_Save 'Add','programmer',1,0,'"+$('[name=sup_name]').val()+"' ,'"+$('[name=sort]').val()+"' ,'"+$('[name=remarks]').val()+"'"
+                       qdata : "SIS_Item_Save 'Add', '{{.Tconf.username}}', 0, {{.Tconf.Org_id}}, '"+$('[name=name]').val()+"', "+$('[name=item_class]').val()+", "+$('[name=supplier]').val()+",'"+$('[name=remarks]').val()+"'"
+
+                    }
+                    ,
+                    function(data,status){
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									alert(ret_msg)
+									$('#basic').modal('hide')
+					            	dtbl()
+					            	console.log("success here")
+									//return false;
+			                    }else{
+			                    	alert(ret_msg)
+			                    }
+		                         
+		                    }
+	                    }
+                    });	
+					
+                    return false;
+		                /*$('#basic').modal('hide')
+		            	dtbl()
+			         	return false*/
+			        	
+			}
+
+			</script>
+

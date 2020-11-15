@@ -1,0 +1,448 @@
+<!-- <Form> -->
+
+</style>
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+		<form id="transdetnew" method="Post" onsubmit="javascript: return DocreateTrasDet()">
+			<input type="hidden" name="hdr_id" value="{{.Tconf.hdr_id}}">	
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">New Transaction Details*</h4>
+				</div>
+				<!-- <div class="modal-body">
+				 -->	 <!-- modal data here -->
+
+					<div class="form-horizontal">
+							<div class="form-group">
+								<label class="col-md-3 control-label">Item</label>
+								<div class="col-md-4">
+									<input type="text" name="item" placeholder="Item" id="item"  class="form-control"  required>
+								</div>
+
+								<div class="col-md-4">
+									<a  class="btn green act_btn" data-toggle='modal' href='#large'  onclick="javascript:Modalfunc_show_prev(this);">
+                   	 				show previous prices<i class="fa fa-plus"></i></a>
+
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Qty</label>
+									<div class="col-md-4">
+										<input type="text" name="qty" placeholder="Qty"  maxlength="8" value="1" class="form-control createAct num_f" onkeypress='return numbersOnly(this,event,false,false);' required>
+									</div>
+							</div>		
+							<div class="form-group">
+								<label class="col-md-3 control-label">Unit Price</label>
+									<div class="col-md-4">
+										<input type="text" name="unit_price" placeholder="Unit Price"  value="00.00" maxlength="12" class="form-control createAct num_f" onkeypress='return numbersOnly(this,event,true,false);' required>
+									</div>
+
+									
+
+									<div class="col-md-4">
+									<label id="message"></label>
+
+								</div>
+							</div>	
+							<div class="form-group">
+								<label class="col-md-3 control-label">Discount %</label>
+									<div class="col-md-6 form-inline">
+										<label>1</label>
+										<input type="text" name="discount_per_1" placeholder="Discount (1) %"  value="0" maxlength="3" class="form-control input-xsmall createAct num_f" onkeypress='return numbersOnly(this,event,true,false);'>
+										<label>2</label>
+										<input type="text" name="discount_per_2" placeholder="Discount (2) %"  value="0" maxlength="3" class="form-control input-xsmall createAct num_f" onkeypress='return numbersOnly(this,event,true,false);'>
+										<label>3</label>
+										<input type="text" name="discount_per_3" placeholder="Discount (3) %"  value="0" maxlength="3" class="form-control input-xsmall createAct num_f" onkeypress='return numbersOnly(this,event,true,false);'>
+									</div>
+							</div>	
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label">Discount Amount</label>
+									<div class="col-md-4">
+										<input type="text" name="discount_amt" placeholder="Discount Amount"  value="00.00" maxlength="100" class="form-control createAct " onkeypress='return numbersOnly(this,event,true,false);'>
+									</div>
+							</div>
+
+							<div class="form-group">
+					<label class="col-md-3 control-label">Tax<span class="required" aria-required="true"></span>
+					</label>
+					<div class="col-md-8 form-inline">
+					<label>Percent</label>
+						<input type="text" name="taxper"  placeholder="" class="form-control input-xsmall createAct num_f" value="0" maxlength="50" onkeypress='return numbersOnly(this,event,true,false);'>
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+					<label>&nbsp;Amount </label>
+						<input type="text" name="taxamt"  placeholder="" class="form-control input-xsmall createAct num_f" value="00.00" maxlength="50" onkeypress='return numbersOnly(this,event,true,false);'>
+					</div>
+				</div>
+							
+							<div class="form-group">
+					<label class="col-md-3 control-label">Commission<span class="required" aria-required="true"></span>
+					</label>
+					<div class="col-md-8 form-inline">
+					<label>Percent</label>
+						<input type="text" name="commper"  placeholder="" class="form-control input-xsmall createAct num_f" value="0" maxlength="50" onkeypress='return numbersOnly(this,event,true,false);'>
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+					<label>&nbsp;Amount </label>
+						<input type="text" name="commamt"  placeholder="" class="form-control input-xsmall createAct num_f" value="00.00" maxlength="50" onkeypress='return numbersOnly(this,event,true,false);'>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label">Advertisement<span class="required" aria-required="true"></span>
+					</label>
+					<div class="col-md-8 form-inline">
+					<label>Percent</label>
+						<input type="text" name="adsper"  placeholder="" class="form-control input-xsmall createAct num_f" value="0" maxlength="50" onkeypress='return numbersOnly(this,event,true,false);'>
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+					<label>&nbsp;Amount </label>
+						<input type="text" name="adsamt"  placeholder="" class="form-control input-xsmall createAct num_f" value="00.00" maxlength="50" onkeypress='return numbersOnly(this,event,true,false);'>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Freight<span class="required" aria-required="true"></span>
+					</label>
+					<div class="col-md-8 form-inline">
+					<label>Percent</label>
+						<input type="text" name="freightper"  placeholder="" class="form-control input-xsmall createAct num_f" value="0" maxlength="50" onkeypress='return numbersOnly(this,event,true,false);'>
+									<!-- <span class="help-block">
+									A block of help text. </sapan> -->
+					<label>&nbsp;Amount </label>
+						<input type="text" name="freightamt"  placeholder="" class="form-control input-xsmall createAct num_f" value="00.00" maxlength="50" onkeypress='return numbersOnly(this,event,true,false);'>
+					</div>
+				</div>
+						
+
+							<div class="form-group" hidden>
+								<label class="col-md-3 control-label">Net</label>
+									<div class="col-md-4">
+										<input type="text" name="net" placeholder="0"  value="00.00" maxlength="100" class="form-control createAct" readonly="readonly">
+									</div>
+							</div>				
+														
+
+							<div class="form-group">
+								<label class="col-md-3 control-label">Remarks</label>
+									<div class="col-md-4">
+										
+										<textarea name = "remarks" maxlength="100" class="form-control createAct"></textarea>
+									</div>
+							</div>
+							<div class="form-group val_err" hidden>
+								<label class="col-md-10 control-label" style="color:red;">
+							opps something is missing</label>
+							</div>
+										  									
+ 					 <!-- end modal data here -->
+				<!-- </div> -->
+				<div class="errorDv">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn default" data-dismiss="modal">Go Back</button>
+					<button type="submit" class="btn blue">Save(Crtl+s)</button>
+					<button type="button" class="btn blue btn_sa" onclick="javascript:DocreateTrasDet('AS');">Save & Add new(ctl+a)</button>
+				</div>
+
+		<!--  -->
+				<!-- /.modal-content -->
+		</form>
+	</div>
+		<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->					
+					
+
+
+<script type="text/javascript">
+ 	$('.form_datetime').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+	
+
+ 	num_val_init() //located on mainframe	
+
+
+	var rights = '{{.Tconf.rights}}' 
+	var assignmentID = '{{.Tconf.location}}' 
+			
+
+	function Modalfunc_show_prev(a,v){
+        $.get("/inventory/customer_sales/details/Show_prev_price",
+                {
+                  customer: '{{.Tconf.customer}}',
+                  item: 	$("input[name=item]").val(),
+                  location: '{{.Tconf.location}}'
+
+                }
+                ,
+
+                function(data,status){
+                    $("#large").html(data);
+                    
+                });
+    }
+	function DocreateTrasDet(a){
+				if(!$('#transdetnew')[0].checkValidity()){
+					$('.val_err').show();
+				 	return false;
+				}
+				
+				$( ".errorDv" ).html("")
+				if ($("input[name=qty]").val()<=0 || $("input[name=qty]").val() % 1 != 0  ){
+					var htdata  = '<div class="alert alert-danger"> <strong>Error: </strong>  Invalid Qty  (must be greater than 0 or whole number)</div>'
+					$( ".errorDv" ).html(htdata)
+					return false;
+				}
+				if ($("input[name=unit_cost]").val()<=0){
+					var htdata  = '<div class="alert alert-danger"> <strong>Error: </strong>  Invalid Unit Price  (must be greater than 0)</div>'
+					$( ".errorDv" ).html(htdata)
+					return false;
+				}
+				$.post("/inventory/customer_sales/details/DaddHandler",$( "#transdetnew" ).serialize()
+		        ,
+		        function(data,status){
+		        	alert(data[1])
+		            if(data[1]=='Success'){
+		            	
+		            	$("input[name=item]").select2("val",""); 
+		            	
+		            	if(a!="AS"){
+		            		$('#basic').modal('hide')
+			            	PageRefresher('2')
+			            }else{
+			            	$( "#item" ).select2('open')
+			            	$('[name=qty]').val("1")
+ 							$('[name=unit_price]').val("00.00")
+ 							$('[name=term]').val("0")
+ 							$('[name=discount_per_1]').val("0")
+ 							$('[name=discount_per_2]').val("0")
+ 							$('[name=discount_per_3]').val("0")
+ 							$('[name=discount_amt]').val("00.00")
+ 							$('[name=taxper]').val("00.00")
+ 							$('[name=taxamt]').val("00.00")
+ 							$('[name=commamt]').val("00.00")
+ 							$('[name=commper]').val("00.00")
+ 							$('[name=taxper]').val("00.00")
+ 							$('[name=adsper]').val("00.00")
+ 							$('[name=adsamt]').val("00.00")
+ 							$('[name=freightper]').val("00.00")
+ 							$('[name=freightamt]').val("00.00")
+ 							$('[name=remarks]').val("")
+
+			            }	
+		            }
+		        });
+	 			return false
+			}
+	
+	function repoFormatResult( repo ) {
+	    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div></div>";
+
+	    return markup;
+	}
+	function repoFormatSelection( repo ) {
+        
+      /*  $("input[name=commper]").val(repo.commission_per);
+        $("input[name=commamt]").val(repo.commission_amt);
+        $("input[name=taxper]").val(repo.tax_per);
+        $("input[name=taxamt]").val(repo.tax_amt);
+        $("input[name=adsper]").val(repo.ads_per);
+        $("input[name=adsamt]").val(repo.ads_amt);
+        $("input[name=freightper]").val(repo.freight_per);
+        $("input[name=freightamt]").val(repo.freight_amt);*/
+         $("input[name=discount_per_1]").val(repo.discount_per_1);
+        $("input[name=discount_per_2]").val(repo.discount_per_2);
+        $("input[name=discount_per_3]").val(repo.discount_per_3);
+        $("input[name=discount_amt]").val(repo.discount_amt);
+
+        return repo.full_name;
+    }
+    
+		$( "#item" ).select2({
+		    placeholder: "Search for Items",
+		    minimumInputLength: 2,
+		    multiple: false,
+		    allowClear: true,
+		    ajax: {
+		        url: "/inventory/customer_sales/details/Ajax/Ajax_getItem?assignmentID="+assignmentID+"&isbaseonassignid=1&hdr_id='{{.Tconf.hdr_id}}'",
+
+				//url: "/inventory/customer_sales/details/Ajax/Ajax_getItem",
+		        dataType: "json",
+		        quietMillis: 250,
+		        data: function( term, page ) {
+		            return {
+		                // search term
+		                q: term,
+
+		            };
+		        },
+		        results: function( data, page ) {
+		                // parse the results into the format expected by Select2.
+		                // since we are using custom formatting functions we do not need to alter the remote JSON data
+		                return { results: data.items };
+		        }
+		        
+		    },
+		    
+		    formatResult: repoFormatResult,
+		    formatSelection: repoFormatSelection,
+		    // apply css that makes the dropdown taller
+		    dropdownCssClass: "bigdrop",
+		    // we do not want to escape markup since we are displaying html in results
+		    escapeMarkup: function( m ) {
+		        return m;
+		    }
+		});		
+	
+	setTimeout(function (){
+        $( "#item").select2('open')
+    	
+    }, 500);
+	
+	$('.btn_sa').on('keydown', function(e) {
+	    if (e.which == 13) {
+	        e.preventDefault();
+	        DocreateTrasDet('AS')
+	    }
+	});
+
+	$('#basic').unbind('hidden.bs.modal');
+	$('#basic').on('hidden.bs.modal', function () {
+		PageRefresher('2')
+	})
+
+
+		var ret_msg= ""
+			$("#item").change(function () {
+					$.get("/json_func",
+                    {
+                       qdata : "SIS_CusSal_Misc 3,'{{.Tconf.Org_id}}',"+$('[name=item]').val()+",'{{.Tconf.hdr_id}}'"
+
+                    }
+                    ,
+                    function(data,status){
+                        if( data!=null){
+                        	
+                        	var uprice = "";
+                        	var message= "";
+                        	var comm_per = "";
+                        	var comm_amt = "";
+                        	var tax_per = "";
+                        	var tax_amt = "";
+                        	var ads_per = "";
+                        	var ads_amt = "";
+                        	var freight_per = "";
+                        	var freight_amt = "";
+                        	var item_loc_price ="";
+
+		                    for (var i = 0; i < data.length; i++) {
+		                    	 	ret_msg = data[i][0]
+					            	//$("input[name=customer]").val(ret_msg);
+					            	//console.log(alert(data[i][0]))
+			            	
+					            	uprice = data[i][1]
+					            	message = data[i][3]
+					            	comm_per = data[i][4]
+                        			comm_amt = data[i][5]
+                        			tax_per = data[i][6]
+                        			tax_amt = data[i][7]
+                        			ads_per = data[i][8]
+                        			ads_amt = data[i][9]
+                        			freight_per = data[i][10]
+                        			freight_amt = data[i][11]
+                        			item_loc_price = data[i][12]
+                        			item_loc_priceform = data[i][13]
+                        			item_loc_date = data[i][14]
+
+		                     		console.log(uprice)  
+		                     		console.log(message)   
+
+		                    }
+		                    $("[name=unit_price]").val(uprice).trigger("change");
+		                    $('#message').text(message);
+		                    $("[name=taxper]").val(tax_per).trigger("change"); 
+		                    $("[name=taxamt]").val(tax_amt).trigger("change"); 
+		                    $("[name=commper]").val(comm_per).trigger("change");   
+		                    $("[name=commamt]").val(comm_amt).trigger("change"); 
+		                   	$("[name=adsper]").val(ads_per).trigger("change"); 
+		                   	$("[name=adsamt]").val(ads_amt).trigger("change"); 
+		                   	$("[name=freightper]").val(freight_per).trigger("change"); 
+		                   	$("[name=freightamt]").val(freight_amt).trigger("change"); 
+
+		                   		if (item_loc_date == 'NULL')
+
+		                   		{
+		                   						bootbox.alert('Item Location price not found.' ).find('.modal-content').css({
+     'top': '200px',
+  // 'left': '350px'
+});
+
+		                   		}
+
+		                   		else{
+
+		                   	if (uprice != item_loc_price) {
+
+		                   			
+		                   		bootbox.alert('Suggested price is different to Item Location price of ' + item_loc_priceform + ' effective ' + item_loc_date + '.' ).find('.modal-content').css({
+     'top': '200px',
+  // 'left': '350px'
+});
+		                   	}	
+
+
+}
+
+	                    }
+                    });	
+					
+                    return false;
+			});
+						
+
+	/*function caltot () {
+		var qty = $("[name=qty]").val();	
+		var unit_cost = $("[name=unit_cost]").val();
+		var total = (parseInt(qty)*parseFloat(unit_cost));
+
+
+		var discount_per = $("[name=discount_per]").val();
+		var discount_amt = $("[name=discount_amt]").val();	
+		var discount_tot = (total)*((parseFloat(discount_per)/100)) + parseFloat(discount_amt); 
+		//var discount_tot = $("[name=discount_tot]").val(discount_tot);
+		var discount_tot = 0
+
+
+
+		var commission_per = $("[name=commission_per]").val();
+		var commission_amt = $("[name=commission_amt]").val();
+		var commission_tot = (total)*((parseFloat(commission_per)/100)) + parseFloat(commission_amt); 
+		//var commission_tot = $("[name=commission_tot]").val(commission_tot);
+		var commission_tot = 0
+
+		var tax_per = $("[name=tax_per]").val();
+		var tax_amt = $("[name=tax_amt]").val();
+		var tax_tot = (total)*((parseFloat(tax_per)/100)) + parseFloat(tax_amt); 
+		var tax_tot = $("[name=tax_tot]").val(tax_tot);
+
+
+		var net = total - ((total)*((parseFloat(discount_per)/100))) - parseFloat(discount_amt) + ((total)*((parseFloat(tax_per)/100))) + parseFloat(tax_amt) - ((total)*((parseFloat(commission_per)/100))) - parseFloat(commission_amt)
+
+		// ((total) - parsefloat(discount_tot) + parsefloat(tax_tot) - parsefloat(commission_tot));
+
+		//var net = $("[name=net]").val(net).tofixed(2);
+		var net = 0
+
+		
+	}	
+*/
+	
+
+</script>

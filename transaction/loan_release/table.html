@@ -1,0 +1,878 @@
+<style type="text/css">
+    tr.hilight {
+    background: #6FB1B1;
+    }
+    td.hilight {
+    background: #6FB1B1 ;
+    }
+   .ipt {
+            width: 30px;
+        }
+    .ipt_r {
+            width: 50px;
+        }
+    .ipt_ref {
+            width: 100px;
+    }
+    .dtl_h {
+        border-bottom: 4px solid #35AA47;
+        width: 65px;
+        margin-bottom: 13px;
+    }       
+    .tot_align_right {
+        text-align: right
+    }    
+    </style>
+    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+    
+    
+
+
+
+    <div class="portlet box grey-cascade" id="dpanel">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-globe"></i>{{.Tempconf.Panel_name}}
+            </div>
+            <div class="tools">
+                <a href="javascript:;" class="collapse">
+                </a>
+                <a href="#portlet-config" data-toggle="modal" class="config">
+                </a>
+                <a href="javascript:;" class="reload">
+                </a>
+                <a href="javascript:;" class="remove">
+                </a>
+            </div>
+        </div>
+        <div class="portlet-body">
+                {{if eq .Tempconf.ismoreinfo "true"}}
+        
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="form-group" >
+                                <label class="control-label col-md-4" ><b>Transaction ID:</b></label>
+                                <p class="control-label col-md-8">{{.Tempconf.id}}</p>
+                               
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-4"><b>Status:</b></label>
+                                <p class="control-label col-md-8">{{.Tempconf.status}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-4"><b>Transaction Date:</b></label>
+                                <p class="control-label col-md-8">{{.Tempconf.trandate}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-4"><b>Member:</b></label>
+                                <p class="control-label col-md-8">{{.Tempconf.member_name}}</p>
+                            </div>
+                        </div>
+        
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-4"><b>Partner:</b></label>
+                                <p class="control-label col-md-8">{{.Tempconf.partner_name}}</p>
+                            </div>
+                        </div>
+        
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-4"><b>PN #</b></label>
+                                <p class="control-label col-md-8">{{.Tempconf.pn}}</p>
+                            </div>
+                        </div>
+        
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-4"><b>Loan App #:</b></label>
+                                <p class="control-label col-md-8">{{.Tempconf.la}}</p>
+                            </div>
+                        </div>
+        
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-4"><b>Loan Type:</b></label>
+                                <p class="control-label col-md-8">{{.Tempconf.loantype_name}}</p>
+                            </div>
+                        </div>
+        
+                        
+        
+                    </div>
+
+                    
+
+                    <div class="col-md-4">
+
+                            <div class="row">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"><b>Amount:</b></label>
+                                        <p class="control-label col-md-8">{{.Tempconf.amt}}</p>
+                                    </div>
+                                </div>
+                
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"><b>Term (mos):</b></label>
+                                        <p class="control-label col-md-8">{{.Tempconf.term}}</p>
+                                    </div>
+                                </div>
+                
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"><b>Pay mode:</b></label>
+                                        <p class="control-label col-md-8">{{.Tempconf.paymode_name}}</p>
+                                    </div>
+                                </div>
+
+                            <div class="row">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"><b>Interest Rate (per annum):</b></label>
+                                        <p class="control-label col-md-8">{{.Tempconf.int_rate}}</p>
+                                </div>
+                            </div>
+            
+            
+                            <div class="row">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"><b>Service Fee (Amt):</b></label>
+                                        <p class="control-label col-md-8">{{.Tempconf.service_fee}}</p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4"><b>Service Fee (%):</b></label>
+                                    <p class="control-label col-md-8">{{.Tempconf.service_fee_per}}</p>
+                            </div>
+                        </div>
+            
+                            <div class="row">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"><b>CV #:</b></label>
+                                        <p class="control-label col-md-8">{{.Tempconf.cv}}</p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"><b>Released Date:</b></label>
+                                        <p class="control-label col-md-8">{{.Tempconf.released}}</p>
+                                </div>
+                            </div>
+            
+                            
+            
+
+                           
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                            <div class="row">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"><b>Bank:</b></label>
+                                        <p class="control-label col-md-8">{{.Tempconf.bank_name}}</p>
+                                </div>
+                            </div>
+            
+                            <div class="row">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"><b>Account Number:</b></label>
+                                        <p class="control-label col-md-8">{{.Tempconf.acct}}</p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"><b>CV Amount:</b></label>
+                                        <p class="control-label col-md-8">{{.Tempconf.cv_amt}}</p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"><b>First Due:</b></label>
+                                        <p class="control-label col-md-8">{{.Tempconf.first_due}}</p>
+                                </div>
+                            </div>
+            
+            
+                            
+                            <div class="row">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"><b>Loan Consolidation Amount:</b></label>
+                                        <p class="control-label col-md-8">{{.Tempconf.LAR_amt}}</p>
+                                </div>
+                            </div>
+            
+                            <div class="row">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"><b>Remarks:</b></label>
+                                        <p class="control-label col-md-8">{{.Tempconf.remarks}}</p>
+                                    </div>
+                                </div>
+                            
+                        </div>
+                  
+                 
+                    
+                   
+                    <!--/span-->
+                </div>
+               
+            {{end}}    
+            <div class="table-toolbar">
+
+                {{if eq .Tempconf.Archive "true"}}
+                    <div class="col-md-2" style="margin-left: -15px;">
+                    <select name="arc" id="arc" class="form-control">
+                        <option value="0">Open</option>
+                        <option value="1">Archive</option>
+                    </select>
+                    </div>
+                {{end}}
+
+                {{if eq .Tempconf.Add_back_button "true"}}
+                    <div class="btn-group">
+                        <a Class="btn blue afjaxify" href="#/transaction/loan_release?rights={{.Tempconf.Rights}}" onclick="javascript:nav_back('/transaction/loan_release?rights={{.Tempconf.Rights}}');">
+                        <i class="fa fa-backward"></i> Back 
+                        </a>
+
+                    
+                    </div>
+                {{end}}
+                
+                
+                {{if eq .Tempconf.Add_new_button "true"}}
+                <div class="btn-group act_btn" >
+                    <a class="btn blue" href="#{{.Tempconf.Add_new_button_url}}" onclick="javascript:Navigate('{{.Tempconf.Add_new_button_url}}');">
+                    Add New <i class="fa fa-plus"></i>
+                    </a>
+
+                   <!--  <a  class="btn green act_btn" data-toggle='modal' href='#basic'  onclick="javascript:Modalfunc('{{.Tempconf.Add_new_button_url}}{{.Tempconf.hdr_id}}');">
+                    Add New <i class="fa fa-plus"></i>
+                     </a> -->
+
+                </div>
+                {{end}}
+
+                {{if eq .Tempconf.Add_new_button_details "true"}}
+                <a  class="btn blue act_btn" data-toggle='modal' href='#basic'  onclick="javascript:Modalfunc('{{.Tempconf.Add_new_button_url}}');">
+                Add New <i class="fa fa-plus"></i>
+                 </a>
+
+               
+                 
+            {{end}}
+            
+                
+                
+                {{if eq .Tempconf.Add_cancel_button "true"}}
+                <div class="btn-group act_btn">
+                    <a class="btn blue" href="#{{.Tempconf.Add_cancel_button_url}}" onclick="javascript:func_cancel('{{.Tempconf.Add_cancel_button_url}}');">
+                    Cancel 
+                    </a>
+                </div>
+                {{end}}
+
+                {{if eq .Tempconf.Add_post_button "true"}}
+                <div class="btn-group act_btn">
+                    <a class="btn blue" href="#{{.Tempconf.Add_post_button_url}}" onclick="javascript:func_post('{{.Tempconf.Add_post_button_url}}');">
+                    Post 
+                    </a>
+                </div>
+                {{end}}
+
+
+                 {{if eq .Tempconf.level "2"}}
+                 <a  class="btn blue act_btn" data-toggle='modal' href='#basic'  onclick="javascript:Modalfunc('{{.Tempconf.Email_url}}&isbarcode=1');">
+                    Email
+                    </a> 
+                    <button class="btn blue default" onclick=GotoLoanConso(event) type="button">Consolidation</button>
+                    <a class="btn blue act_btn" href="/report/Special_rpt?trnID={{.Tempconf.hdr_id}}&rpt_url=report/lr_schedule.html" target="_blank" >Print Schedule</a>
+                    <a class="btn blue" href="#{{.Tempconf.Add_newla_button_url}}" onclick="javascript:Navigate('{{.Tempconf.Add_newla_button_url}}');">
+                        New LA 
+                        </a>
+                  
+                 {{end}}
+
+
+               
+
+               
+                
+                
+
+
+           
+            </div>
+           
+            <div class="error_section">
+               
+            </div>
+
+
+            
+
+
+            <div class ="progressclass">
+
+               <!--  <div class="progress"> <div class="progress-bar progress-bar-striped active uploadprog" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 10%"> <span class="sr-only">45% Complete</span></div></div> -->
+
+            </div>
+            <div class ="progressCountclass"></div>
+            
+             
+            <!-- <div>pushing...</div> -->
+            
+        <table id="example1" class="table table-bordered " cellspacing="0" width="100%">
+            <thead>
+                     <!-- <tr style="border-bottom: 1px solid #DDD;">
+                    <th colspan="2" >HR Information</th>
+                    <th colspan="2">Contact</th>
+                </tr> -->
+                <tr>
+                    {{ range $index, $elmt := .Headercol}}
+                    <th>{{$elmt}}</th>
+                    {{end}}
+                </tr>
+            </thead>
+
+           
+        </table>
+
+        
+        
+    </div>
+</div>
+
+ <script>
+
+
+        function digits (number) { 
+            var n = parseFloat(number).toFixed(2)
+            return Number(n).toLocaleString('en');
+        }
+        
+        function GotoLoanConso(a) {
+		$.get("{{.Tempconf.LoanConso_url}}",
+			function (data, status) {
+				$("#ContentID").html(data);
+
+			}
+		);
+		return false
+	}
+
+    function GotonewLA(a) {
+		$.get("{{.Tempconf.LoanConso_url}}",
+			function (data, status) {
+				$("#ContentID").html(data);
+
+			}
+		);
+		return false
+	}
+
+
+        back_storege("_LoanApplication");
+
+        var stat_done = 0
+        var ish = 0
+        var level = "{{.Tempconf.level}}"
+        var last_url = "{{.AjaxUrl}}"
+       var  last_search ="{{.Tempconf.last_search}}"
+       dtbl();
+       function dtbl(){
+       var oTable =    $('#example1').dataTable( {
+                                "serverSide": true,
+                                "processing": true,
+                                "ajax": "{{.AjaxUrl}}&arc="+$("#arc").val(),
+                                "ordering" : false,
+                                destroy: true,
+                                "pageLength": {{.Tempconf.pageLength}},
+                                'displayStart': {{.Tempconf.displayStart}},
+                                "oSearch": {"sSearch": last_search},
+                                "sDom": '<"top"iflp>rt<"bottom"i>',
+                                "scrollX": true,
+                                "bAutoWidth" : false,
+                                "stateSave" : true,
+                                /* "sScrollX": "100%",
+                                "sScrollYInner": "110%", */
+                                 
+                                "footerCallback": function ( row, data, start, end, display ) {
+                                    //console.log(data[1])
+                                    
+                                }   
+                                ,
+                                "initComplete": function() {
+                                    
+                                    var $searchInput = $('div.dataTables_filter input');
+
+                                    $searchInput.unbind();
+
+                                    $searchInput.bind('keyup', function(e) {
+                                        if(e.keyCode == 13) {
+                                            oTable.fnFilter(this.value); 
+                                        }
+                                    });
+                                },
+
+                                createdRow: function( row, data, dataIndex ) {
+
+                                    {{if eq .Tempconf.level "2"}}
+
+                                    $( row ).find('td:eq(2)').attr('align', 'right');
+                                    $( row ).find('td:eq(3)').attr('align', 'right');
+                                    $( row ).find('td:eq(4)').attr('align', 'right');
+                                    $( row ).find('td:eq(5)').attr('align', 'right');
+
+                                    {{end}}
+
+                                    
+                                }
+
+                            } ) ;
+            $('#example1').on( 'draw.dt', function () {
+               //   console.log(oTable.ajax.params());
+               //alert(params)
+               //console.log(oTable.dataTable().fnSettings())
+               if(level=='1'){
+               var params = oTable.oApi._fnAjaxParameters(oTable.dataTable().fnSettings());
+               localStorage.setItem("last_url_LoanApplication", last_url); 
+               localStorage.setItem("last_start_LoanApplication", params.start);
+               localStorage.setItem("last_length_LoanApplication",params.length);
+               localStorage.setItem("last_search_LoanApplication",params.search.value);
+               }
+            });
+
+        }
+
+        $(document).ready(function() {
+        
+
+
+
+
+        });
+        function Modalfunc(a,v){
+            console.log(v)
+            $.get(a,
+                    {
+                      Assign_ID:'{{.Tempconf.hdr_id}}'
+                    }
+                    ,
+
+                    function(data,status){
+                        $("#basic").html(data);
+                        //$(".dr-js").select2();
+                        
+                    });
+            //return false;
+        }
+        function Modalfunc_adreference(a,event){
+            //console.log(v)
+            $.get(a,
+                    {
+                      Assign_ID:'{{.Tempconf.hdr_id}}'
+                    }
+                    ,
+
+                    function(data,status){
+                        $("#basic").html(data);
+                        //$(".dr-js").select2();
+                        
+                    });
+            return false;
+        }
+
+         function Modalfunc_email(a,v){
+
+                var htdata ='<div class="upload_top_info">'
+                    htdata +=' <div class="upload_jif" style="background: url(/src/metronic_3.1.2/images/throbber.gif) center center no-repeat; height: 15px; width: 18px; display: inline-block;">'
+                                
+                    htdata +='</div>'
+                    htdata +='<div class="upload_info" style="display: inline-block;">Sending email...</div>'
+                    htdata += '</div>' 
+                    $(".progressclass").html(htdata)
+
+            $.get(a,
+                    {
+                      Assign_ID:'{{.Tempconf.Assign_ID}}'
+                    }
+                    ,
+
+                    function(data,status){
+                        console.log(data);
+
+                            
+                        // $(".progressclass").html(htdata)
+
+                        //$("#basic").html(data);
+                        //$(".dr-js").select2();
+                        $(".progressclass").html("");
+                        var htdata =' <div class="Metronic-alerts alert alert-success fade in"><button type="button" '
+                            htdata +='class="close" data-dismiss="alert" aria-hidden="true"></button><i class="fa-lg fa fa-'
+                            htdata += 'success"></i>  Email sent. '
+                           htdata += '</div>   '
+                            $(".error_section").html(htdata);
+
+                        
+                    });
+            //return false;
+        }
+
+
+
+
+
+        function func_edit(a,b){
+            $.get(a,
+                    function(data,status){
+                     $("#ContentID").html(data);
+                    $(".dr-js").select2();
+
+                    }
+                );
+            return false
+        }
+
+        function func_view(a,b){
+            $.get(a,
+                    function(data,status){
+                     $("#ContentID").html(data);
+                    $(".dr-js").select2();
+
+                    }
+                );
+            return false
+        }
+        function func_add_child(a,b){
+            console.log("{{.Tempconf.Add_new_button_url}}")
+            $.get("{{.Tempconf.Add_new_button_url}}&parentID="+a,
+                    function(data,status){
+                     //$("#ContentID").html(data);
+                     $("#basic").html(data);
+                    $('#basic').modal('show'); 
+                    //$(".dr-js").select2();
+
+                    }
+                );
+            return false
+        }
+        function Modalfuncdelete (a,b,c) {
+            //a=link //b=dtl_id
+            clicked =c
+            console.log(a)
+            $.get(a,
+                    {
+                      dtl_id:b 
+                    },
+                    function(data,status){
+                        $("#modalSession").html(data);
+                    });
+            return false;
+        }
+        function Dodelete (a) {
+            $.post(a,$( ".formDelete" ).serialize()
+            ,
+            function(data,status){
+                var ret_data ="";
+                ret_data = data[1];
+                if (data[1] == "Success") {
+                    $('#modalSession').modal('hide') 
+                    //clicked.closest("tr").remove();
+                    PageRefresher(level);
+                }else{
+                   alert(data[1]); 
+                }
+            });
+        return false;
+        }
+        function Nav2(a,b,c){
+            console.log(c)
+            if (c=='application'){
+                $.get("{{.Tempconf.ActionCol_application_url}}&transtype=LoanApp&baseURL={{.AjaxUrl}}",
+                        '{{.Tempconf.ActionCol_param}}='+b ,
+                    function(data,status){
+                     $("#ContentID").html(data);
+                    
+                    }
+                );
+            }else{
+                $.get("{{.Tempconf.Action_baseURL}}",'{{.Tempconf.ActionCol_param}}='+b,
+                    function(data,status){
+                     $("#ContentID").html(data);
+                    }
+                );    
+            }
+            
+            return false;
+        }
+
+
+        function PageRefresher(lev){
+            if(lev=='1'){
+                $.get("/transaction/loan_release?rights={{.Tempconf.Rights}}",
+                    function(data,status){
+                    $("#ContentID").html(data);
+                     //$('#basic').modal('hide')
+                    }
+                );
+            } else {
+                $.get("/transaction/loan_release/details?rights={{.Tempconf.Rights}}&ID={{.Tempconf.hdr_id}}",
+                    function(data,status){
+                    $("#ContentID").html(data);
+                     //$('#basic').modal('hide')
+                    }
+                );
+
+            }
+        }
+        function func_duplicate (a,b) {
+            $.get(a,
+                    function(data,status){
+                        console.log(data)
+                        if(data[1]=='Success'){
+                            $.get("/inventory/customer_sales/details?rights={{.Tempconf.Rights}}&ID="+data[0],
+                                function(data,status){
+                                 $("#ContentID").html(data);
+                                
+                                }
+                            );    
+                        }else{
+                            alert(data[0]);
+                        }
+                    }    
+                );
+        }
+         function func_post(a,b){
+            if (confirm("You are about to post this transaction") == true) {
+            var htdata ='<div class="upload_top_info">'
+                       htdata +=' <div class="upload_jif" style="background: url(/src/metronic_3.1.2/images/throbber.gif) center center no-repeat; height: 15px; width: 18px; display: inline-block;">'
+                                    
+                    htdata +='</div>'
+                    htdata +='<div class="upload_info" style="display: inline-block;">We are now posting your records. Please wait for a moment.</div>'
+                    htdata += '</div>' 
+                     $(".progressclass").html(htdata)
+            $.get(a,
+                    function(data,status){
+                        console.log(data)
+                        $(".progressclass").html("")
+                       // if(data.Message.includes("Success")){
+                        if(data[0][1]=='Success'){
+                            
+                            PageRefresher(level);
+                            /*$(".act_btn").hide();
+                            var htdata =' <div class="Metronic-alerts alert alert-success fade in"><button type="button" '
+                            htdata +='class="close" data-dismiss="alert" aria-hidden="true"></button><i class="fa-lg fa fa-'
+                            htdata += 'success"></i>  Posting '
+                            htdata += data[0][1]
+                            htdata += '</div>   '
+                            $(".error_section").html(htdata);
+                            table = $('#example1').dataTable( {
+                            "serverSide": true,
+                                "ajax": "{{.AjaxUrl}}&status=Posted",
+                                "processing": true,
+                                destroy: true,
+                            } );*/
+                        
+                        }else{
+                            var htdata =' <div class="Metronic-alerts alert alert-danger fade in"><button type="button" '
+                            htdata +='class="close" data-dismiss="alert" aria-hidden="true"></button><i class="fa-lg fa fa-'
+                            htdata += 'warning"></i>Unable to post.<br> '
+                            for (var i = 0; i < data.length; i++) {
+                                //console.log(data[i][0])
+                                htdata +=data[i][1] +"<br>"
+                            };
+                            htdata += '</div>   '
+                            $(".error_section").html(htdata);
+                        }
+
+                    }
+                );
+            return false
+        } else {
+                PageRefresher(level);
+            }
+        }
+
+        function Modalfuncpost (a,b,c) {
+            //a=link //b=dtl_id
+            clicked =c
+            console.log(a)
+            $.get(a,
+                    {
+                      dtl_id:b 
+                    },
+                    function(data,status){
+                        $("#modalSession").html(data);
+                    });
+            return false;
+        }
+
+        function Dopost (a) {
+            $.post(a,$( ".formPost" ).serialize()
+            ,
+            function(data,status){
+                var ret_data ="";
+                ret_data = data[0][1];
+                console.log(data)
+                if (ret_data=='Success'){
+                    $('#modalSession').modal('hide') 
+                    //clicked.closest("tr").remove();
+                    PageRefresher("1");
+                }else{
+                   alert(ret_data); 
+                }
+            });
+        return false;
+        }
+
+        function func_cancel(a,b){
+            if (confirm("You are about to cancel this transaction") == true) {
+            var htdata ='<div class="upload_top_info">'
+                       htdata +=' <div class="upload_jif" style="background: url(/src/metronic_3.1.2/images/throbber.gif) center center no-repeat; height: 15px; width: 18px; display: inline-block;">'
+                                    
+                    htdata +='</div>'
+                    htdata +='<div class="upload_info" style="display: inline-block;">  Where are now canceling your records.. please wait for a moment</div>'
+                    htdata += '</div>' 
+                     $(".progressclass").html(htdata)
+            $.get(a,
+                    function(data,status){
+                        $(".progressclass").html("")
+                        //if(data.Message.includes("Success")){
+                        if(data[0][1]=='Success'){
+                              /* $.get("/inventory/adjustment_entry/details?rights="+rights+"&ID={{.Tempconf.hdr_id}}",
+                                 function(data,status){
+                                 $("#ContentID").html(data);
+                                 //$('#basic').modal('hide')
+                                }
+                            ); */
+
+                            
+                            
+                            PageRefresher(level);
+
+                            /* $(".act_btn").hide();
+                            var htdata =' <div class="Metronic-alerts alert alert-success fade in"><button type="button" '
+                            htdata +='class="close" data-dismiss="alert" aria-hidden="true"></button><i class="fa-lg fa fa-'
+                            htdata += 'Canceled"></i>  '
+                            htdata += data[0][1]
+                            htdata += '</div>   '
+                            $(".error_section").html(htdata);
+                            table = $('#example1').dataTable( {
+                            "serverSide": true,
+                                "ajax": "{{.AjaxUrl}}&status=Posted",
+                                "processing": true,
+                                destroy: true,
+                            } ); */
+                        }else{
+                            var htdata =' <div class="Metronic-alerts alert alert-danger fade in"><button type="button" '
+                            htdata +='class="close" data-dismiss="alert" aria-hidden="true"></button><i class="fa-lg fa fa-'
+                            htdata += 'warning"></i>Unable to cancel.<br> '
+                            for (var i = 0; i < data.length; i++) {
+                                htdata +=data[i][1] +"<br>"
+                            };
+                            
+                          /*  if( data!=null){
+                                for (var i = 0; i < data.length; i++) {
+                                    //alert(data[i][0]);
+                                   htdata += data[i][0]
+                                   
+                                    if (data[i][0]=="Success"){
+                                        console.log(data[i][0])
+                                       
+                                        
+                                    //return false;
+                                    }else{
+                                        alert(ret_msg)
+                                    }
+                                     
+                                }
+                            }
+
+*/
+
+
+                            htdata += '</div>   '
+                             $(".error_section").html(htdata);
+                        }
+
+                    }
+                );
+            return false
+        } else {
+                PageRefresher(level);
+            }
+        }
+
+
+
+         function fuc_ref_delete(trn_id,event) {
+            if(!candf){
+                alert("reference ID already Posted or Cancelled.")
+                return false;
+            }
+            var txt;
+            var r = confirm("Are you Sure to delete this reference?");
+            if (r = true) {
+              //  txt = "You pressed OK!";
+            } else {
+               return false
+
+            }
+
+            $.post('/inventory/customer_sales/details/delete_reference',
+            {
+                trn_id : trn_id
+            }
+            ,
+            function(data,status){
+                console.log(data)
+                alert(data[1])
+                
+                $(event.target).closest("tr").remove()
+
+            });
+            return false;
+
+        }
+
+         $("#arc").change(function(){
+            dtbl();
+        });
+
+        function nav_back(c_url) {
+            var  last_length = localStorage.getItem("last_length_LoanApplication")
+            var  last_start = localStorage.getItem("last_start_LoanApplication")
+            var  last_search = localStorage.getItem("last_search_LoanApplication")
+            var  url_last = c_url
+            console.log(url_last);
+             $.get(url_last,'last_length='+last_length +'&last_start='+last_start+'&last_search='+last_search,
+                    function(data,status){
+                    $("#ContentID").html(data);
+                    $(".dr-js").select2();
+
+                    }
+                );
+            return false
+        }
+
+  
+</script>
+
+
+
+
+<div class="lower_table"></div>

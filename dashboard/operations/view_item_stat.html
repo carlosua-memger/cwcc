@@ -1,0 +1,207 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Top Aging Past Due Per Partner</title>
+
+     
+       <script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/Highcharts-4.2.6/js/highcharts.js" defer="defer" ></script>
+        <script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/Highcharts-4.2.6/js/highcharts-3d.js" defer="defer" ></script>
+        <script type="text/javascript" src="/src/metronic_3.1.2/metronic/assets/global/plugins/Highcharts-4.2.6/js/modules/exporting.js" defer="defer" ></script>
+       
+        
+        <style type="text/css">
+/*#container {
+    height: 400px; 
+    min-width: 310px; 
+    max-width: 800px;
+    margin: 0 auto;
+}*/
+        td {
+            font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+            font-size: 11px;
+            width: 60%;
+        }
+        </style>
+        <script type="text/javascript">
+function open_url() {
+var url_to_open = "/dashboard/operations"
+				    console.log(url_to_open)
+				    var myWindow = window.open(url_to_open);
+					return false;
+				}
+                
+
+// graph 2
+
+
+ 
+
+
+
+
+        $(document).ready( function() {
+    $("#load_loanaging").on("click", function() {
+        $.get("/dashboard/operations/DashboardLoanAging", function (data) {
+                    $("#loanAging").append(data);
+    });
+ });
+});
+
+$(document).ready( function() {
+    $("#load_loanrelease").on("click", function() {
+        $.get("/dashboard/operations/DashboardLoanRelease", function (data) {
+                    $("#loanRelease").append(data);
+    });
+ });
+});
+
+
+$(document).ready( function() {
+    $("#load_loanportfolio").on("click", function() {
+        $.get("/dashboard/operations/DashboardLoanPorfolio", function (data) {
+                    $("#loanPortfolio").append(data);
+    });
+ });
+});
+       /*  $(function () {
+                $.get("/dashboard/operations/DashboardLoanAging", function (data) {
+                    $("#appendToThis").append(data);
+                });
+            }); */
+        </script>
+    </head>
+    <body>
+
+
+  
+        
+
+
+<img src="{{.item_image}}">
+</center>
+<hr>
+
+
+
+<button type="submit" class="btn blue submit_btn" id="load_loanportfolio">Show Loan Portfolio</button>
+<button type="submit" class="btn blue submit_btn" id="load_loanrelease">Show Loan Release</button>
+<button type="submit" class="btn blue submit_btn" id="load_loanaging">Show Loan Aging</button>
+<br>
+<br>
+
+{{$sql_str := combine_string `arhdr_get 3` }}
+{{$data_list := tpl_sql $sql_str }}
+  
+
+{{$sql_str2 := combine_string `LPHDR_Get 3` }}
+{{$data_list2 := tpl_sql $sql_str2 }}
+  
+
+
+
+  <table style="white-space:nowrap;">
+<tr>
+
+<td>
+        <center><font size="4"><b>Unposted Acknowledgement Receipts</center></font></b>
+  <table width="500" cellspacing="1" > 
+      
+      <tr>
+        <td style="white-space:nowrap;padding: 1px;"><b>Partner</td>
+            <td style="white-space:nowrap;padding: 1px;"><b>Count</td>
+            <td style="white-space:nowrap;padding: 3px;"><b>Members</td>
+            <td style="white-space:nowrap;padding: 3px;"><b>Totals</td>
+            <td style="white-space:nowrap;padding: 3px;"><b>Oldest</td>
+            <td style="white-space:nowrap;padding: 3px;"><b>Latest</td>
+          
+
+      </tr>    
+        <tr>
+         {{range  $key1, $val1stloop := $data_list}}
+              <tr> 
+                
+                <td style="white-space:nowrap;padding: 1px;">{{index $val1stloop  0}}</td>
+                <td style="white-space:nowrap;padding: 1px;" align="right">{{index $val1stloop  1}}</td>
+                <td style="white-space:nowrap;padding: 3px;" align="right">{{index $val1stloop  2}}</td>
+                <td style="white-space:nowrap;padding: 3px;" align="right">{{index $val1stloop  3}}</td>
+                <td style="white-space:nowrap;padding: 3px;">{{index $val1stloop  4}}</td>
+                <td style="white-space:nowrap;padding: 3px;">{{index $val1stloop  5}}</td>
+              
+
+              </tr>
+           
+          {{end}}
+      </tr>   
+      
+    
+
+   
+  </table>
+  </td>
+  <td>
+      <center><font size="4"><b>Unposted Loan Payments</center></font></b>
+        <table width="500" cellspacing="1"> 
+                <tr>
+                    <td style="white-space:nowrap;padding: 3px;"><b>Partner</td>
+                    <td style="white-space:nowrap;padding: 3px;"><b>Count</td>
+                    <td style="white-space:nowrap;padding: 3px;"><b>Members</td>
+                    <td style="white-space:nowrap;padding: 3px;"><b>Totals</td>
+                    <td style="white-space:nowrap;padding: 3px;"><b>Oldest</td>
+                    <td style="white-space:nowrap;padding: 3px;"><b>Latest</td>
+                    
+          
+                </tr>    
+                  <tr>
+                   {{range  $key1, $val1stloop := $data_list2}}
+                        <tr> 
+                          
+                                <td style="white-space:nowrap;padding: 3px;">{{index $val1stloop  0}}</td>
+                                <td style="white-space:nowrap;padding: 3px;"align="right">{{index $val1stloop  1}}</td>
+                                <td style="white-space:nowrap;padding: 3px;" align="right">{{index $val1stloop  2}}</td>
+                                <td style="white-space:nowrap;padding: 3px;" align="right">{{index $val1stloop  3}}</td>
+                                <td style="white-space:nowrap;padding: 3px;">{{index $val1stloop  4}}</td>
+                                <td style="white-space:nowrap;padding: 3px;">{{index $val1stloop  5}}</td>
+                        
+          
+                        </tr>
+                     
+                    {{end}}
+                </tr>   
+                
+              
+          
+             
+            </table>
+
+  </td>
+  </tr>
+  
+</table>
+
+
+<!-- <a href="#" data-id="1" id="load_home">
+    Show Loan Aging
+</a> -->
+
+<div class="contentParent">
+    <div id="loanPortfolio">
+
+    </div>
+</div>
+
+<div class="contentParent">
+    <div id="loanRelease">
+
+    </div>
+</div>
+
+
+<div class="contentParent">
+    <div id="loanAging">
+
+    </div>
+</div>
+
+    </body>
+</html>

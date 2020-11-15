@@ -1,0 +1,161 @@
+<!-- <Form> -->
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+		<form id="transdetnew" method="Post" onsubmit="javascript: return DoeditTrasDet()">
+			<input type="hidden" name="hdr_id" value="{{.Tconf.hdr}}">
+			<input type="hidden" name="id" value="{{.Tconf.id}}">
+
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h4 class="modal-title">Edit Amortization Detail</h4>
+			</div>
+			<!-- <div class="modal-body">
+				 -->
+			<!-- modal data here -->
+			<div class="form-horizontal">
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Due date<span class="required" aria-required="true">*</span>
+					</label>
+					<div class="col-md-8">
+						<input type="text" name="due" id="due" value="{{.Tconf.due}}" placeholder="Select Date"
+							class="form-control date-picker-notime" maxlength="50" Required>
+						<span class="help-block c_h_date" style="color:red;"></span>
+
+					</div>
+				</div>
+
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Principal</label>
+					<div class="col-md-4">
+						<input type="text" value="{{.Tconf.principal}}" style="text-align: right" name="principal"
+							placeholder="principal" value="0.00" maxlength="100" class="form-control createAct num_f"
+							required onkeypress='return numbersOnly(this,event,true,false);'>
+					</div>
+
+					<div class="col-md-4">
+						<label id="message"></label>
+
+					</div>
+				</div>
+
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Interest</label>
+					<div class="col-md-4">
+						<input type="text" value="{{.Tconf.interest}}" style="text-align: right" name="interest"
+							placeholder="interest" value="0.00" maxlength="100" class="form-control createAct num_f"
+							onkeypress='return numbersOnly(this,event,true,false);'>
+					</div>
+
+					<div class="col-md-4">
+						<label id="message"></label>
+
+					</div>
+				</div>
+
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Service Fee</label>
+					<div class="col-md-4">
+						<input type="text" value="{{.Tconf.service_fee}}" style="text-align: right" name="service_fee"
+							placeholder="service fee" value="0.00" maxlength="100" class="form-control createAct num_f"
+							onkeypress='return numbersOnly(this,event,true,false);'>
+					</div>
+
+					<div class="col-md-4">
+						<label id="message"></label>
+
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label">Remarks</label>
+					<div class="col-md-5">
+						<textarea name="remarks" placeholder="remarks"
+							class="form-control createAct">{{.Tconf.remarks}}</textarea>
+					</div>
+
+				</div>
+
+			</div>
+			<!-- end modal data here -->
+			<!-- </div> -->
+			<div class="errorDv">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn default" data-dismiss="modal">Go Back</button>
+				<button type="submit" class="btn blue">Update changes</button>
+			</div>
+
+			<!--  -->
+			<!-- /.modal-content -->
+		</form>
+	</div>
+	<!-- /.modal-content -->
+</div>
+<!-- /.modal-dialog -->
+
+
+
+<script type="text/javascript">
+	$('.form_datetime').datepicker({
+		rtl: Metronic.isRTL(),
+		orientation: "left",
+		autoclose: true
+	});
+
+	num_val_init()
+	var rights = '{{.Tconf.rights}}'
+	
+	function DoeditTrasDet(a) {
+
+
+
+		if (!$('#transdetnew')[0].checkValidity()) {
+			$('.val_err').show();
+			return false;
+		}
+		$(".errorDv").html("")
+		
+		$.post("/transaction/loan_release/details/DEditHandler", $("#transdetnew").serialize()
+
+			,
+			function (data, status) {
+				alert(data[1])
+				if (data[1] == 'Success') {
+					$(".createAct").val("")
+					$.get("/transaction/loan_release/details?rights=" + rights + "&ID={{.Tconf.hdr}}",
+						function (data, status) {
+							//$("#ContentID").html(data);
+							$('#basic').modal('hide');
+							PageRefresher();
+						}
+					);
+				}
+
+			});
+		return false
+	}
+
+	function PageRefresher(){
+            
+                $.get("/transaction/loan_release/details?rights={{.Tconf.rights}}&ID={{.Tconf.hdr}}",
+                    function(data,status){
+                    $("#ContentID").html(data);
+                    //$('#basic').modal('hide')
+                    }
+                );
+            
+        }
+
+
+	$('#basic').unbind('hidden.bs.modal');
+	
+
+
+
+
+
+</script>

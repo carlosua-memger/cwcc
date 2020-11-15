@@ -1,0 +1,303 @@
+<div class="row">
+	<div class="col-md-6">
+		<!-- BEGIN BORDERED TABLE PORTLET-->
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-coffee"></i>Areas
+				</div>
+				<div class="tools">
+					<a href="javascript:;" class="collapse">
+					</a>
+					<a href="#portlet-config" data-toggle="modal" class="config">
+					</a>
+					<a href="javascript:;" class="reload">
+					</a>
+					<a href="javascript:;" class="remove">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<table id="tbl_l1" class="table table-bordered table-hover">
+				<thead>
+				<tr>
+					<th>
+						Area
+					</th>
+					<th>
+						Area Name
+					</th>
+					<th>
+						Customer Count
+					</th>
+					<th>
+						 Action
+					</th>
+				</tr>
+				</thead>
+				<tbody id="l1_body">
+				
+				
+			
+				</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- END BORDERED TABLE PORTLET-->
+	</div>
+
+	<div class="col-md-6" id="tbl_c2" hidden>
+		<!-- BEGIN BORDERED TABLE PORTLET-->
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-coffee"></i>Customers
+				</div>
+				<div class="tools">
+					<a href="javascript:;" class="collapse">
+					</a>
+					<a href="#portlet-config" data-toggle="modal" class="config">
+					</a>
+					<a href="javascript:;" class="reload">
+					</a>
+					<a href="javascript:;" class="remove">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<table id="tbl_l2" class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>
+								CustomerID
+							</th>
+							<th>
+								Customer Name
+							</th>
+							<th>
+								Pending Total
+							</th>
+							<th>
+								 Action
+							</th>
+						</tr>
+					</thead>
+					<tbody id="l2_body">
+					
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- END BORDERED TABLE PORTLET-->
+
+
+
+	</div>
+
+
+	<!-- BEGIN BORDERED TABLE PORTLET-->
+		<div class="portlet box grey-cascade" id="tbl_c3" hidden>
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-coffee"></i>Pending Orders
+				</div>
+				<div class="tools">
+					<a href="javascript:;" class="collapse">
+					</a>
+					<a href="#portlet-config" data-toggle="modal" class="config">
+					</a>
+					<a href="javascript:;" class="reload">
+					</a>
+					<a href="javascript:;" class="remove">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<table id="tbl_l3" class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>
+								Date
+							</th>
+							<th>
+								Order No.
+							</th>
+							<th>
+								Header Remarks
+							</th>
+							<th>
+								 Term
+							</th>
+							<th>
+								 Item Name
+							</th>
+							<th>
+								 Ordered
+							</th>
+							<th>
+								 Served
+							</th>
+							<th>
+								 Pending Total
+							</th>
+						</tr>
+					</thead>
+					<tbody id="l3_body">
+					
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- END BORDERED TABLE PORTLET-->
+
+</div>    
+
+
+<script type="text/javascript">
+	get_level1()
+	function get_level1() {
+	//	http://localhost/api/ajax/inventory/get-to-json/63/1
+		
+
+		$.get("/api/ajax/inventory/get-to-json/{{.Org_id}}/1",
+        {
+          sql_str: 'sis_customer_pendingOrder 1, {{.Org_id}}, 0'
+        }
+        ,
+		function(data,status){
+        	console.log(data);
+        	var ht ='';
+        	for (var i = 0; i < data.length; i++) {
+        		ht += ` <tr>
+					<td>
+						`+data[i].area+`
+					</td>
+					<td>
+						`+data[i].area_name+`
+					</td>
+					<td>
+						`+data[i].customer_count+`
+					</td>
+					<td>
+						 <a onclick="javascript:get_level2(`+data[i].area+`);"> >> </a>
+					</td>
+				</tr>
+			 	 `		
+        		
+        	}
+
+        	
+        $("#l1_body").html(ht);
+        $('#tbl_l1').DataTable().destroy();
+        $('#tbl_l1').DataTable({
+    		"ordering": false,
+    		"scrollY": "400px",
+    	});
+
+        });
+	}
+
+	function get_level2(areaID) {
+	//	http://localhost/api/ajax/inventory/get-to-json/63/1
+		$("#tbl_c2").hide();
+		$("#tbl_c3").hide();
+		$('#tbl_l2').DataTable().destroy();
+		$.get("/api/ajax/inventory/get-to-json/{{.Org_id}}/1",
+        {
+          sql_str: 'sis_customer_pendingOrder 2, {{.Org_id}},'+areaID
+        }
+        ,
+		function(data,status){
+        	console.log(data);
+        	var ht ='';
+        	for (var i = 0; i < data.length; i++) {
+        		ht += ` <tr>
+					<td>
+						`+data[i].customer+`
+					</td>
+					<td>
+						`+data[i].customer_name+`
+					</td>
+					<td>
+						`+data[i].pending_total+`
+					</td>
+					<td>
+						 <a onclick="javascript:get_level3(`+data[i].customer+`);"> >> </a>
+					</td>
+				</tr>
+			 	 `		
+        		
+        	}
+
+        $("#tbl_c2").show(); 	
+        $("#l2_body").html(ht);
+
+        
+        $('#tbl_l2').DataTable({
+    		"ordering": false,
+    		"scrollY": "400px",
+    	});
+
+        });
+	}
+
+	function get_level3(customerID) {
+	//	http://localhost/api/ajax/inventory/get-to-json/63/1
+		 $("#tbl_c3").hide();	
+		  $('#tbl_l3').DataTable().destroy();
+		$.get("/api/ajax/inventory/get-to-json/{{.Org_id}}/1",
+        {
+          sql_str: 'sis_customer_pendingOrder 3, {{.Org_id}},'+customerID
+        }
+        ,
+		function(data,status){
+        	console.log(data);
+        	var ht ='';
+        	for (var i = 0; i < data.length; i++) {
+        		ht += ` <tr>
+					<td>
+						`+data[i].trandate+`
+					</td>
+					<td>
+						`+data[i].orderNo+`
+					</td>
+					<td>
+						`+data[i].header_remarks+`
+					</td>
+					<td>
+						`+data[i].term+`
+					</td>
+					<td>
+						`+data[i].item_name+`
+					</td>
+					<td>
+						`+data[i].ordered+`
+					</td>
+					<td>
+						`+data[i].served+`
+					</td>
+					<td>
+						`+data[i].pending_total+`
+					</td>
+				</tr>
+			 	 `		
+        		
+        	}
+        $("#tbl_c3").show();	
+        $("#l3_body").html(ht);
+
+       
+        $('#tbl_l3').DataTable(
+        	//{"ordering": false }
+        	{
+        		"scrollY": "400px",
+        	}
+    	);
+
+        });
+	}
+
+
+
+
+</script>

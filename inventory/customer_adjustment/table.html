@@ -1,0 +1,762 @@
+    <style type="text/css">
+    tr.hilight {
+    background: #6FB1B1;
+    }
+    td.hilight {
+    background: #6FB1B1 ;
+    }
+   .ipt {
+            width: 30px;
+        }
+    .ipt_r {
+            width: 50px;
+        }
+    .ipt_ref {
+            width: 100px;
+    }
+    .dtl_h {
+        border-bottom: 4px solid #35AA47;
+        width: 65px;
+        margin-bottom: 13px;
+    }       
+    .tot_align_right {
+        text-align: right
+    }    
+    </style>
+    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+    
+    
+
+
+
+    <div class="portlet box grey-cascade" id="dpanel">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-globe"></i>{{.Tempconf.Panel_name}}
+            </div>
+            <div class="tools">
+                <a href="javascript:;" class="collapse">
+                </a>
+                <a href="#portlet-config" data-toggle="modal" class="config">
+                </a>
+                <a href="javascript:;" class="reload">
+                </a>
+                <a href="javascript:;" class="remove">
+                </a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            {{if eq .Tempconf.ismoreinfo "true"}}
+            
+                <div class="row">
+
+                    <div class="col-md-6">
+                         <div class="row">    
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Customer Name:</label>
+                                <p class="control-label col-md-8">{{.Tempconf.suprec_hdr_customer_name}}</p>
+                            </div>
+                        </div>
+
+                        <div class="row">    
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Adjustment Type:</label>
+                                <p class="control-label col-md-8">{{.Tempconf.suprec_hdr_Adjtype}}</p>
+                            </div>
+                        </div>
+
+
+                        <div class="row">    
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Transaction ID:</label>
+                                <p class="control-label col-md-8">{{.Tempconf.suprec_hdr_id}}</p>
+                            </div>
+                        </div>
+             
+                        
+                         <div class="row">    
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Transaction Date:</label>
+                                <p class="control-label col-md-8">{{.Tempconf.suprec_hdr_transdate}}</p>
+                            </div>
+                        </div>
+                         <div class="row">    
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Transaction Amount:</label>
+                                <p class="control-label col-md-8">{{.Tempconf.suprec_hdr_amount}}</p>
+                            </div>
+                        </div>
+                         <div class="row">    
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Transaction Balance:</label>
+                                <p class="control-label col-md-8">{{.Tempconf.suprec_hdr_balance}}</p>
+                            </div>
+                        </div>
+                         <div class="row">    
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Application Status:</label>
+                                <p class="control-label col-md-8">{{.Tempconf.suprec_hdr_status}}</p>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+                    <!--/span-->
+
+                      <div>
+                    <script> var candf = false </script>
+                    {{if ne .Tempconf.suprec_hdr_status `App Posted`  }}
+                     {{if ne .Tempconf.suprec_hdr_status `Cancelled`}}
+                      
+                        <!-- <a data-toggle='modal' href='#basic' onclick="javascript:Modalfunc_adreference('/inventory/customer_adjustment/details/add_reference?h_id={{.Tempconf.suprec_hdr_id}}&rights={{.Tempconf.Rights}}',event)" >add reference</a>
+-->
+                        <script> candf = true </script>
+                    {{end}}
+                    {{end}}
+
+
+                    </div>
+                    
+                    <div class="col-md-6">
+                         <table>
+                             <tbody class="c_t_ref">
+                                <!-- <tr>
+                                    <td>id1<a class="remove" href="javascript:;"> X</a></td>
+                                </tr>
+                                <tr>
+                                    <td>id2<a class="remove" href="javascript:;"> X</a></td>
+                                </tr>
+ -->
+                                {{range  $key,$val := .Arr_refID}}
+                                    <tr>
+                                        <td>
+                                            <a href="#" onclick="javascript:fuc_ref_delete({{ index  $val 0}},event);"> {{ index  $val 1}} </a>
+                                        </td>
+                                    </tr>
+                                {{end}}
+
+                             </tbody>
+                         </table>   
+                        
+                        <div class="form-group">
+                            
+                            <table class="table table-bordered table-striped tbl_dtls" width="50%"  >
+                                <tbody>
+                                    {{range  $key,$val := .Arr_tag}}
+                                        <tr>
+                                            <td>{{ index  $val 1}}</td>
+                                            <td>{{ index  $val 4}}</td>
+                                            <td>{{ index  $val 5}}</td>
+                                        </tr>
+                                    {{end}}    
+                                </tbody>
+                            </table>
+
+                        </div>
+
+
+                    </div>
+                    <!--/span-->
+                </div>
+                <hr>
+            {{end}}    
+            <div class="table-toolbar">
+
+                {{if eq .Tempconf.Archive "true"}}
+                    <div class="col-md-2" style="margin-left: -15px;">
+                    <select name="arc" id="arc" class="form-control">
+                        <option value="0">Open</option>
+                        <option value="1">Archive</option>
+                    </select>
+                    </div>
+                {{end}}
+
+                {{if eq .Tempconf.Add_back_button "true"}}
+                    <div class="btn-group">
+                        <a Class="btn green afjaxify" href="#/inventory/adjustment_entry?rights={{.Tempconf.Rights}}" onclick="javascript:nav_back('/inventory/customer_adjustment?rights={{.Tempconf.Rights}}');">
+                        <i class="fa fa-backward"></i> Back 
+                        </a>
+
+                    
+                    </div>
+                {{end}}
+                {{if eq .Tempconf.Add_new_button_details "true"}}
+                    <a  class="btn green act_btn" data-toggle='modal' href='#basic'  onclick="javascript:Modalfunc('{{.Tempconf.Add_new_button_url}}');">
+                    Add New <i class="fa fa-plus"></i>
+                     </a>
+                {{end}}
+                
+                {{if eq .Tempconf.Add_new_button "true"}}
+                <div class="btn-group act_btn" >
+                    <a class="btn green" href="#{{.Tempconf.Add_new_button_url}}" onclick="javascript:Navigate('{{.Tempconf.Add_new_button_url}}');">
+                    Add New <i class="fa fa-plus"></i>
+                    </a>
+
+                   <!--  <a  class="btn green act_btn" data-toggle='modal' href='#basic'  onclick="javascript:Modalfunc('{{.Tempconf.Add_new_button_url}}{{.Tempconf.hdr_id}}');">
+                    Add New <i class="fa fa-plus"></i>
+                     </a> -->
+
+                </div>
+                {{end}}
+                
+                
+                {{if eq .Tempconf.Add_cancel_button "true"}}
+                <div class="btn-group act_btn">
+                    <a class="btn green" href="#{{.Tempconf.Add_cancel_button_url}}" onclick="javascript:func_cancel('{{.Tempconf.Add_cancel_button_url}}');">
+                    Cancel 
+                    </a>
+                </div>
+                {{end}}
+
+                {{if eq .Tempconf.Add_post_button "true"}}
+                <div class="btn-group act_btn">
+                    <a class="btn green" href="#{{.Tempconf.Add_post_button_url}}" onclick="javascript:func_post('{{.Tempconf.Add_post_button_url}}');">
+                    Post 
+                    </a>
+                </div>
+                {{end}}
+
+
+                  {{if eq .Tempconf.Add_upload_button "true"}}
+                 <div class="btn-group act_btn">
+                    <a class="btn green" href="#{{.Tempconf.Add_upload_button_url}}" onclick="javascript:Navigate('{{.Tempconf.Add_upload_button_url}}');"
+                    data-toggle="tooltip" title="Upload to Customer Bill">
+                    Upload to CB 
+                    </a>
+                     
+                </div>
+                {{end}}
+                
+                {{if eq .Tempconf.Add_duplicate_button `true`}}
+                 <div class="btn-group act_btn">
+                    <a class="btn green" href="#{{.Tempconf.Add_duplicate_button_url}}" onclick="javascript:func_duplicate('{{.Tempconf.Add_duplicate_button_url}}');"
+                    data-toggle="tooltip" title="Duplicate Record">
+                    Duplicate Rec 
+                </a>
+                </div>       
+                {{end}}   
+
+            <div class="btn-group pull-right">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">Reports <i class="fa fa-angle-down"></i>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        <!-- {{special_report .Tempconf.org .Tempconf.hdr_id `4`}}-->
+                        <!-- <li>
+                            <a href="#">
+                            Print </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                            Save as PDF </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                            Export to Excel </a>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+            <div class="error_section">
+               
+            </div>
+            
+
+
+            <div class ="progressclass">
+
+               <!--  <div class="progress"> <div class="progress-bar progress-bar-striped active uploadprog" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 10%"> <span class="sr-only">45% Complete</span></div></div> -->
+
+            </div>
+            <div class ="progressCountclass"></div>
+            
+             
+            <!-- <div>pushing...</div> -->
+            
+        <table id="example1" class="table table-bordered " cellspacing="0" width="100%">
+            <thead>
+                     <!-- <tr style="border-bottom: 1px solid #DDD;">
+                    <th colspan="2" >HR Information</th>
+                    <th colspan="2">Contact</th>
+                </tr> -->
+                <tr>
+                    {{ range $index, $elmt := .Headercol}}
+                    <th>{{$elmt}}</th>
+                    {{end}}
+                </tr>
+            </thead>
+
+            <tfoot>
+                <!-- <tr>
+                    {{ range $index, $elmt := .Headercol}}
+                    <th>{{$elmt}}</th>
+                    {{end}}
+                </tr> -->
+                {{if eq .Tempconf.withtotal "true"}}
+                <tr >
+                    <th colspan="5" >TOTAL</th>
+                    <th align="right" class="c_t_amount tot_align_right" >000.00</th>
+                    <th align="right" class="c_t_applied tot_align_right" >000.00</th>
+                    <th align="right" class="c_t_otheradj tot_align_right" >000.00</th>
+                    <th></th>
+                    <th align="right" class="c_t_balance tot_align_right" >000.00</th>
+
+                </tr>
+                {{end}}
+            </tfoot>
+        </table>
+
+        
+        
+    </div>
+</div>
+
+ <script>
+
+        function digits (number) { 
+            var n = parseFloat(number).toFixed(2)
+            return Number(n).toLocaleString('en');
+        }
+
+
+        back_storege("_CustomerSales");
+
+        var stat_done = 0
+        var ish = 0
+        var level = "{{.Tempconf.level}}"
+        var last_url = "{{.AjaxUrl}}"
+       var  last_search ="{{.Tempconf.last_search}}"
+       dtbl();
+       function dtbl(){
+       var oTable =    $('#example1').dataTable( {
+                                "serverSide": true,
+                                "processing": true,
+                                "ajax": "{{.AjaxUrl}}&arc="+$("#arc").val(),
+                                "ordering" : false,
+                                destroy: true,
+                                "pageLength": {{.Tempconf.pageLength}},
+                                'displayStart': {{.Tempconf.displayStart}},
+                                "oSearch": {"sSearch": last_search},
+                                "sDom": '<"top"iflp>rt<"bottom"i>',
+                                /* "sScrollX": "100%",
+                                "sScrollYInner": "110%", */
+                                 
+                                "footerCallback": function ( row, data, start, end, display ) {
+                                    //console.log(data[1])
+                                    {{if eq .Tempconf.withtotal "true"}}
+                                        
+                                        var amount_tot =0
+                                        var applied_tot =0
+                                        var otheradj_tot =0
+                                        var balance_tot =0
+
+                                        for (var i = 0; i < data.length; i++) {
+                                            amount_tot =amount_tot+  parseFloat(data[i][5].trim().replace(',', ''))
+                                            applied_tot =applied_tot+  parseFloat(data[i][6].trim().replace(',', ''))
+                                            otheradj_tot =otheradj_tot+  parseFloat(data[i][7].trim().replace(',', ''))
+                                            balance_tot =balance_tot+  parseFloat(data[i][9].trim().replace(',', ''))
+
+                                        }
+                                        $('.c_t_amount').html(digits(amount_tot) )
+
+                                        $('.c_t_applied').html(digits(applied_tot) ) 
+                                        $('.c_t_otheradj').html(digits(otheradj_tot) ) 
+                                        $('.c_t_balance').html(digits(balance_tot) ) 
+
+                                    {{end}}
+                                }   
+                                ,
+                                "initComplete": function() {
+                                    
+                                    var $searchInput = $('div.dataTables_filter input');
+
+                                    $searchInput.unbind();
+
+                                    $searchInput.bind('keyup', function(e) {
+                                        if(e.keyCode == 13) {
+                                            oTable.fnFilter(this.value); 
+                                        }
+                                    });
+                                },
+
+                                createdRow: function( row, data, dataIndex ) {
+                                    if("{{.Tempconf.level}}"=="2"){
+                                        $( row ).find('td:eq(5)').attr('align', 'right');
+                                        $( row ).find('td:eq(6)').attr('align', 'right');
+                                        $( row ).find('td:eq(7)').attr('align', 'right');
+                                        $( row ).find('td:eq(9)').attr('align', 'right');
+
+                                        
+                                    }
+                                }
+
+                            } ) ;
+            $('#example1').on( 'draw.dt', function () {
+               //   console.log(oTable.ajax.params());
+               //alert(params)
+               //console.log(oTable.dataTable().fnSettings())
+               if(level=='1'){
+               var params = oTable.oApi._fnAjaxParameters(oTable.dataTable().fnSettings());
+               localStorage.setItem("last_url_CustomerSales", last_url); 
+               localStorage.setItem("last_start_CustomerSales", params.start);
+               localStorage.setItem("last_length_CustomerSales",params.length);
+               localStorage.setItem("last_search_CustomerSales",params.search.value);
+               }
+            });
+
+        }
+
+        $(document).ready(function() {
+        
+
+
+
+
+        });
+        function Modalfunc(a,v){
+            console.log(v)
+            $.get(a,
+                    {
+                      Assign_ID:'{{.Tempconf.Assign_ID}}'
+                    }
+                    ,
+
+                    function(data,status){
+                        $("#basic").html(data);
+                        //$(".dr-js").select2();
+                        
+                    });
+            //return false;
+        }
+        function Modalfunc_adreference(a,event){
+            //console.log(v)
+            $.get(a,
+                    {
+                      Assign_ID:'{{.Tempconf.Assign_ID}}'
+                    }
+                    ,
+
+                    function(data,status){
+                        $("#basic").html(data);
+                        //$(".dr-js").select2();
+                        
+                    });
+            return false;
+        }
+        function func_edit(a,b){
+            $.get(a,
+                    function(data,status){
+                     $("#ContentID").html(data);
+                    $(".dr-js").select2();
+
+                    }
+                );
+            return false
+        }
+        function func_add_child(a,b){
+            console.log("{{.Tempconf.Add_new_button_url}}")
+            $.get("{{.Tempconf.Add_new_button_url}}&parentID="+a,
+                    function(data,status){
+                     //$("#ContentID").html(data);
+                     $("#basic").html(data);
+                    $('#basic').modal('show'); 
+                    //$(".dr-js").select2();
+
+                    }
+                );
+            return false
+        }
+        function Modalfuncdelete (a,b,c) {
+            //a=link //b=dtl_id
+            clicked =c
+            console.log(a)
+            $.get(a,
+                    {
+                      dtl_id:b 
+                    },
+                    function(data,status){
+                        $("#modalSession").html(data);
+                    });
+            return false;
+        }
+        function Modalfuncpost (a,b,c) {
+            //a=link //b=dtl_id
+            clicked =c
+            console.log(a)
+            $.get(a,
+                    {
+                      dtl_id:b 
+                    },
+                    function(data,status){
+                        $("#modalSession").html(data);
+                    });
+            return false;
+        }
+        function Dodelete (a) {
+            $.post(a,$( ".formDelete" ).serialize()
+            ,
+            function(data,status){
+                var ret_data ="";
+                ret_data = data[1];
+                if (ret_data.indexOf("Error")==-1){
+                    $('#modalSession').modal('hide') 
+                    //clicked.closest("tr").remove();
+                    PageRefresher(level);
+                }else{
+                   alert("Transaction not successful."); 
+                }
+            });
+        return false;
+        }
+        function Dopost (a) {
+            $.post(a,$( ".formPost" ).serialize()
+            ,
+            function(data,status){
+                var ret_data ="";
+                ret_data = data[1];
+                if (ret_data.indexOf("Error")==-1){
+                    $('#modalSession').modal('hide') 
+                    //clicked.closest("tr").remove();
+                    PageRefresher(level);
+                }else{
+                   alert("Transaction not successful."); 
+                }
+            });
+        return false;
+        }
+        function Nav2(a,b){
+            $.get("{{.Tempconf.Action_baseURL}}",'{{.Tempconf.ActionCol_param}}='+b,
+                function(data,status){
+                 $("#ContentID").html(data);
+                
+                }
+            );
+        return false
+        }
+
+
+        function PageRefresher(lev){
+            if(lev=='1'){
+                $.get("/inventory/customer_adjustment?rights={{.Tempconf.Rights}}",
+                    function(data,status){
+                    $("#ContentID").html(data);
+                     //$('#basic').modal('hide')
+                    }
+                );
+            }else if(lev=='2'){
+                $.get("/inventory/customer_adjustment/details?rights={{.Tempconf.Rights}}&ID={{.Tempconf.hdr_id}}",
+                    function(data,status){
+                    $("#ContentID").html(data);
+                     //$('#basic').modal('hide')
+                    }
+                );  
+            }
+        }
+        function func_duplicate (a,b) {
+            $.get(a,
+                    function(data,status){
+                        console.log(data)
+                        if(data[1]=='Success'){
+                            $.get("/inventory/customer_adjustment/details?rights={{.Tempconf.Rights}}&ID="+data[0],
+                                function(data,status){
+                                 $("#ContentID").html(data);
+                                
+                                }
+                            );    
+                        }else{
+                            alert(data[0]);
+                        }
+                    }    
+                );
+        }
+         function func_post(a,b){
+            if (confirm("You are about to post this transaction") == true) {
+
+
+                //alert("{{.AjaxUrl}}")
+
+               // alert('{{.Tempconf.cusapp}}')
+            var htdata ='<div class="upload_top_info">'
+                       htdata +=' <div class="upload_jif" style="background: url(/src/metronic_3.1.2/images/throbber.gif) center center no-repeat; height: 15px; width: 18px; display: inline-block;">'
+                                    
+                    htdata +='</div>'
+                    htdata +='<div class="upload_info" style="display: inline-block;">We are now posting your records. Please wait for a moment.</div>'
+                    htdata += '</div>' 
+                     $(".progressclass").html(htdata)
+            $.get(a,
+                    function(data,status){
+                        console.log(data)
+                        $(".progressclass").html("")
+                       // if(data.Message.includes("Success")){
+                        if(data[0][1]=='Success'){
+                            
+                            PageRefresher(level);
+                            /*$(".act_btn").hide();
+                            var htdata =' <div class="Metronic-alerts alert alert-success fade in"><button type="button" '
+                            htdata +='class="close" data-dismiss="alert" aria-hidden="true"></button><i class="fa-lg fa fa-'
+                            htdata += 'success"></i>  Posting '
+                            htdata += data[0][1]
+                            htdata += '</div>   '
+                            $(".error_section").html(htdata);
+                            table = $('#example1').dataTable( {
+                            "serverSide": true,
+                                "ajax": "{{.AjaxUrl}}&status=Posted",
+                                "processing": true,
+                                destroy: true,
+                            } );*/
+                        
+                        }else{
+                            var htdata =' <div class="Metronic-alerts alert alert-danger fade in"><button type="button" '
+                            htdata +='class="close" data-dismiss="alert" aria-hidden="true"></button><i class="fa-lg fa fa-'
+                            htdata += 'warning"></i>Unable to post.<br> '
+                            for (var i = 0; i < data.length; i++) {
+                                //console.log(data[i][0])
+                                htdata +=data[i][1] +"<br>"
+                            };
+                            htdata += '</div>   '
+                            $(".error_section").html(htdata);
+                        }
+
+                    }
+                );
+            return false
+        } else {
+                PageRefresher(level);
+            }
+        }
+
+        function func_cancel(a,b){
+            if (confirm("You are about to cancel this transaction") == true) {
+            var htdata ='<div class="upload_top_info">'
+                       htdata +=' <div class="upload_jif" style="background: url(/src/metronic_3.1.2/images/throbber.gif) center center no-repeat; height: 15px; width: 18px; display: inline-block;">'
+                                    
+                    htdata +='</div>'
+                    htdata +='<div class="upload_info" style="display: inline-block;">  Where are now canceling your records.. please wait for a moment</div>'
+                    htdata += '</div>' 
+                     $(".progressclass").html(htdata)
+            $.get(a,
+                    function(data,status){
+                        $(".progressclass").html("")
+                        //if(data.Message.includes("Success")){
+                        if(data[0][1]=='Success'){
+                              /* $.get("/inventory/adjustment_entry/details?rights="+rights+"&ID={{.Tempconf.hdr_id}}",
+                                 function(data,status){
+                                 $("#ContentID").html(data);
+                                 //$('#basic').modal('hide')
+                                }
+                            ); */
+
+                            
+                            
+                            PageRefresher(level);
+
+                            /* $(".act_btn").hide();
+                            var htdata =' <div class="Metronic-alerts alert alert-success fade in"><button type="button" '
+                            htdata +='class="close" data-dismiss="alert" aria-hidden="true"></button><i class="fa-lg fa fa-'
+                            htdata += 'Canceled"></i>  '
+                            htdata += data[0][1]
+                            htdata += '</div>   '
+                            $(".error_section").html(htdata);
+                            table = $('#example1').dataTable( {
+                            "serverSide": true,
+                                "ajax": "{{.AjaxUrl}}&status=Posted",
+                                "processing": true,
+                                destroy: true,
+                            } ); */
+                        }else{
+                            var htdata =' <div class="Metronic-alerts alert alert-danger fade in"><button type="button" '
+                            htdata +='class="close" data-dismiss="alert" aria-hidden="true"></button><i class="fa-lg fa fa-'
+                            htdata += 'warning"></i>Unable to cancel.<br> '
+                            for (var i = 0; i < data.length; i++) {
+                                htdata +=data[i][0] +"<br>"
+                            };
+                            
+                          /*  if( data!=null){
+                                for (var i = 0; i < data.length; i++) {
+                                    //alert(data[i][0]);
+                                   htdata += data[i][0]
+                                   
+                                    if (data[i][0]=="Success"){
+                                        console.log(data[i][0])
+                                       
+                                        
+                                    //return false;
+                                    }else{
+                                        alert(ret_msg)
+                                    }
+                                     
+                                }
+                            }
+
+*/
+
+
+                            htdata += '</div>   '
+                             $(".error_section").html(htdata);
+                        }
+
+                    }
+                );
+            return false
+        } else {
+                PageRefresher(level);
+            }
+        }
+
+
+
+         function fuc_ref_delete(trn_id,event) {
+            if(!candf){
+                alert("reference ID already Posted or Cancelled.")
+                return false;
+            }
+            var txt;
+            var r = confirm("Are you Sure to delete this reference?");
+            if (r = true) {
+              //  txt = "You pressed OK!";
+            } else {
+               return false
+
+            }
+
+            $.post('/inventory/customer_adjustment/details/delete_reference',
+            {
+                trn_id : trn_id
+            }
+            ,
+            function(data,status){
+                console.log(data)
+                alert(data[1])
+                
+                $(event.target).closest("tr").remove()
+
+            });
+            return false;
+
+        }
+
+         $("#arc").change(function(){
+            dtbl();
+        });
+
+        function nav_back(c_url) {
+            var  last_length = localStorage.getItem("last_length_CustomerSales")
+            var  last_start = localStorage.getItem("last_start_CustomerSales")
+            var  last_search = localStorage.getItem("last_search_CustomerSales")
+            var  url_last = c_url
+            console.log(url_last);
+             $.get(url_last,'last_length='+last_length +'&last_start='+last_start+'&last_search='+last_search,
+                    function(data,status){
+                    $("#ContentID").html(data);
+                    $(".dr-js").select2();
+
+                    }
+                );
+            return false
+        }
+       
+</script>
+
+
+
+
+<div class="lower_table"></div>

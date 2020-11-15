@@ -1,0 +1,1477 @@
+{{$Org_id := .Tconf.Org_id}}
+
+<head>
+	<!-- <title style="font-size: 16px;">Paired logs Report</title> -->
+	<style type="text/css">
+		table {
+
+			font-size: 10px;
+			font-family: 'Roboto';
+
+
+			border-collapse: collapse;
+			border-spacing: 50px;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+
+
+		}
+
+		table td,
+		table th {
+			max-width: 100px;
+			overflow-x: hidden;
+			overflow-y: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			padding: 3px;
+
+
+		}
+
+		.headercolor {
+			background-color: #EFEBEB
+		}
+
+		.fontroboto {
+
+			font-family: 'Roboto';
+			font-size: 10px;
+		}
+
+		.row.header {
+			font-weight: 900;
+			color: #ffffff;
+			background: #ea6153;
+		}
+
+		.row.green {
+			background: #27ae60;
+		}
+
+		.cell {
+			padding: 1px 10px;
+			display: table-cell;
+		}
+
+		.table {
+			margin: 0 0 40px 0;
+			width: 100%;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+			display: table;
+		}
+
+		@media screen and (max-width: 580px) {
+			.row {
+				padding: 14px 0 7px;
+				display: block;
+			}
+
+			.row.header {
+				padding: 0;
+				height: 6px;
+			}
+
+			.row.header .cell {
+				display: none;
+			}
+
+			.row .cell {
+				margin-bottom: 10px;
+			}
+
+			.row .cell:before {
+				margin-bottom: 3px;
+				min-width: 150px;
+				font-size: 10px;
+				line-height: 10px;
+				font-weight: bold;
+				text-transform: uppercase;
+				color: #969696;
+				display: block;
+			}
+		}
+
+		#amt_generated2 {
+			font-size: 14px;
+		}
+
+		@keyframes blinker {
+			50% {
+				opacity: 0;
+			}
+		}
+
+		.redfont {
+			color: #FF0000;
+		}
+	</style>
+</head>
+
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-file-text"></i>Edit Loan Release Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+
+
+
+
+				<div class="row">
+					<div class="col-md-6">
+
+
+						<h3 class="form-section">Loan Release {{.Tconf.id}}</h3>
+
+
+
+						<form id="CreateTransaction" class="form-horizontal" method="Post" onsubmit="return DoCreateTransaction()">
+							<input type="hidden" name="id" value="{{.Tconf.id}}">
+
+							<div class="form-horizontal">
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Tran date<span class="required" aria-required="true">*</span>
+									</label>
+									<div class="col-md-8">
+										<input type="text" name="trandate" value="{{.Tconf.trandate}}" placeholder="Select Date"
+											class="form-control date-picker-notime" maxlength="50" id="trandate" Required>
+										<span class="help-block c_h_date" style="color:red;"></span>
+
+									</div>
+								</div>
+
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">PN #</label>
+									<div class="col-md-8">
+										<input type="text" name="pnno" value="{{.Tconf.pn}}" placeholder="PN #" class="form-control"
+											maxlength="50">Please leave as blank to auto generate PN#
+
+									</div>
+								</div>
+
+
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Loan Application #</label>
+									<div class="col-md-8">
+										<input type="text" name="lano" value="{{.Tconf.la}}" class="form-control" maxlength="50"
+											onchange="convertamountwithcomma(this)" onkeypress='return numbersOnly(this,event,false,false);'>
+
+									</div>
+								</div>
+
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Member<span class="required"
+											aria-required="true">*</span></label>
+									<div class="col-md-8">
+										<input type="text" name="member" placeholder="Search Member" id="member" class="form-control"
+											required value="{{.Tconf.member}}">
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Partner</label>
+									<div class="col-md-8">
+										<select name="partner" class="form-control" id="partner">
+
+											{{$partner_id  := .Tconf.partner }}
+											{{range  $key ,$val := .Ls_partner}}
+											{{ $loop_id  := index  $val 0 }}
+											{{if eq $partner_id $loop_id }}
+											<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+											{{else}}
+											<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+											{{end}}
+											{{end}}
+
+										</select>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Loan Type</label>
+									<div class="col-md-8">
+										<select name="loantype" id="loantype" class="form-control">
+
+											{{$loantype_id  := .Tconf.loantype }}
+											{{range  $key ,$val := .Ls_loantype}}
+											{{ $loop_id  := index  $val 0 }}
+											{{if eq $loantype_id $loop_id }}
+											<option value="{{ index  $val 0}}" selected data-defaultamt="{{ index  $val 3}}"
+												data-defaultterm="{{ index  $val 4}}" data-defaultsfrate="{{ index  $val 5}}"
+												data-defaultsfded="{{ index  $val 6}}" data-defaultsffeefix="{{ index  $val 7}}"
+												data-defaultint="{{ index $val 2}}">{{ index  $val 1}}</option>
+											{{else}}
+											<option value="{{ index  $val 0}}" data-defaultamt="{{ index  $val 3}}"
+												data-defaultterm="{{ index  $val 4}}" data-defaultsfrate="{{ index  $val 5}}"
+												data-defaultsfded="{{ index  $val 6}}" data-defaultsffeefix="{{ index  $val 7}}"
+												data-defaultint="{{ index $val 2}}">{{ index  $val 1}}</option>
+											{{end}}
+											{{end}}
+										</select>
+									</div>
+								</div>
+
+
+
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Amount<span class="required" aria-required="true">*</span>
+									</label>
+									<div class="col-md-8">
+										<input type="text" id="amount" value="{{.Tconf.amt}}" name="amount" placeholder="0"
+											class="form-control" maxlength="50" Required style="text-align: right"
+											onchange="convertamountwithcomma(this)" onkeypress='return numbersOnly(this,event,true,false);'>
+										<span class="help-block" style="color:red;"></sapan>
+
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Term (mos)<span class="required" aria-required="true">*</span>
+									</label>
+									<div class="col-md-8">
+										<input type="text" name="term" value="{{.Tconf.term}}" class="form-control"
+											style="text-align: right" maxlength="50" Required
+											onkeypress='return numbersOnly(this,event,false,false);'>
+										<span class="help-block" style="color:red;"></span>
+
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Pay Mode</label>
+									<div class="col-md-8">
+										<select name="paymode" class="form-control" id="paymode">
+											{{$paymode_id  := .Tconf.paymode }}
+											{{range  $key ,$val := .Ls_paymodes}}
+											{{ $loop_id  := index  $val 0 }}
+											{{if eq $paymode_id $loop_id }}
+											<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+											{{else}}
+											<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+											{{end}}
+											{{end}}
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label">First Due<span class="required" aria-required="true">*</span>
+									</label>
+									<div class="col-md-8">
+										<input type="text" name="firstdue" value="{{.Tconf.first_due}}" placeholder="Select Date"
+											class="form-control firstdue-date" maxlength="50" id="firstdue" Required>
+										<span class="help-block c_h_date" style="color:red;"></span>
+
+									</div>
+								</div>
+
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Interest rate (per annum)<span class="required"
+											aria-required="true">*</span>
+									</label>
+									<div class="col-md-8">
+										<input type="text" name="interest" value="{{.Tconf.int_rate}}" class="form-control"
+											style="text-align: right" maxlength="50" Required
+											onkeypress='return numbersOnly(this,event,true,false);'>
+										<span class="help-block" style="color:red;"></span>
+
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Service Fee (Fixed Amount)
+									</label>
+									<div class="col-md-8">
+										<input type="text" name="service_fee" value="{{.Tconf.service_fee}}" class="form-control"
+											style="text-align: right" maxlength="50" 
+											onkeypress='return numbersOnly(this,event,true,false);'>
+										<span class="help-block" style="color:red;"></span>
+
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Service Fee (Percentage)
+									</label>
+									<div class="col-md-8">
+										<input type="text" name="service_fee_per" value="{{.Tconf.service_fee_per}}" class="form-control"
+											style="text-align: right" maxlength="50" 
+											onkeypress='return numbersOnly(this,event,true,false);'>
+										<span class="help-block" style="color:red;"></span>
+
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Bank</label>
+									<div class="col-md-8">
+										<select name="bank" class="form-control" id="bank">
+											{{$bank_id  := .Tconf.bank }}
+											{{range  $key ,$val := .Ls_banks}}
+											{{ $loop_id  := index  $val 0 }}
+											{{if eq $bank_id $loop_id }}
+											<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+											{{else}}
+											<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+											{{end}}
+											{{end}}
+										</select>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">CV To</label>
+									<div class="col-md-8">
+										<select name="cvto" class="form-control" id="cvto">
+											{{$cvto := .Tconf.gl_mapping_account_cv }}
+											{{range  $key ,$val := .Ls_cvto}}
+											{{ $loop_id  := index  $val 0 }}
+											{{if eq $cvto $loop_id }}
+											<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+											{{else}}
+											<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+											{{end}}
+											{{end}}
+										</select>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">JV To</label>
+									<div class="col-md-8">
+										<select name="jvto" class="form-control" id="jvto">
+											{{$jvto := .Tconf.gl_mapping_account_jv }}
+											{{range  $key ,$val := .Ls_jvto}}
+											{{ $loop_id  := index  $val 0 }}
+											{{if eq $jvto $loop_id }}
+											<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+											{{else}}
+											<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+											{{end}}
+											{{end}}
+										</select>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Check #
+									</label>
+									<div class="col-md-8">
+										<input type="text" name="checkno" value="{{.Tconf.cheque}}" class="form-control" maxlength="50"
+											onkeypress='return numbersOnly(this,event,false,false);'>
+
+
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Acct #<span class="required" aria-required="true">*</span>
+									</label>
+									<div class="col-md-8">
+										<input type="text" name="acctno" value="{{.Tconf.acct}}" class="form-control" maxlength="50"
+											onkeypress='return numbersOnly(this,event,false,false);'>
+
+
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">CV #
+									</label>
+									<div class="col-md-8">
+										<input type="text" name="cvno" value="{{.Tconf.cv}}" class="form-control" maxlength="50"
+											onkeypress='return numbersOnly(this,event,false,false);'>
+
+
+									</div>
+								</div>
+
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">CV Amt<span class="required" aria-required="true">*</span>
+									</label>
+									<div class="col-md-8">
+										<input type="text" name="cvamt" value="{{.Tconf.cv_amt}}" class="form-control" maxlength="50"
+											onkeypress='return numbersOnly(this,event,true,false);' style="text-align: right">
+										<span class="help-block" style="color:red;"></span>
+
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Release Date<span class="required" aria-required="true">*</span>
+									</label>
+									<div class="col-md-8">
+										<input type="text" name="releasedate" value="{{.Tconf.released}}" placeholder="Select Date"
+											class="form-control date-picker-released" maxlength="50" id="releasedate" Required>
+										<span class="help-block c_h_date" style="color:red;"></span>
+
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Remarks</label>
+									<div class="col-md-8">
+
+										<!-- 	<input type="text" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct"> -->
+										<textarea name="remarks" class="form-control createAct">{{.Tconf.remarks}}</textarea>
+									</div>
+								</div>
+
+							</div>
+
+
+
+						</form>
+
+
+					</div>
+
+					<div class="col-md-6">
+
+
+						<div class="form-group">
+
+							<!-- 	<div class="col-md-10">
+				<b class = "fontroboto"><font size="4">Amount Generated:</b><label id="amt_generated2"></label></font>
+
+				</div> -->
+
+							<div class="col-md-8">
+								<label id="listofloans_label"></label>
+								<table border="0" width="30%" id="listofloans" name="listofloans">
+								</table>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-8">
+
+								<label id="covers_label"></label>
+								<table border="0" id="covers_table" width="100%"></table>
+
+							</div>
+							<div class="col-md-3">
+								<label id="covers2_label"></label>
+								<table border="0" id="covers2_table" width="100%"></table>
+								<br>
+								<a class="btn green act_btn btn-sm" onclick="javascript:Modalfunc_savings_ledger(this);"
+									id="savings_ledger">
+									Show Savings Ledger</a>
+								<br>
+								<br>
+								<a class="btn green act_btn btn-sm" onclick="javascript:Modalfunc_loans_ledger(this);"
+									id="loans_ledger">
+									Loans with Balance</a>
+
+							</div>
+
+
+
+						</div>
+						<div class="form-group">
+							<div class="col-md-12">
+								<label id="latestpaymentsfromchris_label"></label>
+								<table border="0" width="100%" id="latestpaymentsfromchris_table"></table>
+							</div>
+						</div>
+
+
+					</div>
+
+				</div>
+
+				<div class="form-actions fluid">
+					<div class="col-md-offset-3 col-md-9">
+						<button type="submit" class="btn blue submit_btn" onclick="return DoCreateTransaction()">Save</button>
+						<button class="btn default" onclick="javascript:nav_back('/transaction/loan_release?rights={{.Rights}}')"
+							type="button">Go Back</button>
+					</div>
+				</div>
+
+
+			</div>
+
+
+
+		</div>
+	</div>
+
+
+
+
+</div>
+
+</div>
+
+
+
+
+<script type="text/javascript">
+	$("#savings_ledger").hide();
+	$("#loans_ledger").hide();
+	$("[name=partner] , [name=loantype], [name=paymode], [name=bank], [name=jvto], [name=cvto] ").select2();
+
+	function repoFormatResult(repo) {
+		//var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div></div>";
+		var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+		return markup;
+	}
+	function repoFormatSelection(repo) {
+		// $("input[name=unit_cost]").val(repo.price);
+		return repo.full_name;
+	}
+
+	$("#member").select2({
+		placeholder: "Search for Members",
+		minimumInputLength: 3,
+		multiple: false,
+		allowClear: false,
+		ajax: {
+			url: "/master/members_search/search/Ajax/Ajax_getItem",
+
+			//url: "/inventory/adjustment_entry/details/Ajax/Ajax_getItem",
+			dataType: "json",
+			quietMillis: 250,
+			data: function (term, page) {
+				return {
+					// search term
+					q: term
+				};
+			},
+			results: function (data, page) {
+				// parse the results into the format expected by Select2.
+				// since we are using custom formatting functions we do not need to alter the remote JSON data
+
+				return { results: data.items };
+			}
+
+
+
+		},
+
+		initSelection: function (element, callback) {
+			// the input tag has a value attribute preloaded that points to a preselected repository's id
+			// this function resolves that id attribute to an object that select2 can render
+			// using its formatResult renderer - that way the repository name is shown preselected
+
+			/*
+			var id = $( element ).val();
+			if ( id !== "" ) {
+				$.ajax( "inventory/location_order/details/Ajax/Ajax_getItem?isbaseonassignid=1&id=" + id, {
+					dataType: "json"
+				}).done( function( data ) {
+					callback( data );
+				});
+			}*/
+			var data = { 'Id': {{.Tconf.member}}, 'full_name': "{{.Tconf.member_name}}" }
+		callback(data);
+					
+				},
+
+	formatResult: repoFormatResult,
+		formatSelection: repoFormatSelection,
+			// apply css that makes the dropdown taller
+			dropdownCssClass: "bigdrop",
+				// we do not want to escape markup since we are displaying html in results
+				escapeMarkup: function(m) {
+					return m;
+
+
+
+				}
+			});
+
+
+	$("#member").change(function () {
+
+
+
+		$.get("/json_func",
+			{
+				qdata: "LA_CreditScore 8," + $('[name=member]').val() + "," + $('[name=loantype]').val() + "," + $('[name=term]').val()
+
+			}
+			,
+			function (data, status) {
+				if (data != null) {
+
+					var amt_generated = "";
+
+
+					for (var i = 0; i < data.length; i++) {
+						ret_msg = data[i][0]
+						//$("input[name=customer]").val(ret_msg);
+						//console.log(alert(data[i][0]))
+
+						amt_generated = data[i][0]
+
+ 
+
+
+					}
+					$("[name=amt_generated]").val(CommaFormatted(amt_generated)).trigger("change");
+					$('#amt_generated2').text(CommaFormatted(amt_generated));
+					if (amt_generated < 0) {
+						$('#amt_generated2').css("color", "red");
+						$('#amt_generated2').css("font-size", "18px");
+						$('#amt_generated2').css("font-weight", "900");
+						$('#amt_generated2').css("animation", "blinker 1s linear 3");
+
+					} else {
+
+						$('#amt_generated2').css("color", "black");
+						$('#amt_generated2').css("font-size", "16px");
+						$('#amt_generated2').css("font-weight", "900");
+						$('#amt_generated2').css("animation", "blinker 1s linear 3");
+					}
+
+
+
+				}
+			});
+
+		return false;
+
+	});
+
+	$("#member").change(function () {
+
+		$('#listofloans').empty();
+
+		$.get("/json_func",
+			{
+				qdata: "rep_loanlist_member " + $('[name=member]').val() + ",1"
+
+			}
+			,
+			function (data, status) {
+				if (data != null) {
+
+					var line = "";
+					var header = "";
+					var listofloanslabel = "";
+
+					listofloanslabel = '<b class = "fontroboto">List of Loans</b>';
+					$('#listofloans_label').html(listofloanslabel);
+
+
+					header = '<tr><th class="row header green"><b>Trandate</b></th><th class="row header green"><b>Type of Loan</b></th><th class="row header green"><b>LA_Amount</b></th><th class="row header green"><b>Term</b></th><th class="row header green"><b>LR_Status</b></th><th class="row header green"><b>LA_Status</b></th><th class="row header green"><b>LR_Amount</b></th><th class="row header green"><b>Balance</b></th><th class="row header green"><b>Past_Due</b></th></tr>'
+
+				
+					$('#listofloans').prepend(header);
+
+					for (var i = 0; i < data.length; i++) {
+						ret_msg = data[i][0]
+
+						var myStr = data[i][8];
+						myStr = myStr.replace(/,/g, "");
+
+						if (myStr > 0) {
+
+							line = '<tr class="redfont"><td>' + data[i][0] + '</td><td>' + data[i][1] + '</td><td>' + data[i][2] + '</td><td>' + data[i][3] + '</td><td>' + data[i][4] + '</td><td>' + data[i][5] + '</td><td align="right">' + data[i][6] + '</td><td align="right">' + data[i][7] + '</td><td align="right">' + data[i][8] + '</td>/tr>';
+							//console.log(i);
+
+
+						} else {
+
+							line = '<tr><td>' + data[i][0] + '</td><td>' + data[i][1] + '</td><td>' + data[i][2] + '</td><td>' + data[i][3] + '</td><td>' + data[i][4] + '</td><td>' + data[i][5] + '</td><td align="right">' + data[i][6] + '</td><td align="right">' + data[i][7] + '</td><td align="right">' + data[i][8] + '</td></tr>';
+							//console.log(i);
+
+
+
+
+						}
+						$('#listofloans').append(line);
+						console.log(line);
+
+
+					}
+
+
+				}
+			});
+
+		return false;
+	});
+
+	///////PAYMENT FROM CHRIS TABLE/////
+
+	$("#member").change(function () {
+
+		$('#latestpaymentsfromchris_table').empty();
+
+		$.get("/json_func",
+			{
+				qdata: "hris_get_payment_history 1," + $('[name=member]').val()
+
+			}
+			,
+			function (data, status) {
+				if (data != null) {
+
+					var line = "";
+					var header = "";
+					var listofloanslabel = "";
+
+					listofloanslabel = '<b class = "fontroboto">Latest Payments from CHRIS</b>';
+					$('#latestpaymentsfromchris_label').html(listofloanslabel);
+
+
+
+
+
+					header = '<tr><th class="row header green"><b>Trandate</b></th><th class="row header green"><b>Description</b></th><th class="row header green"><b>Amount</b></th><th class="row header green"><b>Project</b></th></tr>'
+
+				
+					$('#latestpaymentsfromchris_table').prepend(header);
+
+					for (var i = 0; i < data.length; i++) {
+						ret_msg = data[i][0]
+
+
+
+						line = '<tr><td>' + data[i][0] + '</td><td>' + data[i][1] + '</td><td align="right">' + data[i][2] + '</td><td>' + data[i][3] + '</td></tr>';
+						//console.log(i);
+
+
+						$('#latestpaymentsfromchris_table').append(line);
+						console.log(line);
+
+
+					}
+
+
+
+
+
+
+				
+
+
+
+				}
+			});
+
+		return false;
+	});
+
+	///////COVERS START////////////////
+	$("#member").change(function () {
+
+		$('#covers_table').empty();
+
+		$.get("/json_func",
+			{
+				qdata: "LA_CreditScore 5," + $('[name=member]').val() + "," + $('[name=loantype]').val() + "," + $('[name=term]').val()
+
+			}
+			,
+			function (data, status) {
+				if (data != null) {
+
+					var line = "";
+					var header = "";
+					var listofloanslabel = "";
+
+					listofloanslabel = '<b class = "fontroboto">Earnings, Deductions and Covers</b>';
+					$('#covers_label').html(listofloanslabel);
+
+
+
+
+
+					header = '<tr><th class="row header green"><b>Description</b></th><th class="row header green"><b>Amount</b></th></tr>'
+
+					//var amt_generated = "";
+					$('#covers_table').prepend(header);
+
+					for (var i = 0; i < data.length; i++) {
+						ret_msg = data[i][0]
+
+
+
+						line = '<tr><td>' + data[i][1] + '</td><td align="right">' + data[i][2] + '</td></tr>';
+						//console.log(i);
+
+
+
+
+
+						$('#covers_table').append(line);
+						console.log(line);
+
+
+					}
+
+
+
+
+
+
+					//$("[name=amt_generated]").val(CommaFormatted(amt_generated)).trigger("change");
+
+
+
+				}
+			});
+
+		return false;
+	});
+
+	///////COVERS END////////////////
+
+
+	///////COVERS2 START////////////////
+	$("#member").change(function () {
+
+		$("#savings_ledger").show();
+		$("#loans_ledger").show();
+
+		$('#covers2_table').empty();
+
+		$.get("/json_func",
+			{
+				qdata: "LA_CreditScore 6," + $('[name=member]').val() + "," + $('[name=loantype]').val() + "," + $('[name=term]').val()
+
+			}
+			,
+			function (data, status) {
+				if (data != null) {
+
+					var line = "";
+					var header = "";
+					var listofloanslabel = "";
+
+					listofloanslabel = '<b class = "fontroboto"><font color="white">.</font></b>';
+					$('#covers2_label').html(listofloanslabel);
+
+
+
+
+
+					header = '<tr><th class="row header green"><b>Description</b></th><th class="row header green"><b>Amount</b></th></tr>'
+
+					//var amt_generated = "";
+					$('#covers2_table').prepend(header);
+
+					for (var i = 0; i < data.length; i++) {
+						ret_msg = data[i][0]
+
+
+
+						line = '<tr><td>' + data[i][1] + '</td><td align="right">' + data[i][2] + '</td></tr>';
+						//console.log(i);
+
+
+
+
+
+						$('#covers2_table').append(line);
+						console.log(line);
+
+
+					}
+
+
+
+
+
+
+					//$("[name=amt_generated]").val(CommaFormatted(amt_generated)).trigger("change");
+
+
+
+				}
+			});
+
+		return false;
+	});
+
+	///////COVERS END////////////////
+
+
+	function change_amt_generated() {
+
+
+
+		$.get("/json_func",
+			{
+				qdata: "LA_CreditScore 8," + $('[name=member]').val() + "," + $('[name=loantype]').val() + "," + $('[name=term]').val()
+
+			}
+			,
+			function (data, status) {
+				if (data != null) {
+
+					var amt_generated = "";
+
+
+					for (var i = 0; i < data.length; i++) {
+						ret_msg = data[i][0]
+						//$("input[name=customer]").val(ret_msg);
+						//console.log(alert(data[i][0]))
+
+						amt_generated = data[i][0]
+
+
+						//console.log(amt_generated)  
+
+
+					}
+					$("[name=amt_generated]").val(CommaFormatted(amt_generated)).trigger("change");
+					$('#amt_generated2').text(CommaFormatted(amt_generated));
+					if (amt_generated < 0) {
+						$('#amt_generated2').css("color", "red");
+						$('#amt_generated2').css("font-size", "16px");
+						$('#amt_generated2').css("font-weight", "900");
+						$('#amt_generated2').css("animation", "blinker 1s linear 3");
+					} else {
+
+						$('#amt_generated2').css("color", "black");
+						$('#amt_generated2').css("font-size", "16px");
+						$('#amt_generated2').css("font-weight", "900");
+						$('#amt_generated2').css("animation", "blinker 1s linear 3");
+					}
+
+
+
+
+
+				}
+			});
+
+		return false;
+	};
+
+	var currentDate = new Date();
+	/*$('.date-picker').datepicker({
+					 rtl: Metronic.isRTL(),
+					 orientation: "left",
+					 autoclose: true
+			 });*/
+	//$(".date-picker").datepicker("setDate",currentDate,"option", "dateFormat", "mm-dd-yy");
+	/* $(".date-picker").datetimepicker({
+					 Format: 'mm-dd-yy hh:mm:ss'
+					
+			 }).datetimepicker("setDate", currentDate);*/
+
+	$(".date-picker").datetimepicker({ format: 'mm/dd/yyyy hh:mm:ss' });
+	$(".date-picker").datepicker({autoclose: true });
+	$(".date-picker-notime").datepicker({autoclose: true });
+	$(".firstdue-date").datepicker({autoclose: true });
+	$(".date-picker-released").datepicker({autoclose: true });
+
+
+	/*	$(".date-picker").datetimepicker({
+					 dateFormat: "yy-mm-dd",
+						 timeFormat:  "hh:mm:ss"
+
+			});*/
+
+	//$('.date-picker').datepicker({"setDate": new Date() ,  autoclose: true });
+	//$('input[name=item_class]').focus();
+	//$("[name=item_class] , [name=supplier], [name=location]").select2();
+	var rghts = '{{.Rights}}'
+
+
+
+
+
+	function convertamountwithcomma(amount) {
+		console.log(parseFloat(amount.value.split(',').join('')).toFixed(2));
+		var amt = CommaFormatted(parseFloat(amount.value.split(',').join('')).toFixed(2));
+
+
+		document.getElementById('amount').value = amt
+
+		//	 $("[name=amount]").val(formatter.format(amount)).trigger("change");
+
+
+	};
+
+
+	const formatter = new Intl.NumberFormat('en-US', {
+		style: 'currency',
+		currency: 'PHP',
+		minimumFractionDigits: 2
+	})
+
+	/*	function commaSeparateNumber(val){
+					 while (/(\d+)(\d{3})/.test(val.toString())){
+					 val = val.toString().replace(/(\d+)(\d{3})/, '$1'+','+'$2');
+					}
+					return val;
+					}*/
+
+
+	function currencyFormat(num) {
+		return 'P' + parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, 'P1,')
+	}
+
+
+
+
+	function CommaFormatted(amount) {
+		var delimiter = ","; // replace comma if desired
+		var a = amount.split('.', 2)
+		var d = a[1];
+		var i = parseInt(a[0]);
+		if (isNaN(i)) { return ''; }
+		var minus = '';
+		if (i < 0) { minus = '-'; }
+		i = Math.abs(i);
+		var n = new String(i);
+		var a = [];
+		while (n.length > 3) {
+			var nn = n.substr(n.length - 3);
+			a.unshift(nn);
+			n = n.substr(0, n.length - 3);
+		}
+		if (n.length > 0) { a.unshift(n); }
+		n = a.join(delimiter);
+		if (d.length < 1) { amount = n; }
+		else { amount = n + '.' + d; }
+		amount = minus + amount;
+		return amount;
+	}
+
+
+	function Modalfunc_savings_ledger(a, v) {
+		var url_to_open = "/report/Show_savings_ledger?" + "&member=" + $("input[name=member]").val() + "&trantype=0"
+		var myWindow = window.open(url_to_open, "", "width=800,height=500");
+
+	}
+
+	function Modalfunc_loans_ledger(a, v) {
+		var url_to_open = "/report/Show_loans_ledger_withbalance?" + "&member=" + $("input[name=member]").val() + "&trantype=0"
+		var myWindow = window.open(url_to_open, "", "width=800,height=500");
+
+	}
+
+
+	$('#trandate').datepicker().on('changeDate', function(e) {
+		var trandate = $('[name=trandate]').val();
+		var released = addWeekdays(trandate,1);
+		var firstdue = addWeekdays(released,7)
+		console.log(released)
+		$("[name=releasedate]").val(addWeekdays(trandate,1)).trigger("change");
+		$("[name=firstdue]").val(addWeekdays(released,7)).trigger("change");
+		$(".firstdue-date").datepicker({autoclose: true }).datepicker("setDate", firstdue);
+		$(".date-picker-released").datepicker({autoclose: true }).datepicker("setDate", released);
+	});
+
+
+	$('#releasedate').datepicker().on('changeDate', function(e) {
+		var trandate = $('[name=releasedate]').val();
+		var firstdue = addWeekdays(trandate,7)
+		$("[name=firstdue]").val(firstdue).trigger("change");
+		$(".firstdue-date").datepicker({autoclose: true }).datepicker("setDate", firstdue);
+	
+		
+	});
+
+
+	function addWeekdays(date, weekdays) {
+    var newDate = new Date(date);
+    var i = 0;
+	newDate.setDate(newDate.getDate() + weekdays);
+
+	var day = newDate.getDay();
+	
+
+	if (day == 0)
+	{
+		newDate.setDate(newDate.getDate() + 1);
+	} 
+	else if (day == 6) {
+		newDate.setDate(newDate.getDate() + 2);
+	}
+		
+    
+    return newDate.toLocaleDateString();
+}
+
+	function DoCreateTransaction() {
+
+		var la = $('[name=lano]').val();
+		if (la > 0) {
+			la = la
+		}
+		else
+		{
+			la = 0
+		}
+
+		var ret_msg = ""
+		var amt = $('[name=amount]').val();
+		amt = amt.replace(/,/g, "");
+		var cv_amt = $('[name=cvamt]').val();
+		cv_amt = cv_amt.replace(/,/g, "");
+		$.get("/json_func",
+			{
+				//qdata : "Branch_Save 'Add','programmer',1,0,'"+$('[name=sup_name]').val()+"' ,'"+$('[name=sort]').val()+"' ,'"+$('[name=remarks]').val()+"'"
+				qdata: "LRHDR_SaveEdit '{{.Tconf.username}}',{{.Tconf.id}}, '" + $('[name=pnno]').val() + "'," + la + ",'" +  $('[name=trandate]').val() + "'," + $('[name=member]').val() +"," +$('[name=partner]').val() +"," + $('[name=loantype]').val() + "," + amt +"," + $('[name=term]').val() + "," + $('[name=paymode]').val() + ",'" + $('[name=firstdue]').val() + "','" + $('[name=releasedate]').val() + "'," + $('[name=interest]').val() + "," + $('[name=service_fee]').val() +"," +$('[name=bank]').val() + ",'" + $('[name=checkno]').val() + "','" + $('[name=acctno]').val() +  "','" + $('[name=cvno]').val() + "'," + cv_amt + ",'" + $('[name=remarks]').val() + "'," + $('[name=cvto]').val() + "," + $('[name=jvto]').val() + "," + $('[name=service_fee_per]').val()
+
+
+
+			}
+			,
+			function (data, status) {
+				//json_personnel = data
+				if (data != null) {
+					for (var i = 0; i < data.length; i++) {
+						//alert(data[i][0]);
+
+						ret_msg = data[i][1]
+						if (data[i][1] == "Success") {
+							//console.log(data[i][0])
+							//alert(ret_msg)
+							//$('#basic').modal('hide')
+							//dtbl()
+							//console.log("success here")
+							//$("#item_tagsdata").show()
+							//$(".submit_btn").prop('disabled', true);
+							$(".c_suprec_id").val(data[i][0])
+							GotoDetail(data[i][0])
+							//return false;
+						} else {
+							alert(ret_msg)
+						}
+
+					}
+				}
+			});
+
+		return false;
+		/*$('#basic').modal('hide')
+	dtbl()
+	return false*/
+
+	}
+
+	function GotoDetail(lrid) {
+		$.get("/transaction/loan_release/details?rights={{.Rights}}&ID={{.Tconf.id}}",
+			function (data, status) {
+				$("#ContentID").html(data);
+
+			}
+
+		);
+	}
+
+
+	$("#loantype").change(function () {
+
+		var defaultamt = $("[name=loantype]").select2().find(":selected").data("defaultamt")
+		var interest = $("[name=loantype]").select2().find(":selected").data("defaultint")
+		var sfRate = $("[name=loantype]").select2().find(":selected").data("defaultsfrate")
+		var term = $('[name=term]').val()
+		var amount = $('[name=amount]').val()
+		amount = amount.split(',').join('');
+
+		console.log("sf" + sfRate)
+		console.log("term" + term)
+		console.log("interest" + interest)
+		console.log("amount" + amount)
+
+
+		var totInterest = (((interest / 12) * term) / 100) * amount
+		var totSF = amount * sfRate
+
+		console.log("totSF" + totSF)
+		console.log("totInterest" + totInterest)
+
+		if ($('[name=paymode]').val() == 1) {
+			var total = parseFloat(totInterest) + parseFloat(amount) + parseFloat(totSF)
+			var amortization = (((parseFloat(totInterest) + parseFloat(amount) + parseFloat(totSF)) / term) / 4).toFixed(2)
+
+			//Math.Round(((totInterest + txtAmt.Text + totSF) / txtTerm.Text) / 4, 2)
+
+		} else {
+
+			var amortization = (((parseFloat(totInterest) + parseFloat(amount) + parseFloat(totSF)) / term) / 2).toFixed(2)
+		}
+		console.log("total" + total)
+		console.log(amortization)
+
+
+		$("[name=amount]").val(defaultamt).trigger("change");
+
+
+	});
+
+
+
+
+
+	$(document).ready(function () {
+		displaydata();
+
+	});
+
+	function displaydata() {
+
+		showListofLoans();
+		showCovers();
+		showLatestPayments();
+		showCovers2();
+	}
+
+
+
+
+	function showCovers() {
+
+		//$('#covers_table').empty();
+
+		$.get("/json_func",
+			{
+				qdata: "LA_CreditScore 5,{{.Tconf.member}},{{.Tconf.loantype}},{{.Tconf.term}}"
+
+			}
+			,
+
+			function (data, status) {
+				if (data != null) {
+
+					var line = "";
+					var header = "";
+					var listofloanslabel = "";
+
+					listofloanslabel = '<b class = "fontroboto">Earnings, Deductions and Covers</b>';
+					$('#covers_label').html(listofloanslabel);
+
+					header = '<tr><th class="row header green"><b>Description</b></th><th class="row header green"><b>Amount</b></th></tr>';
+
+					//var amt_generated = "";
+					$('#covers_table').prepend(header);
+
+					for (var i = 0; i < data.length; i++) {
+						ret_msg = data[i][0];
+
+
+
+						line = '<tr><td>' + data[i][1] + '</td><td align="right">' + data[i][2] + '</td></tr>';
+
+						$('#covers_table').append(line);
+						console.log(line);
+
+
+					}
+
+
+				}
+			});
+
+		return false;
+
+	};
+
+	function showLatestPayments() {
+
+		$('#latestpaymentsfromchris_table').empty();
+
+		$.get("/json_func",
+			{
+				qdata: "hris_get_payment_history 1,{{.Tconf.member}}"
+
+			}
+			,
+			function (data, status) {
+				if (data != null) {
+
+					var line = "";
+					var header = "";
+					var listofloanslabel = "";
+
+					listofloanslabel = '<b class = "fontroboto">Latest Payments from CHRIS</b>';
+					$('#latestpaymentsfromchris_label').html(listofloanslabel);
+
+					header = '<tr><th class="row header green"><b>Trandate</b></th><th class="row header green"><b>Description</b></th><th class="row header green"><b>Amount</b></th><th class="row header green"><b>Project</b></th></tr>'
+
+					//var amt_generated = "";
+					$('#latestpaymentsfromchris_table').prepend(header);
+
+					for (var i = 0; i < data.length; i++) {
+						ret_msg = data[i][0]
+
+
+
+						line = '<tr><td>' + data[i][0] + '</td><td>' + data[i][1] + '</td><td align="right">' + data[i][2] + '</td><td>' + data[i][3] + '</td></tr>';
+						//console.log(i);
+
+						$('#latestpaymentsfromchris_table').append(line);
+						console.log(line);
+
+
+					}
+
+				}
+			});
+
+		return false;
+	};
+
+
+	function showCovers2() {
+
+		$("#savings_ledger").show();
+		$("#loans_ledger").show();
+
+		$('#covers2_table').empty();
+
+		$.get("/json_func",
+			{
+				qdata: "LA_CreditScore 6,{{.Tconf.member}},{{.Tconf.loantype}},{{.Tconf.term}}"
+
+			}
+			,
+			function (data, status) {
+				if (data != null) {
+
+					var line = "";
+					var header = "";
+					var listofloanslabel = "";
+
+					listofloanslabel = '<b class = "fontroboto"><font color="white">.</font></b>';
+					$('#covers2_label').html(listofloanslabel);
+
+
+
+
+
+					header = '<tr><th class="row header green"><b>Description</b></th><th class="row header green"><b>Amount</b></th></tr>'
+
+					//var amt_generated = "";
+					$('#covers2_table').prepend(header);
+
+					for (var i = 0; i < data.length; i++) {
+						ret_msg = data[i][0]
+
+
+
+						line = '<tr><td>' + data[i][1] + '</td><td align="right">' + data[i][2] + '</td></tr>';
+						//console.log(i);
+
+
+
+
+
+						$('#covers2_table').append(line);
+						console.log(line);
+
+
+					}
+
+
+
+
+
+
+					//$("[name=amt_generated]").val(CommaFormatted(amt_generated)).trigger("change");
+
+
+
+				}
+			});
+
+		return false;
+	};
+
+
+	function showListofLoans() {
+
+		//$('#listofloans').empty();
+
+		$.get("/json_func",
+			{
+				qdata: "rep_loanlist_member {{.Tconf.member}},1"
+
+			}
+			,
+			function (data, status) {
+				if (data != null) {
+
+					var line = "";
+					var header = "";
+					var listofloanslabel = "";
+
+					listofloanslabel = '<b class = "fontroboto">List of Loans</b>';
+					$('#listofloans_label').html(listofloanslabel);
+
+
+					header = '<tr><th class="row header green"><b>Trandate</b></th><th class="row header green"><b>Type of Loan</b></th><th class="row header green"><b>LA_Amount</b></th><th class="row header green"><b>Term</b></th><th class="row header green"><b>LR_Status</b></th><th class="row header green"><b>LA_Status</b></th><th class="row header green"><b>LR_Amount</b></th><th class="row header green"><b>Balance</b></th><th class="row header green"><b>Past_Due</b></th></tr>'
+
+					//var amt_generated = "";
+					$('#listofloans').prepend(header);
+
+					for (var i = 0; i < data.length; i++) {
+						ret_msg = data[i][0]
+
+						var myStr = data[i][8];
+						myStr = myStr.replace(/,/g, "");
+
+						if (myStr > 0) {
+
+							line = '<tr class="redfont"><td>' + data[i][0] + '</td><td>' + data[i][1] + '</td><td>' + data[i][2] + '</td><td>' + data[i][3] + '</td><td>' + data[i][4] + '</td><td>' + data[i][5] + '</td><td align="right">' + data[i][6] + '</td><td align="right">' + data[i][7] + '</td><td align="right">' + data[i][8] + '</td>/tr>';
+							//console.log(i);
+
+
+						} else {
+
+							line = '<tr><td>' + data[i][0] + '</td><td>' + data[i][1] + '</td><td>' + data[i][2] + '</td><td>' + data[i][3] + '</td><td>' + data[i][4] + '</td><td>' + data[i][5] + '</td><td align="right">' + data[i][6] + '</td><td align="right">' + data[i][7] + '</td><td align="right">' + data[i][8] + '</td></tr>';
+							//console.log(i);
+
+
+
+
+						}
+						$('#listofloans').append(line);
+						console.log(line);
+
+
+					}
+
+
+
+
+
+
+					//$("[name=amt_generated]").val(CommaFormatted(amt_generated)).trigger("change");
+
+
+
+				}
+			});
+
+		return false;
+	};
+
+
+
+
+
+
+
+
+</script>

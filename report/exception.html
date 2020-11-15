@@ -1,0 +1,213 @@
+<html>
+    <head>
+                <!-- <title style="font-size: 16px;">Paired logs Report</title> -->
+            <style type="text/css">
+                .rpt_date {
+                    float: right;
+                    
+                }
+                .page_header{
+                    margin-bottom: 5px;
+                    /*display: inline; */
+                }
+                .name{
+                    /*float: left;*/
+                    margin-bottom: 3px;
+                    font-family: Arial; 
+                }
+                .covered_data{
+                    /*float: right;*/
+                    font-family: Arial; 
+                }
+                .pic_logo {
+                    width: 200px;
+
+                }
+                table{
+                    width: 100%;
+                }
+                
+                .dtatbl {
+                
+                border: 0.99px solid #B3B3B3;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 12px;
+                }
+
+                .dtatbl th{
+                    border: 0.99px solid #B3B3B3;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 14px;
+                }
+
+                .dtatbl td {
+                    border: 0.99px solid #B3B3B3;
+                border-collapse: collapse;
+                font-family: 'Arial Narrow', Arial, sans-serif;
+                font-size: 14px;
+                }
+                th, td {
+                    /*padding: 2px;*/
+                      font-size: 12pt;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+                th{
+                    
+                    background-color: whiteSmoke;
+                    /*background-image: -webkit-linear-gradient*/
+                    
+                }
+                body {
+                    font-size: 12px;
+                }
+                .logo{
+                    width: 200px;
+                    margin-bottom: 5px;
+                }
+                .page_footer{
+                    margin-top: 20px;
+                    display: inline-block;
+                    width: 100%;
+                }
+                .signaturemember{
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: left;
+                    font-family: inherit;
+                }
+                .signatureleft{
+                    margin-left: 10%;
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: left;
+                    font-family: inherit; 
+                }
+                .signatureright{
+                    border-top: 0.99px solid black;
+                    width: 25%;
+                    float: right;
+                    font-family: inherit; 
+                }
+                .tbl_foor{
+                    margin-top: 10px;
+                }
+                .tbl_foor td div{
+                    border-top: 0.99px solid black; 
+                    width: 50%;
+                }
+                .isred {
+                    color: red;
+                }
+                .log_sum{
+                    margin-top: 10px;
+                }
+                td div{
+                    font-size: 12px;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+                td div b{
+                    font-size: 12px;
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                }
+                .header {
+                    font-family: 'Arial Narrow', Arial, sans-serif;
+                    font-size: 25px;
+                }
+            </style></head>
+                
+
+            <body>
+                <table>
+                    <tr>
+                  
+                <td class="header">
+                <h>Exception Report </h>
+                <br>
+                <h>{{.Conf.trantype}} Header # {{.Conf.trnID}}</h>
+                </td>
+                </tr>
+                </table>
+    <!--            {{.Conf.org_id}}
+               {{.Conf.trnID }} "mars" -->
+
+              <!--  {{ $currentCategoryUrl := .Conf.org_id | printf "%s%s" "," | printf "%s%s" .Conf.trnID }}
+               {{$currentCategoryUrl}}
+
+ -->
+               
+
+                {{$sql_str2 := combine_string `EOC_CHRISRemittance_Exception 0,'` .Conf.trantype `',` .Conf.trnID }}
+
+              {{$data_list := tpl_sql $sql_str2 }}
+                
+               
+
+
+            
+                
+                <table width="100%" Width="100%" class="dtatbl">
+                    <tr>
+                        <th><b>CHRIS Member Name</th>
+                        <th><b>CHRIS Deduction Type</th>
+                        <th><b>Amount</th>
+                        <th><b>Client</th>
+                        <th><b>Error</th>
+                        
+                        
+                       
+                        
+                        
+                    </tr>    
+
+                      <tr>
+                       {{range  $key1, $val1stloop := $data_list}}
+                            <tr> 
+                            
+                             <td>{{index $val1stloop  0}}</td>
+                             <td>{{index $val1stloop  1}}</td>
+                             <td align="right">{{index $val1stloop  2}}</td>
+                             <td>{{index $val1stloop  3}}</td>
+                             <td>{{index $val1stloop  4}}</td>
+                             
+
+                            </tr>
+                         
+                        {{end}}
+                    </tr>   
+                    
+                  
+                 
+                </table>
+               
+
+
+<br>
+<br>
+
+
+                <table>
+                        ** This report is for CHRIS auto upload only **
+               
+                    <tr>
+                   <td>
+                    
+                   PRINTED BY: {{.Conf.username}} @  {{get_datetime}} 
+                   <br>
+                   
+                  </td>
+                </tr>
+                <tr>
+                    <td>
+                   <font size="3"><b>Powered by Memgertech Inc.</b></font>
+                    </td>
+                   </tr>
+
+
+                </table>
+
+
+
+    </body>
+</html>

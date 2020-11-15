@@ -1,0 +1,617 @@
+<style type="text/css">
+.dropdown-menu > li > .dropdown-menu-item {
+   clear: both;
+    color: #333;
+    display: block;
+    padding: 3px 20px;
+    white-space: nowrap;
+    margin: 5px 0;
+    width: 100%;
+    text-align: left;
+    text-decoration: none;
+    outline: none;
+    cursor: pointer;
+    -moz-user-select: none;
+    user-select: none;
+}
+.dropdown-menu > li:hover .dropdown-menu-item,
+.dropdown-menu > li:focus .dropdown-menu-item{
+    background-color: #f5f5f5;
+    color: #262625;
+}
+.dropdown-menu > li > .dropdown-menu-item.checkbox {
+    margin: 0;
+    font-weight: normal;
+}
+.dropdown-menu > li > .dropdown-menu-item.checkbox input {
+    display: none;
+}
+</style>
+
+
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Raw Reports
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<form id="CreateTransaction" class="form-horizontal" target ="_blank">
+				<!--action="/inventory/reports/do_print/" method="Get" -->
+
+					<div class="form-body">
+							
+						<div id="warnerr" class="Metronic-alerts alert alert-warning fade in" hidden>
+							date range greater than 16 days	
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Report Name:<span class="required" aria-required="true">
+								* </span></label>
+								<div class="col-md-4">
+								<select name="reportname" class="reportname form-control input-xlarge dr-js" required>
+								<option value="0">Select</option>	
+								{{range $assignlist := .RawreportsList }}
+								<option  value="{{$assignlist.Sql}}">{{$assignlist.Reportname}}</option>
+								{{end}}
+									</select>
+							</div>
+						</div>
+
+						<div class="form-group c_datefrom">
+							<label class=" col-md-3 control-label">Date: </label>
+               			 
+                   			 <div id="reportrange" class="col-md-4" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 38.5%;  left: 16px;">
+                        <i class="glyphicon glyphicon-calendar fa fa-calendar "></i>
+                        <span></span> <b class="caret"></b>
+                      
+                   	</div>
+						
+							</div>
+
+						<div class="form-group c_item">
+							<label class="col-md-3 control-label">Item</label>
+							<div class="col-md-4">
+								<input type="text" name="item" placeholder="Item" id="item"  class="form-control input-xlarge">   
+							</div>
+                    	</div>
+						
+						<div class="form-group c_location">
+							<label class="col-md-3 control-label">Location</label>
+								<div class="col-md-4">
+								<select name="location" id="location" class="form-control input-xlarge dr-js clsAssign" required>
+								<option value="0">All</option>	 
+								{{range $locationlist := .Location_Get }}
+								<option  value="{{$locationlist.Id}}">{{$locationlist.Name}}</option>
+								{{end}}
+									</select>
+							</div>
+						</div>
+						<div class="form-group c_supplier">
+							<label class="col-md-3 control-label">Supplier</label>
+								<div class="col-md-4">
+								<select name="supplier" id="supplier" class="form-control input-xlarge dr-js clsAssign" required>
+								<option value="0">All</option>	 
+								{{range $supplierlist := .Supplier }}
+								<option  value="{{$supplierlist.Id}}">{{$supplierlist.Name}}</option>
+								{{end}}
+									</select>
+							</div>
+						</div>
+						<div class="form-group c_transaction">
+							<label class="col-md-3 control-label">Transaction ID</label>
+							<div class="col-md-4">
+								<input type="number" name="trn_id" id="trn_id"class="form-control" value="0" placeholder="Transaction ID:" maxlength="10">
+							</div>
+						</div>
+
+						<div class="form-group c_soldby">
+							<label class="col-md-3 control-label">Sold by</label>
+							<div class="col-md-4">
+								<input type="text" name="soldby" class="form-control soldby"  placeholder="Sold by">
+							</div>
+						</div>
+
+						<div class="form-group c_customer">
+							<label class="col-md-3 control-label">Customer</label>
+								<div class="col-md-4">
+								<select name="customer" id="customer" class="form-control input-xlarge dr-js clsAssign" required>
+								<option value="0">All</option>	 
+								{{range $CustomerList := .CustomerList }}
+								<option  value="{{$CustomerList.Id}}">{{$CustomerList.Name}}</option>
+								{{end}}
+									</select>
+							</div>
+						</div>
+
+						<div class="form-group c_transferto">
+							<label class="col-md-3 control-label">Transfer To</label>
+								<div class="col-md-4">
+								<select name="transferto" id="transferto" class="form-control input-xlarge dr-js clsAssign" required>
+								<option value="0">All</option>	 
+								{{range $locationlist := .Location_Get }}
+								<option  value="{{$locationlist.Id}}">{{$locationlist.Name}}</option>
+								{{end}}
+									</select>
+							</div>
+						</div>
+
+						<div class="form-group c_transferfrom">
+							<label class="col-md-3 control-label">Transfer From</label>
+								<div class="col-md-4">
+								<select name="transferfrom" id="transferfrom" class="form-control input-xlarge dr-js clsAssign" required>
+								<option value="0">All</option>	 
+								{{range $locationlist := .Location_Get }}
+								<option  value="{{$locationlist.Id}}">{{$locationlist.Name}}</option>
+								{{end}}
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group c_filter">
+				                    <label class="col-md-3 control-label">Filter</label>
+								<div class="col-md-4" >
+									<input type="text" name="filter" placeholder="key word" id="filter" class="form-control input-xlarge" maxlength="50" >
+								</div>
+							</div>
+
+						<div class="form-group c_trantype">
+							<label class="col-md-3 control-label">Transaction Type</label>
+							 <div class="btn-group col-md-4">
+							 	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span> <span class="caret"></span></button>
+            						<ul class="dropdown-menu">
+               							  <li>
+                   							<label class="dropdown-menu-item checkbox">
+                       						<input type="checkbox" value="cussal" name="tranchkbox"/>
+                       						<span class="glyphicon glyphicon-unchecked"></span>
+                       						Customer Sales
+                   							</label>
+               							  </li>
+               							   <li>
+                   							<label class="dropdown-menu-item checkbox">
+                       						<input type="checkbox" value="cusret" name="tranchkbox"/>
+                       						<span class="glyphicon glyphicon-unchecked"></span>
+                       						Customer Return
+                   							</label>
+               							  </li>
+               							  <li>
+                   							<label class="dropdown-menu-item checkbox">
+                       						<input type="checkbox" value="cusrep" name="tranchkbox"/>
+                       						<span class="glyphicon glyphicon-unchecked"></span>
+                       						Customer Replacement
+                   							</label>
+               							  </li>
+               							  <li>
+                   							<label class="dropdown-menu-item checkbox">
+                       						<input type="checkbox" value="loctra" name="tranchkbox"/>
+                       						<span class="glyphicon glyphicon-unchecked"></span>
+                       						Location Transfer
+                   							</label>
+               							  </li>
+               							   <li>
+                   							<label class="dropdown-menu-item checkbox">
+                       						<input type="checkbox" value="locrec" name="tranchkbox"/>
+                       						<span class="glyphicon glyphicon-unchecked"></span>
+                       						Location Receipt
+                   							</label>
+               							  </li>
+               							   <li>
+                   							<label class="dropdown-menu-item checkbox">
+                       						<input type="checkbox" value="suprec" name="tranchkbox"/>
+                       						<span class="glyphicon glyphicon-unchecked"></span>
+                       						Supplier Receipt
+                   							</label>
+               							  </li>
+               							   <li>
+                   							<label class="dropdown-menu-item checkbox">
+                       						<input type="checkbox" value="suprep" name="tranchkbox"/>
+                       						<span class="glyphicon glyphicon-unchecked"></span>
+                       						Supplier Replacement
+                   							</label>
+                   							 <li>
+                   							<label class="dropdown-menu-item checkbox">
+                       						<input type="checkbox" value="supret" name="tranchkbox"/>
+                       						<span class="glyphicon glyphicon-unchecked"></span>
+                       						Supplier Return
+                   							</label>
+               							  </li>
+               							   <li>
+                   							<label class="dropdown-menu-item checkbox">
+                       						<input type="checkbox" value="adjent" name="tranchkbox"/>
+                       						<span class="glyphicon glyphicon-unchecked"></span>
+                       						Adjusment Entry
+                   							</label>
+               							  </li>
+               					</ul>
+               				</div>
+						</div>	
+
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Export type:</label>
+							<div class="col-md-4">
+								<select name="export_type" class="form-control input-large dr-js"> 
+								<option value="print">Print</option>
+								<option value="excel">Excel</option>
+								<option value="word">Word</option>
+								<option value="pdf">PDF</option>	
+								</select>
+							</div>
+						</div>
+
+						<div class="form-actions fluid">
+							<div class="col-md-offset-3 col-md-9">
+								<!-- <button class="btn btn-circle blue" type="submit">Print</button> -->
+								<a onclick="javascript:gen_det();" class="btn blue">Print</a>
+							</div>
+						</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+		$('.date-picker').datepicker({"setDate": new Date() ,  autoclose: true });
+		var soldbyText ="";	
+			$('.c_datefrom').hide()
+			$('.c_dateto').hide()
+			$('.c_location').hide()
+			$('.c_supplier').hide()
+			$('.c_transaction').hide()
+
+			$('.c_soldby').hide()
+			$('.c_customer').hide()
+			$('.c_transferto').hide()
+			$('.c_transferfrom').hide()
+			$('.c_filter').hide()
+			$('.c_trantype').hide()
+			$('.c_item').hide()
+
+			$(".dr-js").select2();
+			$(".clsAssign").on("select2-close", function() { 
+				console.log( $('#datefrom').val() + "&dateto="+$('#dateto').val() )
+				$.get("/timekeeping/CreateTransactionDetails/ajaxgetmemberbyassigment?assigmentID="+this.value +"&datefrom="+ $('#datefrom').val() + "&dateto="+$('#dateto').val() ,
+            		function(data,status){
+                   		var ht ='<option value="0">All</option>'
+                   		for (var i = 0; i < data.length; i++) { 
+						    ht+='<option value="'+data[i].Member_id+'">'+data[i].Name+'</option>'
+						}
+						$('#member').html(ht);
+				        $('#member').select2();	
+					}
+                );
+			})
+		$('#drpmember').select2("val","");	
+
+
+		//SIS_SupRec_Register 1, @@id, @@org, @@location, '@@from','@@to',@@supplier
+		$('.reportname').change(function(){
+			$('.c_datefrom').hide()
+			$('.c_dateto').hide()
+			$('.c_location').hide()
+			$('.c_supplier').hide()
+			$('.c_transaction').hide()
+
+
+			$('.c_soldby').hide()
+			$('.c_customer').hide()
+			$('.c_transferto').hide()
+			$('.c_transferfrom').hide()
+			$('.c_transferfrom').hide()
+			$('.c_trantype').hide()
+			$('.c_item').hide()
+
+			
+
+        	console.log($(this).val())
+        	if(stringContains($(this).val(),"@@location")) {
+        		$('.c_location').show();	         
+            }else{
+            	$('.c_location').hide();	
+            }
+        	if(stringContains($(this).val(),"@@datefrom")) {
+        		$('.c_datefrom').show();	         
+            }else{
+            	$('.c_datefrom').hide();	
+            }
+            if(stringContains($(this).val(),"@@dateto")) {
+        		$('.c_dateto').show();	         
+            }else{
+            	$('.c_dateto').hide();	
+            }
+            if(stringContains($(this).val(),"@@supplier")) {
+        		$('.c_supplier').show();	         
+            }else{
+            	$('.c_supplier').hide();	
+            }
+            if(stringContains($(this).val(),"@@id")) {
+        		$('.c_transaction').show();	         
+            }else{
+            	$('.c_transaction').hide();	
+            }
+            if(stringContains($(this).val(),"@@sold_by")) {
+        		$('.c_soldby').show();	         
+            }else{
+            	$('.c_soldby').hide();	
+            }
+            if(stringContains($(this).val(),"@@customer")) {
+        		$('.c_customer').show();	         
+            }else{
+            	$('.c_customer').hide();	
+            }
+            if(stringContains($(this).val(),"@@transferto")) {
+        		$('.c_transferto').show();	         
+            }else{
+            	$('.c_transferto').hide();	
+            }
+            if(stringContains($(this).val(),"@@transferfr")) {
+        		$('.c_transferfrom').show();	         
+            }else{
+            	$('.c_transferfrom').hide();	
+            }
+            if(stringContains($(this).val(),"@@filter")) {
+        		$('.c_filter').show();	         
+            }else{
+            	$('.c_filter').hide();	
+            }
+
+            if(stringContains($(this).val(),"@@trantype")) {
+        		$('.c_trantype').show();	         
+            }else{
+            	$('.c_trantype').hide();	
+            }
+
+             if(stringContains($(this).val(),"@@item")) {
+        		$('.c_item').show();	         
+            }else{
+            	$('.c_item').hide();	
+            }
+
+
+            
+            
+        });
+		
+
+		function repoFormatResult( repo ) {
+		    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+		    return markup;
+		}
+
+		function repoFormatSelection( repo ) {
+	        return repo.full_name;
+	    }
+
+		function repoFormatSelection_soldby( repo ) {
+			soldbyText = repo.full_name;
+	        return repo.full_name;
+	    }
+
+
+		$( ".item" ).select2({
+		    placeholder: "Search for members",
+		    minimumInputLength: 2,
+		    multiple: false,
+		    allowClear: true,
+		    ajax: {
+		        url: "/Ajax/GetMembers?isbaseonassignid=0&isbaseOrg=1&sp=orgmem_get",
+		        dataType: "json",
+		        quietMillis: 250,
+		        data: function( term, page ) {
+		            return {
+		                // search term
+		                q: term
+		            };
+		        },
+		        results: function( data, page ) {
+		                // parse the results into the format expected by Select2.
+		                // since we are using custom formatting functions we do not need to alter the remote JSON data
+		                return { results: data.items };
+		        }
+		        
+		    },
+		    
+		    formatResult: repoFormatResult,
+		    formatSelection: repoFormatSelection_soldby,
+		    // apply css that makes the dropdown taller
+		    dropdownCssClass: "bigdrop",
+		    // we do not want to escape markup since we are displaying html in results
+		    escapeMarkup: function( m ) {
+		        return m;
+		    }
+		});	
+
+
+
+
+                $(function() {
+                   
+                    
+                    
+                    //var start = moment().subtract(29, 'days');
+                    //var end = moment();
+
+                    var start = moment().subtract(1, 'month').startOf('month')
+                    var end = moment().subtract(1, 'month').endOf('month')
+                    
+
+                    function cb(start, end) {
+                        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                    }
+
+                    $('#reportrange').daterangepicker({
+                        startDate: start,
+                        endDate: end,
+                        ranges: {
+                           'Today': [moment(), moment()],
+                           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                           'This Month': [moment().startOf('month'), moment().endOf('month')],
+                           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                        }
+                    }, cb);
+
+                    cb(start, end);
+                    
+                });
+
+                function gen_det() {
+                    
+                    $('#limitAlert').hide()
+                    var strt_date = $('#reportrange').data('daterangepicker').startDate.format('YYYY-MM-DD');
+                    var strt_date_display = $('#reportrange').data('daterangepicker').startDate.format('DDMMMYYYY');
+                    var end_date  = $('#reportrange').data('daterangepicker').endDate.format('YYYY-MM-DD');
+                    var end_date_display = $('#reportrange').data('daterangepicker').endDate.format('DDMMMYYYY');
+                    var df =$('#reportrange').data('daterangepicker').endDate - $('#reportrange').data('daterangepicker').startDate
+                    if(df> 31708799999){ //limit 1yr
+                    //    $('#limitAlert').show()
+                        return false;
+                        
+                    }
+                    console.log(df)
+                  //  var itemid = $("#item").select2("val"); 
+                   // var itemkey = document.getElementById("key").value;
+                    var location = $('[name=location]').val();
+                    var location_name= $("#location option:selected").text();
+                    var reportname = $('[name=reportname]').val();
+                    var reportname_name= $("[name=reportname] option:selected").text();
+                    var export_type = $('[name=export_type]').val();
+                    var supplier = $('[name=supplier]').val();
+                    var supplier_name= $("#supplier option:selected").text();
+                    var trn_id = $('[name=trn_id]').val();
+                    var soldby = $("[name=soldby]").val();
+                    //alert(soldby);
+                    var soldby_name= soldbyText;
+                    var customer = $('[name=customer]').val();
+                    var customer_name= $("#customer option:selected").text();
+                    var transferto = $('[name=transferto]').val();
+                    var transferto_name= $("#transferto option:selected").text();
+                    var transferfrom = $('[name=transferfrom]').val();
+                    var transferfrom_name= $("#transferfrom option:selected").text();
+                    var filter_name= $('[name=filter]').val();
+                    var item= $('[name=item]').val();
+                    var item_name= $(item).select2('data').text;
+
+                    
+
+                    
+                    console.log(strt_date)
+                    console.log(end_date)
+
+                   
+					
+					//	document.getElementById("date_from").value = strt_date;
+					//	document.getElementById("date_to").value = end_date;
+
+                  // var aj_url ="?datefrom="+strt_date+"&dateto="+end_date
+	             //  console.log(aj_url)
+	                    
+
+
+                   // var params = { datefrom:strt_date, dateto:end_date};
+					//var str = jQuery.param( params );
+
+                     
+            var favorite = [];
+            
+            $.each($("input[name='tranchkbox']:checked"), function(){            
+                favorite.push($(this).val());
+            });
+            var tranchkjoin = "";
+            tranchkjoin = tranchkjoin + favorite.join(" ");
+
+            if(item == ""){
+            	item == "0";
+
+            }
+ 
+                    
+                  var url_to_open = "/inventory/reports/do_print?datefrom="+strt_date+"&dateto="+end_date+"&reportname="+reportname+"&location="+location+"&export_type="+export_type+"&supplier="+supplier+"&trn_id="+trn_id+"&soldby="+soldby+"&customer="+customer+"&transferto="+transferto+"&transferfrom="+transferfrom+"&location_name="+location_name+"&strt_date_display="+strt_date_display+"&end_date_display="+end_date_display+"&reportname_name="+reportname_name+"&supplier_name="+supplier_name+"&soldby_name="+soldby_name+"&customer_name="+customer_name+"&transferto_name="+transferto_name+"&transferfrom_name="+transferfrom_name+"&filter="+filter_name+"&trantype="+tranchkjoin+"&item="+item
+
+
+                /*  item_id=" + itemid + "&datefrom="+strt_date+"&dateto="+end_date+"&item_key="+itemkey+"&location="+location+"&tranchkbox="+tranchkjoin*/
+                    console.log(url_to_open)
+
+                    //alert(url_to_open)
+                    //return false;    
+                    var myWindow = window.open(url_to_open);
+                    return false;
+                }
+
+
+                $(function(){
+    $( '.dropdown-menu li' ).on( 'click', function( event ) {
+        var $checkbox = $(this).find('.checkbox');
+        if (!$checkbox.length) {
+            return;
+        }
+        var $input = $checkbox.find('input');
+        var $icon = $checkbox.find('span.glyphicon');
+        if ($input.is(':checked')) {
+            $input.prop('checked',false);
+            $icon.removeClass('glyphicon-check').addClass('glyphicon-unchecked')
+        } else {
+            $input.prop('checked',true);
+            $icon.removeClass('glyphicon-unchecked').addClass('glyphicon-check')
+        }
+        return false;
+    }); 
+});
+
+
+
+                $( "#item" ).select2({
+        placeholder: "Search for Items",
+        minimumInputLength: 2,
+        multiple: false,
+        allowClear: true,
+        ajax: {
+            url: "/inventory/adjustment_entry/details/Ajax/Ajax_getItem",
+            dataType: "json",
+            quietMillis: 250,
+            data: function( term, page ) {
+                return {
+                    // search term
+                    q: term
+                };
+            },
+            results: function( data, page ) {
+                    // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to alter the remote JSON data
+                    return { results: data.items };
+            }
+            
+        },
+        
+        formatResult: repoFormatResult,
+        formatSelection: repoFormatSelection,
+        // apply css that makes the dropdown taller
+        dropdownCssClass: "bigdrop",
+        // we do not want to escape markup since we are displaying html in results
+        escapeMarkup: function( m ) {
+            return m;
+        }
+    });
+
+
+
+               		
+                </script>

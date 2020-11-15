@@ -1,0 +1,763 @@
+<style type="text/css">
+	.fa-question{
+		margin-top: 10px;
+	}
+</style>
+
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Create Assigment Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<form id="CreatAssignment" class="form-horizontal"  method="Post" onsubmit="return DoCreateAssignement()">
+					
+					<div class="form-body">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label class="col-md-3 control-label" >Organization</label>
+										<div class="col-md-4">
+											<select name="org" class="form-control" > 
+											{{range $orglist := .Org }}
+												<option  value="{{$orglist.Org_id}}">{{$orglist.Org_name}}</option>
+											{{end}}
+											</select>
+										</div>
+										<i class="fa fa-question" data-toggle="tooltip" title="Name Of Organization."></i>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-md-3 control-label">Name</label>
+									<div class="col-md-4">
+										
+										<input type="text" name="name"  placeholder="Name"  maxlength="100" class="form-control createAct">
+									</div>
+									<i class="fa fa-question" data-toggle="tooltip" title="Name Of Assignment."></i>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">type</label>
+										<div class="col-md-4">
+										<select name="type" class="form-control "  > 
+											 {{range $type := .Type }}
+											<option  value="{{$type}}">{{$type}}</option>
+														{{end}}
+										</select>
+									
+										</div>
+										<i class="fa fa-question" data-toggle="tooltip" title="Type of Assignment."></i>
+								</div>
+								
+								
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Parent</label>
+									<div class="col-md-4">
+										<select name="parent" class="form-control " > 
+											
+											<option  value="{{.Parent}}">{{.Parent}}</option>
+
+								 			{{range  $key ,$val := .Arr_itemtag}}
+												<option  value="{{ index  $val 0}}" >"{{ index  $val 1}}" </option>
+												
+											{{end}}
+										</select>
+									</div>
+									<i class="fa fa-question" data-toggle="tooltip" title="Parent Assignment.- null if parent"></i>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Location</label>
+									<div class="col-md-4">
+										
+										<input type="text" name="location" placeholder="Location"  maxlength="100" class="form-control createAct"  >
+									</div>
+									<i class="fa fa-question" data-toggle="tooltip" title="Location of Assignment."></i>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label">Postal Code</label>
+									<div class="col-md-4">
+										<input type="text" name="postcode" placeholder="postcode" id="mask_postcode"  class="form-control  createAct" >
+									</div>
+									<i class="fa fa-question" data-toggle="tooltip" title="Location of Postal Code."></i>
+								</div>
+								<div class="form-group">
+										<label class="col-md-3 control-label">Monthly Rate</label>
+											<div class="col-md-4">
+												<input type="text" name="mrate" placeholder="Monthly Rate"  value="00.00" maxlength="12" class="form-control createAct num_f" onkeypress=onchange="javascript:caltot()"  onkeypress='return numbersOnly(this,event,false,true);' required>
+											</div>
+								</div>	
+								<div class="form-group">
+										<label class="col-md-3 control-label">Daily Rate</label>
+											<div class="col-md-4">
+												<input type="text" name="drate" placeholder="Daily Rate"  value="00.00" maxlength="12" class="form-control createAct num_f" onkeypress=onchange="javascript:caltot()"  onkeypress='return numbersOnly(this,event,false,true);' required>
+											</div>
+								</div>	
+								<div class="form-group">
+										<label class="col-md-3 control-label">Hourly Rate</label>
+											<div class="col-md-4">
+												<input type="text" name="hrate" placeholder="Hourly Rate"  value="00.00" maxlength="12" class="form-control createAct num_f" onkeypress=onchange="javascript:caltot()" 'return numbersOnly(this,event,false,true);' required>
+											</div>
+								</div>	
+								<div class="form-group">
+									<label class="col-md-3 control-label">Schedule start</label>
+									<div class="col-md-4">
+										
+										<input type="text" name="sched_start" placeholder=""  maxlength="100" class="form-control createAct date-picker"  >
+									</div>
+									<i class="fa fa-question" data-toggle="tooltip" title="Start of assignment Schedule."></i>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label">Required hours per day</label>
+									<div class="col-md-4">
+										
+										<input type="text" name="req_hrs_day" placeholder="" value="0"  maxlength="100" class="form-control createAct"  >
+									</div>
+									<i class="fa fa-question" data-toggle="tooltip" title="Required hours per day."></i>
+								</div>
+
+
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Required hours per week</label>
+									<div class="col-md-4">
+										
+										<input type="text" name="req_hrs_wk" placeholder=""  value="0" maxlength="100" class="form-control createAct"  >
+									</div>
+									<i class="fa fa-question" data-toggle="tooltip" title="Required Hours per Week"></i>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label">Grace Period</label>
+									<div class="col-md-4">
+										
+										<input type="text" name="graceperiod" placeholder=""  value="0" maxlength="100" class="form-control createAct"  >
+									</div>
+									<i class="fa fa-question" data-toggle="tooltip" title="Minutes for late grace period."></i>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label">Reg late interval</label>
+									<div class="col-md-4">
+										
+										<input type="text" name="reg_late_interval" placeholder=""  value="0" maxlength="100" class="form-control createAct"  >
+									</div>
+									<i class="fa fa-question" data-toggle="tooltip" title="Hours deduction interval on late(after grace period)."></i>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label">Reg Break Interval</label>
+									<div class="col-md-4">
+										
+										<input type="text" name="reg_break_interval" placeholder=""  value="0" maxlength="100" class="form-control createAct"  >
+									</div>
+									<i class="fa fa-question" data-toggle="tooltip" title="Hours total to deduct break." ></i>
+
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label">Break Hr</label>
+									<div class="col-md-4">
+										
+										<input type="text" name="break_hr" placeholder=""  value="0" maxlength="100" class="form-control createAct" >
+									</div>
+									<i class="fa fa-question" data-toggle="tooltip" title="Hours deductible as break."></i>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label">OT Hrs Min</label>
+									<div class="col-md-4">
+										
+										<input type="text" name="OT_hrs_min" placeholder=""  value="0" maxlength="100" class="form-control createAct"  >
+									</div>
+									<i class="fa fa-question" data-toggle="tooltip" title="Hours minimum for overtime."></i>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label">OT Hrs Interval</label>
+									<div class="col-md-4">
+										
+										<input type="text" name="OT_hrs_interval" placeholder=""  value="0" maxlength="100" class="form-control createAct"  >
+									</div>
+									<i class="fa fa-question" data-toggle="tooltip" title="Hours counting interval for overtime."></i>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label">ND Hrs Min</label>
+									<div class="col-md-4">
+										
+										<input type="text" name="ND_hrs_min" placeholder=""  value="0" maxlength="100" class="form-control createAct" >
+									</div>
+									<i class="fa fa-question" data-toggle="tooltip" title="Hours minimum for night differential."></i>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label">ND Hrs Interval</label>
+									<div class="col-md-4">
+										
+										<input type="text" name="ND_hrs_interval" placeholder=""  value="0" maxlength="100" class="form-control createAct" >
+									</div>
+									<i class="fa fa-question" data-toggle="tooltip" title="Hours counting interval for night differential."></i>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label">Default In</label>
+									<div class="col-md-4">
+										
+										<input type="text" name="default_in"  class="form-control form_time createAct ">
+
+									</div>
+									<i class="fa fa-question"  data-toggle="tooltip" title="Time in default."></i>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-md-3 control-label">Default Out</label>
+									<div class="col-md-4">
+										
+										<input type="text" name="default_out"  class="form-control form_time createAct " >
+									</div>
+									<i class="fa fa-question" data-toggle="tooltip" title="Time out default."></i>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label">Target all</label>
+									<div class="col-md-4">
+										
+										<input type="text" name="target_all" placeholder=" "  value="0" maxlength="100" class="form-control createAct "  >
+									</div>
+									<i class="fa fa-question" data-toggle="tooltip" title="Number target when grouped."></i>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label">Target per</label>
+									<div class="col-md-4">
+										
+										<input type="text" name="target_per" placeholder=" " value="0"  maxlength="100" class="form-control createAct" >
+									</div>
+									<i class="fa fa-question" data-toggle="tooltip" title="Number target for individual."></i>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label">Remarks</label>
+									<div class="col-md-4">
+										
+										<input type="text" name="remarks" placeholder="remarks"  maxlength="100" class="form-control createAct" >
+									</div>
+									<i class="fa fa-question" data-toggle="tooltip" title="Optional remarks"></i>
+								</div>
+								
+
+
+							</div>
+							
+							<div class="col-md-6">
+								
+								
+
+							</div>	
+						</div>
+						<hr>
+
+						<table class="table table-bordered ">
+							<thead>
+								<tr>
+									<th>
+										
+									</th>
+									<th>
+										Restday	
+									</th>
+									<th>
+										IN
+									</th>
+									<th>
+										 OUT
+									</th>
+									
+								</tr>
+							</thead>
+							<tbody>
+								<!-- data run here -->
+								<tr class="odd gradeX">
+									<!--<td>
+										<input type="checkbox" class="checkboxes" value="1"/>
+									</td> -->
+									<td>
+										SUN
+									
+									
+									</td>
+									<td style="width:4%">
+										<select name="sun_rest" class="form-control">
+											<option value="0">No</option>
+											<option value="1">Yes</option>
+										</select>
+									</td >
+									<td>
+										<div class="col-md-4">
+											<input type="text" name="sun_in"  class="form-control form_time createAct">
+										</div>
+										<i class="fa fa-question"  data-toggle="tooltip" title="Time in schedule Sunday"></i>
+									</td>
+									<td>
+										<div class="col-md-4">
+											<input type="text" name="sun_out" class="form-control form_time createAct" >
+										</div>	
+										<i class="fa fa-question" data-toggle="tooltip" title="Time out schedule Sunday"></i>
+
+									</td>	
+										
+								</tr>
+
+								<tr class="odd gradeX">
+									<!--<td>
+										<input type="checkbox" class="checkboxes" value="1"/>
+									</td> -->
+									<td style="width:4%">
+										MON
+									</td >
+									<td style="width:4%">
+										<select name="mon_rest" class="form-control">
+											<option value="0">No</option>
+											<option value="1">Yes</option>
+										</select>
+									</td >
+									
+									<td style="width:24%">
+										<div class="col-md-4">
+											<input type="text" name="mon_in" class="form-control form_time createAct"  >
+										</div>	
+										<i class="fa fa-question" data-toggle="tooltip" title="Time in schedule Monday"></i>
+									</td>
+									<td style="width:24%">
+										<div class="col-md-4">
+											<input type="text" name="mon_out" class="form-control form_time createAct" >
+										</div>	
+										<i class="fa fa-question" data-toggle="tooltip" title="Time out schedule Monday"></i>
+									</td>	
+										
+								</tr>
+								<tr class="odd gradeX">
+									<!--<td>
+										<input type="checkbox" class="checkboxes" value="1"/>
+									</td> -->
+									<td>
+										TUE
+									
+									
+									</td>
+									<td style="width:4%">
+										<select name="tue_rest" class="form-control">
+											<option value="0">No</option>
+											<option value="1">Yes</option>
+										</select>
+									</td >
+									<td>
+										<div class="col-md-4">
+											<input type="text" name="tue_in"  class="form-control form_time createAct" >
+										</div>
+										<i class="fa fa-question"  data-toggle="tooltip" title="Time in schedule Tuesday"></i>
+									</td>
+									<td>
+										<div class="col-md-4">
+										<input type="text" name="tue_out" class="form-control form_time createAct"  >
+										</div>
+										<i class="fa fa-question" data-toggle="tooltip" title="Time out schedule Tuesday"></i>
+									</td>	
+										
+								</tr>
+								<tr class="odd gradeX">
+									<!--<td>
+										<input type="checkbox" class="checkboxes" value="1"/>
+									</td> -->
+									<td>
+											WED
+									
+									
+									</td>
+									<td style="width:4%">
+										<select name="wed_rest" class="form-control">
+											<option value="0">No</option>
+											<option value="1">Yes</option>
+										</select>
+									</td >
+									<td>
+										<div class="col-md-4">
+										<input type="text" name="wed_in"  class="form-control form_time createAct" >
+										</div>
+										<i class="fa fa-question" data-toggle="tooltip" title="Time in schedule Wednesday"></i>
+									</td>
+									<td>
+										<div class="col-md-4">
+											<input type="text" name="wed_out" class="form-control form_time createAct" >
+										</div>
+										<i class="fa fa-question" data-toggle="tooltip" title="Time out schedule Wednesday"></i>
+									</td>	
+										
+								</tr>
+								<tr class="odd gradeX">
+									<!--<td>
+										<input type="checkbox" class="checkboxes" value="1"/>
+									</td> -->
+									<td>
+										THU
+									
+									
+									</td>
+									<td style="width:4%">
+										<select class="form-control" name="thu_rest">
+											<option value="0">No</option>
+											<option value="1">Yes</option>
+										</select>
+									</td >
+									<td>
+										<div class="col-md-4">
+											<input type="text" name="thu_in" class="form-control form_time createAct" >
+										</div>
+										<i class="fa fa-question" data-toggle="tooltip" title="Time in schedule Thursday"></i>
+										
+									</td>
+									<td>
+										<div class="col-md-4">
+											<input type="text" name="thu_out" class="form-control form_time createAct" >
+										</div>	
+										<i class="fa fa-question" data-toggle="tooltip" title="Time out schedule Thursday"></i>
+									</td>	
+										
+								</tr>
+								<tr class="odd gradeX">
+									<!--<td>
+										<input type="checkbox" class="checkboxes" value="1"/>
+									</td> -->
+									<td>
+										FRI
+									
+									
+									</td>
+									<td style="width:4%">
+										<select class="form-control" name="fri_rest">
+											<option value="0">No</option>
+											<option value="1">Yes</option>
+										</select>
+									</td >
+									<td>
+										<div class="col-md-4">
+											<input type="text" name="fri_in" class="form-control form_time createAct" >
+										</div>	
+										<i class="fa fa-question" data-toggle="tooltip" title="Time in schedule Friday"></i>
+									</td>
+									<td>
+										<div class="col-md-4">
+											<input type="text" name="fri_out" class="form-control form_timecreateAct" >
+										</div>	
+										<i class="fa fa-question" data-toggle="tooltip" title="Time out schedule Friday"></i>
+									</td>	
+										
+								</tr>
+								<tr class="odd gradeX">
+									<!--<td>
+										<input type="checkbox" class="checkboxes" value="1"/>
+									</td> -->
+									<td>
+										SAT
+									
+									
+									</td>
+									<td style="width:4%">
+										<select class="form-control" name="sat_rest">
+											<option value="0">No</option>
+											<option value="1">Yes</option>
+										</select>
+									</td >
+									<td>
+										<div class="col-md-4">
+											<input type="text" name="sat_in"  class="form-control form_time createAct" >
+										</div>	
+										<i class="fa fa-question" data-toggle="tooltip" title="Time in schedule Saturday"></i>
+									</td>
+									<td>
+										<div class="col-md-4">
+											<input type="text" name="sat_out" class="form-control form_time createAct" >
+										</div>	
+										<i class="fa fa-question" data-toggle="tooltip" title="Time out schedule Saturday"></i>
+									</td>	
+										
+								</tr>
+								
+								<!-- end run here -->
+								
+							</tbody>
+						</table>
+
+
+					</div>
+					<div class="form-actions fluid">
+						<div class="col-md-offset-3 col-md-9">
+							<button class="btn btn-circle blue" type="submit">Submit</button>
+							<button class="btn btn-circle default" onclick="javascript:nav_back()" type="button">Cancel</button>
+						</div>
+					</div>
+				</form>
+				<!-- END FORM-->
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	
+</div>
+
+
+<script type="text/javascript">
+			 $('select[name=org]').focus()
+			 /*$('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+			 $(".dr-js").select2();*/
+				
+		 		
+			
+			 
+			/*  $('.form_time').timepicker({
+                autoclose: true,
+                minuteStep: 5
+            });*/
+			
+            	$("[name=parent] , [name=location_transfer]").select2();
+						$('.date-picker').datepicker({"setDate": new Date() ,  autoclose: true });
+			function validateTime(s) {
+			  	var t = s.split(':');
+			  	if(s==""){
+			  		return true;
+			  	}else{
+			  		/*if (t[0] >23 && t[1] >1 ){
+			  			return false;
+			  		} */
+					return /^\d\d:\d\d:\d\d$/.test(s) &&
+			        	t[0] >= 0 && t[0] < 24 &&
+			         	t[1] >= 0 && t[1] < 60 &&
+			         	t[2] >= 0 && t[2] < 60 ;
+				}	
+			}
+
+
+
+			$(".form_time").inputmask("mask", {
+		    	"mask": "99:99:99"
+		    });
+			$('[data-toggle="tooltip"]').tooltip();  
+
+
+		 	$('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+
+		 	function mask_validation () {
+		 		var ht_err = 'border: 1px solid red;'
+		 		var count_err =0
+		 		if(!$('input[name=default_in]').inputmask("isComplete")  && stringContains($('input[name=default_in]').val(),"_" )  || (!validateTime($('input[name=default_in]').val()) ) ){
+			       	$('input[name=default_in]').attr({style:ht_err})
+			    	count_err =count_err +1
+				}else{
+			    	$('input[name=default_in]').attr({style:''})	
+			    }
+
+			    if(!$('input[name=default_out]').inputmask("isComplete") && stringContains($('input[name=default_out]').val(),"_" )  || (!validateTime($('input[name=default_out]').val()) )){
+			       $('input[name=default_out]').attr({style:ht_err})
+			    	count_err =count_err +1
+			    }else{
+			    	$('input[name=default_out]').attr({style:''})	
+			    }
+
+			    if(!$('input[name=sun_in]').inputmask("isComplete") && stringContains($('input[name=sun_in]').val(),"_" ) || (!validateTime($('input[name=sun_in]').val()) ) ){
+			       $('input[name=sun_in]').attr({style:ht_err})
+			    	count_err =count_err +1
+			    }else{
+			    	$('input[name=sun_in]').attr({style:''})	
+			    }
+			    
+
+			    if(!$('input[name=sun_out]').inputmask("isComplete") && stringContains($('input[name=sun_out]').val(),"_" )  || (!validateTime($('input[name=sun_out]').val()) ) ){
+			       $('input[name=sun_out]').attr({style:ht_err})
+			    	count_err =count_err +1
+			    }else{
+			    	$('input[name=sun_out]').attr({style:''})	
+			    }
+
+			    if(!$('input[name=mon_in]').inputmask("isComplete") && stringContains($('input[name=mon_in]').val(),"_" )  || (!validateTime($('input[name=mon_in]').val()) ) ){
+			       $('input[name=mon_in]').attr({style:ht_err})
+			    	count_err =count_err +1
+			    }else{
+			    	$('input[name=mon_in]').attr({style:''})	
+			    }
+
+			    
+
+			    if(!$('input[name=mon_out]').inputmask("isComplete") && stringContains($('input[name=mon_out]').val(),"_" ) || (!validateTime($('input[name=mon_out]').val()) ) ){
+			       $('input[name=mon_out]').attr({style:ht_err})
+			    	count_err =count_err +1
+			    }else{
+			    	$('input[name=mon_out]').attr({style:''})	
+			    }
+
+
+		 		if(!$('input[name=tue_in]').inputmask("isComplete") && stringContains($('input[name=tue_in]').val(),"_" )  || (!validateTime($('input[name=tue_in]').val()) ) ){
+			       $('input[name=tue_in]').attr({style:ht_err})
+			    	count_err =count_err +1
+			    }else{
+			    	$('input[name=tue_in]').attr({style:''})	
+			    }
+
+			    if(!$('input[name=tue_out]').inputmask("isComplete") && stringContains($('input[name=tue_out]').val(),"_" )  || (!validateTime($('input[name=tue_out]').val()) ) ){
+			       $('input[name=tue_out]').attr({style:ht_err})
+			    	count_err =count_err +1
+			    }else{
+			    	$('input[name=tue_out]').attr({style:''})	
+			    }
+
+			    if(!$('input[name=wed_in]').inputmask("isComplete") && stringContains($('input[name=wed_in]').val(),"_" )  || (!validateTime($('input[name=wed_in]').val()) ) ){
+			       $('input[name=wed_in]').attr({style:ht_err})
+			    	count_err =count_err +1
+			    }else{
+			    	$('input[name=wed_in]').attr({style:''})	
+			    }
+
+			    if(!$('input[name=wed_out]').inputmask("isComplete") && stringContains($('input[name=wed_out]').val(),"_" )  || (!validateTime($('input[name=wed_out]').val()) ) ){
+			       $('input[name=wed_out]').attr({style:ht_err})
+			    	count_err =count_err +1
+			    }else{
+			    	$('input[name=wed_out]').attr({style:''})	
+			    }
+
+			    if(!$('input[name=thu_in]').inputmask("isComplete") && stringContains($('input[name=thu_in]').val(),"_" )  || (!validateTime($('input[name=thu_in]').val()) ) ){
+			       $('input[name=thu_in]').attr({style:ht_err})
+			    	count_err =count_err +1
+			    }else{
+			    	$('input[name=thu_in]').attr({style:''})	
+			    }
+
+			    if(!$('input[name=thu_out]').inputmask("isComplete") && stringContains($('input[name=thu_out]').val(),"_" )  || (!validateTime($('input[name=thu_out]').val()) ) ){
+			       $('input[name=thu_out]').attr({style:ht_err})
+			    	count_err =count_err +1
+			    }else{
+			    	$('input[name=thu_out]').attr({style:''})	
+			    }
+
+				if(!$('input[name=fri_in]').inputmask("isComplete") && stringContains($('input[name=fri_in]').val(),"_" )  || (!validateTime($('input[name=fri_in]').val()) ) ){
+			       $('input[name=fri_in]').attr({style:ht_err})
+			    	count_err =count_err +1
+			    }else{
+			    	$('input[name=fri_in]').attr({style:''})	
+			    }
+
+			    if(!$('input[name=fri_out]').inputmask("isComplete") && stringContains($('input[name=fri_out]').val(),"_" )  || (!validateTime($('input[name=fri_out]').val()) ) ){
+			       $('input[name=fri_out]').attr({style:ht_err})
+			    	count_err =count_err +1
+			    }else{
+			    	$('input[name=fri_out]').attr({style:''})	
+			    }
+
+			    if(!$('input[name=sat_in]').inputmask("isComplete") && stringContains($('input[name=sat_in]').val(),"_" )  || (!validateTime($('input[name=sat_in]').val()) ) ){
+			       $('input[name=sat_in]').attr({style:ht_err})
+			    	count_err =count_err +1
+			    }else{
+			    	$('input[name=sat_in]').attr({style:''})	
+			    }
+
+				if(!$('input[name=sat_out]').inputmask("isComplete") && stringContains($('input[name=sat_out]').val(),"_" )  || (!validateTime($('input[name=sat_out]').val()) ) ){
+			       $('input[name=sat_out]').attr({style:ht_err})
+			       count_err =count_err +1
+			    }else{
+			    	$('input[name=sat_out]').attr({style:''})
+			    }
+
+			    if(count_err > 0) {
+			    	return false
+			    }else{
+			    	return true
+			    } 
+		 	}
+
+			function DoCreateAssignement(){
+				if(!mask_validation()){
+					alert("please fill-up correctly")
+					return false
+				}
+				$.post("/assignment/CreateAssignment",$( "#CreatAssignment" ).serialize()
+		        ,
+		        function(data,status){
+		            if(data.Status==true){
+		            	alert(data.Message)
+		            	if(data.Message=='Success'){
+			            	$(".createAct").val("")
+			            	//Navigate('/assignment?rights={{.Rights}}')
+			            	nav_back()
+			            }
+		            	
+
+		            }
+		           
+		        });
+	 		return false
+			}
+
+
+
+			function repoFormatResult( repo ) {
+			    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+			    return markup;
+			}
+
+			function repoFormatSelection( repo ) {
+			                return repo.full_name;
+			            }
+			$( "#mask_postcode" ).select2({
+			    placeholder: "Search for Address",
+			     minimumInputLength: 3,
+			        multiple: false,
+			        allowClear: true,
+			    ajax: {
+			        url: "/Ajax/GetPostalcode",
+			        dataType: "json",
+			        quietMillis: 250,
+			        data: function( term, page ) {
+			            return {
+			                // search term
+			                q: term
+			            };
+			        },
+			        results: function( data, page ) {
+			                // parse the results into the format expected by Select2.
+			                // since we are using custom formatting functions we do not need to alter the remote JSON data
+			                return { results: data.items };
+			        }
+			        
+			    },
+			    
+			    formatResult: repoFormatResult,
+			    formatSelection: repoFormatSelection,
+			    // apply css that makes the dropdown taller
+			    dropdownCssClass: "bigdrop",
+			    // we do not want to escape markup since we are displaying html in results
+			    escapeMarkup: function( m ) {
+			        return m;
+			    }
+			});
+
+			function caltot () {
+				var drate = $("[name=drate]").val();	
+				var hrate = (parseInt(drate)/8)
+
+			}	
+
+			</script>

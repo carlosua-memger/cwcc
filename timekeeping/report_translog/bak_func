@@ -1,0 +1,612 @@
+func  Report_member_log(w http.ResponseWriter, r *http.Request) {
+	//fmt.Println("here..!")
+	login.Session_renew(w,r)
+	
+
+	tconf := make(map[string]string)
+	tconf["datefrom"] = r.URL.Query().Get("datefrom")
+	tconf["dateto"] = r.URL.Query().Get("dateto")
+	tconf["lbr_assign"] = r.URL.Query().Get("lbr_assign")
+	tconf["member"] = r.URL.Query().Get("member")
+	tconf["no_page"] = r.URL.Query().Get("no_page")
+	no_page64 ,_ := strconv.ParseInt( tconf["no_page"] , 10, 32)
+	no_page := int(no_page64)
+	/*type Lbr_Rep_LogRegister struct{
+	   		Member_name string
+	   		Assignment string
+	   		LogDate string 
+	   		DayCode string
+	   		In_Sched string
+	   		Out_Sched string
+	   		In_Time string
+	   		Out_Time string
+	   		Hr_total string
+	   		Hr_reg string
+	   		Hr_ot string
+	   		Hr_nd string
+	   		Hr_ndot string
+	   		colormered int
+		}*/
+	type Lbr_Rep_LogRegister struct{
+	   		Member_name string
+	   		Logdate string
+	   		Lbr_daycode_name string 
+	   		Assignment string
+	   		Login string
+	   		Logout string
+	   		Final_hrreg string
+	   		Final_hrot string
+	   		Final_hrnd string
+	   		Min_late string
+	   		Raw_log 		string
+	   		
+		}
+	var Logdate interface{}
+	var Lbr_daycode_name interface{}
+	var Login interface{}
+	var Logout interface{}
+	var Final_hrreg interface{}
+	var Final_hrot interface{}
+	var Final_hrnd interface{}
+	var Min_late  interface{}
+	var Raw_log  interface{}
+
+	type Lbr_Rep_LogRegister_summary struct{
+   		Member_name 	   string
+   		Lbr_daycode_name 		interface{}
+   		Dayspresent 		interface{} 
+   		Total_hrreg 			interface{}
+   		Total_hrot 			interface{}
+   		Total_hrnd 			interface{}
+   		Total_minlate 		interface{}
+   	}
+			
+
+	/*type Lbr_Rep_LogRegister struct{
+	   		Member_name string
+	   		Device_id string
+	   		LogDate string 
+	   		Day_name string
+	   		DayCode string
+	   		Assignment string
+	   		In_Sched string
+	   		Out_Sched string
+	   		In_Time string
+	   		Out_Time string
+	   		Hr_total string
+	   		Hr_break string
+	   		Hr_reg string
+	   		Hr_ot string
+	   		Hr_nd string
+	   		Hr_ndot string
+	   		Min_graceperiod  string
+	   		Hr_late string
+	   		Hr_undertime string
+	   		colormered int
+		}
+			*/
+		//fmt.Println("exec lbr_rep_lograw 3, '"+tconf["datefrom"]+"',  '"+tconf["dateto"]+"', "+tconf["lbr_assign"]+", "+tconf["member"])
+	   	fmt.Println(`lbr_rep_lograw 5,2,`+tconf["member"]+`,`+tconf["lbr_assign"]+`,'',`+`'','`+tconf["datefrom"]+ `','`+tconf["dateto"] + `'`)
+	   	LBR_LogHdr_row ,err, _,_ := config.Ap_sql(`lbr_rep_lograw 5,2,`+tconf["member"]+`,`+tconf["lbr_assign"]+`,'',`+`'','`+tconf["datefrom"]+ `','`+tconf["dateto"] + `'`,1)
+	    if err != nil {
+	    	http.Error(w, err.Error(), http.StatusInternalServerError)
+	    	panic(err.Error())
+	    }
+	    Lbr_Rep_LogRegister_data := []Lbr_Rep_LogRegister{}
+	    
+
+	    for LBR_LogHdr_row.Next() {
+            var r Lbr_Rep_LogRegister
+            //err = LBR_LogHdr_row.Scan(&r.Member_name, &r.Device_id,&r.LogDate,&r.Day_name,&r.DayCode,&r.Assignment,&r.In_Sched,&r.Out_Sched,&r.In_Time,&r.Out_Time,&r.Hr_total,&r.Hr_break,&r.Hr_reg,&r.Hr_ot,&r.Hr_nd,&r.Hr_ndot,&r.Min_graceperiod ,&r.Hr_late,&r.Hr_undertime,&r.colormered)
+            err = LBR_LogHdr_row.Scan(&r.Member_name, &Logdate,&Lbr_daycode_name,&r.Assignment,&Login,&Logout,&Final_hrreg,&Final_hrot,&Final_hrnd,&Min_late,&Raw_log)
+            if err != nil {
+                    panic(err.Error())
+            }
+			post2 := Lbr_Rep_LogRegister{
+            	r.Member_name,
+		        PrintValue(Logdate,0),
+		        PrintValue(Lbr_daycode_name,0),
+		      	r.Assignment,
+		      	PrintValue(Login,1),
+		      	PrintValue(Logout,1),
+		      	PrintValue(Final_hrreg,0),
+		      	PrintValue(Final_hrot,0),
+		      	PrintValue(Final_hrnd,0),
+		      	PrintValue(Min_late,0),
+		      	PrintValue(Raw_log,0),
+		      	
+ 		    }
+			Lbr_Rep_LogRegister_data = append(Lbr_Rep_LogRegister_data, post2)
+	    }
+		
+		t := time.Now().Local()
+		//newFormat := t.Format("2006-01-02 15:00:00 +0800")
+		newFormat := t.Format("Mon Jan _2 2006")
+		        
+
+		var id int
+		var name string
+		var location string
+		Org_Get_row ,err, _,_ := config.Ap_sql(" Org_Get 1, 2",1)
+		if err != nil {
+	    	http.Error(w, err.Error(), http.StatusInternalServerError)
+	    	panic(err.Error())
+	    }
+	    for Org_Get_row.Next() {
+	    	err = Org_Get_row.Scan(&id, &name,&location)
+            if err != nil {
+                    panic(err.Error())
+            }
+        }
+	    
+        //start of log summary
+
+        fmt.Println(`lbr_rep_lograw 6,2,`+tconf["member"]+`,`+tconf["lbr_assign"]+`,'',`+`'','`+tconf["datefrom"]+ `','`+tconf["dateto"] + `'`)
+
+        LBR_LogHdr_sum_row ,err, _,_ := config.Ap_sql(`lbr_rep_lograw 6,2,`+tconf["member"]+`,`+tconf["lbr_assign"]+`,'',`+`'','`+tconf["datefrom"]+ `','`+tconf["dateto"] + `'`,1)
+	    if err != nil {
+	    	http.Error(w, err.Error(), http.StatusInternalServerError)
+	    	panic(err.Error())
+	    }
+	    Lbr_Rep_LogRegister_summary_data := []Lbr_Rep_LogRegister_summary{}
+	    for LBR_LogHdr_sum_row.Next() {
+            var r Lbr_Rep_LogRegister_summary
+            //err = LBR_LogHdr_row.Scan(&r.Member_name, &r.Device_id,&r.LogDate,&r.Day_name,&r.DayCode,&r.Assignment,&r.In_Sched,&r.Out_Sched,&r.In_Time,&r.Out_Time,&r.Hr_total,&r.Hr_break,&r.Hr_reg,&r.Hr_ot,&r.Hr_nd,&r.Hr_ndot,&r.Min_graceperiod ,&r.Hr_late,&r.Hr_undertime,&r.colormered)
+            err = LBR_LogHdr_sum_row.Scan(&r.Member_name, &r.Lbr_daycode_name,&r.Dayspresent ,&r.Total_hrreg ,&r.Total_hrot, &r.Total_hrnd ,&r.Total_minlate)
+            if err != nil {
+                    panic(err.Error())
+            }
+			post2_sum := Lbr_Rep_LogRegister_summary{
+            	r.Member_name 	,
+		   		r.Lbr_daycode_name 		,
+		   		r.Dayspresent 	,	 
+		   		r.Total_hrreg 		,	
+		   		r.Total_hrot 		,	
+		   		r.Total_hrnd   ,	
+		   		r.Total_minlate   ,	
+		   		 	
+ 		    }
+			Lbr_Rep_LogRegister_summary_data = append(Lbr_Rep_LogRegister_summary_data, post2_sum)
+	    }
+		
+	    //end of log summary
+	    ///version1
+	    strt:= `
+	    <html>
+			<head>
+				<title style="font-size: 16px;">Time keeping report</title>
+			</head>
+			<style type="text/css">
+				.rpt_date {
+					float: right;
+					
+				}
+				.page_header{
+					margin-bottom: 5px;
+					/*display: inline; */
+				}
+				.name{
+					/*float: left;*/
+					margin-bottom: 3px;
+					font-family: Arial; 
+				}
+				.covered_data{
+					/*float: right;*/
+					font-family: Arial; 
+				}
+				/*.pic_logo {
+					width: 200px;
+
+				}*/
+				table{
+					width: 100%;
+				}
+				
+				.dtatbl {
+				
+				border: 0.99px solid #B3B3B3;
+				border-collapse: collapse;
+				font-family: 'Arial Narrow', Arial, sans-serif;
+				font-size: 10px;
+				}
+
+				.dtatbl th{
+					border: 0.99px solid #B3B3B3;
+				border-collapse: collapse;
+				font-family: 'Arial Narrow', Arial, sans-serif;
+				font-size: 10px;
+				}
+
+				.dtatbl td {
+					border: 0.99px solid #B3B3B3;
+				border-collapse: collapse;
+				font-family: 'Arial Narrow', Arial, sans-serif;
+				font-size: 10px;
+				}
+				th, td {
+				    /*padding: 2px;*/
+				}
+				th{
+					
+					background-color: whiteSmoke;
+					/*background-image: -webkit-linear-gradient*/
+					
+				}
+				body {
+					font-size: 10px;
+				}
+				.logo{
+					width: 200px;
+					margin-bottom: 5px;
+				}
+				.page_footer{
+					margin-top: 20px;
+					display: inline-block;
+					width: 100%;
+				}
+				.signaturemember{
+					border-top: 0.99px solid #B3B3B3;
+					width: 25%;
+					float: left;
+					font-family: inherit;
+				}
+				.signatureleft{
+					margin-left: 10%;
+					border-top: 0.99px solid #B3B3B3;
+					width: 25%;
+					float: left;
+					font-family: inherit; 
+				}
+				.signatureright{
+					border-top: 0.99px solid #B3B3B3;
+					width: 25%;
+					float: right;
+					font-family: inherit; 
+				}
+				.tbl_foor{
+					margin-top: 10px;
+				}
+				.tbl_foor td div{
+					border-top: 0.99px solid #B3B3B3;	
+					width: 50%;
+					font-size: 10px;
+				}
+				.isred {
+					color: red;
+				}
+				.log_sum{
+					margin-top: 10px;
+				}
+
+			</style>
+
+			<body>
+		`
+		fmt.Fprint(w,strt)
+		//counter :=0
+		//counter1:=0
+		Container :=""
+		counterRemarks :=0
+		//Contain := ""
+		var breakcont int = 0
+		for _ , val := range Lbr_Rep_LogRegister_data {
+		/*	if counter1==0{
+				Contain = val.Member_name
+			}
+			if val.Member_name==Contain{
+				fmt.Fprint(w,`---******` + val.Member_name)
+			}
+
+			*/
+
+			if counterRemarks!=0{
+				if Container != val.Member_name{
+					
+							strt=`
+							</table>
+							<div class="log_sum">
+					<b>Log Summary:</b>
+					<table style="width:50%;" class="dtatbl">
+						<tbody>
+							<tr>
+								<th>DayCode</th>
+								<th>Day Present</th>
+								<th>Hr Reg</th>
+								<th>Hr OT</th>
+								<th>Hr ND</th>
+								<th>Min Late</th>
+
+
+							</tr>`
+							fmt.Fprint(w,strt)
+
+							for  _, val_sum := range Lbr_Rep_LogRegister_summary_data {
+								if val_sum.Member_name == Container{
+									strt =`
+										<tr>
+											<td>`+PrintValue(val_sum.Lbr_daycode_name,0)+`</td>
+											<td>`+PrintValue(val_sum.Dayspresent,0)+`</td>
+											<td>`+PrintValue(val_sum.Total_hrreg,0)+`</td>
+											<td>`+PrintValue(val_sum.Total_hrot,0)+`</td>
+											<td>`+PrintValue(val_sum.Total_hrnd,0)+`</td>
+											<td>`+PrintValue(val_sum.Total_minlate,0)+`</td>
+											
+
+										</tr>
+									`
+									fmt.Fprint(w,strt)
+								}
+							}
+							strt =`
+
+						</tbody>
+					</table>
+				</div> <!-- end logsum -->
+
+
+
+
+
+										
+									
+					</div>
+					
+
+					
+
+					<table  class="tbl_foor">
+						<tbody>
+							<tr>
+								<td><div>Member Signature</div></td>
+								<td><div>Verified By</div></td>
+								<td><div>Noted By</div></td>
+							</tr>
+						</tbody>
+					</table>	
+
+
+							
+							`
+							fmt.Fprint(w,strt)
+					if(breakcont< (no_page-1) ){
+						breakcont = breakcont +1
+						 strt =`<p style="margin-top: 20px; border: solid 1px;" ></p>`	
+						fmt.Fprint(w,strt)
+					}else{
+						breakcont = 0 
+						strt =`<p style="page-break-before:always;" ></p>`	
+						fmt.Fprint(w,strt)
+					}
+
+				}
+			}
+			if Container != val.Member_name{
+			//if(counter==0){
+				counterRemarks = + 1
+				Container = val.Member_name 
+				strt=	`	<div class="page">
+								<div class="rpt_date">
+								Report Date:
+						`
+						fmt.Fprint(w,strt)		
+						fmt.Fprint(w,newFormat)
+									
+				strt=		`	</div>
+								<div class="logo">
+									
+									<b class="logo_name"><center> `
+								fmt.Fprint(w,strt)	
+								fmt.Fprint(w,name)	
+
+				strt=			`</center></b>
+									<div class="logo_desc">
+								`
+								fmt.Fprint(w,strt)
+								fmt.Fprint(w,location)	
+
+								
+				strt=			`	</div>
+								</div>
+								
+
+								<div class="page_header">	
+									<div class="name" >Name: <b>  `
+										fmt.Fprint(w,strt)
+										fmt.Fprint(w,val.Member_name)
+										strt=`</b> 
+									</div>
+							
+							
+									<div class="covered_data"> 
+										Coverd Date:`
+										fmt.Fprint(w,strt)	
+										fmt.Fprint(w,tconf["datefrom"])
+											strt=`
+												  to `
+											fmt.Fprint(w,strt)
+										fmt.Fprint(w,tconf["dateto"])	
+										strt=`
+									</div>
+								</div>			
+
+							<table class="dtatbl" >
+								<tr>
+									
+								    <th>Date</th> 
+								    <th>Day Code</th>
+								    <th>Asgmnt</th> 
+								    <th>Login</th>
+								    <th>Logout</th>
+								    <th>Reg hrs</th> 
+								    <th>OT</th>
+								    <th>ND</th>
+								    <th>Late mins</th>
+								    <th>Raw Log</th>
+								    
+								</tr>
+								`
+								fmt.Fprint(w,strt)
+
+					
+
+			//}
+			}  	
+
+			//if(val.Member_name==Container){
+			//	counter = counter+1
+					
+					strt = `<tr> 
+						<td>`
+				
+
+					//fmt.Fprint(w,strt)
+					//fmt.Fprint(w,val.Device_id)
+					//strt = `</td>`			
+					//fmt.Fprint(w,strt)
+
+					strt = `<td>`
+					fmt.Fprint(w,strt)
+					fmt.Fprint(w,val.Logdate)
+					strt = `</td>`			
+					fmt.Fprint(w,strt)
+
+					strt = `<td>`
+					fmt.Fprint(w,strt)
+					fmt.Fprint(w,val.Lbr_daycode_name)
+					strt = `</td>`			
+					fmt.Fprint(w,strt)
+
+					strt = `<td style="font-size: 6px;">`
+					fmt.Fprint(w,strt)
+					fmt.Fprint(w,val.Assignment)
+					strt = `</td>`			
+					fmt.Fprint(w,strt)
+
+					strt = `<td>`
+					fmt.Fprint(w,strt)
+					fmt.Fprint(w,val.Login)
+					strt = `</td>`			
+					fmt.Fprint(w,strt)
+
+					strt = `<td>`
+					fmt.Fprint(w,strt)
+					fmt.Fprint(w,val.Logout)
+					strt = `</td>`			
+					fmt.Fprint(w,strt)
+
+		      		strt = `<td>`
+					fmt.Fprint(w,strt)
+					fmt.Fprint(w,val.Final_hrreg)
+					strt = `</td>`			
+					fmt.Fprint(w,strt)
+
+					strt = `	<td>`
+					fmt.Fprint(w,strt)
+					fmt.Fprint(w,val.Final_hrot)
+					strt = `</td>`			
+					fmt.Fprint(w,strt)
+
+					strt = `<td>`
+					fmt.Fprint(w,strt)
+					fmt.Fprint(w,val.Final_hrnd)
+					strt = `</td>`			
+					fmt.Fprint(w,strt)
+
+					strt = `<td>`
+					fmt.Fprint(w,strt)
+					fmt.Fprint(w,val.Min_late)
+					strt = `</td>`			
+					fmt.Fprint(w,strt)
+
+					strt = `<td style="font-size: 6px;">`
+					fmt.Fprint(w,strt)
+					fmt.Fprint(w,val.Raw_log)  //Break hours applied
+					strt = `</td>`			
+					fmt.Fprint(w,strt)
+
+
+					
+
+					strt = `
+					</tr>`		
+					fmt.Fprint(w,strt)
+
+		
+			
+	    		
+		}
+		strt = `
+				</table>
+
+
+
+				<div class="log_sum">
+					<b>Log Summary:</b>
+					<table style="width:50%;" class="dtatbl">
+						<tbody>
+							<tr>
+								<th>DayCode</th>
+								<th>Day Present</th>
+								<th>Hr Reg</th>
+								<th>Hr OT</th>
+								<th>Hr ND</th>
+								<th>Min late</th>
+								
+
+
+							</tr>
+							`
+							fmt.Fprint(w,strt)
+
+							for  _, val_sum := range Lbr_Rep_LogRegister_summary_data {
+								if val_sum.Member_name == Container{
+									strt =`
+										<tr>
+											<td>`+PrintValue(val_sum.Lbr_daycode_name,0)+`</td>
+											<td>`+PrintValue(val_sum.Dayspresent,0)+`</td>
+											<td>`+PrintValue(val_sum.Total_hrreg,0)+`</td>
+											<td>`+PrintValue(val_sum.Total_hrot,0)+`</td>
+											<td>`+PrintValue(val_sum.Total_hrnd,0)+`</td>
+											<td>`+PrintValue(val_sum.Total_minlate,0)+`</td>
+											
+
+										</tr>
+									`
+									fmt.Fprint(w,strt)
+								}
+							}
+
+						strt =	`
+
+						</tbody>
+					</table>
+				</div> <!-- end logsum -->
+
+
+
+				
+
+				<table  class="tbl_foor">
+					<tbody>
+						<tr>
+							<td><div>Member Signature</div></td>
+							<td><div>Verified By</div></td>
+							<td><div>Noted By</div></td>
+						</tr>
+					</tbody>
+				</table>	
+
+			</div>
+			<p style="page-break-before:always;"></p>
+								
+		</body>
+		
+   
+		</html>					
+		`
+		fmt.Fprint(w,strt)
+		
+
+	
+
+}

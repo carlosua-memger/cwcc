@@ -1,0 +1,144 @@
+server=.;user id=sa;password=masterkey;database=CWCCLIVE_12062019;port=1433;connection timeout=60000
+
+
+
+server=10.174.88.80;user id=CWCCDBA2018;password=CWCCP@assword2018;database=CWCCLIVE;port=1433;connection timeout=60000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+server=10.174.88.80;user id=CWCCDBA2018;password=CWCCP@assword2018;database=CWCCLIVE;port=1433;connection timeout=60000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+server=10.174.88.80;user id=CWCCDBA2018;password=CWCCP@assword2018;database=CWCCLIVE;port=1433;connection timeout=60000
+
+
+
+
+
+
+
+
+
+
+
+
+
+server=10.174.88.80;user id=CWCCDBA2018;password=CWCCLIVE_10252019;database=CWCCLIVE;port=1433;connection timeout=60000
+
+
+
+
+
+
+
+
+
+
+
+
+
+server=10.174.88.80;user id=CWCCDBA2018;password=CWCCP@assword2018;database=CWCCLIVE;port=1433;connection timeout=60000
+
+
+server=.;user id=sa;password=masterkey;database=CWCCLIVE_04242019;port=1433;connection timeout=60000
+
+
+
+
+
+
+
+
+
+
+
+
+server=10.174.88.80;user id=CWCCDBA2018;password=CWCCP@assword2018;database=CWCCLIVE;port=1433;connection timeout=60000
+
+server=10.174.88.80;user id=CWCCDBA2018;password=CWCCP@assword2018;database=CWCCLIVE;port=1433;connection timeout=60000
+
+server=.;user id=sa;password=masterkey;database=CWCCLIVE_04242019;port=1433;connection timeout=60000
+
+server=10.174.88.80;user id=CWCCDBA2018;password=CWCCP@assword2018;database=CWCCLIVE;port=1433;connection timeout=60000
+
+
+
+
+
+
+server=.;user id=sa;password=masterkey;database=CWCCLIVE_04242019;port=1433;connection timeout=60000
+
+
+
+
+
+
+
+server=10.174.88.80;user id=CWCCDBA2018;password=CWCCP@assword2018;database=CWCCLIVE;port=1433;connection timeout=60000
+
+
+
+server=.;user id=sa;password=masterkey;database=CWCCLIVE_04242019;port=1433;connection timeout=60000
+
+
+
+
+
+
+server=10.174.88.80;user id=CWCCDBA2018;password=CWCCP@assword2018;database=CWCCLIVE;port=1433;connection timeout=60000
+enable_log=true
+email_id=noreply@cwcc.ph
+email_password=CWCCP@assword2018
+email_to=88memger@gmail.com
+email_bcc=emailer@memger.com
+
+
+
+
+server=.\SQLEXPRESS2014;user id=sa;password=masterkey;database=TAP;keepAlive=600;connection 
+timeout=600
+server=.\SQLEXPRESS2014;user id=sa;password=masterkey;database=TAP
+server=119.81.181.244;user id=sa;password=mu5e5ecret;database=TAP
+
+
+server=192.168.4.188
+
+
+
+version control testing....
+
+=======
+
+
+version control testing....
+
+--server version
+version control test ni master>>>>>>> .r18

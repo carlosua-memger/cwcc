@@ -1,0 +1,937 @@
+  <style type="text/css">
+  tr.hilight {
+    background: azure;
+  }
+  td.hilight {
+    background: azure ;
+  }
+  .txbxnd{
+    width: 50px;
+
+  }
+  .txblog{
+    width: 75px;
+
+  }
+  .ssuc{
+    border: solid 1px #2b8b3a;
+  }
+  .sfai{
+     border: solid 1px red;
+  }
+  </style>
+  
+  <div style="margin-bottom:10px;">
+    <table role="form" width="60%">
+      <tr>
+        <td >Assignment:</td>
+        <td>
+            <select name="lbr_assign" class="form-control dr-js clsAssign" style="margin-bottom: 5px;" > 
+              <option  value="0">All</option>
+              {{range $assignlist := .LBR_Assign_Get }}
+                <option  value="{{$assignlist.Id}}">{{$assignlist.Name}}</option>
+              {{end}}
+            </select> 
+
+        </td>
+      </tr>
+      <tr>
+        <td>Member:</td>
+        <td colspan="3">
+          <input type="text" name="memberid" placeholder="member" id="member"  class="form-control input-xlarge" style="margin-bottom: 5px;">
+          <button onclick="mem_nav(0);"><i class="fa fa-backward"></i></button> 
+          <button onclick="mem_nav(1);"><i class="fa fa-forward"></i></button>
+        </td>
+      </tr>
+      <tr>
+        <td>From:</td>
+        <td>
+          <input type="text" name="from" class="form-control input-medium  date-picker" placeholder="from" maxlength="50" style="margin-bottom: 5px;" >
+        </td>
+
+        <td>To:</td>
+        <td>
+         <input type="text" name="to" class="form-control input-medium  date-picker" placeholder="to" maxlength="50">
+        </td>
+
+      </tr>
+      
+    </table>
+  </div>    
+
+  <table class="table table-bordered">
+  <thread>
+    <tr>
+          <td>Date</td>
+        <td>Raw logs</td>
+        <td colspan="3">Pair</td>
+        <td colspan="4">Interpretation</td>
+        <td>Approval</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td>Assignment</td>
+        <td>In</td>
+        <td>Out</td>
+        <td>Day Code</td>
+        <td>Regular</td>
+        <td>OT</td>
+        <td>Nd</td>
+        <td>OT</td>
+      </tr>
+  </thread>
+  <tbody id="tdataid">
+    
+    
+
+  </tbody>
+</table>
+
+
+<script>
+  var ass
+  var mem
+  var jsobj
+
+    $(".dr-js").select2();
+    $('.date-picker').datepicker({
+        rtl: Metronic.isRTL(),
+        orientation: "left",
+        autoclose: true
+    });
+
+
+
+    var fullDate = new Date()
+    var todate = new Date()
+    todate.setDate(todate.getDate() - 16); 
+   
+    var twoDigitMonth =fullDate.getMonth();
+    var currentDate = fullDate.getMonth()+1  + "/" +  fullDate.getDate()  + "/" + fullDate.getFullYear();
+    var tod = todate.getMonth()+1  + "/" +  todate.getDate()  + "/" + todate.getFullYear();
+
+
+    var d = new Date()
+    var month = new Array(12);
+    month[0] = "Jan";
+    month[1] = "Feb";
+    month[2] = "Mar";
+    month[3] = "Apr";
+    month[4] = "May";
+    month[5] = "Jun";
+    month[6] = "Jul";
+    month[7] = "Aug";
+    month[8] = "Sep";
+    month[9] = "Oct";
+    month[10] = "Nov";
+    month[11] = "Dec";
+
+    var day = new Array(7);
+    day[0] = "Sun";
+    day[1] = "Mon";
+    day[2] = "Tue";
+    day[3] = "Wed";
+    day[4] = "Thu";
+    day[5] = "Fri";
+    day[6] = "Sat";
+    
+
+  
+  //19/05/2011
+
+    $('input[name=from]').val(tod)
+    $('input[name=to]').val(currentDate)
+  
+    var ajadata = {};
+
+    function Tbltriger_sp3(d){
+    
+
+    //json ajax here
+    $.get("/Ajax/Get_lbr_lograw_get",
+          {
+            member:     $('input[name=memberid]').val(),
+            lbr_assign: $('select[name=lbr_assign]').val(),
+            from:       $('input[name=from]').val(),
+            to:         $('input[name=to]').val(),
+            sp:         "sp3",
+          },
+          function(data,status){
+            Tbltriger(d,data,x)
+            
+    });
+  }
+
+
+
+  function Tbltriger(d,e,x){
+    
+
+  //json ajax here
+    $.get("/Ajax/Get_lbr_lograw_get",
+            {
+              member:     $('input[name=memberid]').val(),
+              lbr_assign: $('select[name=lbr_assign]').val(),
+              from:       $('input[name=from]').val(),
+              to:         $('input[name=to]').val(),
+              sp:         "sp1",
+            },
+            function(data,status){
+              ajadata=data
+              Setrowdata(d,e)
+              
+    });
+  //end json ajax here
+  }
+    function Setrowdata(d,e){
+      //console.log(d)
+      $( "#tdataid" ).html("");
+      var start = new Date($('input[name=from]').val());
+      var end = new Date($('input[name=to]').val() );
+      
+      while(start <= end){
+        var trdata = ''
+        var dateday
+        var datemon
+        if(start.getDate() <10){
+          dateday = '0'+start.getDate()
+        }else{
+          dateday = start.getDate()
+        }
+
+        datemon = start.getMonth()+1
+        if((start.getMonth()+1) <10){
+
+          var loopdate = start.getFullYear()+'0'+datemon+''+ dateday
+        }else{
+          var loopdate = start.getFullYear()+''+datemon+''+ dateday
+        }
+        
+       
+        //var loopdate = start.getFullYear()+''+datemon+''+ dateday
+        //alert(loopdate)
+        var loopdate1 = "'"+(start.getMonth()+1)+"-"+ dateday + "-" + start.getFullYear() + "'"
+                
+
+
+        var trdata_sp2 = ''
+        var trndata_sp2_noval = ''
+        trndata_sp2_noval =  '<td class="cass"> </td>'
+        trndata_sp2_noval += '<td class="cin" ondrop="drop(event,this,1,'+loopdate+')" ondragover="allowDrop(event)" > </td>'
+        trndata_sp2_noval += '<td class="cout" ondrop="drop(event,this,0,'+loopdate+')" ondragover="allowDrop(event)"> </td>'
+        trndata_sp2_noval += '<td class="cdc"> </td>'
+        trndata_sp2_noval += '<td class="creg"> </td>'
+        trndata_sp2_noval += '<td class="cot" > </td>'
+        trndata_sp2_noval += '<td class="cnd" > </td>'
+        var trdata_sp3 =  '<td class="aot" id ="aot_'+loopdate+'" > </td>'
+        for (var keysp3 in e) {
+          if(loopdate==e[keysp3].LogDate){
+            trdata_sp3 = '<td class="aot" id ="aot_'+loopdate+'">'+e[keysp3].Hours+'</td>'
+          } 
+        }
+        trndata_sp2_noval += trdata_sp3
+        
+        //trndata_sp2_noval += '<td class="aot" id ="aot_'+loopdate+'" > </td>'
+        var countsame = 0
+        var cs = 0
+        for (var keysp2_1 in d) {
+          if(loopdate==d[keysp2_1].Logdate){
+            cs= cs+1
+          }
+        }  
+        for (var keysp2 in d) {
+          //console.log(loopdate+'-----'+d[keysp2].Logdate)
+         if(loopdate==d[keysp2].Logdate){
+              
+            if(countsame >0){
+                trdata_sp2+='<tr>'
+            }
+            trdata_sp2 += '<td><select class="form-control ctass" id="'+d[keysp2].Id+'" > <option>'+d[keysp2].Assignment+'</option> '+jsobj+'</select><a href="javascript:void(0);" onclick="logpDel('+d[keysp2].Id+',event)"> [Delete pair]</a></td>'
+            trdata_sp2 += '<td class="out" >'+d[keysp2].Login+'</td>'
+            trdata_sp2 += '<td class="cout" >'+d[keysp2].Logout+'</td>'
+            trdata_sp2 += '<td>'+d[keysp2].Daycode+'</td>'
+            trdata_sp2 += '<td>'+d[keysp2].Hr_reg+'</td>'
+            trdata_sp2 += '<td>'+d[keysp2].Hr_ot+'</td>'
+            trdata_sp2 += '<td><input type="text" class="txbxnd" onblur="und(this,'+d[keysp2].Id+')" value="'+d[keysp2].Hr_nd+'"></td>'
+            if(countsame==0){
+              var trdata_sp3
+              var rowspap  = cs + 1
+              if(cs==0){
+                rowspap = 1
+              } 
+              trdata_sp3 =  '<td class="aot" id ="aot_'+loopdate+'" rowspan="'+rowspap+'" > </td>'
+              for (var keysp3 in e) {
+                if(loopdate==e[keysp3].LogDate){
+                  trdata_sp3 = '<td class="aot" id ="aot_'+loopdate+'" rowspan="'+rowspap+'" >'+e[keysp3].Hours+'</td>'
+                } 
+              }
+              trdata_sp2 += trdata_sp3
+            }
+            if(cs>1){
+              if(cs!= (countsame+1) ){
+                //trdata_sp2 +='<td></td>'
+                trdata_sp2 +='</tr>'
+                
+              }
+            }
+            countsame =countsame + 1     
+          } 
+        }
+
+        var trndata_emp_drg = ''
+        trndata_emp_drg =  '<td class="cass"></td>'
+        trndata_emp_drg += '<td class="cin" ondrop="drop(event,this,1,'+loopdate+')" ondragover="allowDrop(event)" > </td>'
+        trndata_emp_drg += '<td class="cout" ondrop="drop(event,this,0,'+loopdate+')" ondragover="allowDrop(event)"> </td>'
+        trndata_emp_drg += '<td class="cdc"> </td>'
+        trndata_emp_drg += '<td class="creg"> </td>'
+        trndata_emp_drg += '<td class="cot" > </td>'
+        trndata_emp_drg += '<td class="cnd" > </td>'
+
+
+        trdata_sp2 += '</tr>' + trndata_emp_drg + '</tr>'
+        if(cs==0){
+           trdata_sp2 = trndata_sp2_noval
+           countsame = 1
+        }else{
+          countsame = countsame + 1
+        }
+        trdata += '<tr>'
+        trdata += '<td class="cdate" id ="cdate_'+loopdate+'" rowspan="'+countsame+'" >'+month[start.getMonth()] + ' '+ start.getDate() +' '+ day[start.getDay()] +'</td>'
+        trdata += '<td class="log" id ="log_'+loopdate+'" rowspan="'+countsame+'">'
+        
+        for (var key in ajadata) {
+          if(loopdate==ajadata[key].LogDate){
+            if(ajadata[key].Lbr_logpair=="1"){
+              trdata += '<a href="javascript:void(0);" ondragstart="dragStart(event,this,'+ajadata[key].Id+','+loopdate1+');" ondragover="allowDrop(event,this)" >['+ajadata[key].Logtime+']</a> '
+            }else{
+              trdata += '['+ ajadata[key].Logtime+ ']'
+            }
+          }
+        }
+        trdata += ' <a href="javascript:void(0);" onclick="addlog('+loopdate+',this,event);" >[+ add log]</a></td>'
+        trdata += trdata_sp2
+       
+        trdata += '</tr>'
+
+        $( "#tdataid" ).append(trdata);
+        var newDate = start.setDate(start.getDate() + 1);
+        start = new Date(newDate);
+      }
+
+      $(".table").fadeIn();
+      $(".ctass").select2();
+
+      
+      $(".ctass").on("select2-close", function(event) { 
+        pid = $(event.target).closest("select").attr("id")
+        console.log(pid) 
+        assd = this.value
+        
+        $.post("/timekeeping/assignmentandlogs/dragsave",
+        { 
+          pairID    : pid,
+          assignid  : assd,
+          trn_type  : 'updateassignment' ,
+        },
+        function(data,status){
+          Tbltriger_sp2()
+        });
+
+       
+
+      });
+    }  
+  
+  function repoFormatResult( repo ) {
+    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+    return markup;
+  }
+
+  function repoFormatSelection( repo ) {
+        return repo.full_name;
+  }
+  var assignID ="emp"      
+  $( "#member" ).select2({
+      placeholder: "Search for members",
+      minimumInputLength: 2,
+      multiple: false,
+      allowClear: true,
+      ajax: {
+          url: "/Ajax/GetMembers",
+          dataType: "json",
+          quietMillis: 250,
+          data: function( term, page ) {
+              return {
+                  // search term
+                  q: term
+              };
+          },
+          results: function( data, page ) {
+                  // parse the results into the format expected by Select2.
+                  // since we are using custom formatting functions we do not need to alter the remote JSON data
+                  return { results: data.items };
+          }
+          
+      },
+      
+      formatResult: repoFormatResult,
+      formatSelection: repoFormatSelection,
+      // apply css that makes the dropdown taller
+      dropdownCssClass: "bigdrop",
+      // we do not want to escape markup since we are displaying html in results
+      escapeMarkup: function( m ) {
+          return m;
+      }
+  });
+
+
+  $(".clsAssign").on("select2-close", function() { 
+       if(assignID==this.value){
+          return false;
+        }else{
+          assignID = this.value
+        } 
+      ass = this.value  
+      $( "#member" ).select2({
+        placeholder: "Search for members",
+        minimumInputLength: 2,
+        multiple: false,
+        allowClear: true,
+        ajax: {
+            url: "/Ajax/GetMembers?assignmentID="+this.value +"&isbaseonassignid=1",
+            dataType: "json",
+            quietMillis: 250,
+            data: function( term, page ) {
+                return {
+                    // search term
+                    q: term
+                };
+            },
+            results: function( data, page ) {
+                    // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to alter the remote JSON data
+                    return { results: data.items };
+            }
+            
+        },
+        
+        formatResult: repoFormatResult,
+        formatSelection: repoFormatSelection,
+        // apply css that makes the dropdown taller
+        dropdownCssClass: "bigdrop",
+        // we do not want to escape markup since we are displaying html in results
+        escapeMarkup: function( m ) {
+            return m;
+        }
+      });
+
+      childass(ass)
+  })
+
+
+  $("#member").on("select2-close", function() { 
+    mem = this.value
+    $(".table").fadeOut();
+    Tbltriger_sp2()
+    
+  })
+  $( ".date-picker" ).change(function () {
+    $(".table").fadeOut();
+    Tbltriger_sp2()
+    
+  });
+  
+
+function Tbltriger_sp2(x){
+//json ajax here
+    
+  $.get("/Ajax/Get_lbr_lograw_get",
+        {
+          member:     $('input[name=memberid]').val(),
+          lbr_assign: $('select[name=lbr_assign]').val(),
+          from:       $('input[name=from]').val(),
+          to:         $('input[name=to]').val(),
+          sp:         "sp2",
+        },
+        function(data,status){
+          Tbltriger_sp3(data,x)
+          
+  });
+}
+
+
+var thisobj 
+var dd
+var dd1
+var t1
+var ldt
+function dragStart(event,a,did,ldate ) {
+ //   event.dataTransfer.setData("Text", event.target.id);
+ //   document.getElementById("demo").innerHTML = "Started to drag the p element";
+  ldt= ldate
+  thisobj = event
+ //console.log($(a).text())
+  dd1 =$(a).text()
+  dd = did  
+  t1 =a
+//console.log("start dragging")
+}
+
+
+
+
+function dateCompare(time1,time2) {
+  var t1 = new Date();
+  var parts = time1.split(":");
+  t1.setHours(parts[0],parts[1],parts[2],0);
+  var t2 = new Date();
+  parts = time2.split(":");
+  t2.setHours(parts[0],parts[1],parts[2],0);
+
+  // returns 1 if greater, -1 if less and 0 if the same
+  if (t1.getTime()>t2.getTime()) return 1;
+  if (t1.getTime()<t2.getTime()) return -1;
+  return 0;
+}
+
+function allowDrop(event) {
+  event.preventDefault();
+}
+function drop(event,a,ty,d,rw) {
+  
+
+  //console.log(dd1)
+  
+  //console.log(ldt)
+  
+  //console.log(d)
+  //console.log(t1)
+  $( t1 ).replaceWith( "<div>" + $( t1 ).text() + "</div>" );
+
+  $(event.target).closest("td").toggleClass( "hilight" );
+  
+  var dd1f= dd1.replace("[", "");
+  var dd1ff= dd1f.replace("]", "");
+  $(event.target).closest("td").text( ldt + ' ' + dd1ff);
+
+  $(event.target).closest("td").attr("id", dd);
+  var timein=""
+  var timeout=""
+  timein = $(event.target).closest("tr").find('.cin').attr("id")
+  timeout = $(event.target).closest("tr").find('.cout').attr("id")
+  
+
+
+  timein_text = $(event.target).closest("tr").find('.cin').text();
+  timeout_text = $(event.target).closest("tr").find('.cout').text();
+
+  var in_res= timein_text.replace("[", "");
+  var in_res1 = in_res.replace("]", "");
+
+  var out_res= timeout_text.replace("[", "");
+  var out_res1 = out_res.replace("]", "");
+
+  //in here
+  
+
+  var instr1= timein_text.replace(":", "-");
+  var instrf= instr1.replace(":", "-");
+  var instrf1= instrf.replace(":", "-");
+  var instrf2= instrf1.replace(" ", "-");
+
+
+  arrin = instrf2.split("-");
+  var datetimeIN = new Date((arrin[2]), (arrin[0]-1), arrin[1], arrin[3], arrin[4], arrin[5]);
+  
+
+  var in_res11= timein_text.replace("-", "");
+  var in_res2= in_res11.replace(" ", "");
+  var in_res3= in_res2.replace(":", "");
+  var in_res4= in_res3.replace("-", "");
+  var in_res5= in_res4.replace(":", "");
+  
+
+
+
+  //end IN here
+
+  //out here 
+  var out_res11= timeout_text.replace("-", "");
+  var out_res2= out_res11.replace(" ", "");
+  var out_res3= out_res2.replace(":", "");
+  var out_res4= out_res3.replace("-", "");
+  var out_res5= out_res4.replace(":", "");
+  //end OUT here
+  
+  
+  var outstr1= timeout_text.replace(":", "-");
+  var outstrf= outstr1.replace(":", "-");
+  var outstrf1= outstrf.replace(":", "-");
+  var outstrf2= outstrf1.replace(" ", "-");
+
+
+  arrout = outstrf2.split("-");
+
+  var datetimeOUT = new Date((arrout[2]), (arrout[0]-1), arrout[1], arrout[3], arrout[4], arrout[5]);
+  
+
+
+  var  intin = parseInt(in_res5)
+  var  intout = parseInt(out_res5)
+  
+  //var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
+  //alert((((datetimeOUT - datetimeIN)/60)/60)/1000)
+  var timedef = ((((datetimeOUT - datetimeIN)/60)/60)/1000)
+  
+  var din = new Date(in_res5);
+  
+  var dout = new Date(timeout_text); 
+  
+
+  if(ty=="1"){
+    //console.log($(event.target).closest("tr").find('.cout').text())
+    //console.log($(event.target).closest("tr").find('.cout').attr("id"))
+    var coutval
+    coutval = $(event.target).closest("tr").find('.cout').attr("id")
+    if (typeof coutval == 'undefined'){  
+      return false 
+    }
+  }else if(ty=="0"){
+    //console.log($(event.target).closest("tr").find('.cin').text())
+    //console.log($(event.target).closest("tr").find('.cin').attr("id"))
+    var cinval
+    cinval = $(event.target).closest("tr").find('.cin').attr("id")
+    if (typeof cinval == 'undefined'){
+      return false 
+    }
+  }
+
+  //time in and out filter here
+  if (timedef > 26 ){
+    alert("Invalid IN and OUT time difference. Please limit to 26 hours.")
+    $(event.target).closest("td").text("");
+    $(event.target).closest("td").toggleClass( "hilight" );
+    return false
+  }
+  if (timedef <=0 ){
+    alert("valid time combination. OUT must be higher than IN.")
+    $(event.target).closest("td").text("");
+    $(event.target).closest("td").toggleClass( "hilight" );
+    return false
+  }
+
+  //end of date time filter 
+  
+  //$(thisobj).attr("ondragstart","destroy"); 
+  //$(thisobj).attr("ondragover","destroy"); 
+ 
+  
+  //console.log(thisobj.explicitOriginalTarget.data) 
+  //console.log(thisobj) 
+  
+  //$(event.target).closest("tr").find('.cdate').toggleClass( "hilight" );
+  //console.log(mem)
+  //console.log(ass)
+  //var res= dd.replace("[", "");
+  //var res1 = res.replace("]", "");
+  //console.log(res1)
+  //console.log(ty)
+  //console.log(d)
+  var rs
+      rs = parseInt($("#log_"+d).attr("rowspan")) + 1
+      $("#log_"+d).attr("rowspan",rs);
+      $("#cdate_"+d).attr("rowspan",rs);
+      $("#aot_"+d).attr("rowspan",rs);
+
+
+      
+
+      htm ='<tr>'
+      htm += '<td class="cass"></td>'
+      htm += '<td class="cin" ondrop="drop(event,this,1,'+d+','+ rs +')" ondragover="allowDrop(event)" > </td>'
+      htm += '<td class="cout" ondrop="drop(event,this,0,'+d+','+ rs +')" ondragover="allowDrop(event)"> </td>'
+      htm += '<td class="cdc"> </td>'
+      htm += '<td class="creg"> </td>'
+      htm += '<td class="cot" > </td>'
+      htm += '<td class="cnd" > </td>'
+      htm +='</tr>'
+      
+      $(event.target).closest("tr").after( htm);
+
+  $.post("/timekeeping/assignmentandlogs/dragsave",
+    { 
+      member      : mem,
+      assignid    : ass,
+      logtimein   : timein,
+      logtimeout  : timeout,
+      logdate     : d ,
+      type        : ty ,
+      trn_type    : 'dragsave' ,
+    },
+    function(data,status){
+      //console.log(data[0].Assignment)
+       
+     /* 
+      var objgrs =$(event.target).closest("tr").find('.cdate')
+      var obj1 = objgrs[0]
+      if (typeof obj1 == 'undefined'){  
+        rs =  rw + 1 
+      }else{
+        rs =  objgrs[0].rowSpan + 1
+      }
+       
+     */ 
+      //$(event.target).closest("tr").find('.cdate').attr("rowspan",rs);
+      //$(event.target).closest("tr").find('.log').attr("rowspan",rs);
+      //$(event.target).closest("tr").find('.aot').attr("rowspan",rs);
+
+      $(event.target).closest("tr").find('.cass').html('<select class="form-control ctass ct1" id="'+data[0].Id+'"><option>'+data[0].Assignment+'</option>'+jsobj+'</select> <a href="javascript:void(0);" onclick="logpDel('+data[0].Id+')",event> [Delete pair]</a>');
+
+      $(".ct1").select2()
+      $(".ct1").on("select2-close", function(event) { 
+        pid = $(event.target).closest("select").attr("id")
+        console.log(pid) 
+        assd = this.value
+        
+        $.post("/timekeeping/assignmentandlogs/dragsave",
+        { 
+          pairID    : pid,
+          assignid  : assd,
+          trn_type  : 'updateassignment' ,
+        },
+        function(data,status){
+          Tbltriger_sp2()
+        });
+
+       
+
+      });
+      
+      
+
+      $(event.target).closest("tr").find('.cin').text(data[0].Login);
+      $(event.target).closest("tr").find('.cout').text(data[0].Logout);
+      $(event.target).closest("tr").find('.cdc').text(data[0].Daycode);
+      $(event.target).closest("tr").find('.creg').text(data[0].Hr_reg);
+      $(event.target).closest("tr").find('.cot').text(data[0].Hr_ot);
+      $(event.target).closest("tr").find('.cnd').html('<input type="text" class="txbxnd" onblur="und(this,'+data[0].Id+')" value="'+data[0].Hr_nd+'">');
+      
+      $(event.target).closest("tr").find('.cin').attr("ondragover","destroy"); 
+      $(event.target).closest("tr").find('.cout').attr("ondragover","destroy");
+
+      
+
+      $(event.target).closest("tr").find('.cin').toggleClass( "hilight" );
+      $(event.target).closest("tr").find('.cout').toggleClass( "hilight" );  
+
+
+  });
+    event.preventDefault(); 
+ 
+  
+  
+}
+function logpDel(d,event){
+
+  var txt;
+  var r = confirm("Are you sure to delete this pair?");
+  if (r != true) {
+      return false;
+  }
+
+  $.post("/timekeeping/assignmentandlogs/dragsave",
+    { 
+      pairID    : d ,
+      trn_type  : 'pair_delete' ,
+    },
+    function(data,status){
+      
+      if(data.RetMsg=="Success"){
+        //console.log(event)
+        //$(event.target).closest("tr").toggleClass( "hilight" );
+      //  $(event.target).closest("tr").next('tr').toggleClass( "hilight" );
+        //$(event.target).closest("tr").html( "" );
+
+      /*  $(event.target).closest("tr").find('.cin').text(data[0].Login);
+        $(event.target).closest("tr").find('.cout').text(data[0].Logout);
+        $(event.target).closest("tr").find('.cdc').text(data[0].Daycode);
+        $(event.target).closest("tr").find('.creg').text(data[0].Hr_reg);
+        $(event.target).closest("tr").find('.cot').text(data[0].Hr_ot);
+        $(event.target).closest("tr").find('.cnd').text(data[0].Hr_nd);
+        */
+
+       // console.log( $(event.target).closest('tr').next('tr').find('.cin').data)
+
+   
+
+
+
+       // return false
+       Tbltriger_sp2()
+      }else{
+        alert(data.RetMsg)
+      }
+
+  });
+}
+function addlog(dt,t,event) {
+  $( event.target ).replaceWith( '<div><input type="text" name="txtlogs" onblur="adlog_b('+dt+',this)" class="txblog" autofocus > <button type="submit" class="blue"><i class="fa fa-check"></i></button> </div>' );
+  
+  $("input[name=txtlogs]").inputmask("mask", {
+      "mask": "99:99:99"
+  });
+  $( 'input[name=txtlogs]' ).focus()
+  var timelog //= prompt("Enter time");
+  
+
+  if(timelog=="null"){
+    return false
+  }
+  
+
+  /*$.post("/timekeeping/assignmentandlogs/dragsave",
+    { 
+      member    : mem,
+      assignid  : ass,
+      logdate   : dt,
+      logtime   : timelog ,
+      trn_type  : 'addlog' ,
+    },
+    function(data,status){
+      if(data.RetMsg=="Success"){
+       Tbltriger_sp2()
+      }else{
+        alert(data.RetMsg)
+      }
+
+  });*/
+}
+function validateTime(s) {
+    var t = s.split(':');
+    if(s==""){
+      return false;
+    }else{
+      /*if (t[0] >23 && t[1] >1 ){
+        return false;
+      } */
+    return /^\d\d:\d\d:\d\d$/.test(s) &&
+          t[0] >= 0 && t[0] < 24 &&
+          t[1] >= 0 && t[1] < 60 &&
+          t[2] >= 0 && t[2] < 60 ;
+  } 
+}
+var ht_err = 'border: 1px solid red;'
+function adlog_b (dt,x) {
+    console.log($(x).val())
+    if(!validateTime($(x).val())){
+      $(x).attr({style:ht_err})
+      return false
+    }
+    $.post("/timekeeping/assignmentandlogs/dragsave",
+      { 
+        member    : mem,
+        assignid  : ass,
+        logdate   : dt,
+        logtime   : $(x).val() ,
+        trn_type  : 'addlog' ,
+      },
+      function(data,status){
+        if(data.RetMsg=="Success"){
+         Tbltriger_sp2()
+        }else{
+          alert(data.RetMsg)
+        }
+      }
+    );
+}
+
+function mem_nav (x) {
+  $(".table").fadeOut();
+  $.post("/timekeeping/assignmentandlogs/dragsave",
+    { 
+      member    : mem,
+      assignid  : ass,
+      nav_type  : x,
+      trn_type  : 'mem_nav' ,
+    },
+    function(data,status){
+      //$('#member').val(data.ID)
+      $("#member").select2("data", { id: data.Id, full_name: data.Member });
+      mem = data.Id
+       
+      Tbltriger_sp2()
+      $(".table").fadeIn(); 
+
+
+
+
+  }); 
+}
+
+$( "body" ).on( "keydown", function(event) {
+  if(event.which == 37){ 
+    mem_nav (0) //press left
+  } 
+  if(event.which == 39){ 
+    mem_nav (1) //press right
+  }
+
+});
+
+
+function childass (y) {
+  $.get("/Ajax/Get_lbr_lograw_get",
+        {
+          member:     $('input[name=memberid]').val(),
+          lbr_assign: y,
+          from:       $('input[name=from]').val(),
+          to:         $('input[name=to]').val(),
+          sp:         "LBR_Assign_Get",
+        },
+        function(data,status){
+          var ht =''
+          for (var d1 in data) {
+            ht += '<option value="'+data[d1].id+'">' +data[d1].text+'/option'
+          }
+          jsobj=ht 
+        //  Tbltriger(d,data,x)
+          
+  });
+}
+
+function und(t,x) {
+  
+  ndhr = parseInt($(t).val())
+  $(t).removeClass("sfai")
+  $(t).removeClass("ssuc")
+  $.post("/timekeeping/assignmentandlogs/dragsave",
+    { 
+      pid    : x,
+      hr_nd  : ndhr,
+      trn_type  : 'updatelineND' ,
+    },
+    function(data,status){
+      if(data.RetMsg=="Success"){
+        $(t).addClass("ssuc") 
+      }else{
+        $(t).addClass("sfai")
+        alert(data.RetMsg)
+      }
+      
+    }
+  );
+
+  $.ajax({
+    statusCode: {
+      404: function() {
+       
+        $(t).addClass("sfai")
+      }
+    }
+  });
+
+}
+
+
+</script>

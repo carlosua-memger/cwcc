@@ -1,0 +1,218 @@
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box green">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Member Assignment Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<form id="MemberAssignmentDoCreate" class="form-horizontal"  method="Post" onsubmit="return MemberAssignmentDoCreate('S')">
+					<input type="hidden" name="member" value="{{.Htdata.memberID}}">
+					<div class="form-body">
+						<div class="form-group">
+							<label class="col-md-3 control-label">Assignment</label>
+								<div class="col-md-4">
+								<select name="lbr_assign" class="form-control input-xlarge dr-js clsAssign" required>
+								 {{range $LBR_Assign_Get := .LBR_Assign_Get }}
+								<option  value="{{$LBR_Assign_Get.Id}}">{{$LBR_Assign_Get.Name}}</option>
+											{{end}}
+									</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Leader</label>
+							<div class="col-md-4">
+								<input type="text" name="leader" placeholder="Leader" id="leader"  class="form-control createAct" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Employee #</label>
+							<div class="col-md-4">
+								<input type="text" name="emp_id" placeholder="Employee Number" id="emp_id"  class="form-control createAct" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">processaccess</label>
+								<div class="col-md-4">
+								<select name="processaccess" class="form-control input-large dr-js clsAssign" required>
+								<option value="1">Yes</option>
+								<option value="0">No</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Date<span class="required" aria-required="true">
+								* </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="txdate" class="form-control date-picker" placeholder="Date" maxlength="50" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Device ID<span class="required" aria-required="true">
+								* </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="device_id"class="form-control dvID" placeholder="Device ID" maxlength="50" >
+							</div>
+						
+						<a  class="btn green act_btn" data-toggle='modal' href='#basic'  onclick="javascript:Modalfunc(this);">
+                   	 			Display duplicate<i class="fa fa-plus"></i></a>
+                   	 			
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Remarks<span class="required" aria-required="true">
+								* </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="remarks"class="form-control " placeholder="Remarks" maxlength="50" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Enable<span class="required" aria-required="true">
+								* </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="enable" class="form-control date-picker" placeholder="Enable" maxlength="50" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Disable<span class="required" aria-required="true">
+								* </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" name="disable" class="form-control date-picker" placeholder="Disable" maxlength="50" >
+							</div>
+						</div>
+						
+
+					</div>
+
+					
+					<div class="form-actions fluid">
+						<div class="col-md-offset-3 col-md-9">
+							<button class="btn btn-circle blue" type="submit">Save</button>
+							<a class="btn btn-circle blue" onclick="javascript:MemberAssignmentDoCreate('AS');">Save&Addnew</a>
+							<button class="btn btn-circle default" onclick="javascript:Navigate('/Member/MemberAssignment?rights={{.Htdata.rights}}&ID={{.Htdata.memberID}}')" type="button">Cancel</button>
+						</div>
+					</div>
+				</form>
+				<!-- END FORM-->
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	
+</div>
+
+<script type="text/javascript">
+	$('select[name=lbr_assign]').focus();	
+	$( ".dr-js" ).select2();
+	$('select[name=lbr_assign]').select2('open');
+
+
+
+			var currentDate = new Date();  
+			$('.date-picker').datepicker({autoclose: true});
+			$('.date-picker').datepicker("setDate", new Date());
+
+
+    function Modalfunc(a,v){
+        $.get("/get_duplicate_dev_id",
+                {
+                  device_id: $('input[name=device_id]').val()
+                }
+                ,
+
+                function(data,status){
+                    $("#basic").html(data);
+                    
+                });
+        //return false;
+    }
+
+	function MemberAssignmentDoCreate(a){
+		$.post("/Member/MemberAssignmentCreate",$( "#MemberAssignmentDoCreate" ).serialize()
+	        ,
+	        function(data,status){
+	            alert(data.Message)
+	            if(data.Message=='Success'){
+	            	$("select[name=lbr_assign]").select2("val", ""); 
+	            	$(".dvID").val("")
+	            	if(a!="AS"){
+	            		Navigate('/Member/MemberAssignment?rights={{.Htdata.rights}}&ID={{.Htdata.memberID}}')
+	            	}
+	            }
+	        });
+		return false
+	}
+
+
+	function repoFormatResult( repo ) {
+	    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+	    return markup;
+	}
+
+	function repoFormatSelection( repo ) {
+        return repo.full_name;
+    }
+	$( "#leader" ).select2({
+	    placeholder: "Search for Address",
+	     minimumInputLength: 2,
+	        multiple: true,
+	        allowClear: true,
+	    ajax: {
+	        url: "/Ajax/GetMembers",
+	        dataType: "json",
+	        quietMillis: 250,
+	        data: function( term, page ) {
+	            return {
+	                // search term
+	                q: term
+	            };
+	        },
+	        results: function( data, page ) {
+	                // parse the results into the format expected by Select2.
+	                // since we are using custom formatting functions we do not need to alter the remote JSON data
+	                return { results: data.items };
+	        }
+	        
+	    },
+	    
+	    formatResult: repoFormatResult,
+	    formatSelection: repoFormatSelection,
+	    // apply css that makes the dropdown taller
+	    dropdownCssClass: "bigdrop",
+	    // we do not want to escape markup since we are displaying html in results
+	    escapeMarkup: function( m ) {
+	        return m;
+	    }
+	    
+	});
+	$('input[name=lbr_assign]').select2('open');
+
+	function caltot () {
+		var drate = $("[name=drate]").val();	
+		var hrate = (parseInt(drate)/8)
+
+	}	
+
+
+</script>						

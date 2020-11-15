@@ -1,0 +1,273 @@
+<!-- <Form> -->
+
+<style type="text/css">
+ table.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.centered {
+    margin: 0 auto;
+    text-align: left;
+    width: 800px;
+    border-style: solid;
+border-width: thin;
+border-color: #FFFFFF;
+}
+
+th{
+                    
+                    background-color: whiteSmoke;
+                    /*background-image: -webkit-linear-gradient*/
+                    
+                }
+
+
+</style>
+<div class="modal-dialog modal-lg">
+	<div class="modal-content" id="ModalCont">
+
+		<form id="transdetnew" method="Post" onsubmit="javascript: return DoeditTrasDet()">
+			<input type="hidden" name="hdr_id" value="{{.Tconf.suprec_detail_hdr_id}}">
+			<input type="hidden" name="id" value="{{.Tconf.suprec_detail_id}}">	
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">Email to: {{.Tconf.suprec_hdr_customername}} </h4>
+				</div>
+				<!-- <div class="modal-body">
+				 -->	 <!-- modal data here -->
+					<div class="form-horizontal">
+							<div class="form-group">
+								<label class="col-md-3 control-label">To:</label>
+									<div class="col-md-4">
+										<input type="text" name="emailto" placeholder="To"  maxlength="100" class="form-control createAct" value="{{.Tconf.suprec_hdr_email}}" required readonly>
+									</div>	
+							</div>	
+
+							<div class="form-group">
+								<label class="col-md-3 control-label">Cc:</label>
+									<div class="col-md-4">
+										<input type="hidden" name="ccto" placeholder="Cc"  maxlength="100" class="form-control createAct jstags idNoEnter"  value="{{.Tconf.suprec_hdr_locationemail}}">
+									</div>
+							</div>	
+							<div class="form-group">
+								<label class="col-md-3 control-label">Subject:</label>
+									<div class="col-md-4">
+										<input type="text" name="subject" placeholder="Subject"  maxlength="100" class="form-control createAct" value="{{.Tconf.suprec_hdr_org}} Customer Sale (ID# {{.Tconf.suprec_hdr_id}}) " required readonly>
+									</div>
+							</div>	
+							<div class="form-group">
+								<label class="col-md-3 control-label">Additional Message:</label>
+									<div class="col-md-4">
+										<textarea name = "message" class="form-control createAct"></textarea>
+									</div>
+							</div>
+					</div>
+					 <!-- end modal data here -->
+				<!-- </div> -->
+				<div class="form-group">
+								<label class="col-md-3 control-label">Message Preview:</label>
+				<div style="width: 800px; height: 300px; overflow-y: scroll; overflow-x: scroll;" class="form-group centered">
+
+                {{$sql_str := combine_string `SIS_CusSal_Custom 4,` .Tconf.org_id "," .Tconf.h_id}}
+                {{$conf_data := tpl_sql_row $sql_str }}
+
+                   {{$sql_str2 := combine_string `SIS_CusSal_Custom 3,` .Tconf.org_id "," .Tconf.h_id}}
+
+              {{$data_list := tpl_sql $sql_str2 }}
+
+              	Dear {{.Tconf.suprec_hdr_customername}},
+              	<br>
+				<br>
+
+			Sending you list of sales, as follows; <br>
+
+                <table width="100%" class="center">
+
+                     <tr>
+                        <th align="right" bgcolor="#E5E7E9"><b>#</th>
+                        <th bgcolor="#E5E7E9"><b>Item</th>
+                        <th align="right" bgcolor="#E5E7E9"><b>Qty</th>
+                        <th align="right" bgcolor="#E5E7E9"><b>Unit Price</th>
+                        <th align="right" bgcolor="#E5E7E9"><b>Total Price</th>
+                        <th align="right" bgcolor="#E5E7E9"><b>Disc 1 Percentage</th>
+                        <th align="right" bgcolor="#E5E7E9"><b>Disc 2 Percentage</th>
+                        <th align="right" bgcolor="#E5E7E9"><b>Disc 3 Percentage</th>
+                        <th align="right" bgcolor="#E5E7E9"><b>Disc Amount</th>
+                        <th align="right" bgcolor="#E5E7E9"><b>Total Discount</th>
+                        <th align="right" bgcolor="#E5E7E9"><b>Discounted Amount</th>
+                        
+
+                        
+                        
+                    </tr>        
+
+    
+                   
+                       {{range  $key1, $val1stloop := $data_list}}
+                            <tr> 
+                            
+                             <td align="right">{{index $val1stloop  0}}</td>
+                             <td >{{index $val1stloop  1}}</td>
+                             <td align="right">{{index $val1stloop  2}}</td>
+                             <td align="right">{{index $val1stloop  3}}</td>
+                             <td align="right">{{index $val1stloop  4}}</td>
+                             <td align="right">{{index $val1stloop  5}}</td>
+                             <td align="right">{{index $val1stloop  6}}</td>
+                             <td align="right">{{index $val1stloop  7}}</td>
+                             <td align="right">{{index $val1stloop  8}}</td>
+                             <td align="right">{{index $val1stloop  9}}</td>
+                             <td align="right">{{index $val1stloop  10}}</td>
+                             
+
+
+                            </tr>
+                         
+                        {{end}}
+              
+                  <!--   <tr>
+                        <td><b>Total Record/s : <script type="text/javascript">
+    document.write(total_rec)
+ 
+
+    </script></td>
+                     
+                    </tr>    
+
+
+ -->
+
+                    <tr>
+
+                    	<td align="right" bgcolor="#E5E7E9"><b>{{index $conf_data  0}}</td>
+                        <td bgcolor="#E5E7E9"><b></td>
+                        <td align="right" bgcolor="#E5E7E9"><b>{{index $conf_data  1}}</td>
+                        <td align="right" bgcolor="#E5E7E9"><b></td>
+                        <td align="right" bgcolor="#E5E7E9"><b>{{index $conf_data  2}}</td>
+                        <td align="right" bgcolor="#E5E7E9"><b></td>
+                        <td align="right" bgcolor="#E5E7E9"><b></td>
+                        <td align="right" bgcolor="#E5E7E9"><b></td>
+                        <td align="right" bgcolor="#E5E7E9"><b></td>
+                        <td align="right" bgcolor="#E5E7E9"><b>{{index $conf_data  3}}</td>
+                        <td align="right" bgcolor="#E5E7E9"><b>{{index $conf_data  4}}</td>
+                        
+
+                      
+
+                       
+                    </tr>     
+
+                </table>
+
+            
+                
+			<br>
+			<div class='printchatbox' id='printchatbox'></div>
+			Thank you, <br>
+			{{.Tconf.suprec_hdr_org}}
+			<br>
+			<br>
+			
+			This is a system generated email. Please send your reply to {{.Tconf.suprec_hdr_locationemail}}.
+			<br>
+			Powered by <a href="www.memger.com"> Memgertech Inc.</a> <i>Inventory like a <b>boss</b>... try us for <b>free</b>.</i>
+                </div>
+                </div>
+				
+				<div class="errorDv">
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn default" data-dismiss="modal">Go Back</button>
+					<button type="submit" class="btn blue btn_send" >Send</button>
+				</div>
+
+		<!--  -->
+				<!-- /.modal-content -->
+		</form>
+	</div>
+		<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->					
+					
+
+
+<script type="text/javascript">
+ 	$('.form_datetime').datepicker({
+        rtl: Metronic.isRTL(),
+        orientation: "left",
+        autoclose: true
+    });
+	
+
+ 	$(".jstags").select2({
+    	tags:["{{.Tconf.suprec_hdr_locationemail}}"],
+      	maximumInputLength: 50
+  	});
+
+  	$('.idNoEnter').keydown(function (e) {
+	  if (e.keyCode == 13) {
+	    e.preventDefault();
+	  }
+	});
+
+
+	$(document).on('keyup keypress', 'form input[type="text"]', function(e) {
+	  if(e.keyCode == 13) {
+	    e.preventDefault();
+	    return false;
+	  }
+	});
+
+	
+
+	var rights = '{{.Tconf.rights}}' 
+	var assignmentID = '{{.Tconf.location}}' 
+	var customer = '{{.Tconf.suprec_hdr_customer}}' 
+	var hdr_id = '{{.Tconf.suprec_hdr_id}}'
+
+
+				
+
+
+			function DoeditTrasDet(a){
+				$(".btn_send").attr("disabled", true);
+				var htdata ='<div class="upload_top_info" style="margin-left: 30px;">'
+                htdata +=' <div class="upload_jif" style="background: url(/src/metronic_3.1.2/images/throbber.gif) center center no-repeat; height: 15px; width: 18px; display: inline-block;">'
+                            
+                htdata +='</div>'
+                htdata +='<div class="upload_info" style="display: inline-block;">Sending email...</div>'
+                htdata += '</div>' 
+                $( ".errorDv" ).html(htdata);
+
+
+
+				$.post("/inventory/customer_sales/details/email?customer="+customer+"&hdr_id="+hdr_id,$( "#transdetnew" ).serialize()
+		        ,
+		        function(data,status){
+		        	if(data=='Success'){
+		            	var htdata  = '<div class="alert alert-success"> <strong>info: </strong> email successfully sent. </div>'
+						$( ".errorDv" ).html(htdata)
+			        }else{
+			        	var htdata  = '<div class="alert alert-warning"> <strong>Error: </strong> not sent something went wrong. </div>'
+						$( ".errorDv" ).html(htdata)
+			        }	
+					$(".btn_send").removeAttr("disabled");
+
+		        });
+	 			return false
+			}
+	
+	function repoFormatResult( repo ) {
+	    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'><img src='" + repo.avatar + "' />" + repo.full_name + "</div></div>";
+
+	    return markup;
+	}
+
+	function repoFormatSelection( repo ) {
+        return repo.full_name;
+    }
+
+
+</script>

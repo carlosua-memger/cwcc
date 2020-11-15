@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<style type="text/css">
+	#example1 tr td{
+		font-family: "Times New Roman", Times, serif;
+		border: 1px solid #000000;
+		
+		font-size:14px
+
+	}
+
+    table { 
+        border-collapse: separate; /* allow spacing between cell borders */
+    border-spacing: 0 -4px;
+           
+                
+                
+            } 
+
+        
+
+</style>
+<body>
+
+        {{$sql_str3 := combine_string `rep_get_coop_header ` .Conf.bank}}
+        {{$conf_data3 := tpl_sql_row $sql_str3 }}
+
+        <b>{{index $conf_data3 0}}</b><BR>
+            Account Netpay<br>    
+            <b>{{.Conf.bank_name}}</b><br>
+            <b>{{.Conf.date}}</b>
+
+
+
+            {{$sql_str := combine_string `Accounting_Transmittal 1,'` .Conf.dateSelected "'," .Conf.partner "," .Conf.member "," .Conf.lpartype "," .Conf.paymode "," .Conf.bank "," .Conf.group "," .Conf.coop }}
+            {{$data_list := tpl_sql $sql_str }}
+              
+             
+
+
+          
+              
+              <table width="670" cellspacing="1"> 
+                  <tr>
+                      <td><b>Rec No</td>
+                      <td><b>Acct No</td>
+                      <td><b>Member Name</td>
+                      <td align="right"><b>Amount</td>
+
+                  </tr>    
+                    <tr>
+                     {{range  $key1, $val1stloop := $data_list}}
+                          <tr> 
+                            
+                           <td style="padding: 0px;">{{index $val1stloop  2}}</td>
+                           <td style="padding: 0px;">{{index $val1stloop  3}}</td>
+                           <td style="padding: 0px;">{{index $val1stloop  4}}</td>
+                           <td style="padding: 0px;" align="right">{{index $val1stloop  5}}</td>
+                           
+
+                          </tr>
+                       
+                      {{end}}
+                  </tr>   
+                  
+                
+
+               
+              </table>
+
+              <br>
+              <br>
+              
+                <TABLE id="Table3" cellSpacing="0" cellPadding="1" width="670" border="0">
+                        <TR>
+                            <TD align="center">__________________________________</TD>
+                            <TD align="center">__________________________________</TD>
+                        </TR>
+                        <TR>
+                            <TD align="center">Prepared by</TD>
+                            <TD align="center">Reviewed by</TD>
+                        </TR>
+
+                        <tr>
+                            <td colspan="2">
+                                <br>
+                                <br>
+
+                                   <b> PRINTED BY: {{.Conf.username}} @  {{get_datetime}}</b>
+
+                            </td>
+                        
+                        </tr>
+                    </TABLE>
+                </P>
+                <P>&nbsp;</P>
+                <P></P>
+            </TD>
+        </TR>
+    </TABLE>
+
+    </body>
+</html>
