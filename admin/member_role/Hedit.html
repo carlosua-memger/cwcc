@@ -1,0 +1,219 @@
+{{$Org_id := .Conf.org_id}}
+
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Edit Member Role Form
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+
+
+
+
+<div class="row">
+<div class="col-md-6">
+
+
+<h3 class="form-section">Account info</h3>
+
+
+
+			<form id="CreateTransaction" class="form-horizontal"  method="Post" onsubmit="return DoCreateTransaction()">
+	
+					<div class="form-horizontal">
+						<div class="form-group">
+							<label class="col-md-3 control-label">Member Name<span class="required" aria-required="true">*</span>
+							</label>
+							<div class="col-md-8">
+								<input type="text" id="member" name="membername" placeholder="Name" class="form-control" maxlength="50" Required>
+											<!-- <span class="help-block">
+											A block of help text. </sapan> -->
+							</div>
+						</div>
+
+						
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Role<span class="required" aria-required="true">*</span>
+							</label>
+							<div class="col-md-8">
+								<select class="form-control" name="sysrole">
+									<option value="Associate">Associate</option>
+									<option value="Regular">Regular</option>
+									{{range  $key ,$val := .Arr_Sysrole}}
+										<div>
+											<option value="{{index  $val 0}}">{{index  $val 1}}</option>
+										</div>
+									{{end}}
+
+								</select>
+											
+							</div>
+						</div>
+
+						
+
+			
+						
+				</div>
+
+						
+			</form>
+
+
+</div>	
+
+
+
+</div>
+
+
+
+<div class="form-actions fluid">
+	<div class="col-md-offset-3 col-md-9">
+		<button type="submit" class="btn blue submit_btn" onclick="return DoCreateTransaction()">Save</button>
+		<button class="btn default" onclick="javascript:Navigate('/administrator/org_member?rights={{.Rights}}')" type="button">Cancel</button>
+	</div>
+</div>
+
+
+</div>
+
+
+
+
+
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	
+</div>
+
+
+
+
+			<script type="text/javascript">
+			var currentDate = new Date();  
+			 /*$('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });*/
+			
+			$('input[name=transdate]').datepicker("setDate", new Date());
+			 $('input[name=membername]').focus()
+			
+			var rghts = '{{.Rights}}'
+
+			function repoFormatResult( repo ) {
+			    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+			    return markup;
+			}
+
+			function repoFormatSelection( repo ) {
+		        return repo.full_name;
+		    }
+			
+			$( "#member" ).select2({
+			    placeholder: "Search for members",
+			    minimumInputLength: 2,
+			    multiple: false,
+			    allowClear: true,
+			    ajax: {
+			        url: "/Ajax/GetMembers",
+			        dataType: "json",
+			        quietMillis: 250,
+			        data: function( term, page ) {
+			            return {
+			                // search term
+			                q: term
+			            };
+			        },
+			        results: function( data, page ) {
+			                // parse the results into the format expected by Select2.
+			                // since we are using custom formatting functions we do not need to alter the remote JSON data
+			                return { results: data.items };
+			        }
+			        
+			    },
+			    
+			    formatResult: repoFormatResult,
+			    formatSelection: repoFormatSelection,
+			    // apply css that makes the dropdown taller
+			    dropdownCssClass: "bigdrop",
+			    // we do not want to escape markup since we are displaying html in results
+			    escapeMarkup: function( m ) {
+			        return m;
+			    }
+			});		
+			setTimeout(function (){
+		        $( "#member").select2('open')
+		    	
+		    }, 500);
+
+
+
+
+
+			function DoCreateTransaction(){
+				var ret_msg= ""
+					$.get("/json_func",
+	                    {
+	                    	qdata : "OrgMemRol_Save 'Edit', '{{.Conf.username}}', {{.Conf.OrgmberRoleID}} , {{.Conf.org_id}}, "+$('[name=membername]').select2('val')+","+$('[name=sysrole]').val()
+						}
+	                    ,
+	                    function(data,status){
+	                        //json_personnel = data
+	                        if( data!=null){
+			                    for (var i = 0; i < data.length; i++) {
+			                        //alert(data[i][0]);
+			                       
+			                        ret_msg = data[i][1]
+			                        if (data[i][1]=="Success"){
+										//console.log(data[i][0])
+										//alert(ret_msg)
+										//$('#basic').modal('hide')
+						            	//dtbl()
+						            	//console.log("success here")
+						            	//$("#item_tagsdata").show()
+						            	//$(".submit_btn").prop('disabled', true);
+						            	Navigate("/administrator/member_role?rights={{.Rights}}")
+						            	//Dobatchsave()
+									//return false;
+				                    }else{
+				                    	alert(ret_msg)
+				                    }
+			                         
+			                    }
+		                    }
+                    });	
+					
+                    return false;
+		                /*$('#basic').modal('hide')
+		            	dtbl()
+			         	return false*/
+			        	
+			}
+
+			
+			
+			</script>

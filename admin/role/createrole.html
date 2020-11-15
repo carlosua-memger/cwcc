@@ -1,0 +1,115 @@
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>{{.Contentcon.Panel_name}}
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<form id="postformID" class="form-horizontal"  method="Post" onsubmit="return postformfuc('{{.Contentcon.postURL}}',this)">
+				<input type="hidden" name="roleID" value="{{.Contentcon.roleid}}">	
+					<div class="form-body">
+						<div class="form-group">
+							<label class="col-md-3 control-label">Role Name:</label>
+							<div class="col-md-4">
+								<input type="text" name="rolename" placeholder="Role Name" class="form-control createAct" value="{{.Contentcon.rolename}}" required>
+							</div>
+						</div>
+						<hr>
+						<table class="table table-bordered ">
+							<thead>
+								<tr>
+									<th>
+										Action
+									</th>
+									<th>
+										Pages
+									</th>
+									<th>
+										Url
+									</th>
+									<th>
+										Rights
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<!-- data run here -->
+								{{range $sysacess := .Sysaccessdata}}
+								<tr class="odd gradeX" >
+									<td style="width:4%">
+										<input type="checkbox" name="sysaccessid" value="{{$sysacess.ID}}" class="checkboxes" value="1" {{$sysacess.Ischeck}}/>
+									</td> 
+									<td style="width:30%">
+										{{$sysacess.Name}}
+									</td>
+									
+									<td style="width:30%">
+										{{$sysacess.Url}}
+									</td>
+									<td style="width:30%">
+										<textarea class="Rights" name="rights[{{$sysacess.ID}}]"  maxlength='100'>{{$sysacess.Rights}}</textarea>
+										
+										<!-- <select name="rights[{{$sysacess.ID}}]"  class="form-control input-large dr-js rights" data-placeholder="Select..." multiple >
+											<option value="1">marlon</option>
+											<option value="2">marlon1</option> 
+											<option value="3">marlon2</option> 
+											 
+										</select> -->
+
+										
+									</td>
+								</tr>
+								{{end}}
+								<!-- end run here -->
+							</tbody>
+						</table>
+					</div>
+					<div class="form-actions fluid">
+						<div class="col-md-offset-3 col-md-9">
+							<button class="btn btn-circle blue" type="submit">Submit</button>
+							<button class="btn btn-circle default" id ="" type="button">Cancel</button>
+						</div>
+					</div>
+				</form>
+				<!-- END FORM-->
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	
+</div>
+<style type="text/css">
+	.Rights {
+		    width: 100%;
+	}
+</style>
+
+<script type="text/javascript">
+	$('.rights').select2();
+
+	function postformfuc(x,a){
+	$.post(x,$( "#"+a.id).serialize()
+        ,
+        function(data,status){
+            alert("done successfully...")
+        });
+
+	return false
+}
+</script>

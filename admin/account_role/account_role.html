@@ -1,0 +1,120 @@
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Account Role
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<form id="crateroleformid" class="form-horizontal"  method="Post" onsubmit="return postformfuc('{{.Contentcon.postURL}}',this)">
+					<input type="hidden" name ="member_id" value="{{.Contentcon.MemberID}}">
+					<div class="form-body">
+						<div class="form-group">
+							<label class="col-md-3 control-label">Firstname:</label>
+							<div class="col-md-4">
+								<input type="text" name="firstname" placeholder="Firstname" class="form-control createAct" value="{{.Contentcon.firstname}}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Lastname:</label>
+							<div class="col-md-4">
+								<input type="text" name="lastname" placeholder="Lastname" class="form-control createAct" value="{{.Contentcon.lastname}}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Middlename:</label>
+							<div class="col-md-4">
+								<input type="text" name="middlename" placeholder="Middlename" class="form-control createAct" value="{{.Contentcon.middlename}}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Username:</label>
+							<div class="col-md-4">
+								<input type="text" name="username" placeholder="Username" class="form-control createAct" value="{{.Contentcon.username}}">
+							</div>
+						</div>
+
+						<hr>
+						<table class="table table-bordered ">
+							<thead>
+								<tr>
+									<th>
+										Action
+									</th>
+									<th>
+										Role Name
+									</th>
+									<th>
+										Description
+									</th>
+									
+									
+								</tr>
+							</thead>
+							<tbody>
+								<!-- data run here -->
+								{{range $sysrole := .SysroleData}}
+								<tr class="odd gradeX" >
+									<td style="width:4%">
+										<input type="checkbox" name="sysroleid" value="{{$sysrole.Id}}" class="checkboxes" value="1" {{if eq $sysrole.Isdata "true"}}checked{{end}}/>
+									
+									</td> 
+									<td style="width:30%">
+										{{$sysrole.Name}}
+									</td >
+									
+									<td style="width:30%">
+										
+									</td>
+									
+								</tr>
+								{{end}}
+
+								<!-- end run here -->
+								
+							</tbody>
+						</table>
+
+
+					</div>
+					<div class="form-actions fluid">
+						<div class="col-md-offset-3 col-md-9">
+							<button class="btn btn-circle blue" type="submit">Submit</button>
+							<button class="btn btn-circle default" id ="" type="button" onclick="Navigate('/administrator/account_org_role?rights={{.Contentcon.Rights}}')">Cancel</button>
+						</div>
+					</div>
+				</form>
+				<!-- END FORM-->
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	
+</div>
+<script type="text/javascript">
+	function postformfuc(x,a){
+	$.post(x,$( "#"+a.id).serialize()
+        ,
+        function(data,status){
+            alert("done successfully...")
+            Navigate('/administrator/account_org_role?rights={{.Contentcon.Rights}}')
+        });
+
+	return false
+}
+</script>

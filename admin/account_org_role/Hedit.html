@@ -1,0 +1,285 @@
+{{$Org_id := .Tconf.Org_id}}
+
+<div class="tab-content">
+	<div id="tab_0" class="tab-pane active">
+		<div class="portlet box grey-cascade">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Edit User Account
+				</div>
+				<div class="tools">
+					<a class="collapse" href="javascript:;">
+					</a>
+					<a class="config" data-toggle="modal" href="#portlet-config">
+					</a>
+					<a class="reload" href="javascript:;">
+					</a>
+					<a class="remove" href="javascript:;">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+
+
+
+
+<div class="row">
+<div class="col-md-6">
+
+
+<h3 class="form-section">Account info</h3>
+
+
+
+			<form id="CreateTransaction" class="form-horizontal"  method="Post" onsubmit="return DoCreateTransaction()">
+					<input type="hidden" name="OrgmemroleID" value="{{.Tconf.orgmemroleID}}">
+					<div class="form-horizontal">
+						<div class="form-group">
+							<label class="col-md-3 control-label">Member Name<span class="required" aria-required="true">*</span>
+							</label>
+							<div class="col-md-8">
+								<input type="text" id="member" value="{{.Tconf.Member_id}}" name="membername" placeholder="Name" class="form-control" maxlength="50" Required>
+											<!-- <span class="help-block">
+											A block of help text. </sapan> -->
+							</div>
+						</div>
+<!-- 
+						<div class="form-group">
+							<label class="col-md-3 control-label">Trans Date<span class="required" aria-required="true">*</span>
+							</label>
+							<div class="col-md-8">
+								<input type="text" name="transdate" placeholder="Name" class="form-control" maxlength="50" Required>
+											
+							</div>
+						</div>
+
+											
+						<div class="form-group">
+							<label class="col-md-3 control-label">Remarks</label>
+							<div class="col-md-8">
+								<textarea name = "remarks" class="form-control createAct"></textarea>
+							</div>
+						</div>
+
+
+ -->			
+						<div class="form-group">
+							<label class="col-md-3 control-label">Role</label>
+							<div class="col-md-8">
+								<select  name="role" class="form-control">
+									{{$datasysrole := .Tconf.SysRole_id}}
+									{{range  $key ,$val := .Arr_RoleAccount}}
+										{{$sysrole := index  $val 0}}
+										{{if eq $datasysrole $sysrole  }}
+										<option value="{{ index  $val 0}}" selected>{{ index  $val 1}}</option>
+										{{else}}
+										<option value="{{ index  $val 0}}">{{ index  $val 1}}</option>
+										{{end}}
+										}
+									{{end}}
+								</select>
+							</div>
+							
+						</div>
+				</div>
+
+						
+			</form>
+
+
+</div>	
+
+
+
+</div>
+
+
+
+<div class="form-actions fluid">
+	<div class="col-md-offset-3 col-md-9">
+		<button type="submit" class="btn blue submit_btn" onclick="return DoCreateTransaction()">Save</button>
+		<button class="btn default" onclick="javascript:Navigate('/administrator/account_org_role?rights={{.Tconf.Rights}}')" type="button">Cancel</button>
+	</div>
+</div>
+
+
+</div>
+
+
+
+
+
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	
+</div>
+
+
+
+
+			<script type="text/javascript">
+			var currentDate = new Date();  
+			 /*$('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });*/
+			
+			$('input[name=transdate]').datepicker("setDate", new Date());
+			 //$('input[name=membername]').focus()
+			
+			var rghts = '{{.Tconf.Rights}}'
+
+			function repoFormatResult( repo ) {
+			    var markup = "<div class='select2-result-repository clearfix'> <div class='select2-result-repository__title'>" + repo.full_name + "</div></div>";
+
+			    return markup;
+			}
+
+			function repoFormatSelection( repo ) {
+		        return repo.full_name;
+		    }
+			
+			
+			$( "#member" ).select2({
+			    placeholder: "Search for Name",
+			     minimumInputLength: 2,
+			        multiple: false,
+			        allowClear: true,
+			    ajax: {
+			        url: "/Ajax/GetMembers?sp=orgmem_get",
+			        dataType: "json",
+			        quietMillis: 250,
+			        data: function( term, page ) {
+			            return {
+			                // search term
+			                q: term
+			            };
+			        },
+			        results: function( data, page ) {
+			                // parse the results into the format expected by Select2.
+			                // since we are using custom formatting functions we do not need to alter the remote JSON data
+			                return { results: data.items };
+			        }
+			        
+			    }, 
+				initSelection: function( element, callback ) {
+					// the input tag has a value attribute preloaded that points to a preselected repository's id
+					// this function resolves that id attribute to an object that select2 can render
+					// using its formatResult renderer - that way the repository name is shown preselected
+					var id = $( element ).val();
+					if ( id !== "" ) {
+						$.ajax( "/Ajax/GetMembers?id=" + id, {
+							dataType: "json"
+						}).done( function( data ) {
+							callback( data );
+						});
+					}
+				},
+
+			    
+			    formatResult: repoFormatResult,
+			    formatSelection: repoFormatSelection,
+			    // apply css that makes the dropdown taller
+			    dropdownCssClass: "bigdrop",
+			    // we do not want to escape markup since we are displaying html in results
+			    escapeMarkup: function( m ) {
+			        return m;
+			    }
+			});
+
+			/*setTimeout(function (){
+		        $( "#member").select2('open')
+		    	
+		    }, 500);*/
+
+
+
+
+
+			function DoCreateTransaction(){
+				var ret_msg= ""
+				$.post("/administrator/account_org_role/HEditHandler",
+                    $( "#CreateTransaction" ).serialize()
+                    ,
+                    function(data,status){
+                        //json_personnel = data
+                        if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        if (data[i][1]=="Success"){
+									//console.log(data[i][0])
+									//alert(ret_msg)
+									//$('#basic').modal('hide')
+					            	//dtbl()
+					            	//console.log("success here")
+					            	//$("#item_tagsdata").show()
+					            	//$(".submit_btn").prop('disabled', true);
+					            	$(".c_suprec_id").val(data[i][0])
+					            	Navigate("/administrator/account_org_role?rights={{.Tconf.Rights}}")
+					            	//Dobatchsave()
+								//return false;
+			                    }else{
+			                    	alert(ret_msg)
+			                    }
+		                         
+		                    }
+	                    }
+                    });	
+					
+                    return false;
+		                /*$('#basic').modal('hide')
+		            	dtbl()
+			         	return false*/
+			        	
+			}
+
+			
+
+			function Dobatchsave(){
+				$.post("/inventory/supplier/HaddTagHandler",
+                    $("#item_tagsdata").serialize()
+					,
+                    function(data,status){
+                    	var errcount = 0 
+                    	if( data!=null){
+		                    for (var i = 0; i < data.length; i++) {
+		                        //alert(data[i][0]);
+		                       
+		                        ret_msg = data[i][1]
+		                        
+		                        if (data[i][0]=="HasError"){
+									errcount = errcount + 1
+								//return false;
+			                    }
+			                }
+						}
+						if (errcount>0){
+	                    	alert(errcount)
+	                    	alert("Opsss something went wrong")
+                        }else{
+                        	alert("Save Success")
+                        	Navigate('/inventory/supplier?rights={{.Tconf.Rights}}')
+                        } 
+                        
+                    });
+
+				return false;
+
+
+			}
+			
+			</script>
+
+
+
+
+
